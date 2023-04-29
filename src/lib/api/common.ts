@@ -104,4 +104,9 @@ export const commonService = {
         const { data: responseData } = await axiosInstance.post(`common/createPaymentURL`, data);
         return responseData;
     },
+    async payviaJavaPayG(paymentDetailsJava: any) {
+        const { data: responseData } = await axiosInstance.post(`payment/getPaymentRedirectURL`,paymentDetailsJava);
+        return responseData;
+    },
+
 };

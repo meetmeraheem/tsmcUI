@@ -129,7 +129,7 @@ const Payment = () => {
     const PayAndContinueForm = useCallback(
         async (values: PaymentFormType) => {
             try {
-                const paymentRequest = {
+               /* const paymentRequest = {
                     ...payLoad,
                     OrderAmount: values.amount,
                     CustomerData: {
@@ -138,7 +138,16 @@ const Payment = () => {
                         Email: values.email
                     }
                 }
-                const {success,data} = await commonService.createPaymentURL(paymentRequest);
+                const {success,data} = await commonService.createPaymentURL(paymentRequest);*/
+
+                const paymentRequestJava = {
+                        FirstName:values.fullname,
+                        OrderAmount: values.amount,
+                        MobileNo: values.phone,
+                        Email: values.email
+                }
+                  const {success,data} = await commonService.payviaJavaPayG(paymentRequestJava);
+    
                 if (success) {
                     LocalStorageManager.setOrderKeyId(data.OrderKeyId.toString());
                     window.open(data.PaymentProcessUrl, '_self', 'noreferrer');
