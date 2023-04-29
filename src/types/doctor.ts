@@ -1,0 +1,77 @@
+import { ApiResponseType } from "./api";
+
+export type DoctorSignUpFormType = {
+  fullname: string,
+  dateofbirth: string,
+  gender: string,
+  emailid: string,
+  mobileno: string,
+  password: string,
+  // createdon: Date,
+  // posttime: TimeRanges,
+}
+
+export type DoctorFormType = {
+  id: number,
+  serial_id: string,
+  pmr_no: string,
+  fmr_no: string,
+  gs_id: string,
+  gs_mci_id: string,
+  noc_id: string,
+  fullname: string,
+  fathername: string,
+  mothername: string,
+  dateofbirth: string,
+  gender: string,
+  address1: string,
+  address2: string,
+  country: number,
+  state: number,
+  city: number,
+  pincode: string,
+  emailid: string,
+  stdcode: string,
+  mobileno: string,
+  phoneno: string,
+  aadharcard: string,
+  bloodgroup: string,
+  passphoto: string,
+  signature: string,
+  fingerprint: string,
+  createdon: string,
+  posttime: string,
+  modifiedon: string,
+  status: string,
+  adisnal1: string,
+  adisnal2: string,
+  adisnal3: string,
+  added_by: number,
+}
+
+export type GetDoctorResponseType = Omit<ApiResponseType, 'list'> & {
+  list: DoctorFormType[];
+};
+
+export type DoctorProfileType = {
+  fullname: string,
+  fathername: string,
+  mothername: string,
+  dateofbirth: Date,
+  gender: string,
+  address1: string,
+  address2: string,
+  country: number,
+  state: number,
+  city: number,
+  pincode: string,
+  emailid: string,
+  stdcode: string,
+  mobileno: string,
+  phoneno: string,
+  aadharcard: string,
+  bloodgroup: string,
+  passphoto: string,
+  signature: string,
+  fingerprint: string,
+}

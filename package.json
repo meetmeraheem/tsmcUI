@@ -1,0 +1,77 @@
+{
+  "name": "tsmc-reactapp",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@fontsource/poppins": "^4.5.10",
+    "@reduxjs/toolkit": "^1.9.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.2.0",
+    "bootstrap": "^5.2.2",
+    "bootstrap-icons": "^1.9.1",
+    "connected-react-router": "^6.9.3",
+    "formik": "^2.2.9",
+    "history": "^5.3.0",
+    "js-base64": "^3.7.5",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "node-polyfill-webpack-plugin": "^2.0.1",
+    "query-string": "^8.1.0",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.6.0",
+    "react-date-picker": "^10.0.3",
+    "react-dom": "^18.2.0",
+    "react-files": "^3.0.0-alpha.3",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.4.3",
+    "react-scripts": "5.0.1",
+    "react-secure-storage": "^1.2.0",
+    "react-select": "^5.6.1",
+    "react-table": "^7.8.0",
+    "reactjs-social-login": "^2.6.1",
+    "sweetalert2": "^11.6.16",
+    "web-vitals": "^2.1.4",
+    "yet-another-react-lightbox": "^3.1.0",
+    "yup": "^0.32.11"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/fslightbox-react": "^1.7.0",
+    "@types/react-table": "^7.7.14",
+    "assert": "^2.0.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "process": "^0.11.10",
+    "react-app-rewired": "^2.2.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.0"
+  }
+}
