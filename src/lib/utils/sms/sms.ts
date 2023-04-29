@@ -17,7 +17,7 @@ export const SMS = {
         // which stores all digits
         var digits = '0123456789';
         let number = '';
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < 7; i++) {
             number += digits[Math.floor(Math.random() * 10)];
         }
 

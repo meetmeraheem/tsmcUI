@@ -15,7 +15,15 @@ export const assignmentService = {
         return responseData;
     },
     async getUsersByRole() {
-        const { data: responseData } = await axiosInstance.get(`userRole/getUsersByRole`);
+        const { data: responseData } = await axiosInstance.get(`user/getUsersByRole`);
+        return responseData as ApiResponseType;
+    },
+    async updateAssignment(doctor_id: number, data: any) {
+        const { data: responseData } = await axiosInstance.put(`assignments/updateAssignMent/${doctor_id}`, data);
+        return responseData;
+    },
+    async getAssignMentBydoctorIdAssignType(doctor_id: number, assign_type: string) {
+        const { data: responseData } = await axiosInstance.get(`assignments/getAssignMentBydoctorIdAssignType/${doctor_id}/${assign_type}`);
         return responseData as ApiResponseType;
     },
 };

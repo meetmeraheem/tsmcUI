@@ -214,7 +214,7 @@ const UserEditProfile = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter full name"
                                                                             tabIndex={1}
@@ -243,7 +243,7 @@ const UserEditProfile = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter father name"
                                                                             tabIndex={2}
@@ -274,7 +274,7 @@ const UserEditProfile = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter mother name"
                                                                             tabIndex={3}
@@ -305,7 +305,7 @@ const UserEditProfile = () => {
                                                                             }}
                                                                             clearIcon={null}
                                                                             value={field.value}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''}`}
+                                                                            className={`form-control ${error ? 'is-invalid' : ''}`}
                                                                         />
                                                                         {/* <input
                                                                             type="date"
@@ -316,7 +316,7 @@ const UserEditProfile = () => {
                                                                                 //moment(ev.target.value, 'YYYY-MM-DD')
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             tabIndex={4}
                                                                             maxLength={10}
@@ -351,7 +351,7 @@ const UserEditProfile = () => {
                                                                         }}
                                                                         tabIndex={5}
                                                                         className={`form-select ${error ? 'is-invalid' : ''
-                                                                            } form-select-sm`}
+                                                                            }`}
                                                                     >
                                                                         <option value="">Select Gender</option>
                                                                         <option value="m">MALE</option>
@@ -383,7 +383,7 @@ const UserEditProfile = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter Address 1"
                                                                             tabIndex={6}
@@ -415,7 +415,7 @@ const UserEditProfile = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter Address 2"
                                                                             tabIndex={7}
@@ -563,7 +563,7 @@ const UserEditProfile = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, Number(ev.target.value));
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter Postal Code"
                                                                             tabIndex={11}
@@ -594,7 +594,7 @@ const UserEditProfile = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter Email Address"
                                                                             tabIndex={12}
@@ -631,7 +631,7 @@ const UserEditProfile = () => {
                                                                                     setFieldTouched(field.name);
                                                                                     setFieldValue(field.name, ev.target.value);
                                                                                 }}
-                                                                                className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                                className={`form-control ${error ? 'is-invalid' : ''
                                                                                     }`}
                                                                                 placeholder="Enter Landline No"
                                                                                 tabIndex={14}
@@ -667,7 +667,7 @@ const UserEditProfile = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter Aadhar Card Number"
                                                                             tabIndex={15}
@@ -703,7 +703,7 @@ const UserEditProfile = () => {
                                                                             }}
                                                                             tabIndex={16}
                                                                             className={`form-select ${error ? 'is-invalid' : ''
-                                                                                } form-select-sm`}
+                                                                                }`}
                                                                         >
                                                                             <option value="">Select Blood Group</option>
                                                                             <option value="O+">O+</option>
@@ -722,9 +722,8 @@ const UserEditProfile = () => {
                                                         </Field>
                                                     </div>
                                                 </div>
-                                                <div className="row mb-3">
-                                                    <label className="col-sm-2 col-form-label">Passport Photo</label>
-                                                    <div className="col-sm-4">
+                                                <div className="d-flex justify-content-center my-5">
+                                                    <div className="col-3 pe-3">
                                                         <Field name="passphoto">
                                                             {(fieldProps: FieldProps) => {
                                                                 const { field, form } = fieldProps;
@@ -774,11 +773,9 @@ const UserEditProfile = () => {
                                                                             //accepts={['.jpeg', '.jpg', '.png']}
                                                                             clickable
                                                                         >
-                                                                            <div className="drag-drop-box mt-3">
-                                                                                <div className="text-center">
-                                                                                    <i className="bi-file-earmark-break fs-32"></i>
-                                                                                    <p className='fs-13'>Upload Passphoto</p>
-                                                                                </div>
+                                                                            <div className="file-upload-box">
+                                                                                <i className="bi-plus-lg fs-22"></i>
+                                                                                <p className="fs-13">Upload Passport Photo</p>
                                                                             </div>
                                                                         </Files>
                                                                         <small className="text-danger mt-1">
@@ -789,10 +786,8 @@ const UserEditProfile = () => {
                                                                 );
                                                             }}
                                                         </Field>
-
                                                     </div>
-                                                    <label className="col-sm-2 col-form-label">Signature</label>
-                                                    <div className="col-sm-4">
+                                                    <div className="col-3 ps-3">
                                                         <Field name="signature">
                                                             {(fieldProps: FieldProps) => {
                                                                 const { field, form } = fieldProps;
@@ -839,11 +834,9 @@ const UserEditProfile = () => {
                                                                             //accepts={['.jpeg', '.jpg','.png']}
                                                                             clickable
                                                                         >
-                                                                            <div className="drag-drop-box mt-3">
-                                                                                <div className="text-center">
-                                                                                    <i className="bi-file-earmark-break fs-32"></i>
-                                                                                    <p className='fs-13'>Upload Signature</p>
-                                                                                </div>
+                                                                            <div className="file-upload-box">
+                                                                                <i className="bi-plus-lg fs-22"></i>
+                                                                                <p className='fs-13'>Upload Signature</p>
                                                                             </div>
                                                                         </Files>
                                                                         <small className="text-danger mt-1">

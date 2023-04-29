@@ -125,7 +125,10 @@ const Myprofile = () => {
                                                             </div>
                                                             <div className="d-flex align-items-center justify-content-center border rounded p-1 signature">
                                                                 {doctor?.signature ? <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" /> :
-                                                                <div><i className="bi-pencil-square fs-22 px-2"></i><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
+                                                                    <>
+                                                                        <div><i className="bi-pencil-square fs-22 px-2"></i></div>
+                                                                        <div><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
+                                                                    </>
                                                                 }
                                                             </div>
                                                         </div>
@@ -417,14 +420,14 @@ const Myprofile = () => {
                                 <div className="row mb-3">
                                     <div className="col">
                                         <label htmlFor="" className='mb-2'>Qualification</label>
-                                        <select name="" id="" className="form-select form-select-sm">
+                                        <select name="" id="" className="form-select">
                                             <option value="">Select</option>
                                             <option value=""></option>
                                         </select>
                                     </div>
                                     <div className="col">
                                         <label htmlFor="" className='mb-2'>Country</label>
-                                        <select name="" id="" className="form-select form-select-sm">
+                                        <select name="" id="" className="form-select">
                                             <option value="">Select</option>
                                             <option value=""></option>
                                         </select>
@@ -433,14 +436,14 @@ const Myprofile = () => {
                                 <div className="row mb-3">
                                     <div className="col">
                                         <label htmlFor="" className='mb-2'>State</label>
-                                        <select name="" id="" className="form-select form-select-sm">
+                                        <select name="" id="" className="form-select">
                                             <option value="">Select</option>
                                             <option value=""></option>
                                         </select>
                                     </div>
                                     <div className="col">
                                         <label htmlFor="" className='mb-2'>University</label>
-                                        <select name="" id="" className="form-select form-select-sm">
+                                        <select name="" id="" className="form-select">
                                             <option value="">Select</option>
                                             <option value=""></option>
                                         </select>
@@ -449,14 +452,14 @@ const Myprofile = () => {
                                 <div className="row mb-3">
                                     <div className="col">
                                         <label htmlFor="" className='mb-2'>College</label>
-                                        <select name="" id="" className="form-select form-select-sm">
+                                        <select name="" id="" className="form-select">
                                             <option value="">Select</option>
                                             <option value=""></option>
                                         </select>
                                     </div>
                                     <div className="col">
                                         <label htmlFor="" className='mb-2'>Exam Month</label>
-                                        <select name="" id="" className="form-select form-select-sm">
+                                        <select name="" id="" className="form-select">
                                             <option value="">Select</option>
                                             <option value=""></option>
                                         </select>
@@ -465,7 +468,7 @@ const Myprofile = () => {
                                 <div className="row mb-3">
                                     <div className="col-6">
                                         <label htmlFor="" className='mb-2'>Exam Year</label>
-                                        <input type="text" className="form-control form-control-sm" placeholder='Enter Exam Year' />
+                                        <input type="text" className="form-control" placeholder='Enter Exam Year' />
                                     </div>
                                 </div>
                                 <div className="row mt-4">

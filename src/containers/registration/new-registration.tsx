@@ -152,7 +152,7 @@ const Newregistration = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter full name"
                                                                             tabIndex={1}
@@ -181,7 +181,7 @@ const Newregistration = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter father name"
                                                                             tabIndex={2}
@@ -212,7 +212,7 @@ const Newregistration = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter mother name"
                                                                             tabIndex={3}
@@ -241,7 +241,7 @@ const Newregistration = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter full name"
                                                                             tabIndex={4}
@@ -277,7 +277,7 @@ const Newregistration = () => {
                                                                         }}
                                                                         tabIndex={5}
                                                                         className={`form-select ${error ? 'is-invalid' : ''
-                                                                            } form-select-sm`}
+                                                                            }`}
                                                                     >
                                                                         <option value="">Select Gender</option>
                                                                         <option value="m">Male</option>
@@ -309,7 +309,7 @@ const Newregistration = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter Address 1"
                                                                             tabIndex={6}
@@ -341,7 +341,7 @@ const Newregistration = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter Address 2"
                                                                             tabIndex={7}
@@ -477,7 +477,7 @@ const Newregistration = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, Number(ev.target.value));
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter Postal Code"
                                                                             tabIndex={11}
@@ -508,7 +508,7 @@ const Newregistration = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter Email Address"
                                                                             tabIndex={12}
@@ -601,7 +601,7 @@ const Newregistration = () => {
                                                                                     setFieldTouched(field.name);
                                                                                     setFieldValue(field.name, ev.target.value);
                                                                                 }}
-                                                                                className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                                className={`form-control ${error ? 'is-invalid' : ''
                                                                                     }`}
                                                                                 placeholder="Enter Landline No"
                                                                                 tabIndex={14}
@@ -637,7 +637,7 @@ const Newregistration = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter Aadhar Card Number"
                                                                             tabIndex={15}
@@ -673,7 +673,7 @@ const Newregistration = () => {
                                                                             }}
                                                                             tabIndex={16}
                                                                             className={`form-select ${error ? 'is-invalid' : ''
-                                                                                } form-select-sm`}
+                                                                                }`}
                                                                         >
                                                                             <option value="">Select Blood Group</option>
                                                                             <option value="O+ve">O+ve</option>

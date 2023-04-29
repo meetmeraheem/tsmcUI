@@ -778,3 +778,59 @@ aside>ul>li>a:hover {
 	border-radius: 5px;
 	padding: 5px 11px;
 }
+.react-calendar__navigation{
+    display: flex !important;
+}
+.react-date-picker__calendar{
+    width: 300px !important;
+}
+.react-calendar{
+    background-color: #ffffff !important;
+	box-shadow: 0 0 9px 4px #ccc;
+	border-radius: 10px !important;
+}
+.react-calendar__month-view__days > button{
+    border:0 !important;
+	background-color: #fff !important;
+	padding: 10px 4px !important;
+}
+.react-calendar__month-view__days > button:hover{
+	background-color: #66bb8f !important;
+	border-radius: 50px;
+	color: #ffffff;
+}
+.react-calendar__month-view__weekdays__weekday{
+	padding:8px 5px !important;
+	font-weight: 600;
+	font-size: 13px;
+}
+.react-calendar__navigation > button{
+	padding: 0 12px !important;
+	border: 0 !important;
+}
+.react-calendar__navigation > button:hover{
+	background-color: #66bb8f !important;
+}
+.react-calendar__navigation__prev2-button, .react-calendar__navigation__prev-button, .react-calendar__navigation__next-button, .react-calendar__navigation__next2-button{
+	padding: 0 12px !important;
+    font-size: 27px !important;
+}
+.react-calendar__year-view__months > button{
+	border: 0 !important;
+	padding: 8px 10px;
+	background-color: #FFFFFF !important;
+}
+.react-calendar__year-view__months > button:hover{
+	background-color: #66bb8f !important;
+}
+.react-calendar__decade-view__years > button{
+	border: 0 !important;
+	padding: 8px 10px;
+	background-color: #FFFFFF !important;
+}
+.react-calendar__decade-view__years > button:hover{
+	background-color: #66bb8f !important;
+}
+.react-date-picker__inputGroup__year{
+	width: 64px !important;
+}

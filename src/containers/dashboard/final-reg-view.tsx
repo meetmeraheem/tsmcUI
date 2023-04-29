@@ -14,6 +14,7 @@ import { AdminFinalProfileType } from '../../types/final';
 import { routes } from '../routes/routes-names';
 import { serverUrl, serverImgUrl } from '../../config/constants';
 import moment from 'moment';
+import { assignmentService } from '../../lib/api/assignments';
 
 const FinalRegView = () => {
     const location = useLocation();
@@ -88,6 +89,12 @@ const FinalRegView = () => {
             }
             const { success } = await finalService.updateFinal(finalPrimaryId, finalInfo);
             if (success) {
+                const assignmentInfo = {
+                    AssignStatus: status,
+                    AssignModified: moment().format('YYYY-MM-DD'),
+                    AssignRegType: 'final'
+                }
+                const { success } = await assignmentService.updateAssignment(Number(doctor?.serial_id), assignmentInfo);
                 if (status == 'apr') {
                     Swal.fire({
                         title: "Success",
@@ -143,7 +150,10 @@ const FinalRegView = () => {
                                     </div>
                                     <div className="d-flex align-items-center justify-content-center border rounded p-1">
                                         {doctor?.signature ? <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" width="100%" /> :
-                                            <div><i className="bi-pencil-square fs-22 px-2"></i><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
+                                            <>
+                                                <div><i className="bi-pencil-square fs-22 px-2"></i></div>
+                                                <div><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
+                                            </>
                                         }
                                     </div>
                                 </div>

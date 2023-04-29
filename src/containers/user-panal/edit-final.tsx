@@ -563,7 +563,7 @@ const EditFinal = () => {
                                                                                         setDuration('');
                                                                                     }
                                                                                 }}
-                                                                                className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                                className={`form-control ${error ? 'is-invalid' : ''
                                                                                     }`}
                                                                                 placeholder="Enter exam year"
                                                                                 tabIndex={7} minLength={4} maxLength={4}
@@ -595,7 +595,7 @@ const EditFinal = () => {
                                                                                 //     setFieldTouched(field.name);
                                                                                 //     setFieldValue(field.name, Number(ev.target.value));
                                                                                 // }}
-                                                                                className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                                className={`form-control ${error ? 'is-invalid' : ''
                                                                                     }`}
                                                                                 placeholder="Enter duration"
                                                                                 tabIndex={8}

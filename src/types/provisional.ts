@@ -88,3 +88,23 @@ export type AdminProvisionalProfileType = {
     edu_cert2: string;
     edu_cert3: string;
 };
+
+export type ProvisionalPaymentProfileType = {
+    id: number,
+    reg_date: Date,
+    recept_date: Date,
+    dd_amount: number,
+    receipt_no: string,
+    doctor_id: number;
+    qualification: string;
+    exam_month: string;
+    exam_year: string;
+    country: string;
+    state: string;
+    university: string;
+    approval_status: string;
+    college: string;
+    edu_cert1: string;
+    edu_cert2: string;
+    edu_cert3: string;
+};

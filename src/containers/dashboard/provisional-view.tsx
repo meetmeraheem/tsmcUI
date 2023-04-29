@@ -17,6 +17,7 @@ import { AdminProvisionalProfileType } from '../../types/provisional';
 import { routes } from '../routes/routes-names';
 import { serverUrl, serverImgUrl } from '../../config/constants';
 import moment from 'moment';
+import { assignmentService } from '../../lib/api/assignments';
 
 //type Props = OutletProps<{ id: string }>;
 //const ProvisionalView: React.FC<Props> = ({match}: any) => {
@@ -85,6 +86,12 @@ const ProvisionalView = () => {
             }
             const { success } = await provisionalService.updateProvisional(provisionalPrimaryId, provisionalInfo);
             if (success) {
+                const assignmentInfo = {
+                    AssignStatus: status,
+                    AssignModified: moment().format('YYYY-MM-DD'),
+                    AssignRegType: 'provisional'
+                }
+                const { success } = await assignmentService.updateAssignment(Number(doctor?.serial_id), assignmentInfo);
                 if (status == 'apr') {
                     Swal.fire({
                         title: "Success",
@@ -164,7 +171,10 @@ const ProvisionalView = () => {
                                     </div>
                                     <div className="d-flex align-items-center justify-content-center border rounded p-1">
                                         {doctor?.signature ? <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" width="100%" /> :
-                                            <div><i className="bi-pencil-square fs-22 px-2"></i><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
+                                            <>
+                                                <div><i className="bi-pencil-square fs-22 px-2"></i></div>
+                                                <div><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
+                                            </>
                                         }
                                     </div>
                                 </div>

@@ -542,7 +542,7 @@ const HomePage = () => {
                                                                                                                              setFieldTouched(field.name);
                                                                                                                              setFieldValue(field.name, ev.target.value);
                                                                                                                         }}
-                                                                                                                        className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                                                                        className={`form-control ${error ? 'is-invalid' : ''
                                                                                                                              }`}
                                                                                                                         placeholder="Enter full name"
                                                                                                                    />
@@ -574,7 +574,7 @@ const HomePage = () => {
                                                                                                                         }}
                                                                                                                         clearIcon={null}
                                                                                                                         value={startDate}
-                                                                                                                        className={`form-control form-control-sm ${error ? 'is-invalid' : ''}`}
+                                                                                                                        className={`form-control ${error ? 'is-invalid' : ''}`}
                                                                                                                    />
                                                                                                                    {/* <input
                                                                                                                         type="date"
@@ -583,7 +583,7 @@ const HomePage = () => {
                                                                                                                              setFieldTouched(field.name);
                                                                                                                              setFieldValue(field.name, ev.target.value);
                                                                                                                         }}
-                                                                                                                        className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                                                                        className={`form-control ${error ? 'is-invalid' : ''
                                                                                                                              }`}
                                                                                                                         maxLength={10}
                                                                                                                    /> */}
@@ -651,7 +651,7 @@ const HomePage = () => {
                                                                                                                         );
                                                                                                                    }}
                                                                                                                    className={`form-select ${error ? 'is-invalid' : ''
-                                                                                                                        } form-select-sm`}
+                                                                                                                        }`}
                                                                                                               >
                                                                                                                    <option value="">Select Gender</option>
                                                                                                                    <option value="m">MALE</option>
@@ -686,7 +686,7 @@ const HomePage = () => {
                                                                                                                              setFieldTouched(field.name);
                                                                                                                              setFieldValue(field.name, ev.target.value);
                                                                                                                         }}
-                                                                                                                        className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                                                                        className={`form-control ${error ? 'is-invalid' : ''
                                                                                                                              }`}
                                                                                                                         placeholder="Enter Email Address"
                                                                                                                    />
@@ -717,7 +717,7 @@ const HomePage = () => {
                                                                                                                              setFieldTouched(field.name);
                                                                                                                              setFieldValue(field.name, ev.target.value);
                                                                                                                         }}
-                                                                                                                        className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                                                                        className={`form-control ${error ? 'is-invalid' : ''
                                                                                                                              }`}
                                                                                                                         placeholder="Enter password"
                                                                                                                    />

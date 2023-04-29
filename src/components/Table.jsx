@@ -130,7 +130,7 @@ function Table({
             <span className='pe-3'>
               <input
                 type="number"
-                className='form-control form-control-sm'
+                className='form-control'
                 defaultValue={pageIndex + 1}
                 onChange={e => {
                   const page = e.target.value ? Number(e.target.value) - 1 : 0
@@ -141,7 +141,7 @@ function Table({
             </span>{' '}
             <select
               value={pageSize}
-              className="form-select form-select-sm"
+              className="form-select"
               onChange={e => {
                 setPageSize(Number(e.target.value))
               }}

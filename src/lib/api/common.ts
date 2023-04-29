@@ -72,6 +72,7 @@ export const commonService = {
         return data;
     },
     async orderDetails(orderKeyId: any, merchantKeyId: string) {
+        console.log('merchantKeyId  ----: ' + merchantKeyId);
         //const authString = 'YjAwZTU5MDdhODMwNGIwZDk5YTU0MzIwZTg3ZDNiMjQ6MTE3ZmRiOTdiOTc2NGI3OWIxNjJkNTZiM2ZkNmNmMGQ6TTo3MTNDMDAxOEZCMjAzMTE=';
         //const authString = 'ODdhMmY2ODIyNDFlNDc2MzgxMjlkMzIzZDVlNzJhNWQ6NDNjMTg1YTE1YjkwNDMwNWFjOGM2OGJjNjQ2ZTBiMTA6TToxMTEzMA==';
         const authString = Base64.encode('87a2f682241e47638129d323d5e72a5d:43c185a15b904305ac8c68bc646e0b10:M:31921');
@@ -90,5 +91,17 @@ export const commonService = {
             }
         });
         return data;
+    },
+
+
+    //Payment
+    async createPayment(data: any) {
+        const { data: responseData } = await axiosInstance.post(`payments/createPayment`, data);
+        return responseData;
+    },
+
+    async createPaymentURL(data: any) {
+        const { data: responseData } = await axiosInstance.post(`common/createPaymentURL`, data);
+        return responseData;
     },
 };

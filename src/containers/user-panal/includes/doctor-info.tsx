@@ -47,8 +47,11 @@ const DoctorInfoCard = () => {
                         </div>
                         <div className="d-flex align-items-center justify-content-center border rounded p-1 signature">
                         {doctor?.signature ? <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" /> :
-                                                                <div><i className="bi-pencil-square fs-22 px-2"></i><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
-                                                                }
+                            <>
+                                <div><i className="bi-pencil-square fs-22 px-2"></i></div>
+                                <div><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
+                            </>
+                        }
                         </div>
                     </div>
                 </div>

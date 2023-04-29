@@ -1,9 +1,9 @@
 import { Field, FieldProps, Formik, FormikProps } from "formik";
 import { RootState } from "../../redux";
 import getValue from 'lodash/get';
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import { commonService } from "../../lib/api/common";
@@ -14,12 +14,21 @@ import moment from "moment";
 import { Base64 } from 'js-base64';
 import { SMS } from '../../lib/utils/sms/sms';
 import { LocalStorageManager } from "../../lib/localStorage-manager";
-
+import visalogo from "../../assets/images/visa.jpg";
+import payglogo from "../../assets/images/payg.jpg";
+import sslsecurelogo from "../../assets/images/ssl-secure.jpg";
+import mastercardlogo from "../../assets/images/mastercard.jpg";
+import rupaylogo from "../../assets/images/rupay.jpg";
+import { doctorService } from "../../lib/api/doctot";
+import { DoctorProfileType } from "../../types/doctor";
 
 const Payment = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { doctor_id, regType } = location.state
     const doctorProfile = useSelector((state: RootState) => state.doctor.profile);
     const getDate = moment().format('YYYY-MM-DD');
+    const [doctor, setDoctor] = useState<DoctorProfileType | null>(null);
 
     //const authString = '0ca4cd6e43204581ac6efeba64ea7d56:16d3605e36ef429bb2c5dcd1e238bff8:M:8463';
     //const authString = '0ca4cd6e43204581ac6efeba64ea7d56:16d3605e36ef429bb2c5dcd1e238bff8:M:11130';
@@ -31,9 +40,10 @@ const Payment = () => {
 
     const initialFormData: PaymentFormType = {
         amount: 1.00,
-        fullname: 'Nageswara Rao' || '',
-        email: 'nageswararao.g31@gmail.com' || '',
-        phone: '8099528126' || '',
+        fullname: doctor?.fullname || '',
+        email: doctor?.emailid || '',
+        stdcode: doctor?.stdcode || '+91',
+        phone: doctor?.mobileno || '',
     }
 
     const uatPayLoad = {
@@ -86,7 +96,7 @@ const Payment = () => {
         "OrderType": "PAYMENT",
         "OrderId": generateOrderId,
         "RedirectUrl": "https://regonlinetsmc.in/paymentsuccess?orderid=" + generateOrderId,
-        "OrderStatus": null,
+        "OrderStatus": 'Initiating',
         "OrderAmountData": null,
         "ProductData": "{'GameName':'b1149239b72457cdb24814a930de39ba'}",
         "TransactionData": {
@@ -128,11 +138,16 @@ const Payment = () => {
                         Email: values.email
                     }
                 }
-                const data = await commonService.payviaPayG(paymentRequest, Base64.encode(authString));
-                if (data) {
+                const {success,data} = await commonService.createPaymentURL(paymentRequest);
+                if (success) {
                     LocalStorageManager.setOrderKeyId(data.OrderKeyId.toString());
-                    window.open(data.PaymentProcessUrl, '_blank', 'noreferrer');
+                    window.open(data.PaymentProcessUrl, '_self', 'noreferrer');
                 }
+                // const data = await commonService.payviaPayG(paymentRequest, Base64.encode(authString));
+                // if (data) {
+                //     LocalStorageManager.setOrderKeyId(data.OrderKeyId.toString());
+                //     window.open(data.PaymentProcessUrl, '_self', 'noreferrer');
+                // }
 
             } catch (err) {
                 console.log('error in payment process during the provisional registrartion.', err);
@@ -140,12 +155,119 @@ const Payment = () => {
         },
         []
     );
+    const getDoctorProfile = useCallback(async () => {
+        try {
+            const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
+            if (doctorPrimaryId) {
+                const getDoctor = await doctorService.getDoctorById(doctorPrimaryId);
+                if (getDoctor.data.length > 0) {
+                    setDoctor(getDoctor.data[0]);
+                }
+            }
+        } catch (err: any) {
+            console.log('candidateService getProfile error', err.response);
+        } finally {
+            //setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        getDoctorProfile();
+    }, []);
 
     return (
         <>
             <UserHeader />
             <section className='gray-banner'>
-                <div className="container mt-4">
+                <div className="col-7 m-auto mt-4">
+                    <div className="card mb-3 shadow border-0">
+                        <div className="card-header">
+                            <div className="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h3 className="fs-18 fw-700 mb-0">Payment details</h3>
+                                </div>
+                                <div></div>
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <div className="d-flex">
+                                <div className="col pe-2 border-end">
+                                    <div className="row mb-3">
+                                        <div className="col-4"><label htmlFor="">Registration Type</label></div>
+                                        {regType === 'provisional' && <div className="col fs-14">Provisional (PMR)</div>}
+                                        {regType === 'final' && <div className="col fs-14">Final (FMR)</div>}
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-4"><label htmlFor="">Final Registration No.</label></div>
+                                        {regType === 'provisional' && <div className="col fs-14">TSMC/PMR/234579</div>}
+                                        {regType === 'final' && <div className="col fs-14">TSMC/FMR/234579</div>}
+                                        
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-4"><label htmlFor="">Doctor ID</label></div>
+                                        <div className="col fs-14">{doctor_id}</div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-4"><label htmlFor="">Full Name</label></div>
+                                        <div className="col fs-14">{doctor?.fullname}</div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-4"><label htmlFor="">Date Of Birth</label></div>
+                                        <div className="col fs-14">{moment(doctor?.dateofbirth).format('DD/MM/YYYY')}</div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-4"><label htmlFor="">Registraion No.</label></div>
+                                        <div className="col fs-14">891399060</div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-4"><label htmlFor="">Address</label></div>
+                                        <div className="col fs-14">{doctor?.address1} {doctor?.address2}</div>
+                                    </div>
+                                </div>
+                                <div className="col-4 d-flex align-items-end ps-2">
+                                    <div>
+                                        <div className="d-flex align-items-center justify-content-between mb-3">
+                                            <label htmlFor="">Registration Request</label>
+                                            <div className="fs-14">Non-Tatkal</div>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-between mb-3">
+                                            <label htmlFor="">Registration Fee</label>
+                                            <div className="fs-14"><i className="bi-currency-rupee"></i> 2,300/-</div>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-between mb-3">
+                                            <label htmlFor="">Penalty</label>
+                                            <div className="fs-14"><i className="bi-currency-rupee"></i> 500/-</div>
+                                        </div>
+                                        <hr />
+                                        <div className="d-flex align-items-center justify-content-between mb-3">
+                                            <label htmlFor="">Total</label>
+                                            <div className="fs-14"><i className="bi-currency-rupee"></i> 2,800/-</div>
+                                        </div>
+                                        <hr className="mb-0" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card-footer text-end py-3">
+                            <button type="button" className="btn btn-primary">Continue & Pay</button>
+                        </div>
+                    </div>
+                    <div className="card shadow border-0 mb-3">
+                        <div className="card-body d-flex justify-content-between align-items-center">
+                            <div className="fs-13 d-flex">
+                                <Link target={'_blank'} className="pe-2" to={'/terms-and-conditions'}>Terms and Conditions</Link>
+                                <Link target={'_blank'} className="px-2" to={'/privacy-policy'}>Privacy Policy</Link>
+                                <Link target={'_blank'} className="ps-2" to={'/refund'}>Refund</Link>
+                            </div>
+                            <div>
+                                <img src={rupaylogo} alt="" width="55px" className="pe-2" />
+                                <img src={visalogo} alt="" width="55px" className="pe-2" />
+                                <img src={mastercardlogo} alt="" width="55px" className="pe-2" />
+                                <img src={payglogo} alt="" width="55px" className="pe-2" />
+                                <img src={sslsecurelogo} alt="" width="55px" className="" />
+                            </div>
+                        </div>
+                    </div>
                     <div className="card shadow border-0">
                         <Formik
                             onSubmit={PayAndContinueForm}
@@ -181,7 +303,7 @@ const Payment = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Amount to be paid"
                                                                             tabIndex={2}
@@ -196,7 +318,7 @@ const Payment = () => {
 
                                                     <label className="col-sm-2 col-form-label">Full Name</label>
                                                     <div className="col-sm-4">
-                                                        <Field name="FullName">
+                                                        <Field name="fullname">
                                                             {(fieldProps: FieldProps) => {
                                                                 const { field, form } = fieldProps;
                                                                 const error =
@@ -211,7 +333,7 @@ const Payment = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter full name"
                                                                             tabIndex={1}
@@ -230,7 +352,7 @@ const Payment = () => {
                                                     <label className="col-sm-2 col-form-label pr-0">Mobile No</label>
                                                     <div className="col-sm-4">
                                                         <div className="input-group input-group-sm mb-3">
-                                                            <Field name="Stdcode">
+                                                            <Field name="stdcode">
                                                                 {(fieldProps: FieldProps) => {
                                                                     const { field, form } = fieldProps;
                                                                     const error =
@@ -256,7 +378,7 @@ const Payment = () => {
                                                                     );
                                                                 }}
                                                             </Field>
-                                                            <Field name="Phone">
+                                                            <Field name="phone">
                                                                 {(fieldProps: FieldProps) => {
                                                                     const { field, form } = fieldProps;
                                                                     const error =
@@ -290,7 +412,7 @@ const Payment = () => {
 
                                                     <label className="col-sm-2 col-form-label">Email ID</label>
                                                     <div className="col-sm-4">
-                                                        <Field name="Email">
+                                                        <Field name="email">
                                                             {(fieldProps: FieldProps) => {
                                                                 const { field, form } = fieldProps;
                                                                 const error =
@@ -306,7 +428,7 @@ const Payment = () => {
                                                                                 setFieldTouched(field.name);
                                                                                 setFieldValue(field.name, ev.target.value);
                                                                             }}
-                                                                            className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                 }`}
                                                                             placeholder="Enter Email Address"
                                                                             tabIndex={12}

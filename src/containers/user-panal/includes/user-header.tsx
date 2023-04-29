@@ -18,6 +18,7 @@ const Userheader = () => {
 		LocalStorageManager.removeDoctorSerialId();
 		LocalStorageManager.removeAdminPrimaryId();
 		LocalStorageManager.removeDoctorFMRNo();
+		LocalStorageManager.removeOrderKeyId();
 		dispatch(deleteDoctorInfo);
 	};
 
@@ -37,9 +38,14 @@ const Userheader = () => {
 			<header>
 				<nav className="navbar navbar-expand-lg bg-light tsmc-header">
 					<div className="container">
-						<Link to="" className="navbar-brand tsmc-site-logo">
-							<img src={SiteLogo} alt="Site Logo" />
-						</Link>
+						<div className='col-1'>
+							<Link to="" className="navbar-brand tsmc-site-logo">
+								<img src={SiteLogo} alt="Site Logo" className='mt-3'/>
+							</Link>
+						</div>
+						<div>
+							<h1 className="fs-22 fw-700 mb-0 text-light">Telangana State Medical Council</h1>
+						</div>
 						<button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#MainMenu" aria-controls="MainMenu">
 							<i className="bi bi-list"></i>
 						</button>
@@ -68,7 +74,7 @@ const Userheader = () => {
 													<li><Link className="dropdown-item" to={isDoctorFMRNo ? '' : 'final-duplicate'}>Duplicate</Link></li>
 												</ul>
 											</li>
-											 <li className='dropdown-submenu'>
+											<li className='dropdown-submenu'>
 											<Link to='additional-qualification-registration' className="dropdown-item">Additional Qualification</Link>
 											<ul className="dropdown-menu">
 												<li><Link className="dropdown-item" to={'additional-qualification-registration'}>New Registration</Link></li>
@@ -78,7 +84,7 @@ const Userheader = () => {
 										<li><Link to='/my-panal/good-standing-registration' className="dropdown-item">Good Standing</Link></li>
 										<li><Link to='/my-panal/good-standing-mci-registration' className="dropdown-item">Good Standing MCI</Link></li>
 										<li><Link to='/my-panal/noc-registration' className="dropdown-item">NOC for Other State</Link></li>
-										<li><Link to='/my-panal/temporary-registration' className="dropdown-item">Temporary Registration</Link></li> 
+										<li><Link to='/my-panal/temporary-registration' className="dropdown-item">Temporary Registration</Link></li>
 										</div>
 									</li>
 									<li className="nav-item"><Link to="/" className="nav-link" onClick={signOut} aria-current="page">Sign Out</Link></li>
