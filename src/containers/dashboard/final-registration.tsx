@@ -100,23 +100,38 @@ const FinalRegistrations = () => {
             Header: "Assign",
             Cell: (cell: any) => (
                 <>
-                    <i className="bi-person" onClick={() => {
-                        const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
-                        if (!isDuplicate(assignedGridList, cell.data[Number(cell.row.id)])) {
-                            const doctorInfo = {
-                                assignBy: adminPrimaryId,
-                                //AssignTo: assignedUser,
-                                assignCreated: moment().format('YYYY-MM-DD'),
-                                assignStatus: 0,
-                                assignReason: '',
-                                doctor_id: cell.data[Number(cell.row.id)].doctor_id
-                            }
-                            setAssignedList([...assignedList, doctorInfo]);
-                            setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
+                    <i className="bi-person" onClick={async () => {
+                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'final');
+                        if (data && data.length > 0) {
+                            Swal.fire({
+                                text: "Already Assigned",
+                                icon: "warning",
+                                confirmButtonText: "OK",
+                            })
                         }
                         else {
-                            alert('Duplicate');
+                            const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
+                            if (!isDuplicate(assignedGridList, cell.data[Number(cell.row.id)])) {
+                                const doctorInfo = {
+                                    assignBy: adminPrimaryId,
+                                    assignCreated: moment().format('YYYY-MM-DD'),
+                                    assignStatus: 'pen',
+                                    assignReason: '',
+                                    doctor_id: cell.data[Number(cell.row.id)].doctor_id,
+                                    assignRegType: 'final'
+                                }
+                                setAssignedList([...assignedList, doctorInfo]);
+                                setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
+                            }
+                            else {
+                                Swal.fire({
+                                    text: "Already Added",
+                                    icon: "warning",
+                                    confirmButtonText: "OK",
+                                })
+                            }
                         }
+
                     }}></i>
                 </>
             )
@@ -187,17 +202,16 @@ const FinalRegistrations = () => {
                 const startRow = pageSize * pageIndex
                 const endRow = startRow + pageSize
                 if(data!=undefined){
-                setFinals(data.slice(startRow, endRow));
+                setFinals(data.slice(startRow, endRow))
+                // Your server could send back total page count.
+                // For now we'll just fake it, too
                 setPageCount(Math.ceil(data.length / pageSize));
                 setLoading(false);
-                }else{
-                    setFinals([]);
-                    setLoading(false);
+               }else{
+                   setFinals([]);
+                   setLoading(false);
                 }
-
             }
-            
-
         }, 1000)
     }, [date, statusValue]);
 
@@ -273,7 +287,7 @@ const FinalRegistrations = () => {
                                 pageCount={pageCount}
                                 fetchData={fetchData}
                             />
-                            
+
                         </div>
                     </div>
                     {assignedGridList.length > 0 &&

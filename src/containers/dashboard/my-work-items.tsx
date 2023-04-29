@@ -97,14 +97,15 @@ const MyWorkItems = () => {
                     const endRow = startRow + pageSize
                     if(data!=undefined){
                     setProvisionals(data.slice(startRow, endRow))
+
                     // Your server could send back total page count.
                     // For now we'll just fake it, too
                     setPageCount(Math.ceil(data.length / pageSize));
-                    setLoading(false)
-                    }else{
-                        setProvisionals([]);
-                        setLoading(false);
-                    }
+
+                }else{
+                                          setProvisionals([]);
+                                            setLoading(false);
+                                        }
                 }
             }, 1000)
         }

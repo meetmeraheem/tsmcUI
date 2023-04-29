@@ -89,23 +89,38 @@ const ProvisionalRegistrations = () => {
             Header: "Assign",
             Cell: (cell: any) => (
                 <>
-                    <i className="bi-person" onClick={() => {
-                        const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
-                        if (!isDuplicate(assignedGridList, cell.data[Number(cell.row.id)])) {
-                            const doctorInfo = {
-                                assignBy: adminPrimaryId,
-                                //AssignTo: assignedUser,
-                                assignCreated: moment().format('YYYY-MM-DD'),
-                                assignStatus: 0,
-                                assignReason: '',
-                                doctor_id: cell.data[Number(cell.row.id)].doctor_id
-                            }
-                            setAssignedList([...assignedList, doctorInfo]);
-                            setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
+                    <i className="bi-person" onClick={async () => {
+                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'provisional');
+                        if (data && data.length > 0) {
+                            Swal.fire({
+                                text: "Already Assigned",
+                                icon: "warning",
+                                confirmButtonText: "OK",
+                            });
                         }
                         else {
-                            alert('Duplicate');
+                            const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
+                            if (!isDuplicate(assignedGridList, cell.data[Number(cell.row.id)])) {
+                                const doctorInfo = {
+                                    assignBy: adminPrimaryId,
+                                    assignCreated: moment().format('YYYY-MM-DD'),
+                                    assignStatus: 'pen',
+                                    assignReason: '',
+                                    doctor_id: cell.data[Number(cell.row.id)].doctor_id,
+                                    assignRegType: 'provisional'
+                                }
+                                setAssignedList([...assignedList, doctorInfo]);
+                                setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
+                            }
+                            else {
+                                Swal.fire({
+                                    text: "Already Added",
+                                    icon: "warning",
+                                    confirmButtonText: "OK",
+                                })
+                            }
                         }
+
                     }}></i>
                 </>
             )
@@ -138,7 +153,7 @@ const ProvisionalRegistrations = () => {
         } catch (err) {
             console.log('error getProvisionalDetails', err);
         }
-    }, [date,statusValue]);
+    }, [date, statusValue]);
 
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
         // This will get called when the table needs new data
@@ -158,24 +173,21 @@ const ProvisionalRegistrations = () => {
         // We'll even set a delay to simulate a server here
         setTimeout(() => {
             // Only update the data if this is the latest fetch
-            console.log("data"+data);
             if (fetchId === fetchIdRef.current) {
                 const startRow = pageSize * pageIndex
                 const endRow = startRow + pageSize
                 if(data!=undefined){
-                setProvisionals(data.slice(startRow, endRow));
-                setPageCount(Math.ceil(data.length / pageSize));
-                setLoading(false);
-                }else{
-                    setProvisionals([]);
-                    setLoading(false);
-                }
+                setProvisionals(data.slice(startRow, endRow))
 
                 // Your server could send back total page count.
                 // For now we'll just fake it, too
-               
+                setPageCount(Math.ceil(data.length / pageSize));
+                setLoading(false);
 
-               
+            }else{
+                                 setProvisionals([]);
+                                 setLoading(false);
+                    }
             }
         }, 1000)
     }, [date, statusValue]);
@@ -183,11 +195,9 @@ const ProvisionalRegistrations = () => {
     const assign = useCallback(async () => {
         try {
             const assignToUser = assignedList.map((obj: any) => {
-                return { ...obj, assignTo: assignedUser };
+                return { ...obj, AssignTo: assignedUser };
             })
-            const formData = new FormData();
-            formData.append("AssignmentData", JSON.stringify(assignToUser[0]));
-            const { success } = await assignmentService.assignToUser(formData);
+            const { success } = await assignmentService.assignToUser(assignToUser);
             if (success) {
                 Swal.fire({
                     //title: "Error",
@@ -220,10 +230,10 @@ const ProvisionalRegistrations = () => {
             }
         });
 
-        const eamtyArray =  res.filter((d) => {
+        const eamtyArray = res.filter((d) => {
             return d.isChecked === true
         });
-        if(eamtyArray.length === 0){
+        if (eamtyArray.length === 0) {
             setStatusValue(null);
         }
         setCheckBoxData(res);

@@ -73,11 +73,11 @@ const AdminLogin = () => {
             if (error) {
                 //setMsg(error.response.data.msg);
                 Swal.fire({
-                    //title: "Error",
-                    text: "Login failed",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
+                                       //title: "Error",
+                                        text: "Login failed",
+                                        icon: "error",
+                                        confirmButtonText: "OK",
+                                    });
             }
             setIsSubmitting(false);
         }

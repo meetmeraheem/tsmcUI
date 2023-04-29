@@ -155,7 +155,8 @@ const ProvisionalRegistration = () => {
     const submitForm = useCallback(
         async (values: ProvisionalFormType) => {
             try {
-               const doctorPrimaryId = LocalStorageManager.getDoctorPrimaryId()
+                const doctorPrimaryId = LocalStorageManager.getDoctorPrimaryId()
+
                 const provisionalInfo = {
                     ...values,
                     createdon: moment().format('YYYY-MM-DD'),
@@ -167,20 +168,19 @@ const ProvisionalRegistration = () => {
                     reg_date: moment().format('YYYY-MM-DD'),
                     extra_col1:provisionalRequestType,
                     doctorPrimaryId:doctorPrimaryId,
-
                 }
-                const formData = new FormData();
-                formData.append("provisionalInfo", JSON.stringify(provisionalInfo));
-                if (provisionalCertificate?.file) {
-                    formData.append("pc", provisionalCertificate?.file);
-                }
-                if (applicationForm?.file) {
-                    formData.append("af", applicationForm?.file);
-                }
-                if (nocCertificate?.file) {
-                    formData.append("noc", nocCertificate?.file);
-                }
-
+                // const formData = new FormData();
+                // formData.append("provisionalInfo", JSON.stringify(provisionalInfo));
+                // if (provisionalCertificate?.file) {
+                //     formData.append("pc", provisionalCertificate?.file);
+                // }
+                // if (applicationForm?.file) {
+                //     formData.append("af", applicationForm?.file);
+                // }
+                // if (nocCertificate?.file) {
+                //     formData.append("noc", nocCertificate?.file);
+                // }
+                secureLocalStorage.setItem("regType", 'provisional');
                 secureLocalStorage.setItem("provisionalInfo", provisionalInfo);
                 if (provisionalCertificate?.file) {
                     secureLocalStorage.setItem("pc", provisionalCertificate?.file);
@@ -191,30 +191,30 @@ const ProvisionalRegistration = () => {
                 if (nocCertificate?.file) {
                     secureLocalStorage.setItem("noc", nocCertificate?.file);
                 }
-                //navigate(routes.payment);
+                navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'provisional'}});
                 //navigate(routes.paymentsuccess);
-                const { success } = await provisionalService.provisionalRegistration(formData);
-                if (success) {
-                 /*   if (serial) {
-                        await commonService.updateMtSerials(serial);
-                        provisionalSerial && await commonService.updateMtSerials(provisionalSerial);
-                        const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
-                        doctorPrimaryId && await doctorService.updateDoctorIdPmrId(doctorPrimaryId, doctorId, pmrNo);
-                        LocalStorageManager.setDoctorSerialId(doctorId.toString());
-                    }*/
-                    setProvisionalCertificate(null);
-                    setApplicationForm(null);
-                    setNOCCertificate(null);
-                    const doctorMobileno = LocalStorageManager.getDoctorMobileno();
-                    if (doctorMobileno) {
-                        await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Provisional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
+                // const { success } = await provisionalService.provisionalRegistration(formData);
+                // if (success) {
+                //     if (serial) {
+                //         await commonService.updateMtSerials(serial);
+                //         provisionalSerial && await commonService.updateMtSerials(provisionalSerial);
+                //         const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
+                //         doctorPrimaryId && await doctorService.updateDoctorIdPmrId(doctorPrimaryId, doctorId, pmrNo);
+                //         LocalStorageManager.setDoctorSerialId(doctorId.toString());
+                //     }
+                //     setProvisionalCertificate(null);
+                //     setApplicationForm(null);
+                //     setNOCCertificate(null);
+                //     const doctorMobileno = LocalStorageManager.getDoctorMobileno();
+                //     if (doctorMobileno) {
+                //         await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Provisional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
 
-                        }).catch(() => {
+                //         }).catch(() => {
 
-                        });
-                    }
-                    //navigate(routes.payment);
-                }
+                //         });
+                //     }
+                //     //navigate(routes.payment);
+                // }
             } catch (err) {
                 Swal.fire({
                     //title: "Error",
@@ -254,17 +254,12 @@ const ProvisionalRegistration = () => {
                         <div className="col-9 m-auto">
                             <div className="card shadow border-0 mb-4">
                                 <div className="card-body">
-                                    <h1 className='fs-22 fw-700'>Provisional Registration</h1>
-                                    <label className="mb-2">Provisional Request Type</label>
-                                    <select
-                                        value={provisionalRequestType}
-                                        onChange={(ev) => {
-                                            setProvisionalRequestType(ev.target.value);
-                                        }}
-                                    >
-                                        <option value="nor">Normal</option>
-                                        <option value="tat">Tatkal</option>
-                                    </select>
+                                    <div className="d-flex align-items-center justify-content-between">
+                                        <h1 className='fs-22 fw-700 text-nowrap'>Provisional Registration</h1>
+                                        <div>
+                                            
+                                        </div>
+                                    </div>
                                     <hr />
                                     <Formik
                                         onSubmit={submitForm}
@@ -531,7 +526,18 @@ const ProvisionalRegistration = () => {
                                                             </Field>
                                                         </div>
                                                         <div className="col">
-
+                                                            <label className="mb-2">Provisional Request Type</label>
+                                                            <select
+                                                                value={provisionalRequestType}
+                                                                onChange={(ev) => {
+                                                                    setProvisionalRequestType(ev.target.value);
+                                                                }}
+                                                                className="form-select"
+                                                            >
+                                                                <option value="">Select</option>
+                                                                <option value="nor">Normal</option>
+                                                                <option value="tat">Tatkal</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                     <div className="row mb-2 mt-4">

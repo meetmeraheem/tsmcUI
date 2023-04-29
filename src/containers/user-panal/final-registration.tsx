@@ -22,6 +22,7 @@ import { dateDuration } from '../../lib/utils/dateDuration';
 import { provisionalService } from '../../lib/api/provisional';
 import moment from 'moment';
 import { authService } from '../../lib/api/auth';
+import secureLocalStorage from 'react-secure-storage';
 
 const FinalRegistration = () => {
     const navigate = useNavigate();
@@ -191,6 +192,7 @@ const FinalRegistration = () => {
             try {
                 const doctorId = Number(LocalStorageManager.getDoctorSerialId());
                 const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
+
                 const finalInfo = {
                     ...values,
                     createdon: moment().format('YYYY-MM-DD'),
@@ -203,87 +205,131 @@ const FinalRegistration = () => {
                     reg_date: moment().format('YYYY-MM-DD'),
                     doctorPrimaryId:doctorPrimaryId,
                 }
-                const formData = new FormData();
-                formData.append("finalInfo", JSON.stringify(finalInfo));
+                secureLocalStorage.setItem("regType", 'final');
+                secureLocalStorage.setItem("finalInfo", finalInfo);
+
                 if (applicationForm?.file) {
-                    formData.append("af", applicationForm?.file);
+                    secureLocalStorage.setItem("af", applicationForm?.file);
                 }
                 if (mbbsCertificate?.file) {
-                    formData.append("mbbs", mbbsCertificate?.file);
+                    secureLocalStorage.setItem("mbbs", mbbsCertificate?.file);
                 }
                 if (nocCertificate?.file) {
-                    formData.append("noc", nocCertificate?.file);
+                    secureLocalStorage.setItem("noc", nocCertificate?.file);
                 }
                 if (affidavitCertificate?.file) {
-                    formData.append("affidavit", affidavitCertificate?.file);
+                    secureLocalStorage.setItem("affidavit", affidavitCertificate?.file);
                 }
                 if (testimonal1?.file) {
-                    formData.append("testimonal1", testimonal1?.file);
+                    secureLocalStorage.setItem("testimonal1", testimonal1?.file);
                 }
                 if (testimonal2?.file) {
-                    formData.append("testimonal2", testimonal2?.file);
+                    secureLocalStorage.setItem("testimonal2", testimonal2?.file);
                 }
                 if (registrationOfOtherStateCertificate?.file) {
-                    formData.append("regOfOtherState", registrationOfOtherStateCertificate?.file);
+                    secureLocalStorage.setItem("regOfOtherState", registrationOfOtherStateCertificate?.file);
                 }
                 if (screeningTestPassCertificate?.file) {
-                    formData.append("screeningTestPass", screeningTestPassCertificate?.file);
+                    secureLocalStorage.setItem("screeningTestPass", screeningTestPassCertificate?.file);
                 }
                 if (internshipCompletionCertificate?.file) {
-                    formData.append("internshipComp", internshipCompletionCertificate?.file);
+                    secureLocalStorage.setItem("internshipComp", internshipCompletionCertificate?.file);
                 }
                 if (mciEligibilityCertificate?.file) {
-                    formData.append("mciEligibility", mciEligibilityCertificate?.file);
+                    secureLocalStorage.setItem("mciEligibility", mciEligibilityCertificate?.file);
                 }
                 if (intermediateVerificationCertificate?.file) {
-                    formData.append("interVerification", intermediateVerificationCertificate?.file);
+                    secureLocalStorage.setItem("interVerification", intermediateVerificationCertificate?.file);
                 }
                 if (mciRegisrationCertificate?.file) {
-                    formData.append("mciReg", mciRegisrationCertificate?.file);
+                    secureLocalStorage.setItem("mciReg", mciRegisrationCertificate?.file);
                 }
                 if (imrCertificate?.file) {
-                    formData.append("imr", imrCertificate?.file);
+                    secureLocalStorage.setItem("imr", imrCertificate?.file);
                 }
-                const { success } = await finalService.finalRegistration(formData);
-                if (success) {
-                    const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
-                   /* if (finalSerial) {
-                        await commonService.updateMtSerials(finalSerial);
-                        fmrNo && await doctorService.updateDoctorIdFMRId(doctorPrimaryId, { fmr_no: fmrNo });
-                        LocalStorageManager.setDoctorFMRNo(fmrNo.toString());
-                    }*/
-                    setApplicationForm(null);
-                    setMBBSCertificate(null);
-                    setNOCCertificate(null);
-                    setAffidavitCertificate(null);
-                    setTestimonal1(null);
-                    setTestimonal2(null);
-                    setRegistrationOfOtherStateCertificate(null);
-                    setScreeningTestPassCertificate(null);
-                    setInternshipCompletionCertificate(null);
-                    setMCIEligibilityCertificate(null);
-                    setIntermediateVerificationCertificate(null);
-                    setMCIRegisrationCertificate(null);
-                    setIMRCertificate(null);
-                    Swal.fire({
-                        title: "Success",
-                        text: "Final registration successfully completed",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    }).then(async (result) => {
-                        if (result.isConfirmed) {
-                            const doctorMobileno = LocalStorageManager.getDoctorMobileno();
-                            if (doctorMobileno) {
-                                await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Final Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
+                navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'final'}});
 
-                                }).catch(() => {
+                // const formData = new FormData();
+                // formData.append("finalInfo", JSON.stringify(finalInfo));
+                // if (applicationForm?.file) {
+                //     formData.append("af", applicationForm?.file);
+                // }
+                // if (mbbsCertificate?.file) {
+                //     formData.append("mbbs", mbbsCertificate?.file);
+                // }
+                // if (nocCertificate?.file) {
+                //     formData.append("noc", nocCertificate?.file);
+                // }
+                // if (affidavitCertificate?.file) {
+                //     formData.append("affidavit", affidavitCertificate?.file);
+                // }
+                // if (testimonal1?.file) {
+                //     formData.append("testimonal1", testimonal1?.file);
+                // }
+                // if (testimonal2?.file) {
+                //     formData.append("testimonal2", testimonal2?.file);
+                // }
+                // if (registrationOfOtherStateCertificate?.file) {
+                //     formData.append("regOfOtherState", registrationOfOtherStateCertificate?.file);
+                // }
+                // if (screeningTestPassCertificate?.file) {
+                //     formData.append("screeningTestPass", screeningTestPassCertificate?.file);
+                // }
+                // if (internshipCompletionCertificate?.file) {
+                //     formData.append("internshipComp", internshipCompletionCertificate?.file);
+                // }
+                // if (mciEligibilityCertificate?.file) {
+                //     formData.append("mciEligibility", mciEligibilityCertificate?.file);
+                // }
+                // if (intermediateVerificationCertificate?.file) {
+                //     formData.append("interVerification", intermediateVerificationCertificate?.file);
+                // }
+                // if (mciRegisrationCertificate?.file) {
+                //     formData.append("mciReg", mciRegisrationCertificate?.file);
+                // }
+                // if (imrCertificate?.file) {
+                //     formData.append("imr", imrCertificate?.file);
+                // }
+                // const { success } = await finalService.finalRegistration(formData);
+                // if (success) {
+                //     const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
+                //     if (finalSerial) {
+                //         await commonService.updateMtSerials(finalSerial);
+                //         fmrNo && await doctorService.updateDoctorIdFMRId(doctorPrimaryId, { fmr_no: fmrNo });
+                //         LocalStorageManager.setDoctorFMRNo(fmrNo.toString());
+                //     }
+                //     setApplicationForm(null);
+                //     setMBBSCertificate(null);
+                //     setNOCCertificate(null);
+                //     setAffidavitCertificate(null);
+                //     setTestimonal1(null);
+                //     setTestimonal2(null);
+                //     setRegistrationOfOtherStateCertificate(null);
+                //     setScreeningTestPassCertificate(null);
+                //     setInternshipCompletionCertificate(null);
+                //     setMCIEligibilityCertificate(null);
+                //     setIntermediateVerificationCertificate(null);
+                //     setMCIRegisrationCertificate(null);
+                //     setIMRCertificate(null);
+                //     Swal.fire({
+                //         title: "Success",
+                //         text: "Final registration successfully completed",
+                //         icon: "success",
+                //         confirmButtonText: "OK",
+                //     }).then(async (result) => {
+                //         if (result.isConfirmed) {
+                //             const doctorMobileno = LocalStorageManager.getDoctorMobileno();
+                //             if (doctorMobileno) {
+                //                 await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Final Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
 
-                                });
-                            }
-                            navigate(routes.userpanal);
-                        }
-                    });
-                }
+                //                 }).catch(() => {
+
+                //                 });
+                //             }
+                //             navigate(routes.userpanal);
+                //         }
+                //     });
+                // }
             } catch (err) {
                 Swal.fire({
                     text: "Final registeration failed",
@@ -702,7 +748,7 @@ const FinalRegistration = () => {
                                                                                             setDuration('');
                                                                                         }
                                                                                     }}
-                                                                                    className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                                    className={`form-control ${error ? 'is-invalid' : ''
                                                                                         }`}
                                                                                     placeholder="Enter exam year"
                                                                                     tabIndex={7} minLength={4} maxLength={4}
@@ -734,7 +780,7 @@ const FinalRegistration = () => {
                                                                                     //     setFieldTouched(field.name);
                                                                                     //     setFieldValue(field.name, Number(ev.target.value));
                                                                                     // }}
-                                                                                    className={`form-control form-control-sm ${error ? 'is-invalid' : ''
+                                                                                    className={`form-control ${error ? 'is-invalid' : ''
                                                                                         }`}
                                                                                     placeholder="Enter duration"
                                                                                     tabIndex={8}
