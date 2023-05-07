@@ -288,9 +288,6 @@ const AdditionalQualificationRegistration = () => {
                                 <hr />
                                 <DoctorInfoCard />
                             </div>
-                            <div className="card-footer text-end">
-                            <button type='submit' className='btn btn-primary'>Next <i className="bi-chevron-right"></i></button>
-                            </div>
                         </div>
                     </div>
                     }
@@ -477,7 +474,7 @@ const AdditionalQualificationRegistration = () => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                            <label className="mb-2">AppliedFor </label>
+                                                                        <label className="mb-2">AppliedFor </label>
                                                                                 <select
                                                                                     value={field.value}
                                                                                     onChange={(ev) => {
@@ -512,7 +509,8 @@ const AdditionalQualificationRegistration = () => {
                                                                         return (
                                                                             <>
                                                                                 <label className="mb-2">Qualification</label>
-                                                                                <select
+                                                                                <input
+                                                                                    type="text"
                                                                                     value={field.value}
                                                                                     onChange={(ev) => {
                                                                                         setFieldTouched(field.name);
@@ -521,18 +519,11 @@ const AdditionalQualificationRegistration = () => {
                                                                                             ev.target.value
                                                                                         );
                                                                                     }}
-                                                                                    className={`form-select ${error ? 'is-invalid' : ''
+                                                                                    className={`form-control form-control-sm ${error ? 'is-invalid' : ''
                                                                                         }`}
-                                                                                >
-                                                                                    <option value="">Select</option>
-                                                                                    {qualifications.map(
-                                                                                        (item, index) => (
-                                                                                            <option key={index} value={item.id.toString()}>
-                                                                                                {item.name}
-                                                                                            </option>
-                                                                                        )
-                                                                                    )}
-                                                                                </select>
+                                                                                    placeholder="Enter Qualification"
+                                                                                    
+                                                                                />
                                                                                 {error && <small className="text-danger">{error.toString()}</small>}
                                                                             </>
                                                                         );
@@ -567,8 +558,7 @@ const AdditionalQualificationRegistration = () => {
                                                                                         }
                                                                                     }}
                                                                                     className={`form-select ${error ? 'is-invalid' : ''
-                                                                                        }`}
-                                                                                >
+                                                                                        }`}>
                                                                                     <option value="">Select Month</option>
                                                                                     <option value="JAN">January</option>
                                                                                     <option value="FEB">February</option>
@@ -598,35 +588,29 @@ const AdditionalQualificationRegistration = () => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                                                <label className="mb-2"> Year</label>
+                                                                                <label className="mb-2">Year</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     value={field.value}
                                                                                     onChange={(ev) => {
                                                                                         setFieldTouched(field.name);
-                                                                                        setFieldValue(field.name, Number(ev.target.value));
-                                                                                        if (ev.target.value.length === 4 && values.exam_month) {
-                                                                                            const getDuration = dateDuration(Number(ev.target.value), values.exam_month);
-                                                                                            getDuration && setDuration(getDuration);
-                                                                                        }
-                                                                                        else {
-                                                                                            setDuration('');
-                                                                                        }
+                                                                                        setFieldValue(
+                                                                                            field.name,
+                                                                                            ev.target.value
+                                                                                        );
                                                                                     }}
                                                                                     className={`form-control form-control-sm ${error ? 'is-invalid' : ''
                                                                                         }`}
                                                                                     placeholder="Enter exam year"
                                                                                     tabIndex={7} minLength={4} maxLength={4}
                                                                                 />
-
                                                                                 {error && <small className="text-danger">{error.toString()}</small>}
-
-
                                                                             </>
                                                                         );
                                                                     }}
                                                                 </Field>
                                                             </div>
+                                                            
                                                             </div >
                                                         </div>
                                                         <div className="row mb-2 mt-4">

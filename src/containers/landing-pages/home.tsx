@@ -202,7 +202,13 @@ const HomePage = () => {
                }
           } catch (error) {
                if (error) {
-                    //setMsg(error.response.data.msg);
+                    console.log(error);
+                    Swal.fire({
+                         //title: "Error",
+                         text: "Login failed",
+                         icon: "error",
+                         confirmButtonText: "OK",
+                    });
                }
           }
      }
