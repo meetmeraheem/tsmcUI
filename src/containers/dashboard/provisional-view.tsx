@@ -33,6 +33,7 @@ const ProvisionalView = () => {
     const [isEduCert1, setIsEduCert1] = useState(false);
     const [isEduCert2, setIsEduCert2] = useState(false);
     const [isEduCert3, setIsEduCert3] = useState(false);
+    const [userType, setUserType] = useState('');
 
     const getDoctorDetails = async () => {
         try {
@@ -65,6 +66,7 @@ const ProvisionalView = () => {
                         university: data[0].university,
                         reg_date: data[0].reg_date,
                         college: data[0].college,
+                        approval_status:data[0].approval_status,
                         edu_cert1: data[0].edu_cert1,
                         edu_cert2: data[0].edu_cert2,
                         edu_cert3: data[0].edu_cert3,
@@ -78,7 +80,6 @@ const ProvisionalView = () => {
     }, []);
 
     const submit = useCallback(async (status: any) => {
-        const userType = LocalStorageManager.getUserType();
         if (status) {
             const provisionalInfo = {
                 approval_status: status,
@@ -102,7 +103,7 @@ const ProvisionalView = () => {
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
                                 await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
-
+                                    
                                 }).catch(() => {
 
                                 });
@@ -126,7 +127,7 @@ const ProvisionalView = () => {
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
                                 await authService.sendSMS(doctor?.mobileno, 'Your Application has been Rejected from Telangana State Medical Council.').then((response) => {
-
+                                    
                                 }).catch(() => {
 
                                 });
@@ -153,6 +154,8 @@ const ProvisionalView = () => {
     }, [remarks]);
 
     useEffect(() => {
+        const userTypeValue = LocalStorageManager.getUserType();
+        userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getProvisionalDetails();
     }, []);
@@ -314,26 +317,27 @@ const ProvisionalView = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="card-footer pb-3">
-                        <div className="mb-3">
-                            <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
-                            <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
-                        </div>
-                        <div className='d-flex'>
-                            <div className="col">
-                                <button type="submit" onClick={() => {
-                                    submit('rej');
-                                }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                    {userType === 'u' && provisional?.approval_status === 'pen' &&
+                        <div className="card-footer pb-3">
+                            <div className="mb-3">
+                                <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
+                                <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
                             </div>
-                            <div className="col text-end">
-                                <button type="submit"
-                                    onClick={() => {
-                                        submit('apr');
-                                    }} className='btn btn-success'><i className="bi-check-circle"></i> Approve</button>
+                            <div className='d-flex'>
+                                <div className="col">
+                                    <button type="submit" onClick={() => {
+                                        submit('rej');
+                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                                </div>
+                                <div className="col text-end">
+                                    <button type="submit"
+                                        onClick={() => {
+                                            submit('apr');
+                                        }} className='btn btn-success'><i className="bi-check-circle"></i> Approve</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
+                    }
                 </div>
             </div>
             <div>

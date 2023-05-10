@@ -11,7 +11,7 @@ import { authService } from "../../lib/api/auth";
 import { routes } from "../routes/routes-names";
 import Swal from "sweetalert2";
 import { ProvisionalFormType, ProvisionalPaymentProfileType } from "../../types/provisional";
-import { FinalPaymentFormType } from "../../types/final";
+import { FinalFormType, FinalPaymentFormType } from "../../types/final";
 import { finalService } from "../../lib/api/final";
 
 const PaymentSuccess = () => {
@@ -22,11 +22,16 @@ const PaymentSuccess = () => {
     // const { orderid } = location.state
     console.log('orderId ' + orderId);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
-    const [isLoader, setIsLoader] = useState(false);
+    const [isLoader, setIsLoader] = useState(true);
+    const [paymentSerial, setPaymentSerial] = useState(0);
+    const [doctorSerialNumber, setDoctorSerialNumber] = useState(0);
+    const [pmrSerialNumber, setPMRSerialNumber] = useState(0);
+    const [fmrSerialNumber, setFMRSerialNumber] = useState(0);
+    const [transactionNumber, setTransactionNumber] = useState('');
 
     useEffect(() => {
         (async () => {
-            setIsLoader(true);
+
             try {
                 const orderKeyId = LocalStorageManager.getOrderKeyId();
                 console.log('orderKeyId ----: ' + orderKeyId);
@@ -35,6 +40,7 @@ const PaymentSuccess = () => {
                 //data && data.OrderId && data.OrderId !== null && data.OrderId !== ""
 
                 if (data && data.OrderId && data.OrderId !== null && data.OrderId !== "") {
+                    console.log('Payment OrderId ' + data.OrderId + ' ------ ' + orderId);
                     const regType = secureLocalStorage.getItem("regType");
                     if (regType === 'provisional') {
                         const provisionalInfo = secureLocalStorage.getItem("provisionalInfo");
@@ -43,8 +49,8 @@ const PaymentSuccess = () => {
                             recept_date: moment().format('YYYY-MM-DD'),
                             dd_amount: 100,
                             receipt_no: orderId
-
                         }
+                        orderId && setTransactionNumber(orderId);
                         const pc = secureLocalStorage.getItem("pc");
                         const af = secureLocalStorage.getItem("af");
                         const noc = secureLocalStorage.getItem("noc");
@@ -73,7 +79,7 @@ const PaymentSuccess = () => {
                                     }
                                 );
                             }
-
+                            setDoctorSerialNumber(Number(data.serial_starts) + 1);
                             const { data: pr } = await commonService.getMtSerials('PR');
                             if (pr) {
                                 await commonService.updateMtSerials(
@@ -84,6 +90,7 @@ const PaymentSuccess = () => {
                                     }
                                 );
                             }
+                            setPMRSerialNumber(Number(pr.serial_starts) + 1);
                             const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
                             doctorPrimaryId && await doctorService.updateDoctorIdPmrId(doctorPrimaryId, Number(data.serial_starts) + 1, Number(pr.serial_starts) + 1);
                             LocalStorageManager.setDoctorSerialId((Number(data.serial_starts) + 1).toString());
@@ -112,7 +119,15 @@ const PaymentSuccess = () => {
                     }
 
                     if (regType === 'final') {
+                        const { data: dd } = await commonService.getMtSerials('DD');
+                        if (dd) {
+                            setPaymentSerial(Number(dd.serial_starts) + 1);
+                        }
                         const finalInfo = secureLocalStorage.getItem("finalInfo");
+                        const finalPaymentInfo = {
+                            ...finalInfo as FinalPaymentFormType,
+                            pay_id: Number(dd.serial_starts) + 1
+                        }
                         const af = secureLocalStorage.getItem("af");
                         const mbbs = secureLocalStorage.getItem("mbbs");
                         const noc = secureLocalStorage.getItem("noc");
@@ -128,7 +143,7 @@ const PaymentSuccess = () => {
                         const imr = secureLocalStorage.getItem("imr");
 
                         const formData = new FormData();
-                        formData.append("finalInfo", JSON.stringify(finalInfo));
+                        formData.append("finalInfo", JSON.stringify(finalPaymentInfo));
 
                         if (af) {
                             formData.append("af", af as File);
@@ -171,9 +186,10 @@ const PaymentSuccess = () => {
                         }
                         const { success } = await finalService.finalRegistration(formData);
                         if (success) {
-                            const { data } = await commonService.getMtSerials('DD');
+                            //const { data } = await commonService.getMtSerials('DD');
                             const doctorId = Number(LocalStorageManager.getDoctorSerialId());
-                            if (data) {
+                            setDoctorSerialNumber(doctorId);
+                            if (paymentSerial) {
                                 const finalPaymentInfo = {
                                     doctor_id: doctorId,
                                     reg_date: moment().format('YYYY-MM-DD'),
@@ -181,10 +197,12 @@ const PaymentSuccess = () => {
                                     dd_amount: 100,
                                     receipt_no: orderId,
                                     pay_type: 'frn',
-                                    dd_serial: Number(data.serial_starts) + 1,
+                                    dd_branch: 'on',
+                                    dd_serial: paymentSerial,
                                     createdon: moment().format('YYYY-MM-DD'),
                                     posttime: moment().format('h:mm:ss'),
                                 }
+                                orderId && setTransactionNumber(orderId);
                                 const { success } = await commonService.createPayment(finalPaymentInfo);
                                 if (success) {
                                     await commonService.updateMtSerials(
@@ -206,9 +224,9 @@ const PaymentSuccess = () => {
                                         serial_starts: Number(fr.serial_starts) + 1
                                     }
                                 );
-
+                                setFMRSerialNumber(Number(fr.serial_starts) + 1);
                                 const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
-                                doctorPrimaryId && await doctorService.updateDoctorIdFMRId(doctorPrimaryId, { fmr_no: Number(fr.serial_starts) + 1 });
+                                doctorPrimaryId && await doctorService.updateDoctorIdFMRId(doctorPrimaryId, { fmr_no: Number(fr.serial_starts) + 1, orignal_fmr_no: 'TSMC/FMR/' + Number(fr.serial_starts) + 1 });
                                 LocalStorageManager.setDoctorFMRNo((Number(fr.serial_starts) + 1).toString());
                             }
                             secureLocalStorage.removeItem("af");
@@ -250,22 +268,24 @@ const PaymentSuccess = () => {
                         //     receipt_no: orderId
                         // }
                     }
+                    setIsLoader(false);
                     setPaymentSuccess(true);
                 }
                 else {
+                    setIsLoader(false);
                     setPaymentSuccess(false);
-                }              
+                }
             } catch (error) {
+                setIsLoader(false);
                 setPaymentSuccess(false);
                 console.log('error --------- ' + error);
             }
-
         })();
-    }, []);
+    }, [doctorSerialNumber, pmrSerialNumber, fmrSerialNumber, transactionNumber]);
 
     return (
         <>
-            {isLoader ?
+            {isLoader ? (<div className="spinner-border text-success" role="status"></div>) :
                 <section className='gray-banner'>
                     <div className="container vh-75 d-flex align-items-center justify-content-center">
                         {/* Payment Success message */}
@@ -279,6 +299,28 @@ const PaymentSuccess = () => {
                                         </div>
                                         <div className="px-3 text-center">
                                             <p className="mb-3">Your application successfully submitted to <br /> Telangana State Medical Council</p>
+                                            <div className="d-flex mb-2">
+                                                <div className="col d-flex">
+                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Doctor Id:</label>
+                                                    <div className="fs-14">{doctorSerialNumber}</div>
+                                                </div>
+                                                {pmrSerialNumber && <div className="col d-flex">
+                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>PMR No:</label>
+                                                    <div className="fs-14">{pmrSerialNumber}</div>
+                                                </div>}
+                                                {fmrSerialNumber && <div className="col d-flex">
+                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>FMR No:</label>
+                                                    <div className="fs-14">{fmrSerialNumber}</div>
+                                                </div>}
+                                                <div className="col d-flex">
+                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Id:</label>
+                                                    <div className="fs-14">{transactionNumber}</div>
+                                                </div>
+                                                <div className="col d-flex">
+                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Reg Date and Time:</label>
+                                                    <div className="fs-14">{moment().format('YYYY-MM-DD h:mm:ss')}</div>
+                                                </div>
+                                            </div>
                                             <hr className="my-4" />
                                             <button type="button" onClick={() => { navigate(routes.userpanal); }} className="btn btn-primary">Back to Profile</button>
                                         </div>
@@ -306,7 +348,7 @@ const PaymentSuccess = () => {
                         }
                     </div>
                 </section>
-                : ''
+
             }
         </>
     )

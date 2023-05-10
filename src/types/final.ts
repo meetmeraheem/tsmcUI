@@ -148,6 +148,7 @@ export type FinalPaymentFormType = {
   exam_month: string;
   exam_year: string;
   duration: string,
+  extra_col1: string;
   edu_cert1: string,
   edu_cert2: string,
   edu_cert3: string,

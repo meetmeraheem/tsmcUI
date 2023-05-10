@@ -82,6 +82,16 @@ const EditFinal = () => {
                 const { data } = await finalService.getFinal(doctorSerialId);
                 if (data.length > 0) {
                     setFinal(data[0]);
+                    if (data[0].country === 101) {
+                        setIsIndia(true);
+                    } else {
+                        setIsIndia(false);
+                    }
+                    if (data[0].state === 36) {
+                        setIsTelangana(true);
+                    } else {
+                        setIsTelangana(false);
+                    }
                     setDuration(data[0]?.duration);
                     getStates(data[0]?.country);
                     const universityList = await getUniversityNames(data[0]?.state);
@@ -262,6 +272,84 @@ const EditFinal = () => {
         },
         [applicationForm,mbbsCertificate,nocCertificate,affidavitCertificate,testimonal1,testimonal2,registrationOfOtherStateCertificate,screeningTestPassCertificate,internshipCompletionCertificate,mciEligibilityCertificate,intermediateVerificationCertificate,mciRegisrationCertificate,imrCertificate,final, duration]
     );
+
+    const getValidationSchema = () =>
+        objectYup().shape({
+            country: stringYup()
+                .required('Country is required.'),
+            state: stringYup()
+                .required('State is required.'),
+            university: stringYup()
+                .required('University Name is required.'),
+            college: stringYup()
+                .required('College Name is required.'),
+            qualification: stringYup()
+                .required('Qualification is required.'),
+            exam_month: stringYup()
+                .required('Exam Month is required.'),
+            exam_year: stringYup()
+                .required('Exam year is required.')
+                .min(4, 'Exam year must 4 numbers.'),
+            edu_cert1: stringYup()
+                .required('Application form is required.'),
+            edu_cert2: stringYup()
+                .required('MBBS certificate is required.'),
+            edu_cert3: stringYup().when(['country', 'state'], {
+                is: (country: any, state: any) => (country == 101 && state != 36 && !isPMRDateAbove15M),
+                then: stringYup().required('NOC is required.'),
+                otherwise: stringYup()
+            }),
+            reg_other_state: stringYup().when(['country', 'state'], {
+                is: (country: any, state: any) => (country == 101 && state != 36 && !isPMRDateAbove15M),
+                then: stringYup().required('Registration of other state certificate is required.'),
+                otherwise: stringYup()
+            }),
+            affidivit: stringYup().when(['country', 'state'], {
+                is: (country: any, state: any) => ((country != 101) || (country == 101 && state == 36 && isPMRDateAbove15M)),
+                then: stringYup().required('affidivit is required.'),
+                otherwise: stringYup()
+            }),
+            testimonal1: stringYup().when(['country', 'state'], {
+                is: (country: any, state: any) => (country == 101 && state == 36 && isPMRDateAbove15M && isPMRDateAbove18M),
+                then: stringYup().required('Testimonal1 is required.'),
+                otherwise: stringYup()
+            }),
+            testimonal2: stringYup().when(['country', 'state'], {
+                is: (country: any, state: any) => (country == 101 && state == 36 && isPMRDateAbove15M && isPMRDateAbove18M),
+                then: stringYup().required('Testimonal2 is required.'),
+                otherwise: stringYup()
+            }),
+            screen_test: stringYup().when(['country'], {
+                is: (country: any) => (country != 101),
+                then: stringYup().required('Screening test pass certificate is required.'),
+                otherwise: stringYup()
+            }),
+            intership_comp: stringYup().when(['country'], {
+                is: (country: any) => (country != 101),
+                then: stringYup().required('Internship completion certificate is required.'),
+                otherwise: stringYup()
+            }),
+            mci_eligi: stringYup().when(['country'], {
+                is: (country: any) => (country != 101),
+                then: stringYup().required('MCI eligibility certificate is required.'),
+                otherwise: stringYup()
+            }),
+            inter_verif_cert: stringYup().when(['country'], {
+                is: (country: any) => (country != 101),
+                then: stringYup().required('Intermediate verification certificate is required.'),
+                otherwise: stringYup()
+            }),
+            mci_reg: stringYup().when(['country'], {
+                is: (country: any) => (country != 101),
+                then: stringYup().required('MCI regisration certificate is required.'),
+                otherwise: stringYup()
+            }),
+            imr_certificate: stringYup().when(['country'], {
+                is: (country: any) => (country != 101),
+                then: stringYup().required('IMR certificate is required.'),
+                otherwise: stringYup()
+            }),
+        });
 
     return (
         <>
@@ -1491,49 +1579,49 @@ const EditFinal = () => {
 
 export default EditFinal;
 
-const getValidationSchema = () =>
-    objectYup().shape({
-        country: stringYup()
-            .required('Country is required.'),
-        state: stringYup()
-            .required('State is required.'),
-        university: stringYup()
-            .required('University Name is required.'),
-        college: stringYup()
-            .required('College Name is required.'),
-        qualification: stringYup()
-            .required('Qualification is required.'),
-        exam_month: stringYup()
-            .required('Exam Month is required.'),
-        exam_year: stringYup()
-            .required('Exam year is required.')
-            .min(4, 'Exam year must 4 numbers.'),
-        // duration: stringYup()
-        //     .required('Duration is required.'),
-        edu_cert1: stringYup()
-            .required('Application form is required.'),
-        edu_cert2: stringYup()
-            .required('MBBS certificate is required.'),
-        // edu_cert3: stringYup()
-        //     .required('NOC is required.'),
-        // AffidavitCertificate: stringYup()
-        //     .required('Affidavit certificate is required.'),
-        // Testimonal1: stringYup()
-        //     .required('Testimonal1 is required.'),
-        // Testimonal2: stringYup()
-        //     .required('Testimonal2 is required.'),
-        // RegistrationOfOtherStateCertificate: stringYup()
-        //     .required('Registration of other state certificate is required.'),
-        // ScreeningTestPassCertificate: stringYup()
-        //     .required('Screening test pass certificate is required.'),
-        // InternshipCompletionCertificate: stringYup()
-        //     .required('Internship completion certificate is required.'),
-        // MCIEligibilityCertificate: stringYup()
-        //     .required('MCI eligibility certificate is required.'),
-        // IntermediateVerificationCertificate: stringYup()
-        //     .required('Intermediate verification certificate is required.'),
-        // MCIRegisrationCertificate: stringYup()
-        //     .required('MCI regisration certificate is required.'),
-        // IMRCertificate: stringYup()
-        //     .required('IMR certificate is required.')
-    });
+// const getValidationSchema = () =>
+//     objectYup().shape({
+//         country: stringYup()
+//             .required('Country is required.'),
+//         state: stringYup()
+//             .required('State is required.'),
+//         university: stringYup()
+//             .required('University Name is required.'),
+//         college: stringYup()
+//             .required('College Name is required.'),
+//         qualification: stringYup()
+//             .required('Qualification is required.'),
+//         exam_month: stringYup()
+//             .required('Exam Month is required.'),
+//         exam_year: stringYup()
+//             .required('Exam year is required.')
+//             .min(4, 'Exam year must 4 numbers.'),
+//         // duration: stringYup()
+//         //     .required('Duration is required.'),
+//         edu_cert1: stringYup()
+//             .required('Application form is required.'),
+//         edu_cert2: stringYup()
+//             .required('MBBS certificate is required.'),
+//         // edu_cert3: stringYup()
+//         //     .required('NOC is required.'),
+//         // AffidavitCertificate: stringYup()
+//         //     .required('Affidavit certificate is required.'),
+//         // Testimonal1: stringYup()
+//         //     .required('Testimonal1 is required.'),
+//         // Testimonal2: stringYup()
+//         //     .required('Testimonal2 is required.'),
+//         // RegistrationOfOtherStateCertificate: stringYup()
+//         //     .required('Registration of other state certificate is required.'),
+//         // ScreeningTestPassCertificate: stringYup()
+//         //     .required('Screening test pass certificate is required.'),
+//         // InternshipCompletionCertificate: stringYup()
+//         //     .required('Internship completion certificate is required.'),
+//         // MCIEligibilityCertificate: stringYup()
+//         //     .required('MCI eligibility certificate is required.'),
+//         // IntermediateVerificationCertificate: stringYup()
+//         //     .required('Intermediate verification certificate is required.'),
+//         // MCIRegisrationCertificate: stringYup()
+//         //     .required('MCI regisration certificate is required.'),
+//         // IMRCertificate: stringYup()
+//         //     .required('IMR certificate is required.')
+//     });

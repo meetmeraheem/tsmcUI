@@ -48,7 +48,7 @@ const Myprofile = () => {
                         reg_date: data[0].reg_date,
                         receipt_no: data[0].receipt_no,
                         country: country.data[0].name,
-                        state:state.data[0].name,
+                        state: state.data[0].name,
                         qualification: qualification.data[0].name,
                         exam_month: data[0].exam_month,
                         exam_year: data[0].exam_year,
@@ -78,7 +78,7 @@ const Myprofile = () => {
                         serialno: data[0].serialno,
                         reg_date: data[0].reg_date,
                         country: country.data[0].name,
-                        state:state.data[0].name,
+                        state: state.data[0].name,
                         qualification: qualification.data[0].name,
                         exam_month: data[0].exam_month,
                         exam_year: data[0].exam_year,
@@ -109,9 +109,11 @@ const Myprofile = () => {
                     <div className="row">
                         <div className="col-10 m-auto">
                             <div className="card shadow border-0 mb-4">
-                                <div className="card-header text-end">
-                                    <Link to={'edit-profile'} className='btn btn-primary btn-sm'>Edit Profile</Link>
-                                </div>
+                                {!doctor?.serial_id &&
+                                    <div className="card-header text-end">
+                                        <Link to={'edit-profile'} className='btn btn-primary btn-sm'>Edit Profile</Link>
+                                    </div>
+                                }
                                 <div className="card-body">
                                     <div className="tsmc-timeline-box">
                                         <div className="tsmc-timeline mb-5">
@@ -121,7 +123,7 @@ const Myprofile = () => {
                                                     <div className="flex-shrink-1 pe-3">
                                                         <div className="tsmc-doc-profile-box border-bottom-0">
                                                             <div className='tsmc-doc-img mb-3'>
-                                                                {doctor?.passphoto ? <img src={serverImgUrl + 'files/' + doctor?.passphoto} alt="" /> : <img src={DocDefultPic} alt="" /> }
+                                                                {doctor?.passphoto ? <img src={serverImgUrl + 'files/' + doctor?.passphoto} alt="" /> : <img src={DocDefultPic} alt="" />}
                                                             </div>
                                                             <div className="d-flex align-items-center justify-content-center border rounded p-1 signature">
                                                                 {doctor?.signature ? <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" /> :
@@ -196,20 +198,20 @@ const Myprofile = () => {
                                                     <div className="d-flex align-items-center justify-content-between mb-4">
                                                         <h1 className='fs-18 fw-700 mb-0'>Provisional Registration</h1>
                                                         <div>
-                                                            {provisional?.approval_status == 'apr' && 
-                                                            <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                <i className='bi-check-circle'></i> Approved
-                                                            </span>
+                                                            {provisional?.approval_status == 'apr' &&
+                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-check-circle'></i> Approved
+                                                                </span>
                                                             }
                                                             {provisional?.approval_status == 'pen' &&
-                                                            <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                <i className='bi-exclamation-circle'></i> Pending
-                                                            </span>
+                                                                <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-exclamation-circle'></i> Pending
+                                                                </span>
                                                             }
                                                             {provisional?.approval_status == 'rej' &&
-                                                            <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                <i className='bi-exclamation-circle'></i> Rejected
-                                                            </span>
+                                                                <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-exclamation-circle'></i> Rejected
+                                                                </span>
                                                             }
                                                             {provisional?.approval_status == 'pen' && <Link to={'edit-provisional'} className='btn btn-primary btn-sm me-3'>Edit</Link>}
                                                         </div>
@@ -271,20 +273,20 @@ const Myprofile = () => {
                                                     <div className="d-flex align-items-center justify-content-between mb-4">
                                                         <h1 className='fs-18 fw-700 mb-0'>Final Registration</h1>
                                                         <div>
-                                                            {final?.approval_status == 'apr' && 
-                                                            <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                <i className='bi-check-circle'></i> Approved
-                                                            </span>
+                                                            {final?.approval_status == 'apr' &&
+                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-check-circle'></i> Approved
+                                                                </span>
                                                             }
                                                             {final?.approval_status == 'pen' &&
-                                                            <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                <i className='bi-exclamation-circle'></i> Pending
-                                                            </span>
+                                                                <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-exclamation-circle'></i> Pending
+                                                                </span>
                                                             }
                                                             {final?.approval_status == 'rej' &&
-                                                            <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                <i className='bi-exclamation-circle'></i> Rejected
-                                                            </span>
+                                                                <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-exclamation-circle'></i> Rejected
+                                                                </span>
                                                             }
                                                             {final?.approval_status == 'pen' && <Link to={'edit-final'} className='btn btn-primary btn-sm me-3'>Edit</Link>}
                                                         </div>

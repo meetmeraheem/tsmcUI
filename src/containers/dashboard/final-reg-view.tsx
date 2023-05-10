@@ -15,6 +15,8 @@ import { routes } from '../routes/routes-names';
 import { serverUrl, serverImgUrl } from '../../config/constants';
 import moment from 'moment';
 import { assignmentService } from '../../lib/api/assignments';
+import { LocalStorageManager } from '../../lib/localStorage-manager';
+import { authService } from '../../lib/api/auth';
 
 const FinalRegView = () => {
     const location = useLocation();
@@ -26,6 +28,7 @@ const FinalRegView = () => {
     const [remarks, setRemarks] = useState('');
     const [isLightBoxOpen, setIsLightBoxOpen] = useState(false);
     const [lightBoxImagePath, setLightBoxImagePath] = useState('');
+    const [userType, setUserType] = useState('');
 
     const getDoctorDetails = async () => {
         try {
@@ -101,9 +104,21 @@ const FinalRegView = () => {
                         text: "Final successfully approved",
                         icon: "success",
                         confirmButtonText: "OK",
-                    }).then((result) => {
+                    }).then(async (result) => {
                         if (result.isConfirmed) {
-                            navigate(routes.admin_final_registrations);
+                            if (doctor?.mobileno) {
+                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
+                                    
+                                }).catch(() => {
+
+                                });
+                            }
+                            if (userType === 'a') {
+                                navigate(routes.admin_final_registrations);
+                            }
+                            if (userType === 'u') {
+                                navigate(routes.admin_my_work_items);
+                            }
                         }
                     });
                 }
@@ -113,9 +128,21 @@ const FinalRegView = () => {
                         text: "Final registration rejected",
                         icon: "error",
                         confirmButtonText: "OK",
-                    }).then((result) => {
+                    }).then(async (result) => {
                         if (result.isConfirmed) {
-                            navigate(routes.admin_final_registrations);
+                            if (doctor?.mobileno) {
+                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
+                                    
+                                }).catch(() => {
+
+                                });
+                            }
+                            if (userType === 'a') {
+                                navigate(routes.admin_final_registrations);
+                            }
+                            if (userType === 'u') {
+                                navigate(routes.admin_my_work_items);
+                            }
                         }
                     });
                 }
@@ -133,6 +160,8 @@ const FinalRegView = () => {
     }, [remarks]);
 
     useEffect(() => {
+        const userTypeValue = LocalStorageManager.getUserType();
+        userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getFinalDetails();
     }, []);
@@ -362,25 +391,27 @@ const FinalRegView = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="card-footer">
-                        <div className="mb-3">
-                            <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
-                            <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
-                        </div>
-                        <div className='d-flex'>
-                            <div className="col">
-                                <button type="submit" onClick={() => {
-                                    submit('rej');
-                                }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                    {userType === 'u' && final?.approval_status === 'pen' &&
+                        <div className="card-footer">
+                            <div className="mb-3">
+                                <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
+                                <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
                             </div>
-                            <div className="col text-end">
-                                <button type="submit"
-                                    onClick={() => {
-                                        submit('apr');
-                                    }} className='btn btn-success'><i className="bi-check-circle"></i> Approve</button>
+                            <div className='d-flex'>
+                                <div className="col">
+                                    <button type="submit" onClick={() => {
+                                        submit('rej');
+                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                                </div>
+                                <div className="col text-end">
+                                    <button type="submit"
+                                        onClick={() => {
+                                            submit('apr');
+                                        }} className='btn btn-success'><i className="bi-check-circle"></i> Approve</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
             <div>

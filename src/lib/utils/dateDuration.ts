@@ -8,6 +8,9 @@ export const dateDuration = (year: number, month: string) => {
         const diifYears = currentDate.diff(date, 'years');
         date.add(diifYears, 'years');
         const diifMonths = currentDate.diff(date, 'months');
+        // if(diifYears < 0 || diifMonths < 0){
+        //     return `${0} Years, ${0} Months`;
+        // }
         return `${diifYears} Years, ${diifMonths} Months`;
     } catch (error) {
         console.log('file upload Error', error);

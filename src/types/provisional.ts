@@ -84,6 +84,7 @@ export type AdminProvisionalProfileType = {
     university: string;
     reg_date: Date,
     college: string;
+    approval_status: string;
     edu_cert1: string;
     edu_cert2: string;
     edu_cert3: string;
@@ -104,6 +105,7 @@ export type ProvisionalPaymentProfileType = {
     university: string;
     approval_status: string;
     college: string;
+    extra_col1: string;
     edu_cert1: string;
     edu_cert2: string;
     edu_cert3: string;

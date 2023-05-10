@@ -21,6 +21,9 @@ import mastercardlogo from "../../assets/images/mastercard.jpg";
 import rupaylogo from "../../assets/images/rupay.jpg";
 import { doctorService } from "../../lib/api/doctot";
 import { DoctorProfileType } from "../../types/doctor";
+import secureLocalStorage from "react-secure-storage";
+import { ProvisionalPaymentProfileType } from "../../types/provisional";
+import { FinalPaymentFormType } from "../../types/final";
 
 const Payment = () => {
     const navigate = useNavigate();
@@ -29,6 +32,11 @@ const Payment = () => {
     const doctorProfile = useSelector((state: RootState) => state.doctor.profile);
     const getDate = moment().format('YYYY-MM-DD');
     const [doctor, setDoctor] = useState<DoctorProfileType | null>(null);
+    const [isNormalReg, setIsNormalReg] = useState(true);
+    const [registrationFee, setRegistrationFee] = useState(0);
+    const [penalityAmount, setPenalityAmount] = useState(0);
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [extraCharges, setExtraCharges] = useState(0);
 
     //const authString = '0ca4cd6e43204581ac6efeba64ea7d56:16d3605e36ef429bb2c5dcd1e238bff8:M:8463';
     //const authString = '0ca4cd6e43204581ac6efeba64ea7d56:16d3605e36ef429bb2c5dcd1e238bff8:M:11130';
@@ -126,44 +134,33 @@ const Payment = () => {
         // }
     }
 
-    const PayAndContinueForm = useCallback(
-        async (values: PaymentFormType) => {
-            try {
-               /* const paymentRequest = {
-                    ...payLoad,
-                    OrderAmount: values.amount,
-                    CustomerData: {
-                        FirstName:values.fullname,
-                        MobileNo: values.phone,
-                        Email: values.email
-                    }
+    const PayAndContinueForm = useCallback(async () => {
+        try {
+            const paymentRequest = {
+                ...payLoad,
+                OrderAmount: 1,
+                CustomerData: {
+                    FirstName: doctor?.fullname,
+                    MobileNo: doctor?.stdcode + ' ' + doctor?.mobileno,
+                    Email: doctor?.emailid
                 }
-                const {success,data} = await commonService.createPaymentURL(paymentRequest);*/
-
-                const paymentRequestJava = {
-                        FirstName:values.fullname,
-                        OrderAmount: values.amount,
-                        MobileNo: values.phone,
-                        Email: values.email
-                }
-                  const {success,data} = await commonService.payviaJavaPayG(paymentRequestJava);
-    
-                if (success) {
-                    LocalStorageManager.setOrderKeyId(data.OrderKeyId.toString());
-                    window.open(data.PaymentProcessUrl, '_self', 'noreferrer');
-                }
-                // const data = await commonService.payviaPayG(paymentRequest, Base64.encode(authString));
-                // if (data) {
-                //     LocalStorageManager.setOrderKeyId(data.OrderKeyId.toString());
-                //     window.open(data.PaymentProcessUrl, '_self', 'noreferrer');
-                // }
-
-            } catch (err) {
-                console.log('error in payment process during the provisional registrartion.', err);
             }
-        },
-        []
-    );
+            const { success, data } = await commonService.createPaymentURL(paymentRequest);
+            if (success) {
+                LocalStorageManager.setOrderKeyId(data.OrderKeyId.toString());
+                window.open(data.PaymentProcessUrl, '_self', 'noreferrer');
+            }
+            // const data = await commonService.payviaPayG(paymentRequest, Base64.encode(authString));
+            // if (data) {
+            //     LocalStorageManager.setOrderKeyId(data.OrderKeyId.toString());
+            //     window.open(data.PaymentProcessUrl, '_self', 'noreferrer');
+            // }
+
+        } catch (err) {
+            console.log('error in payment process during the provisional registrartion.', err);
+        }
+    }, []);
+
     const getDoctorProfile = useCallback(async () => {
         try {
             const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
@@ -181,8 +178,62 @@ const Payment = () => {
     }, []);
 
     useEffect(() => {
+        if (regType === 'provisional') {
+            const provisionalInfo = secureLocalStorage.getItem("provisionalInfo");
+            const provisionalPaymentInfo = {
+                ...provisionalInfo as ProvisionalPaymentProfileType,
+            }
+
+            provisionalPaymentInfo.extra_col1 === 'nor' ? setIsNormalReg(true) : setIsNormalReg(false);
+            const currentYear = moment().year();
+            const yearDiff = currentYear - Number(provisionalPaymentInfo.exam_year);
+            const penality = yearDiff > 1 ? ((yearDiff-1) * 500) : 0;
+            setPenalityAmount(penality);
+            const regFee = Number(provisionalPaymentInfo.country) === 101 ? 2000 : 5000;
+            const totalRegFee = provisionalPaymentInfo.extra_col1 === 'nor' ? regFee : (regFee + 2000);
+            setRegistrationFee(totalRegFee);
+            const amountValue = totalRegFee + penalityAmount;
+            const postalCharge = 100;
+            let amountRange = 4000;
+            let onlineCharge = 0;
+            if (amountValue < amountRange) {
+                onlineCharge = 100;
+            }
+            else {
+                onlineCharge = (Math.floor(amountValue / amountValue) + 1) * 100;
+            }
+            //const charges = amountValue > 4000 ? 200 : 100;
+            setExtraCharges(postalCharge + onlineCharge);
+            setTotalAmount(amountValue + postalCharge + onlineCharge);
+        }
+        if (regType === 'final') {
+            const finalInfo = secureLocalStorage.getItem("finalInfo");
+            const finalPaymentInfo = {
+                ...finalInfo as FinalPaymentFormType,
+            }
+            const currentYear = moment().year();
+            const yearDiff = currentYear - Number(finalPaymentInfo.exam_year);
+            const penality = yearDiff > 1 ? ((yearDiff-1) * 500) : 0;
+            setPenalityAmount(penality);
+            const regFee = Number(finalPaymentInfo.country) === 101 ? 4000 : 10000;
+            const totalRegFee = finalPaymentInfo.extra_col1 === 'nor' ? regFee : (regFee + 2000);
+            setRegistrationFee(totalRegFee);
+            const amountValue = totalRegFee + penalityAmount;
+            const postalCharge = 100;
+            let amountRange = 4000;
+            let onlineCharge = 0;
+            if (amountValue < amountRange) {
+                onlineCharge = 100;
+            }
+            else {
+                onlineCharge = (Math.floor(amountValue / amountValue) + 1) * 100;
+            }
+            //const charges = amountValue > 4000 ? 200 : 100;
+            setExtraCharges(onlineCharge + postalCharge);
+            setTotalAmount(amountValue + postalCharge + onlineCharge);
+        }
         getDoctorProfile();
-    }, []);
+    }, [registrationFee, penalityAmount, totalAmount, extraCharges]);
 
     return (
         <>
@@ -206,16 +257,18 @@ const Payment = () => {
                                         {regType === 'provisional' && <div className="col fs-14">Provisional (PMR)</div>}
                                         {regType === 'final' && <div className="col fs-14">Final (FMR)</div>}
                                     </div>
-                                    <div className="row mb-3">
+                                    {/* <div className="row mb-3">
                                         <div className="col-4"><label htmlFor="">Final Registration No.</label></div>
                                         {regType === 'provisional' && <div className="col fs-14">TSMC/PMR/234579</div>}
                                         {regType === 'final' && <div className="col fs-14">TSMC/FMR/234579</div>}
                                         
-                                    </div>
-                                    <div className="row mb-3">
-                                        <div className="col-4"><label htmlFor="">Doctor ID</label></div>
-                                        <div className="col fs-14">{doctor_id}</div>
-                                    </div>
+                                    </div> */}
+                                    {regType === 'final' &&
+                                        <div className="row mb-3">
+                                            <div className="col-4"><label htmlFor="">Doctor ID</label></div>
+                                            <div className="col fs-14">{doctor_id}</div>
+                                        </div>
+                                    }
                                     <div className="row mb-3">
                                         <div className="col-4"><label htmlFor="">Full Name</label></div>
                                         <div className="col fs-14">{doctor?.fullname}</div>
@@ -225,32 +278,36 @@ const Payment = () => {
                                         <div className="col fs-14">{moment(doctor?.dateofbirth).format('DD/MM/YYYY')}</div>
                                     </div>
                                     <div className="row mb-3">
-                                        <div className="col-4"><label htmlFor="">Registraion No.</label></div>
-                                        <div className="col fs-14">891399060</div>
+                                        <div className="col-4"><label htmlFor="">Mobile No</label></div>
+                                        <div className="col fs-14">{doctor?.stdcode} {doctor?.mobileno}</div>
                                     </div>
                                     <div className="row mb-3">
                                         <div className="col-4"><label htmlFor="">Address</label></div>
                                         <div className="col fs-14">{doctor?.address1} {doctor?.address2}</div>
                                     </div>
                                 </div>
-                                <div className="col-4 d-flex align-items-end ps-2">
+                                <div className="d-flex align-items-end ps-2">
                                     <div>
                                         <div className="d-flex align-items-center justify-content-between mb-3">
                                             <label htmlFor="">Registration Request</label>
-                                            <div className="fs-14">Non-Tatkal</div>
+                                            <div className="fs-14">{isNormalReg ? 'Non-Tatkal' : 'Tatkal'}</div>
                                         </div>
                                         <div className="d-flex align-items-center justify-content-between mb-3">
                                             <label htmlFor="">Registration Fee</label>
-                                            <div className="fs-14"><i className="bi-currency-rupee"></i> 2,300/-</div>
+                                            <div className="fs-14"><i className="bi-currency-rupee"></i> {registrationFee}/-</div>
                                         </div>
                                         <div className="d-flex align-items-center justify-content-between mb-3">
                                             <label htmlFor="">Penalty</label>
-                                            <div className="fs-14"><i className="bi-currency-rupee"></i> 500/-</div>
+                                            <div className="fs-14"><i className="bi-currency-rupee"></i> {penalityAmount}/-</div>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-between mb-3">
+                                            <label htmlFor="">Charges</label>
+                                            <div className="fs-14"><i className="bi-currency-rupee"></i> {extraCharges}/-</div>
                                         </div>
                                         <hr />
                                         <div className="d-flex align-items-center justify-content-between mb-3">
                                             <label htmlFor="">Total</label>
-                                            <div className="fs-14"><i className="bi-currency-rupee"></i> 2,800/-</div>
+                                            <div className="fs-14"><i className="bi-currency-rupee"></i> {totalAmount}/-</div>
                                         </div>
                                         <hr className="mb-0" />
                                     </div>
@@ -258,7 +315,8 @@ const Payment = () => {
                             </div>
                         </div>
                         <div className="card-footer text-end py-3">
-                            <button type="button" className="btn btn-primary">Continue & Pay</button>
+                            <button type="button" onClick={()=>navigate(-1)} className="btn btn-primary me-3">Back</button>
+                            <button type="button" onClick={PayAndContinueForm} className="btn btn-primary ps-2">Continue & Pay</button>
                         </div>
                     </div>
                     <div className="card shadow border-0 mb-3">
@@ -277,7 +335,7 @@ const Payment = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="card shadow border-0">
+                    {/* <div className="card shadow border-0">
                         <Formik
                             onSubmit={PayAndContinueForm}
                             enableReinitialize
@@ -463,7 +521,7 @@ const Payment = () => {
                                 );
                             }}
                         </Formik>
-                    </div>
+                    </div> */}
                 </div>
             </section>
         </>

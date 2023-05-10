@@ -12,6 +12,7 @@ import {
 } from "react-table";
 import Swal from "sweetalert2";
 import Table from "../../components/Table";
+import { adminService } from "../../lib/api/admin";
 import { assignmentService } from "../../lib/api/assignments";
 import { finalService } from "../../lib/api/final";
 import { provisionalService } from "../../lib/api/provisional";
@@ -42,15 +43,30 @@ const FinalRegistrations = () => {
 
     const columns = [
         {
-            Header: "Doctor Name",
-            accessor: "fullname"
-        },
-        {
             Header: "Doctor Id",
             accessor: "doctor_id"
         },
         {
-            Header: "Reg No.",
+            Header: "Doctor Name",
+            accessor: "fullname"
+        },
+        {
+            Header: "Mobile No",
+            accessor: "mobileno"
+        },
+        {
+            Header: "PMR Reg No.",
+            accessor: "pmr_no",
+            Cell: ({ cell: { value } }: any) => {
+                return (
+                    <>
+                        <span>TSMC/PMR/</span>{value}
+                    </>
+                );
+            }
+        },
+        {
+            Header: "FMR Reg No.",
             accessor: "fmr_no",
             Cell: ({ cell: { value } }: any) => {
                 return (
@@ -59,22 +75,6 @@ const FinalRegistrations = () => {
                     </>
                 );
             }
-        },
-        {
-            Header: "Father Name",
-            accessor: "fathername"
-        },
-        {
-            Header: "Mother Name",
-            accessor: "mothername"
-        },
-        {
-            Header: "Mobile No",
-            accessor: "mobileno"
-        },
-        {
-            Header: "Aadhar No",
-            accessor: "aadharcard"
         },
         {
             Header: "Status",
@@ -103,11 +103,14 @@ const FinalRegistrations = () => {
                     <i className="bi-person" onClick={async () => {
                         const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'final');
                         if (data && data.length > 0) {
-                            Swal.fire({
-                                text: "Already Assigned",
-                                icon: "warning",
-                                confirmButtonText: "OK",
-                            })
+                            const getUser = await adminService.getAdminById(data[0].AssignTo);
+                            if (getUser.data.length > 0) {
+                                Swal.fire({
+                                    text: "Already Assigned to " + getUser.data[0].username,
+                                    icon: "warning",
+                                    confirmButtonText: "OK",
+                                });
+                            }
                         }
                         else {
                             const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
@@ -158,12 +161,12 @@ const FinalRegistrations = () => {
     const assign = useCallback(async () => {
         try {
             const assignToUser = assignedList.map((obj: any) => {
-                return { ...obj, assignTo: assignedUser };
+                return { ...obj, AssignTo: assignedUser };
             })
             const formData = new FormData();
             formData.append("AssignmentData", JSON.stringify(assignToUser[0]));
-            const { success } = await assignmentService.assignToUser(formData);
-            if (success) {
+            const { success } = await assignmentService.assignToUser(formData);           
+             if (success) {
                 Swal.fire({
                     //title: "Error",
                     text: "Assigned",
@@ -201,8 +204,9 @@ const FinalRegistrations = () => {
             if (fetchId === fetchIdRef.current) {
                 const startRow = pageSize * pageIndex
                 const endRow = startRow + pageSize
-                if(data!=undefined){
+               if(data!=undefined){
                 setFinals(data.slice(startRow, endRow))
+
                 // Your server could send back total page count.
                 // For now we'll just fake it, too
                 setPageCount(Math.ceil(data.length / pageSize));
@@ -211,6 +215,8 @@ const FinalRegistrations = () => {
                    setFinals([]);
                    setLoading(false);
                 }
+
+                setLoading(false)
             }
         }, 1000)
     }, [date, statusValue]);
@@ -294,26 +300,24 @@ const FinalRegistrations = () => {
                         <><table className="table table-hover table-striped">
                             <thead>
                                 <tr>
-                                    <th>Doctor Name</th>
                                     <th>Doctor Id</th>
-                                    <th>Reg No.</th>
+                                    <th>Doctor Name</th>
                                     <th>Father Name</th>
-                                    <th>Mother Name</th>
                                     <th>Mobile No.</th>
-                                    <th>Aadhar No</th>
+                                    <th>PMR Reg No.</th>
+                                    <th>FMR Reg No.</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {assignedGridList?.map((obj: any) => {
                                     return (<tr>
-                                        <td>{obj.fullname}</td>
                                         <td>{obj.doctor_id}</td>
-                                        <td><span>TSMC/FMR/</span>{obj.fmr_no}</td>
+                                        <td>{obj.fullname}</td>
                                         <td>{obj.fathername}</td>
-                                        <td>{obj.mothername}</td>
                                         <td>{obj.mobileno}</td>
-                                        <td>{obj.aadharcard}</td>
+                                        <td><span>TSMC/PMR/</span>{obj.pmr_no}</td>
+                                        <td><span>TSMC/FMR/</span>{obj.fmr_no}</td>
                                         <td>
                                             {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                                             {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
