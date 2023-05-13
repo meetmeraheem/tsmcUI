@@ -5,10 +5,10 @@ import { tokenManager } from '../token-manager';
 import { axiosInstance } from './index';
 import { serverUrl } from '../../config/constants';
 
-export const goodstandingmciService = {
+export const renewalService = {
    
     async getNocsByFilter( reg_date: any,status: any) {
-        const { data: responseData } = await axiosInstance.get(`goodstandingmci/getGoodStandingsMciByFilter/${reg_date}/${status}`);
+        const { data: responseData } = await axiosInstance.get(`renewal/getRenewalsByFilter/${reg_date}/${status}`);
         return responseData as ApiResponseType;
     },
  

@@ -35,6 +35,9 @@ import PaymentSuccess from '../payment/paymentsuccess';
 import EditProvisional from '../user-panal/edit-provisional';
 import EditFinal from '../user-panal/edit-final';
 import ProvisionalView from '../dashboard/provisional-view';
+import AdditionalView from '../dashboard/additional';
+import RenewalView from '../dashboard/renewal';
+import GoodStandingView from '../dashboard/goodstanding';
 import GoodStandingMCIView from '../dashboard/mci';
 import NocView from '../dashboard/noc';
 import FinalRegView from '../dashboard/final-reg-view';
@@ -87,6 +90,9 @@ const MainRoute = () => {
 					<Route path={routes.provisional_registrations} element={<ProvisionalRegistrations />} />
 					<Route path={routes.admin_final_registrations} element={<FinalRegistrations />} />
 					<Route path={routes.admin_provisional_view} element={<ProvisionalView />} />
+					<Route path={routes.admin_additional} element={<AdditionalView />} />
+					<Route path={routes.admin_renewals} element={<RenewalView />} />
+					<Route path={routes.admin_goodstanding} element={<GoodStandingView />} />
 					<Route path={routes.admin_goodstanding_mci} element={<GoodStandingMCIView />} />
 					<Route path={routes.admin_noc} element={<NocView />} />
 					<Route path={routes.admin_final_reg_view} element={<FinalRegView />} />

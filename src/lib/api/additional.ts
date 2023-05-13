@@ -26,5 +26,9 @@ export const additionalService = {
         const { data: responseData } = await axiosInstance.put(`additionalQualification/updateQualification/${finalId}`, data);
         return responseData;
     },
+    async getaddlsByFilter( reg_date: any,status: any) {
+        const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByFilter/${reg_date}/${status}`);
+        return responseData as ApiResponseType;
+    },
  
 };
