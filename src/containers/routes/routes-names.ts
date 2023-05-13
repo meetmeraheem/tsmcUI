@@ -35,6 +35,8 @@ export const routes = {
     provisional_registrations: `${urlPrefix}admin${urlPrefix}provisional_registrations`,
     admin_final_registrations: `${urlPrefix}admin${urlPrefix}final_registrations`,
     admin_provisional_view: `${urlPrefix}admin${urlPrefix}provisional_view`,
+    admin_noc: `${urlPrefix}admin${urlPrefix}noc`,
+    admin_goodstanding_mci: `${urlPrefix}admin${urlPrefix}admin_goodstanding_mci`,
     admin_final_reg_view: `${urlPrefix}admin${urlPrefix}final_reg_view`,
     admin_employes_works: `${urlPrefix}admin/${urlPrefix}employees-works`,
     admin_notifications: `${urlPrefix}admin/${urlPrefix}notifications`,

@@ -63,9 +63,9 @@ const AdminSideNav = () => {
 							</li><li className="nav-items">
 								<Link className="dropdown-item" to={"/admin/admin-registrations"}><i className="bi-person-check"></i> Good Standing</Link>
 							</li><li className="nav-items">
-								<Link className="dropdown-item" to={"/admin/admin-registrations"}><i className="bi-file-person"></i> Good Standing MCI</Link>
+								<Link className={activeTab === routes.admin_goodstanding_mci ? 'nav-link active' : 'nav-link'} to={"/admin/admin_goodstanding_mci"}><i className="bi-file-person"></i> Good Standing MCI</Link>
 							</li><li className="nav-items">
-								<Link className="dropdown-item" to={"/admin/admin-registrations"}><i className="bi-person-check"></i> NOC</Link>
+								<Link className={activeTab === routes.admin_noc ? 'nav-link active' : 'nav-link'} to={"/admin/noc"}><i className="bi-person-check"></i> NOC</Link>
 							</li><li className="nav-item">
 								<Link className="nav-link" to={'/admin/employees-works'}><i className="bi-briefcase me-2"></i> User Management</Link>
 							</li></>

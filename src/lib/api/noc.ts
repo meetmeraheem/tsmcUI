@@ -17,6 +17,9 @@ export const nocService = {
         });
         return responseData;
     },
-   
+    async getNocsByFilter( reg_date: any,status: any) {
+        const { data: responseData } = await axiosInstance.get(`noc/getNocsByFilter/${reg_date}/${status}`);
+        return responseData as ApiResponseType;
+    },
  
 };

@@ -35,6 +35,8 @@ import PaymentSuccess from '../payment/paymentsuccess';
 import EditProvisional from '../user-panal/edit-provisional';
 import EditFinal from '../user-panal/edit-final';
 import ProvisionalView from '../dashboard/provisional-view';
+import GoodStandingMCIView from '../dashboard/mci';
+import NocView from '../dashboard/noc';
 import FinalRegView from '../dashboard/final-reg-view';
 import FinalRegistrations from '../dashboard/final-registration';
 import PaymentFailure from '../payment/paymentfailure';
@@ -85,6 +87,8 @@ const MainRoute = () => {
 					<Route path={routes.provisional_registrations} element={<ProvisionalRegistrations />} />
 					<Route path={routes.admin_final_registrations} element={<FinalRegistrations />} />
 					<Route path={routes.admin_provisional_view} element={<ProvisionalView />} />
+					<Route path={routes.admin_goodstanding_mci} element={<GoodStandingMCIView />} />
+					<Route path={routes.admin_noc} element={<NocView />} />
 					<Route path={routes.admin_final_reg_view} element={<FinalRegView />} />
 					<Route path={routes.admin_my_work_items} element={<MyWorkItems />} />
 					<Route path={routes.admin_employes_works} element={<EmployesWorks />} />
