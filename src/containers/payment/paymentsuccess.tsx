@@ -28,6 +28,10 @@ const PaymentSuccess = () => {
     const [pmrSerialNumber, setPMRSerialNumber] = useState(0);
     const [fmrSerialNumber, setFMRSerialNumber] = useState(0);
     const [transactionNumber, setTransactionNumber] = useState('');
+    const [respOrderId, setRespOrderId] = useState('');
+    const [paymentTransactionRefNo, setPaymentTransactionRefNo] = useState('');
+    const [paymentResponseText, setPaymentResponseText] = useState('');
+    const [paymentDateTime, setpaymentDateTime] = useState('');
 
     useEffect(() => {
         (async () => {
@@ -35,41 +39,54 @@ const PaymentSuccess = () => {
             try {
                 const orderKeyId = LocalStorageManager.getOrderKeyId();
                 console.log('orderKeyId ----: ' + orderKeyId);
-                const data = await commonService.orderDetails(orderKeyId, '31921');
-                console.log('order details ----: ' + JSON.stringify(data));
-                //data && data.OrderId && data.OrderId !== null && data.OrderId !== ""
 
-                if (data && data.OrderId && data.OrderId !== null && data.OrderId !== "") {
-                    console.log('Payment OrderId ' + data.OrderId + ' ------ ' + orderId);
-                    const regType = secureLocalStorage.getItem("regType");
-                    if (regType === 'provisional') {
-                        const provisionalInfo = secureLocalStorage.getItem("provisionalInfo");
-                        const provisionalPaymentInfo = {
-                            ...provisionalInfo as ProvisionalPaymentProfileType,
-                            recept_date: moment().format('YYYY-MM-DD'),
-                            dd_amount: 100,
-                            receipt_no: orderId
-                        }
-                        orderId && setTransactionNumber(orderId);
-                        const pc = secureLocalStorage.getItem("pc");
-                        const af = secureLocalStorage.getItem("af");
-                        const noc = secureLocalStorage.getItem("noc");
+                //const data = await commonService.orderDetails(orderKeyId, '31921');
 
-                        const formData = new FormData();
-                        formData.append("provisionalInfo", JSON.stringify(provisionalPaymentInfo));
-                        if (pc) {
-                            formData.append("pc", pc as File);
-                        }
-                        if (af) {
-                            formData.append("af", af as File);
-                        }
-                        if (noc) {
-                            formData.append("noc", noc as File);
-                        }
+                const { success, data } = await commonService.getJavaOrderDetails(orderKeyId);
 
-                        const { success } = await provisionalService.provisionalRegistration(formData);
-                        if (success) {
-                            const { data } = await commonService.getMtSerials('DPD');
+                if (success) {
+                    let resp = JSON.parse(data);
+                    console.log('order details ----: ' + JSON.stringify(resp));
+                    if (resp && resp.OrderId && resp.OrderId !== null && resp.OrderId !== "" && resp.PaymentResponseText === "Approved") {
+                        alert("paymnet success full " + resp.OrderId);
+                        setPaymentSuccess(true);
+                        setRespOrderId(resp.OrderId);
+                        setPaymentTransactionRefNo(resp.PaymentTransactionRefNo);
+                        setPaymentResponseText(resp.PaymentResponseText);
+                        setpaymentDateTime(resp.PaymentDateTime);
+
+                        console.log('Payment OrderId ' + data.OrderId + ' ------ ' + orderId);
+                        const regType = secureLocalStorage.getItem("regType");
+
+
+                        if (regType === 'provisional') {
+                            const provisionalInfo = secureLocalStorage.getItem("provisionalInfo");
+                            const provisionalPaymentInfo = {
+                                ...provisionalInfo as ProvisionalPaymentProfileType,
+                                recept_date: moment().format('YYYY-MM-DD'),
+                                dd_amount: 100,
+                                receipt_no: orderId
+                            }
+                            orderId && setTransactionNumber(orderId);
+                            const pc = secureLocalStorage.getItem("pc");
+                            const af = secureLocalStorage.getItem("af");
+                            const noc = secureLocalStorage.getItem("noc");
+
+                            const formData = new FormData();
+                            formData.append("provisionalInfo", JSON.stringify(provisionalPaymentInfo));
+                            if (pc) {
+                                formData.append("pc", pc as File);
+                            }
+                            if (af) {
+                                formData.append("af", af as File);
+                            }
+                            if (noc) {
+                                formData.append("noc", noc as File);
+                            }
+
+                            const { success } = await provisionalService.provisionalRegistration(formData);
+                            if (success) {
+                                {/*   const { data } = await commonService.getMtSerials('DPD');
                             if (data) {
                                 await commonService.updateMtSerials(
                                     {
@@ -79,7 +96,7 @@ const PaymentSuccess = () => {
                                     }
                                 );
                             }
-                            setDoctorSerialNumber(Number(data.serial_starts) + 1);
+                           {/*  setDoctorSerialNumber(Number(data.serial_starts) + 1);
                             const { data: pr } = await commonService.getMtSerials('PR');
                             if (pr) {
                                 await commonService.updateMtSerials(
@@ -90,100 +107,104 @@ const PaymentSuccess = () => {
                                     }
                                 );
                             }
-                            setPMRSerialNumber(Number(pr.serial_starts) + 1);
+                       setPMRSerialNumber(Number(pr.serial_starts) + 1);
                             const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
                             doctorPrimaryId && await doctorService.updateDoctorIdPmrId(doctorPrimaryId, Number(data.serial_starts) + 1, Number(pr.serial_starts) + 1);
                             LocalStorageManager.setDoctorSerialId((Number(data.serial_starts) + 1).toString());
                             secureLocalStorage.removeItem("pc");
                             secureLocalStorage.removeItem("af");
                             secureLocalStorage.removeItem("noc");
-                            const doctorMobileno = LocalStorageManager.getDoctorMobileno();
-                            if (doctorMobileno) {
-                                await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Provisional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
+                        */}
+                                const doctorMobileno = LocalStorageManager.getDoctorMobileno();
+                                if (doctorMobileno) {
+                                    await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Provisional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
 
-                                }).catch(() => {
+                                    }).catch(() => {
 
+                                    });
+                                }
+                                Swal.fire({
+                                    title: "Success",
+                                    text: "Provisional Successfully Registered",
+                                    icon: "success",
+                                    confirmButtonText: "OK",
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // navigate(routes.userpanal);
+                                    }
                                 });
                             }
-                            Swal.fire({
-                                title: "Success",
-                                text: "Provisional Successfully Registered",
-                                icon: "success",
-                                confirmButtonText: "OK",
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    // navigate(routes.userpanal);
-                                }
-                            });
                         }
-                    }
 
-                    if (regType === 'final') {
-                        const { data: dd } = await commonService.getMtSerials('DD');
-                        if (dd) {
-                            setPaymentSerial(Number(dd.serial_starts) + 1);
-                        }
-                        const finalInfo = secureLocalStorage.getItem("finalInfo");
-                        const finalPaymentInfo = {
-                            ...finalInfo as FinalPaymentFormType,
-                            pay_id: Number(dd.serial_starts) + 1
-                        }
-                        const af = secureLocalStorage.getItem("af");
-                        const mbbs = secureLocalStorage.getItem("mbbs");
-                        const noc = secureLocalStorage.getItem("noc");
-                        const affidavit = secureLocalStorage.getItem("affidavit");
-                        const testimonal1 = secureLocalStorage.getItem("mbtestimonal1bs");
-                        const testimonal2 = secureLocalStorage.getItem("testimonal2");
-                        const regOfOtherState = secureLocalStorage.getItem("regOfOtherState");
-                        const screeningTestPass = secureLocalStorage.getItem("screeningTestPass");
-                        const internshipComp = secureLocalStorage.getItem("internshipComp");
-                        const mciEligibility = secureLocalStorage.getItem("mciEligibility");
-                        const interVerification = secureLocalStorage.getItem("interVerification");
-                        const mciReg = secureLocalStorage.getItem("mciReg");
-                        const imr = secureLocalStorage.getItem("imr");
+                        if (regType === 'final') {
+                            const { data: dd } = await commonService.getMtSerials('DD');
+                            if (dd) {
+                                setPaymentSerial(Number(dd.serial_starts) + 1);
+                            }
+                            const finalInfo = secureLocalStorage.getItem("finalInfo");
+                            const finalPaymentInfo = {
+                                ...finalInfo as FinalPaymentFormType,
+                                pay_id: Number(dd.serial_starts) + 1
+                            }
+                            const af = secureLocalStorage.getItem("af");
+                            const mbbs = secureLocalStorage.getItem("mbbs");
+                            const noc = secureLocalStorage.getItem("noc");
+                            const affidavit = secureLocalStorage.getItem("affidavit");
+                            const testimonal1 = secureLocalStorage.getItem("mbtestimonal1bs");
+                            const testimonal2 = secureLocalStorage.getItem("testimonal2");
+                            const regOfOtherState = secureLocalStorage.getItem("regOfOtherState");
+                            const screeningTestPass = secureLocalStorage.getItem("screeningTestPass");
+                            const internshipComp = secureLocalStorage.getItem("internshipComp");
+                            const mciEligibility = secureLocalStorage.getItem("mciEligibility");
+                            const interVerification = secureLocalStorage.getItem("interVerification");
+                            const mciReg = secureLocalStorage.getItem("mciReg");
+                            const imr = secureLocalStorage.getItem("imr");
 
-                        const formData = new FormData();
-                        formData.append("finalInfo", JSON.stringify(finalPaymentInfo));
+                            const formData = new FormData();
+                            formData.append("finalInfo", JSON.stringify(finalPaymentInfo));
 
-                        if (af) {
-                            formData.append("af", af as File);
-                        }
-                        if (mbbs) {
-                            formData.append("mbbs", mbbs as File);
-                        }
-                        if (noc) {
-                            formData.append("noc", noc as File);
-                        }
-                        if (affidavit) {
-                            formData.append("affidivit", affidavit as File);
-                        }
-                        if (testimonal1) {
-                            formData.append("testimonal1", testimonal1 as File);
-                        }
-                        if (testimonal2) {
-                            formData.append("testimonal2", testimonal2 as File);
-                        }
-                        if (regOfOtherState) {
-                            formData.append("regOfOtherState", regOfOtherState as File);
-                        }
-                        if (screeningTestPass) {
-                            formData.append("screeningTestPass", screeningTestPass as File);
-                        }
-                        if (internshipComp) {
-                            formData.append("internshipComp", internshipComp as File);
-                        }
-                        if (mciEligibility) {
-                            formData.append("mciEligibility", mciEligibility as File);
-                        }
-                        if (interVerification) {
-                            formData.append("interVerification", interVerification as File);
-                        }
-                        if (mciReg) {
-                            formData.append("mciReg", mciReg as File);
-                        }
-                        if (imr) {
-                            formData.append("imr", imr as File);
-                        }
+                            if (af) {
+                                formData.append("af", af as File);
+                            }
+                            if (mbbs) {
+                                formData.append("mbbs", mbbs as File);
+                            }
+                            if (noc) {
+                                formData.append("noc", noc as File);
+                            }
+                            if (affidavit) {
+                                formData.append("affidivit", affidavit as File);
+                            }
+                            if (testimonal1) {
+                                formData.append("testimonal1", testimonal1 as File);
+                            }
+                            if (testimonal2) {
+                                formData.append("testimonal2", testimonal2 as File);
+                            }
+                            if (regOfOtherState) {
+                                formData.append("regOfOtherState", regOfOtherState as File);
+                            }
+                            if (screeningTestPass) {
+                                formData.append("screeningTestPass", screeningTestPass as File);
+                            }
+                            if (internshipComp) {
+                                formData.append("internshipComp", internshipComp as File);
+                            }
+                            if (mciEligibility) {
+                                formData.append("mciEligibility", mciEligibility as File);
+                            }
+                            if (interVerification) {
+                                formData.append("interVerification", interVerification as File);
+                            }
+                            if (mciReg) {
+                                formData.append("mciReg", mciReg as File);
+                            }
+                            if (imr) {
+                                formData.append("imr", imr as File);
+                            }
+
+
+                            {/*
                         const { success } = await finalService.finalRegistration(formData);
                         if (success) {
                             //const { data } = await commonService.getMtSerials('DD');
@@ -260,20 +281,28 @@ const PaymentSuccess = () => {
                                     //navigate(routes.userpanal);
                                 }
                             });
+                        }*/}
+                            // const provisionalPaymentInfo = {
+                            //     ...finalInfo as FinalPaymentFormType,
+                            //     recept_date: moment().format('YYYY-MM-DD'),
+                            //     dd_amount: 100,
+                            //     receipt_no: orderId
+                            // }
                         }
-                        // const provisionalPaymentInfo = {
-                        //     ...finalInfo as FinalPaymentFormType,
-                        //     recept_date: moment().format('YYYY-MM-DD'),
-                        //     dd_amount: 100,
-                        //     receipt_no: orderId
-                        // }
+
+                        setIsLoader(false);
+
                     }
-                    setIsLoader(false);
-                    setPaymentSuccess(true);
-                }
-                else {
-                    setIsLoader(false);
-                    setPaymentSuccess(false);
+                    else {
+                        setIsLoader(false);
+                        setPaymentSuccess(false);
+                        setRespOrderId(resp.OrderId);
+                        setPaymentTransactionRefNo(resp.PaymentTransactionRefNo);
+                        setPaymentResponseText(resp.PaymentResponseText);
+                        setpaymentDateTime(resp.PaymentDateTime);
+                    }
+                } else {
+                    alert("Error" + data);
                 }
             } catch (error) {
                 setIsLoader(false);
@@ -313,16 +342,22 @@ const PaymentSuccess = () => {
                                                     <div className="fs-14">{fmrSerialNumber}</div>
                                                 </div>}
                                                 <div className="col d-flex">
-                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Id:</label>
-                                                    <div className="fs-14">{transactionNumber}</div>
+                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Order Id:</label>
+                                                    <div className="fs-14">{respOrderId}</div>
                                                 </div>
                                                 <div className="col d-flex">
-                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Reg Date and Time:</label>
-                                                    <div className="fs-14">{moment().format('YYYY-MM-DD h:mm:ss')}</div>
+                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>PaymentTransaction Ref No :</label>
+                                                    <div className="fs-14">{paymentTransactionRefNo}</div>
+                                                </div>
+                                                <div className="col d-flex">
+                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Payment  Date and Time:</label>
+                                                    <div className="fs-14">{paymentDateTime}</div>
                                                 </div>
                                             </div>
                                             <hr className="my-4" />
+
                                             <button type="button" onClick={() => { navigate(routes.userpanal); }} className="btn btn-primary">Back to Profile</button>
+
                                         </div>
                                     </div>
                                 </div>
@@ -330,17 +365,33 @@ const PaymentSuccess = () => {
                         }
                         {/* Payment Error message */}
                         {!paymentSuccess &&
-                            <div className="col-5">
+                            <div className="col-6">
                                 <div className="card shadow border-0 p-4">
                                     <div className="card-body">
-                                        <div className="w-100 text-center">
-                                            <i className="bi-x-circle fs-42 text-danger"></i>
-                                            <h1 className='fs-22 fw-700'>Payment Error</h1>
+                                        <div className="px-4 text-center">
+                                            <p className="mb-3">Opps..! <br />Something went wrong</p>
                                         </div>
-                                        <div className="px-3 text-center">
-                                            <p className="mb-3">Opps..! <br />Something want wornge</p>
+                                        <div className="w-150 text-center">
+                                            <i className="bi-x-circle fs-42 text-danger"></i>
+                                            <h1 className='fs-22 fw-700'>Payment Error for Order Id :{orderId}</h1>
+                                        </div>
+                                        <div className="col d-flex">
+                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Order Id:</label>
+                                            <div className="fs-14">{respOrderId}</div>
+                                        </div>
+                                        <div className="col d-flex">
+                                            <label htmlFor="" className='fs-14 fw-600 me-2'>PaymentTransaction Ref No:</label>
+                                            <div className="fs-14">{paymentTransactionRefNo}</div>
+                                        </div>
+                                        <div className="col d-flex">
+                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Payment Date and Time:</label>
+                                            <div className="fs-14">{paymentDateTime}</div>
+                                        </div>
+                                        <div>
                                             <hr className="my-4" />
-                                            <button type="button" onClick={() => { navigate(routes.userpanal); }} className="btn btn-primary">Back to Profile</button>
+                                            <div className="w-400 text-center mt-3">
+                                                <button type="button" onClick={() => { navigate(routes.userpanal); }} className="btn btn-primary">Back to Profile</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

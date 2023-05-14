@@ -22,6 +22,8 @@ import { dateDuration } from '../../lib/utils/dateDuration';
 import { provisionalService } from '../../lib/api/provisional';
 import moment from 'moment';
 import { authService } from '../../lib/api/auth';
+import secureLocalStorage from 'react-secure-storage';
+
 
 const AdditionalQualificationRegistration = () => {
     const navigate = useNavigate();
@@ -192,29 +194,24 @@ const AdditionalQualificationRegistration = () => {
                     reg_date: moment().format('YYYY-MM-DD'),
                     doctorPrimaryId:doctorPrimaryId,
                 }
-                const formData = new FormData();
-                formData.append("additionalInfo", JSON.stringify(additionalInfo));
+                secureLocalStorage.setItem("regType", 'additionalInfo');
+                secureLocalStorage.setItem("additionalInfo", additionalInfo);
+              
               
                 if (studyCertificate?.file) {
-                    formData.append("study", studyCertificate?.file);
+                    secureLocalStorage.setItem("additional_study", studyCertificate?.file);
                 }
                
                 if (DegreeCertificate?.file) {
-                    formData.append("Degree", DegreeCertificate?.file);
+                    secureLocalStorage.setItem("additional_Degree", DegreeCertificate?.file);
                 }
-          
+                navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'additionalInfo'}});
+              
+              {/*
                 const { success } = await additionalService.additionalRegistration(formData);
                 if (success) {
-                    const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
-                   /* if (finalSerial) {
-                        await commonService.updateMtSerials(finalSerial);
-                        fmrNo && await doctorService.updateDoctorIdFMRId(doctorPrimaryId, { fmr_no: fmrNo });
-                        LocalStorageManager.setDoctorFMRNo(fmrNo.toString());
-                    }*/
-                   
                     setStudyCertificate(null);
                     setDegreeCertificate(null);
-                    
                     Swal.fire({
                         title: "Success",
                         text: "Additional registration successfully completed",
@@ -233,7 +230,7 @@ const AdditionalQualificationRegistration = () => {
                             navigate(routes.userpanal);
                         }
                     });
-                }
+                }*/}
             } catch (err) {
                 Swal.fire({
                     text: "Additional registeration failed",
@@ -288,12 +285,15 @@ const AdditionalQualificationRegistration = () => {
                                 <hr />
                                 <DoctorInfoCard />
                             </div>
+                            <div className="card-footer text-end">
+                                <button type='submit' onClick={() => setNext(true)} className='btn btn-primary'>Next <i className="bi-chevron-right"></i></button>
+                            </div>
                         </div>
                     </div>
                     }
 
                     
-                        <div className="col-9 m-auto">
+                {next &&  <div className="col-9 m-auto">
                             <div className="card shadow border-0 mb-4">
                                 <div className="card-body">
                                     <h1 className='fs-22 fw-700'>Educational Institution Details</h1>
@@ -768,7 +768,7 @@ const AdditionalQualificationRegistration = () => {
                                 </div>
                             </div>
                         </div>
-                    
+                    }
 
                 </div>
             </section>

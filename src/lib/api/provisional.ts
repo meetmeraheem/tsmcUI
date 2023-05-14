@@ -23,7 +23,7 @@ export const provisionalService = {
         const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalById/${provisionalId}`);
         return responseData as ApiResponseType;
     },
-    async getProvisionalByDoctorId(doctorId: number) {
+    async getProvisionalByDoctorId(doctorId: any) {
         const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalByDoctorId/${doctorId}`);
         return responseData as ApiResponseType;
     },

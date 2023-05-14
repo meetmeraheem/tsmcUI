@@ -33,6 +33,13 @@ export type ProvisionalProfileType = {
     edu_cert2: string;
     edu_cert3: string;
 };
+export type ProvisionalDuplicateType = {
+    doctor_id: number;
+    reason: string;
+    approval_status: string;
+    docuemt1: string;
+    
+};
 
 export type ProvisionalEditFormType = {
     qualification: number;

@@ -1,28 +1,36 @@
+import DoctorInfoCard from "./includes/doctor-info";
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const FinalRenewals = () => {
+    const navigate = useNavigate();
+    const [next, setNext] = useState(false);
     return (
         <>
             <section className='gray-banner'>
-                <div className="container mt-4">
-                    <div className="card shadow border-0">
-                        <div className="card-body">
-                            <div className="w-100">
-                                <h1 className='fs-22 fw-700'>New Registration</h1>
+            <div className="container mt-4">
+            {!next && <div className="col-9 m-auto">
+                        <div className="card shadow border-0 mb-4">
+                            <div className="card-body">
+                            <div className="mt-3">
+                                <div className="d-flex align-items-center">
+                                    <h1 className='fs-22 fw-700 me-2 mb-0'>Final Renewals</h1>
+                                    <p className='mb-0 fs-13'>(Please check your personal details and click on next)</p>
+                                    
+                                </div>
                                 <hr />
+                                <DoctorInfoCard />
                             </div>
-                            <div className="px-3">
-
-                            </div>
-                        </div>
-                        <div className="card-footer">
-                            <div className="w-100 text-end">
-                                <button type="submit" className="btn btn-primary">Submit</button>
+                            <div className="card-footer text-end">
+                                <button type='submit' onClick={() => setNext(true)} className='btn btn-primary'>Next <i className="bi-chevron-right"></i></button>
                             </div>
                         </div>
+                        </div>
+                    </div>  
+                    }
                     </div>
-                </div>
-            </section>
-        </>
+                </section>
+            </>
     )
 };
 

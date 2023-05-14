@@ -194,7 +194,7 @@ const GoodStanding = () => {
         setLoading(true)
 
         var newdate = moment(date).format('YYYY-MM-DD');
-        const { data } = await goodstandingService.getNocsByFilter(newdate, statusValue);
+        const { data } = await goodstandingService.getGoodstandingByFilter(newdate, statusValue);
         // if (data.length > 0) {
         //     setProvisionals(data);
         // }

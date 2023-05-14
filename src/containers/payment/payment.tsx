@@ -137,18 +137,19 @@ const Payment = () => {
     const PayAndContinueForm = useCallback(async () => {
         try {
             const paymentRequest = {
-                ...payLoad,
-                OrderAmount: 1,
-                CustomerData: {
-                    FirstName: doctor?.fullname,
-                    MobileNo: doctor?.stdcode + ' ' + doctor?.mobileno,
-                    Email: doctor?.emailid
-                }
+                    OrderAmount: 1,
+                    FirstName: 'MD Rahimoddin',
+                    MobileNo: '9848245648',
+                    Email: 'meetme.raheem@gmail.com'                
             }
-            const { success, data } = await commonService.createPaymentURL(paymentRequest);
+            const { success, data } = await commonService.payviaJavaPayG(paymentRequest);
+           
             if (success) {
-                LocalStorageManager.setOrderKeyId(data.OrderKeyId.toString());
-                window.open(data.PaymentProcessUrl, '_self', 'noreferrer');
+                let resp=JSON.parse(data);
+                LocalStorageManager.setOrderKeyId(resp.OrderKeyId.toString());
+                window.open(resp.PaymentProcessUrl, '_self', 'noreferrer');
+            }else{
+                alert("Error Msg "+data);
             }
             // const data = await commonService.payviaPayG(paymentRequest, Base64.encode(authString));
             // if (data) {

@@ -194,7 +194,7 @@ const Mci = () => {
         setLoading(true)
 
         var newdate = moment(date).format('YYYY-MM-DD');
-        const { data } = await goodstandingmciService.getNocsByFilter(newdate, statusValue);
+        const { data } = await goodstandingmciService.getGoodstandingMCIByFilter(newdate, statusValue);
         // if (data.length > 0) {
         //     setProvisionals(data);
         // }

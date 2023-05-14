@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import DocDefultPic from '../../../assets/images/doc-default-img.jpg';
+import DoctorInfoCard from "../includes/doctor-info";
+
 
 const AdditionalDuplicate = () => {
     return (
@@ -14,68 +16,7 @@ const AdditionalDuplicate = () => {
                                     <p className='mb-0 fs-13'>(Please check your personal details and click on next)</p>
                                 </div>
                                 <hr />
-                                <div className="row">
-                                    <div className="col-3">
-                                        <div className="tsmc-doc-profile-box border-bottom-0">
-                                            <div className='tsmc-doc-img mb-3'>
-                                                <img src={DocDefultPic} alt="" />
-                                            </div>
-                                            <div className="d-flex align-items-center justify-content-center border rounded p-1">
-                                                <i className="bi-pencil-square fs-22 px-3"></i>
-                                                <h2 className="fs-18 fw-700 mb-0">Signature</h2>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <h2 className='fs-16 fw-600 mb-3'>Konda Venkata Vamshi Das</h2>
-                                        <div className="d-flex">
-                                            <div className="col">
-                                                <div className="d-flex mb-2">
-                                                    <label htmlFor="" className='fs-14 fw-700 me-2'>Father Name:</label>
-                                                    <div className="col fs-14">Konda Venkata Ranga Das</div>
-                                                </div>
-                                                <div className="d-flex mb-2">
-                                                    <label htmlFor="" className='fs-14 fw-700 me-2'>Mother Name:</label>
-                                                    <div className="col fs-14">Konda Venkata Sunitha</div>
-                                                </div>
-                                                <div className="d-flex mb-2">
-                                                    <label htmlFor="" className='fs-14 fw-700 me-2'>Date of Birth:</label>
-                                                    <div className="col fs-14">22-12-1989</div>
-                                                </div>
-                                                <div className="d-flex mb-2">
-                                                    <label htmlFor="" className='fs-14 fw-700 me-2'>Gender:</label>
-                                                    <div className="col fs-14">Male</div>
-                                                </div>
-                                                <div className="d-flex mb-2">
-                                                    <label htmlFor="" className='fs-14 fw-700 me-2'>Mobile No:</label>
-                                                    <div className="col fs-14">+91 9000992292</div>
-                                                </div>
-                                                <div className="d-flex mb-2">
-                                                    <label htmlFor="" className='fs-14 fw-700 me-2'>Email Address:</label>
-                                                    <div className="col fs-14">vamshidas@gmail.com</div>
-                                                </div>
-                                                <div className="d-flex mb-2">
-                                                    <label htmlFor="" className='fs-14 fw-700 me-2'>Blood Group:</label>
-                                                    <div className="col fs-14">O+</div>
-                                                </div>
-                                            </div>
-                                            <div className="col">
-                                                <div className="d-flex mb-2">
-                                                    <label htmlFor="" className='fs-14 fw-00 me-2'>Landline:</label>
-                                                    <div className="col fs-14">040 3234358</div>
-                                                </div>
-                                                <div className="d-flex mb-1">
-                                                    <label htmlFor="" className='fs-14 fw-00 me-2'>Aadhar No:</label>
-                                                    <div className="col fs-14">3455 7999 4394 9834</div>
-                                                </div>
-                                                <div className="mb-2">
-                                                    <label htmlFor="" className='fs-14 fw-00 me-2'>Address:</label>
-                                                    <div className="col fs-14">P.B. 523, Sultan Bazaar, Near Post Office, opposite Womens College, Hyderabad, Telangana 500095, India</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <DoctorInfoCard />
                             </div>
                             <div className="card-footer text-end">
                                 <button type='submit' className='btn btn-primary'>Next <i className="bi-chevron-right"></i></button>

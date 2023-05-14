@@ -105,7 +105,11 @@ export const commonService = {
         return responseData;
     },
     async payviaJavaPayG(paymentDetailsJava: any) {
-        const { data: responseData } = await axiosInstance.post(`payment/getPaymentRedirectURL`,paymentDetailsJava);
+        const { data:  responseData } = await axiosInstance.post(`payment/getPaymentRedirectURL`,paymentDetailsJava);
+        return responseData;
+    },
+    async getJavaOrderDetails(orderKeyId: any) {
+        const { data:  responseData } = await axiosInstance.get(`payment/getOrderDetails/${orderKeyId}`);
         return responseData;
     },
 

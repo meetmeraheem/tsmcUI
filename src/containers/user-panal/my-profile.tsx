@@ -18,6 +18,8 @@ const Myprofile = () => {
     const [provisional, setProvisional] = useState<ProvisionalMyProfileType>();
     const [final, setFinal] = useState<FinalMyProfileType>();
     const [test, setTest] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false)
+
 
     const getDoctorDetails = useCallback(async () => {
         try {
@@ -37,7 +39,7 @@ const Myprofile = () => {
         try {
             const doctorSerialId = LocalStorageManager.getDoctorSerialId();
             if (doctorSerialId) {
-                const { data } = await provisionalService.getProvisionalByDoctorId(Number(doctorSerialId));
+                const { data } = await provisionalService.getProvisionalByDoctorId(doctorSerialId);
                 if (data.length > 0) {
                     const qualification = await commonService.getQualificationById(Number(data[0].qualification));
                     const country = await commonService.getCountry(Number(data[0].country));
@@ -97,9 +99,11 @@ const Myprofile = () => {
 
     useEffect(() => {
         //console.log('doctorProfile ' + JSON.stringify(doctorProfile));
+        setLoading(true);
         getDoctorDetails();
         getProvisionalDetails();
         getFinalDetails();
+        setLoading(false);
     }, []);
 
     return (
@@ -403,6 +407,13 @@ const Myprofile = () => {
                                             </div>
                                         </div>
                                         }
+                                        {loading && (
+                                            <div>
+                                            <div className="spinner-border text-success" role="status"></div> Loading...
+                                              </div>
+                                        )
+                                        }
+              
                                     </div>
                                 </div>
                             </div>

@@ -51,7 +51,7 @@ const EditProvisional = () => {
         try {
             const doctorSerialId = LocalStorageManager.getDoctorSerialId();
             if (doctorSerialId) {
-                const { data } = await provisionalService.getProvisionalByDoctorId(Number(doctorSerialId));
+                const { data } = await provisionalService.getProvisionalByDoctorId(doctorSerialId);
                 if (data.length > 0) {
                     setProvisional(data[0]);
                     getStates(data[0]?.country);

@@ -7,7 +7,7 @@ import { serverUrl } from '../../config/constants';
 
 export const goodstandingService = {
    
-    async getNocsByFilter( reg_date: any,status: any) {
+    async getGoodstandingByFilter( reg_date: any,status: any) {
         const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingsByFilter/${reg_date}/${status}`);
         return responseData as ApiResponseType;
     },
