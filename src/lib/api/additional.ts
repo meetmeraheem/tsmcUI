@@ -17,18 +17,17 @@ export const additionalService = {
         });
         return responseData;
     },
-    async getFinal(doctorId : string) {
+    async getQualificationById(doctorId : string) {
         const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationById/${doctorId}`);
         return responseData as ApiResponseType;
     },
     
-    async updateFinal(finalId: number, data: any) {
-        const { data: responseData } = await axiosInstance.put(`additionalQualification/updateQualification/${finalId}`, data);
+    async updateQualification(additionalId: number, data: any) {
+        const { data: responseData } = await axiosInstance.put(`additionalQualification/updateQualification/${additionalId}`, data);
         return responseData;
     },
-    async getaddlsByFilter( reg_date: any,status: any) {
-        const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByFilter/${reg_date}/${status}`);
-        return responseData as ApiResponseType;
+    async getAdditionalData(doctorId: any) {
+        const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByDoctorId/${doctorId}`);
+        return responseData;
     },
- 
 };

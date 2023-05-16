@@ -36,8 +36,8 @@ const NocRegistration = () => {
             posttime: '',
             modifiedon: '',
             status: '',
-            added_by: 0
-
+            added_by: 0,
+            approval_status:''
         }),
         []
     );
@@ -96,7 +96,8 @@ const NocRegistration = () => {
                     councilpincode: values.councilpincode,
                     address1: values.address1.toUpperCase(),
                     address2: values.address2.toUpperCase(),
-                    doctor_id: doctorId
+                    doctor_id: doctorId,
+                    doctorPrimaryId:doctorPrimaryId
                 }
 
                 secureLocalStorage.setItem("regType", 'nocInfo');

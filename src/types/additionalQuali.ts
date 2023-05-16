@@ -21,5 +21,17 @@ export type AddQualFormType = {
     mci_eligi: string,
     inter_verif_cert: string,
     mci_reg: string,
-    imr_certificate: string
+    imr_certificate: string,
+    approval_status:string
+  }
+  export type AddQualDataFormType = {
+    country: string,
+    state: string,
+    university: string,
+    college: string,
+    qualification: string;
+    exam_month: string;
+    exam_year: string;
+    appliedFor: string,
+    approval_status:string
   }

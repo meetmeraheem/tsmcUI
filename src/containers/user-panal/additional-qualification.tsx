@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 //@ts-ignore
 import Files from 'react-files';
 import { College, Country, Qualification, Serials, State, University } from '../../types/common';
-import { AddQualFormType } from '../../types/additionalQuali';
+import { AddQualFormType,AddQualDataFormType } from '../../types/additionalQuali';
 import DoctorInfoCard from './includes/doctor-info';
 import { ReactFilesError, ReactFilesFile } from '../../types/files';
 import { isLessThanTheMB } from '../../lib/utils/lessthan-max-filesize';
@@ -64,7 +64,8 @@ const AdditionalQualificationRegistration = () => {
         mci_eligi: '',
         inter_verif_cert: '',
         mci_reg: '',
-        imr_certificate: ''
+        imr_certificate: '',
+        approval_status:''
     }
 
     const getProvisionalDetails = useCallback(async () => {
@@ -206,7 +207,9 @@ const AdditionalQualificationRegistration = () => {
                     secureLocalStorage.setItem("additional_Degree", DegreeCertificate?.file);
                 }
                 navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'additionalInfo'}});
-              
+             
+                
+                
               {/*
                 const { success } = await additionalService.additionalRegistration(formData);
                 if (success) {

@@ -11,13 +11,20 @@ import { DoctorFormType } from '../../types/doctor';
 import { FinalMyProfileType } from '../../types/final';
 import { ProvisionalMyProfileType } from '../../types/provisional';
 import { serverUrl, serverImgUrl } from '../../config/constants';
+import { additionalService } from '../../lib/api/additional';
+import { AddQualDataFormType } from '../../types/additionalQuali';
+import { nocService } from "../../lib/api/noc";
+import { nocFormType } from "../../types/noc";
+
 
 const Myprofile = () => {
     //const doctorProfile = useSelector((state: RootState) => state.doctor.profile);
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [provisional, setProvisional] = useState<ProvisionalMyProfileType>();
     const [final, setFinal] = useState<FinalMyProfileType>();
-    const [test, setTest] = useState<boolean>(false);
+    const [additional, setadditional] = useState<AddQualDataFormType>();
+    const [Nocdata, setNocdata] = useState<nocFormType>();
+    
     const [loading, setLoading] = useState(false)
 
 
@@ -96,13 +103,71 @@ const Myprofile = () => {
             console.log('error getProvisionalDetails', err);
         }
     }, []);
+    const getAdditionalDetails = useCallback(async () => {
+        try {
+            const doctorSerialId = LocalStorageManager.getDoctorSerialId();
+            if (doctorSerialId) {
+                const { data } = await additionalService.getAdditionalData(doctorSerialId);
+                if (data.length > 0) {
+                    //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
+                    const country = await commonService.getCountry(Number(data[0].country));
+                    const state = await commonService.getState(Number(data[0].state));
+                    setadditional({
+                        country: country.data[0].name,
+                        state: state.data[0].name,
+                        qualification: data[0].qualification,
+                        exam_month: data[0].exam_month,
+                        exam_year: data[0].exam_year,
+                        university: data[0].university,
+                        college: data[0].college,
+                        approval_status: data[0].approval_status,
+                        appliedFor:data[0].appliedFor,
 
+                    });
+                }
+            }
+        } catch (err) {
+            console.log('error getProvisionalDetails', err);
+        }
+    }, []);
+    const getNocDetails = useCallback(async () => {
+        try {
+            const doctorSerialId = LocalStorageManager.getDoctorSerialId();
+            if (doctorSerialId) {
+                const { data } = await nocService.nocDataByDoctorId(doctorSerialId);
+                if (data.length > 0) {
+                    //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
+                    const country = await commonService.getCountry(Number(data[0].country));
+                    const state = await commonService.getState(Number(data[0].state));
+                    setNocdata({
+                        country: country.data[0].name,
+                        state: state.data[0].name,
+                        councilname: data[0].councilname,
+                        councilpincode: data[0].councilpincode,
+                        approval_status: data[0].approval_status,
+                        address1:data[0].address1,
+                        address2:data[0].Address2,
+                        createdon: data[0].createdon,
+                        posttime: data[0].posttime,
+                        modifiedon: data[0].modifiedon,
+                        city:data[0].city,
+                        status: data[0].status,
+                        added_by: data[0].added_by
+                    });
+                }
+            }
+        } catch (err) {
+            console.log('error getProvisionalDetails', err);
+        }
+    }, []);
     useEffect(() => {
         //console.log('doctorProfile ' + JSON.stringify(doctorProfile));
         setLoading(true);
         getDoctorDetails();
         getProvisionalDetails();
         getFinalDetails();
+        getAdditionalDetails();
+        getNocDetails();
         setLoading(false);
     }, []);
 
@@ -346,70 +411,143 @@ const Myprofile = () => {
                                                 </div>
                                             </div></>
                                         }
-                                        {test && <div className="tsmc-timeline mb-5">
+                                        {additional && <div className="tsmc-timeline mb-5">
                                             <div className="tsmc-text">
                                                 <div className="d-flex align-items-center justify-content-between mb-4">
                                                     <h1 className='fs-18 fw-700 mb-0'>Additional Qualification</h1>
                                                     <div>
-                                                        <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'><i className='bi-check-circle'></i> Approved</span>
-                                                        <Link to={''} className='btn btn-primary btn-sm me-3'>Edit</Link>
-                                                        {/* <button type='button' className='btn btn-primary btn-sm'>View Certificate</button> */}
+                                                    <div>
+                                                            {additional?.approval_status == 'apr' &&
+                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-check-circle'></i> Approved
+                                                                </span>
+                                                            }
+                                                            {additional?.approval_status == 'pen' &&
+                                                                <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-exclamation-circle'></i> Pending
+                                                                </span>
+                                                            }
+                                                            {additional?.approval_status == 'rej' &&
+                                                                <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-exclamation-circle'></i> Rejected
+                                                                </span>
+                                                            }
+                                                            {additional?.approval_status == 'pen' && <Link to={''} className='btn btn-primary btn-sm me-3'>Edit</Link>}
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div className="w-100">
-                                                    <div className="d-flex mb-2">
-                                                        <div className="col d-flex">
-                                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Registration No:</label>
-                                                            <div className="fs-14">078908</div>
+                                               
+                                                        <div className="d-flex mb-2">
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Qualification:</label>
+                                                                <div className="fs-14">{additional?.qualification ? additional?.qualification : 'NA'}</div>
+                                                            </div>
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Month:</label>
+                                                                <div className="fs-14">{additional?.exam_month ? additional?.exam_month : 'NA'}</div>
+                                                            </div>
                                                         </div>
-                                                        <div className="col d-flex">
-                                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Registration Date:</label>
-                                                            <div className="fs-14">18-12-2022</div>
+                                                        <div className="d-flex mb-2">
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Year:</label>
+                                                                <div className="fs-14">{additional?.exam_year ? additional?.exam_year : 'NA'}</div>
+                                                            </div>
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Country:</label>
+                                                                <div className="fs-14">{additional?.country ? additional?.country : 'NA'}</div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="d-flex mb-2">
-                                                        <div className="col d-flex">
-                                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Qualification:</label>
-                                                            <div className="fs-14">M.B.B.S</div>
+                                                        <div className="d-flex mb-2">
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
+                                                                <div className="fs-14">{additional?.state ? additional?.state : 'NA'}</div>
+                                                            </div>
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>University Name:</label>
+                                                                <div className="fs-14">{additional?.university ? additional?.university : 'NA'}</div>
+                                                            </div>
                                                         </div>
-                                                        <div className="col d-flex">
-                                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Month:</label>
-                                                            <div className="fs-14">4321 8384 2793</div>
+                                                        <div className="d-flex mb-2">
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>College Name:</label>
+                                                                <div className="fs-14">{additional?.college ? additional?.college : 'NA'}</div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="d-flex mb-2">
-                                                        <div className="col d-flex">
-                                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Year:</label>
-                                                            <div className="fs-14">2020</div>
-                                                        </div>
-                                                        <div className="col d-flex">
-                                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Country:</label>
-                                                            <div className="fs-14">India</div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex mb-2">
-                                                        <div className="col d-flex">
-                                                            <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
-                                                            <div className="fs-14">Telangana</div>
-                                                        </div>
-                                                        <div className="col d-flex">
-                                                            <label htmlFor="" className='fs-14 fw-600 me-2'>University Name:</label>
-                                                            <div className="fs-14">Post Graduation University</div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex mb-2">
-                                                        <div className="col d-flex">
-                                                            <label htmlFor="" className='fs-14 fw-600 me-2'>College Name:</label>
-                                                            <div className="fs-14">Degree College</div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         }
+                                        {Nocdata&&  <div className="tsmc-timeline mb-5">
+                                            <div className="tsmc-text">
+                                                <div className="d-flex align-items-center justify-content-between mb-4">
+                                                    <h1 className='fs-18 fw-700 mb-0'>NOC Details</h1>
+                                                    <div>
+                                                    <div>
+                                                            {Nocdata?.approval_status == 'apr' &&
+                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-check-circle'></i> Approved
+                                                                </span>
+                                                            }
+                                                            {Nocdata?.approval_status == 'pen' &&
+                                                                <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-exclamation-circle'></i> Pending
+                                                                </span>
+                                                            }
+                                                            {Nocdata?.approval_status == 'rej' &&
+                                                                <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-exclamation-circle'></i> Rejected
+                                                                </span>
+                                                            }
+                                                            {Nocdata?.approval_status == 'pen' && <Link to={''} className='btn btn-primary btn-sm me-3'>Edit</Link>}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="w-100">
+                                               
+                                                        <div className="d-flex mb-2">
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Council Name:</label>
+                                                                <div className="fs-14">{Nocdata?.councilname ? Nocdata?.councilname : 'NA'}</div>
+                                                            </div>
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Council Address1</label>
+                                                                <div className="fs-14">{Nocdata?.address1 ? Nocdata?.address1 : 'NA'}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="d-flex mb-2">
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Council Address2</label>
+                                                                <div className="fs-14">{Nocdata?.address2 ? Nocdata?.address2 : 'NA'}</div>
+                                                            </div>
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Country:</label>
+                                                                <div className="fs-14">{Nocdata?.country ? Nocdata?.country : 'NA'}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="d-flex mb-2">
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
+                                                                <div className="fs-14">{Nocdata?.state ? Nocdata?.state : 'NA'}</div>
+                                                            </div>
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>city Name:</label>
+                                                                <div className="fs-14">{Nocdata?.city ? Nocdata?.city : 'NA'}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="d-flex mb-2">
+                                                            <div className="col d-flex">
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>council pincode :</label>
+                                                                <div className="fs-14">{Nocdata?.councilpincode ? Nocdata?.councilpincode : 'NA'}</div>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            }
                                         {loading && (
                                             <div>
-                                            <div className="spinner-border text-success" role="status"></div> Loading...
+                                          
                                               </div>
                                         )
                                         }

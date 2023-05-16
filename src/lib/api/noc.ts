@@ -17,9 +17,17 @@ export const nocService = {
         });
         return responseData;
     },
-    async getNocsByFilter( reg_date: any,status: any) {
-        const { data: responseData } = await axiosInstance.get(`noc/getNocsByFilter/${reg_date}/${status}`);
-        return responseData as ApiResponseType;
+   
+    async nocDataByDoctorId(doctorId: any) {
+        const token = tokenManager.getToken();
+        const { data: responseData } = await axios.get(serverUrl+`noc/getNocByDoctorId/${doctorId}`, {
+            headers: {
+                'authorization': 'Bearer '+token,
+                'Content-Type': 'application/json'
+            }
+        });
+        return responseData;
     },
+   
  
 };

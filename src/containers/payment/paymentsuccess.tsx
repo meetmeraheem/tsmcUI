@@ -13,6 +13,12 @@ import Swal from "sweetalert2";
 import { ProvisionalFormType, ProvisionalPaymentProfileType } from "../../types/provisional";
 import { FinalFormType, FinalPaymentFormType } from "../../types/final";
 import { finalService } from "../../lib/api/final";
+import { additionalService } from '../../lib/api/additional';
+import { nocFormType } from "../../types/noc";
+import { AddQualFormType } from '../../types/additionalQuali';
+import { nocService } from "../../lib/api/noc";
+
+
 
 const PaymentSuccess = () => {
     const search = useLocation().search;
@@ -47,13 +53,13 @@ const PaymentSuccess = () => {
                 if (success) {
                     let resp = JSON.parse(data);
                     console.log('order details ----: ' + JSON.stringify(resp));
-                    if (resp && resp.OrderId && resp.OrderId !== null && resp.OrderId !== "" && resp.PaymentResponseText === "Approved") {
-                        alert("paymnet success full " + resp.OrderId);
+                    if (resp && resp.OrderId && resp.OrderId !== null && resp.OrderId !== "" /*&& resp.PaymentResponseText === "Approved"*/) {
                         setPaymentSuccess(true);
                         setRespOrderId(resp.OrderId);
                         setPaymentTransactionRefNo(resp.PaymentTransactionRefNo);
                         setPaymentResponseText(resp.PaymentResponseText);
                         setpaymentDateTime(resp.PaymentDateTime);
+                        let OrderAmount=resp.OrderAmount;
 
                         console.log('Payment OrderId ' + data.OrderId + ' ------ ' + orderId);
                         const regType = secureLocalStorage.getItem("regType");
@@ -137,14 +143,14 @@ const PaymentSuccess = () => {
                         }
 
                         if (regType === 'final') {
-                            const { data: dd } = await commonService.getMtSerials('DD');
-                            if (dd) {
-                                setPaymentSerial(Number(dd.serial_starts) + 1);
+                            const { data} = await commonService.getMtSerials('DD');
+                            if (data) {
+                                setPaymentSerial(Number(data.serial_starts) + 1);
                             }
                             const finalInfo = secureLocalStorage.getItem("finalInfo");
                             const finalPaymentInfo = {
                                 ...finalInfo as FinalPaymentFormType,
-                                pay_id: Number(dd.serial_starts) + 1
+                                pay_id: Number(data.serial_starts) + 1
                             }
                             const af = secureLocalStorage.getItem("af");
                             const mbbs = secureLocalStorage.getItem("mbbs");
@@ -204,10 +210,9 @@ const PaymentSuccess = () => {
                             }
 
 
-                            {/*
+                            
                         const { success } = await finalService.finalRegistration(formData);
                         if (success) {
-                            //const { data } = await commonService.getMtSerials('DD');
                             const doctorId = Number(LocalStorageManager.getDoctorSerialId());
                             setDoctorSerialNumber(doctorId);
                             if (paymentSerial) {
@@ -215,7 +220,7 @@ const PaymentSuccess = () => {
                                     doctor_id: doctorId,
                                     reg_date: moment().format('YYYY-MM-DD'),
                                     recept_date: moment().format('YYYY-MM-DD'),
-                                    dd_amount: 100,
+                                    dd_amount: OrderAmount,
                                     receipt_no: orderId,
                                     pay_type: 'frn',
                                     dd_branch: 'on',
@@ -226,29 +231,17 @@ const PaymentSuccess = () => {
                                 orderId && setTransactionNumber(orderId);
                                 const { success } = await commonService.createPayment(finalPaymentInfo);
                                 if (success) {
-                                    await commonService.updateMtSerials(
-                                        {
-                                            ...data,
-                                            created_date: moment(data.created_date).format('YYYY-MM-DD h:mm:ss'),
-                                            serial_starts: Number(data.serial_starts) + 1
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: "Provisional Successfully Registered",
+                                        icon: "success",
+                                        confirmButtonText: "OK",
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            // navigate(routes.userpanal);
                                         }
-                                    );
+                                    });
                                 }
-                            }
-
-                            const { data: fr } = await commonService.getMtSerials('FR');
-                            if (fr) {
-                                await commonService.updateMtSerials(
-                                    {
-                                        ...fr,
-                                        created_date: moment(fr.created_date).format('YYYY-MM-DD h:mm:ss'),
-                                        serial_starts: Number(fr.serial_starts) + 1
-                                    }
-                                );
-                                setFMRSerialNumber(Number(fr.serial_starts) + 1);
-                                const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
-                                doctorPrimaryId && await doctorService.updateDoctorIdFMRId(doctorPrimaryId, { fmr_no: Number(fr.serial_starts) + 1, orignal_fmr_no: 'TSMC/FMR/' + Number(fr.serial_starts) + 1 });
-                                LocalStorageManager.setDoctorFMRNo((Number(fr.serial_starts) + 1).toString());
                             }
                             secureLocalStorage.removeItem("af");
                             secureLocalStorage.removeItem("mbbs");
@@ -281,7 +274,7 @@ const PaymentSuccess = () => {
                                     //navigate(routes.userpanal);
                                 }
                             });
-                        }*/}
+                        }
                             // const provisionalPaymentInfo = {
                             //     ...finalInfo as FinalPaymentFormType,
                             //     recept_date: moment().format('YYYY-MM-DD'),
@@ -289,7 +282,149 @@ const PaymentSuccess = () => {
                             //     receipt_no: orderId
                             // }
                         }
+                        if (regType === 'additionalInfo') {
+                            const { data } = await commonService.getMtSerials('DD');
+                            if (data) {
+                                setPaymentSerial(Number(data.serial_starts) + 1);
+                            }
+                            const additionalInfo = secureLocalStorage.getItem("additionalInfo");
+                            const additionalDataPaymentInfo = {
+                                ...additionalInfo as AddQualFormType,
+                                pay_id: Number(data.serial_starts) + 1
+                            }
+                            const additional_study = secureLocalStorage.getItem("additional_study");
+                            const additional_Degree = secureLocalStorage.getItem("additional_Degree");
+                          
 
+                            const formData = new FormData();
+                            formData.append("additionalInfo", JSON.stringify(additionalDataPaymentInfo));
+
+                            if (additional_study) {
+                                formData.append("study", additional_study as File);
+                            }
+                            if (additional_Degree) {
+                                formData.append("Degree", additional_Degree as File);
+                            }
+                            const { success } = await additionalService.additionalRegistration(formData);                        if (success) {
+                            const doctorId = Number(LocalStorageManager.getDoctorSerialId());
+                            setDoctorSerialNumber(doctorId);
+                            if (paymentSerial) {
+                                const additionalPaymentInfo = {
+                                    doctor_id: doctorId,
+                                    reg_date: moment().format('YYYY-MM-DD'),
+                                    recept_date: moment().format('YYYY-MM-DD'),
+                                    dd_amount: OrderAmount,
+                                    receipt_no: orderId,
+                                    pay_type: 'aqn',
+                                    dd_branch: 'on',
+                                    dd_serial: paymentSerial,
+                                    createdon: moment().format('YYYY-MM-DD'),
+                                    posttime: moment().format('h:mm:ss'),
+                                }
+                                orderId && setTransactionNumber(orderId);
+                                const { success } = await commonService.createPayment(additionalPaymentInfo);
+                                if (success) {
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: "Provisional Successfully Registered",
+                                        icon: "success",
+                                        confirmButtonText: "OK",
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                           
+                                        }
+                                    });
+                                }
+                            }
+                            secureLocalStorage.removeItem("additional_study");
+                            secureLocalStorage.removeItem("additional_Degree");
+                          
+                            Swal.fire({
+                                title: "Success",
+                                text: "Additional registration successfully completed",
+                                icon: "success",
+                                confirmButtonText: "OK",
+                            }).then(async (result) => {
+                                if (result.isConfirmed) {
+                                    const doctorMobileno = LocalStorageManager.getDoctorMobileno();
+                                   if (doctorMobileno) {
+                                      await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Additional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
+
+                                }).catch(() => {
+
+                                      });
+                                   }
+                                    
+                                }
+                            });
+                        }
+                          
+                        }
+                        if (regType === 'nocInfo') {
+                            const { data } = await commonService.getMtSerials('DD');
+                            if (data) {
+                                setPaymentSerial(Number(data.serial_starts) + 1);
+                            }
+                            const nocInfo = secureLocalStorage.getItem("nocInfo");
+                            const nocDataPaymentInfo = {
+                                ...nocInfo as nocFormType,
+                                pay_id: Number(data.serial_starts) + 1
+                            }
+                            const formData = new FormData();
+                            formData.append("nocInfo", JSON.stringify(nocDataPaymentInfo));
+                            const { success } = await nocService.nocRegistration(formData);
+                        if (success) {
+                            const doctorId = Number(LocalStorageManager.getDoctorSerialId());
+                            setDoctorSerialNumber(doctorId);
+                            if (paymentSerial) {
+                                const nocPaymentInfo = {
+                                    doctor_id: doctorId,
+                                    reg_date: moment().format('YYYY-MM-DD'),
+                                    recept_date: moment().format('YYYY-MM-DD'),
+                                    dd_amount: OrderAmount,
+                                    receipt_no: orderId,
+                                    pay_type: 'noc',
+                                    dd_branch: 'on',
+                                    dd_serial: paymentSerial,
+                                    createdon: moment().format('YYYY-MM-DD'),
+                                    posttime: moment().format('h:mm:ss'),
+                                }
+                                orderId && setTransactionNumber(orderId);
+                                const { success } = await commonService.createPayment(nocPaymentInfo);
+                                if (success) {
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: "Noc Successfully Registered",
+                                        icon: "success",
+                                        confirmButtonText: "OK",
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                           
+                                        }
+                                    });
+                                }
+                            }
+                            Swal.fire({
+                                title: "Success",
+                                text: "Noc registration successfully completed",
+                                icon: "success",
+                                confirmButtonText: "OK",
+                            }).then(async (result) => {
+                                if (result.isConfirmed) {
+                                    const doctorMobileno = LocalStorageManager.getDoctorMobileno();
+                                   if (doctorMobileno) {
+                                      await authService.sendSMS(doctorMobileno, 'Your Application Submitted for NOC Registration to Telangana State Medical Council is under Process.').then((response) => {
+
+                                }).catch(() => {
+
+                                      });
+                                   }
+                                    
+                                }
+                            });
+                        }
+                          
+                        }
                         setIsLoader(false);
 
                     }

@@ -13,4 +13,5 @@ export type nocFormType = {
     modifiedon: string,
     status: string,
     added_by: number,
+    approval_status:string
   }
