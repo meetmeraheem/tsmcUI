@@ -37,6 +37,9 @@ const Payment = () => {
     const [penalityAmount, setPenalityAmount] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
     const [extraCharges, setExtraCharges] = useState(0);
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phoneNo, setPhoneNo] = useState('');
 
     //const authString = '0ca4cd6e43204581ac6efeba64ea7d56:16d3605e36ef429bb2c5dcd1e238bff8:M:8463';
     //const authString = '0ca4cd6e43204581ac6efeba64ea7d56:16d3605e36ef429bb2c5dcd1e238bff8:M:11130';
@@ -46,14 +49,7 @@ const Payment = () => {
         salt: 'Dud9MZY05pnwC6rpOZ3qh9gw0Jn0O2lm'
     });
 
-    const initialFormData: PaymentFormType = {
-        amount: 1.00,
-        fullname: doctor?.fullname || '',
-        email: doctor?.emailid || '',
-        stdcode: doctor?.stdcode || '+91',
-        phone: doctor?.mobileno || '',
-    }
-
+   
     const uatPayLoad = {
         "OrderKeyId": null,
         "MerchantKeyId": 8463,
@@ -134,33 +130,7 @@ const Payment = () => {
         // }
     }
 
-    const PayAndContinueForm = useCallback(async () => {
-        try {
-            const paymentRequest = {
-                    OrderAmount: 1,
-                    FirstName: 'MD Rahimoddin',
-                    MobileNo: '9848245648',
-                    Email: 'meetme.raheem@gmail.com'                
-            }
-            const { success, data } = await commonService.payviaJavaPayG(paymentRequest);
-           
-            if (success) {
-                let resp=JSON.parse(data);
-                LocalStorageManager.setOrderKeyId(resp.OrderKeyId.toString());
-                window.open(resp.PaymentProcessUrl, '_self', 'noreferrer');
-            }else{
-                alert("Error Msg "+data);
-            }
-            // const data = await commonService.payviaPayG(paymentRequest, Base64.encode(authString));
-            // if (data) {
-            //     LocalStorageManager.setOrderKeyId(data.OrderKeyId.toString());
-            //     window.open(data.PaymentProcessUrl, '_self', 'noreferrer');
-            // }
-
-        } catch (err) {
-            console.log('error in payment process during the provisional registrartion.', err);
-        }
-    }, []);
+   
 
     const getDoctorProfile = useCallback(async () => {
         try {
@@ -169,6 +139,9 @@ const Payment = () => {
                 const getDoctor = await doctorService.getDoctorById(doctorPrimaryId);
                 if (getDoctor.data.length > 0) {
                     setDoctor(getDoctor.data[0]);
+                    setFullName(getDoctor.data[0].fullname,);
+                    setEmail(getDoctor.data[0].emailid);
+                    setPhoneNo(getDoctor.data[0].stdcode +' '+getDoctor.data[0].mobileno);
                 }
             }
         } catch (err: any) {
@@ -178,7 +151,10 @@ const Payment = () => {
         }
     }, []);
 
-    useEffect(() => {
+    useEffect(
+       
+        () => {
+            getDoctorProfile();
         if (regType === 'provisional') {
             const provisionalInfo = secureLocalStorage.getItem("provisionalInfo");
             const provisionalPaymentInfo = {
@@ -233,9 +209,35 @@ const Payment = () => {
             setExtraCharges(onlineCharge + postalCharge);
             setTotalAmount(amountValue + postalCharge + onlineCharge);
         }
-        getDoctorProfile();
+        setTotalAmount(7);
     }, [registrationFee, penalityAmount, totalAmount, extraCharges]);
 
+
+
+    const PayAndContinueForm = useCallback(async (amount:any,name:any,mobileno:any,email:any) => {
+        try {
+            
+            const paymentRequest = {
+                OrderAmount: amount,
+                FirstName: name ,
+                MobileNo: mobileno,
+                Email: email 
+           }
+           if(amount!=0){
+            const { success, data } = await commonService.payviaJavaPayG(paymentRequest);
+           
+            if (success) {
+                let resp=JSON.parse(data);
+                LocalStorageManager.setOrderKeyId(resp.OrderKeyId.toString());
+                window.open(resp.PaymentProcessUrl, '_self', 'noreferrer');
+            }else{
+                alert("Error Msg "+data);
+            }
+        }
+        } catch (err) {
+            console.log('error in payment process during the provisional registrartion.', err);
+        }
+    }, []);
     return (
         <>
             <UserHeader />
@@ -317,8 +319,8 @@ const Payment = () => {
                         </div>
                         <div className="card-footer text-end py-3">
                             <button type="button" onClick={()=>navigate(-1)} className="btn btn-primary me-3">Back</button>
-                            <button type="button" onClick={PayAndContinueForm} className="btn btn-primary ps-2">Continue & Pay</button>
-                        </div>
+                            <button type="button" onClick={()=>PayAndContinueForm(totalAmount,doctor?.fullname,doctor?.mobileno,doctor?.emailid)} className="btn btn-primary ps-2">Continue & Pay</button>
+                        </div>=
                     </div>
                     <div className="card shadow border-0 mb-3">
                         <div className="card-body d-flex justify-content-between align-items-center">
@@ -336,193 +338,7 @@ const Payment = () => {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="card shadow border-0">
-                        <Formik
-                            onSubmit={PayAndContinueForm}
-                            enableReinitialize
-                            initialValues={initialFormData}
-                        >
-                            {(formikProps: FormikProps<PaymentFormType>) => {
-                                const { isValid, handleSubmit, isSubmitting, setFieldTouched, setFieldValue, resetForm, errors } = formikProps;
-
-                                return (
-                                    <form onSubmit={handleSubmit}>
-                                        <div className="card-body">
-                                            <div className="w-100">
-                                                <h1 className='fs-22 fw-700'>Payment Details</h1>
-                                                <hr />
-                                            </div>
-                                            <div className="px-3">
-                                                <div className="row mb-3">
-                                                    <label className="col-sm-2 col-form-label">Amount</label>
-                                                    <div className="col-sm-4">
-                                                        <Field name="amount">
-                                                            {(fieldProps: FieldProps) => {
-                                                                const { field, form } = fieldProps;
-                                                                const error =
-                                                                    getValue(form.touched, field.name) &&
-                                                                    getValue(form.errors, field.name);
-                                                                return (
-                                                                    <>
-                                                                        <input
-                                                                            type="text"
-                                                                            value={field.value}
-                                                                            onChange={(ev) => {
-                                                                                setFieldTouched(field.name);
-                                                                                setFieldValue(field.name, ev.target.value);
-                                                                            }}
-                                                                            className={`form-control ${error ? 'is-invalid' : ''
-                                                                                }`}
-                                                                            placeholder="Amount to be paid"
-                                                                            tabIndex={2}
-                                                                        />
-
-                                                                        {error && <small className="text-danger">{error.toString()}</small>}
-                                                                    </>
-                                                                );
-                                                            }}
-                                                        </Field>
-                                                    </div>
-
-                                                    <label className="col-sm-2 col-form-label">Full Name</label>
-                                                    <div className="col-sm-4">
-                                                        <Field name="fullname">
-                                                            {(fieldProps: FieldProps) => {
-                                                                const { field, form } = fieldProps;
-                                                                const error =
-                                                                    getValue(form.touched, field.name) &&
-                                                                    getValue(form.errors, field.name);
-                                                                return (
-                                                                    <>
-                                                                        <input
-                                                                            type="text"
-                                                                            value={field.value}
-                                                                            onChange={(ev) => {
-                                                                                setFieldTouched(field.name);
-                                                                                setFieldValue(field.name, ev.target.value);
-                                                                            }}
-                                                                            className={`form-control ${error ? 'is-invalid' : ''
-                                                                                }`}
-                                                                            placeholder="Enter full name"
-                                                                            tabIndex={1}
-                                                                        />
-
-                                                                        {error && <small className="text-danger">{error.toString()}</small>}
-                                                                    </>
-                                                                );
-                                                            }}
-                                                        </Field>
-                                                    </div>
-
-                                                </div>
-
-                                                <div className="row mb-3">
-                                                    <label className="col-sm-2 col-form-label pr-0">Mobile No</label>
-                                                    <div className="col-sm-4">
-                                                        <div className="input-group input-group-sm mb-3">
-                                                            <Field name="stdcode">
-                                                                {(fieldProps: FieldProps) => {
-                                                                    const { field, form } = fieldProps;
-                                                                    const error =
-                                                                        getValue(form.touched, field.name) &&
-                                                                        getValue(form.errors, field.name);
-                                                                    return (
-                                                                        <>
-                                                                            <input
-                                                                                type="text"
-                                                                                name="mobcode"
-                                                                                value={field.value}
-                                                                                onChange={(ev) => {
-                                                                                    setFieldTouched(field.name);
-                                                                                    setFieldValue(field.name, ev.target.value);
-                                                                                }}
-                                                                                className={`input-group-text col-2 ${error ? 'is-invalid' : ''
-                                                                                    }`}
-                                                                                placeholder="STD Code"
-                                                                            />
-
-                                                                            {error && <small className="text-danger">{error.toString()}</small>}
-                                                                        </>
-                                                                    );
-                                                                }}
-                                                            </Field>
-                                                            <Field name="phone">
-                                                                {(fieldProps: FieldProps) => {
-                                                                    const { field, form } = fieldProps;
-                                                                    const error =
-                                                                        getValue(form.touched, field.name) &&
-                                                                        getValue(form.errors, field.name);
-                                                                    return (
-                                                                        <>
-                                                                            <input
-                                                                                type="text"
-                                                                                name="mobileno"
-                                                                                value={field.value}
-                                                                                onChange={(ev) => {
-                                                                                    setFieldTouched(field.name);
-                                                                                    setFieldValue(field.name, ev.target.value);
-                                                                                }}
-                                                                                className={`form-control col-auto ${error ? 'is-invalid' : ''
-                                                                                    }`}
-                                                                                placeholder="Enter Mobile No"
-                                                                                tabIndex={13}
-                                                                                maxLength={10}
-                                                                                minLength={10}
-                                                                            />
-
-                                                                            {error && <small className="text-danger">{error.toString()}</small>}
-                                                                        </>
-                                                                    );
-                                                                }}
-                                                            </Field>
-                                                        </div>
-                                                    </div>
-
-                                                    <label className="col-sm-2 col-form-label">Email ID</label>
-                                                    <div className="col-sm-4">
-                                                        <Field name="email">
-                                                            {(fieldProps: FieldProps) => {
-                                                                const { field, form } = fieldProps;
-                                                                const error =
-                                                                    getValue(form.touched, field.name) &&
-                                                                    getValue(form.errors, field.name);
-                                                                return (
-                                                                    <>
-                                                                        <input
-                                                                            type="text"
-                                                                            name="emailid"
-                                                                            value={field.value}
-                                                                            onChange={(ev) => {
-                                                                                setFieldTouched(field.name);
-                                                                                setFieldValue(field.name, ev.target.value);
-                                                                            }}
-                                                                            className={`form-control ${error ? 'is-invalid' : ''
-                                                                                }`}
-                                                                            placeholder="Enter Email Address"
-                                                                            tabIndex={12}
-                                                                        />
-
-                                                                        {error && <small className="text-danger">{error.toString()}</small>}
-                                                                    </>
-                                                                );
-                                                            }}
-                                                        </Field>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="card-footer">
-                                                <div className="w-100 text-end">
-                                                    <button type="submit" disabled={isSubmitting} className="btn btn-primary">
-                                                        {isSubmitting && <span className="spinner-border spinner-border-sm" />} Pay & Continue
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                );
-                            }}
-                        </Formik>
-                    </div> */}
+                    
                 </div>
             </section>
         </>

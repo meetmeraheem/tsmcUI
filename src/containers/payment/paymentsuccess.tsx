@@ -53,7 +53,7 @@ const PaymentSuccess = () => {
                 if (success) {
                     let resp = JSON.parse(data);
                     console.log('order details ----: ' + JSON.stringify(resp));
-                    if (resp && resp.OrderId && resp.OrderId !== null && resp.OrderId !== "" /*&& resp.PaymentResponseText === "Approved"*/) {
+                    if (resp && resp.OrderId && resp.OrderId !== null && resp.OrderId !== "" && resp.PaymentResponseText === "Approved") {
                         setPaymentSuccess(true);
                         setRespOrderId(resp.OrderId);
                         setPaymentTransactionRefNo(resp.PaymentTransactionRefNo);

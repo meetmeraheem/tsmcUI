@@ -15,7 +15,7 @@ export const assignmentService = {
         return responseData;
     },
     async getUsersByRole() {
-        const { data: responseData } = await axiosInstance.get(`user/getUsersByRole`);
+        const { data: responseData } = await axiosInstance.get(`userRole/getUsersByRole`);
         return responseData as ApiResponseType;
     },
     async updateAssignment(doctor_id: number, data: any) {
