@@ -28,6 +28,16 @@ export const nocService = {
         });
         return responseData;
     },
-   
+    async getNocsByFilter(newdate:any, statusValue:any){
+        const token = tokenManager.getToken();
+        const { data: responseData } = await axios.get(serverUrl+`noc/getNocsByFilter/${newdate}/${statusValue}`, {
+            headers: {
+                'authorization': 'Bearer '+token,
+                'Content-Type': 'application/json'
+            }
+        });
+        return responseData;
+
+    }
  
 };

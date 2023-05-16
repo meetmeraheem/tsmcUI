@@ -30,4 +30,8 @@ export const additionalService = {
         const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByDoctorId/${doctorId}`);
         return responseData;
     },
+    async getaddlsByFilter(newdate:any, statusValue: any){
+        const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByFilter/${newdate}/${statusValue}`);
+        return responseData;
+    }
 };
