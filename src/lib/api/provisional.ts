@@ -53,4 +53,15 @@ export const provisionalService = {
         const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByUserId/${reg_date}/${user_id}`);
         return responseData as ApiResponseType;
     },
+
+    async getProvisionalFeeDetails(data: any) {
+        const token = tokenManager.getToken();
+        const { data: responseData } = await axios.post(serverUrl+`provisional/getProvisionalRegFeeDetails`, data, {
+            headers: {
+                'authorization': 'Bearer '+token,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return responseData;
+    },
 };

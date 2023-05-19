@@ -38,6 +38,17 @@ export const nocService = {
         });
         return responseData;
 
+    },
+    async getNocRegDetails(nocdata:any){
+        const token = tokenManager.getToken();
+        const { data: responseData } = await axios.post(serverUrl+`noc/getNocRegFeeDetails`,nocdata, {
+            headers: {
+                'authorization': 'Bearer '+token,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return responseData;
+
     }
  
 };

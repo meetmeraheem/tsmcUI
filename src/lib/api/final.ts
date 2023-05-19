@@ -46,4 +46,14 @@ export const finalService = {
         const { data: responseData } = await axiosInstance.get(`finalreg/getFinalsByFilter/${reg_date}/${status}`);
         return responseData as ApiResponseType;
     },
+    async getFinalRegFeeDetails(data: any) {
+        const token = tokenManager.getToken();
+        const { data: responseData } = await axios.post(serverUrl+`finalreg/getProvisionalRegFeeDetails`, data, {
+            headers: {
+                'authorization': 'Bearer '+token,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return responseData;
+    },
 };

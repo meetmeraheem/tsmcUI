@@ -22,7 +22,7 @@ import { Provisional_DoctorFormType } from "../../types/provisional";
 
 const Noc = () => {
     const fetchIdRef = useRef(0);
-    const [finals, setFinals] = useState([]);
+    const [noc, setNoc] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
     const [date, setDate] = useState(defaultDate);
     const [loading, setLoading] = useState(false)
@@ -205,14 +205,14 @@ const Noc = () => {
                 const startRow = pageSize * pageIndex
                 const endRow = startRow + pageSize
                if(data!=undefined){
-                setFinals(data.slice(startRow, endRow))
+                setNoc(data.slice(startRow, endRow))
 
                 // Your server could send back total page count.
                 // For now we'll just fake it, too
                 setPageCount(Math.ceil(data.length / pageSize));
                 setLoading(false);
                }else{
-                   setFinals([]);
+                   setNoc([]);
                    setLoading(false);
                 }
 
@@ -277,7 +277,7 @@ const Noc = () => {
                             <input type="date" name="" id=""
                                 value={date}
                                 onChange={(ev) => {
-                                    setFinals([]);
+                                    setNoc([]);
                                     setDate(ev.target.value)
                                 }} className="form-control" />
                         </span>
@@ -288,7 +288,7 @@ const Noc = () => {
                         <div className="card-body">
                             <Table
                                 columns={columns}
-                                data={finals}
+                                data={noc}
                                 loading={loading}
                                 pageCount={pageCount}
                                 fetchData={fetchData}

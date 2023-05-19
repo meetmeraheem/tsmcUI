@@ -33,5 +33,16 @@ export const additionalService = {
     async getaddlsByFilter(newdate:any, statusValue: any){
         const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByFilter/${newdate}/${statusValue}`);
         return responseData;
-    }
+    },
+
+    async  getAdditionalRegFeeDetails(data: any) {
+        const token = tokenManager.getToken();
+        const { data: responseData } = await axios.post(serverUrl+`additionalQualification/getQualificationRegFeeDetails`, data, {
+            headers: {
+                'authorization': 'Bearer '+token,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return responseData;
+    },
 };

@@ -22,11 +22,11 @@ import { nocService } from "../../lib/api/noc";
 
 const PaymentSuccess = () => {
     const search = useLocation().search;
-    const orderId = new URLSearchParams(search).get('orderid');
+   // const orderId = new URLSearchParams(search).get('orderid');
     const navigate = useNavigate();
     //const location = useLocation();
     // const { orderid } = location.state
-    console.log('orderId ' + orderId);
+    
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [isLoader, setIsLoader] = useState(true);
     const [paymentSerial, setPaymentSerial] = useState(0);
@@ -38,6 +38,8 @@ const PaymentSuccess = () => {
     const [paymentTransactionRefNo, setPaymentTransactionRefNo] = useState('');
     const [paymentResponseText, setPaymentResponseText] = useState('');
     const [paymentDateTime, setpaymentDateTime] = useState('');
+    const [respOrderAmt, setRespOrderAmt] = useState('');
+
 
     useEffect(() => {
         (async () => {
@@ -59,9 +61,9 @@ const PaymentSuccess = () => {
                         setPaymentTransactionRefNo(resp.PaymentTransactionRefNo);
                         setPaymentResponseText(resp.PaymentResponseText);
                         setpaymentDateTime(resp.PaymentDateTime);
-                        let OrderAmount=resp.OrderAmount;
+                        setRespOrderAmt(resp.OrderAmount);
 
-                        console.log('Payment OrderId ' + data.OrderId + ' ------ ' + orderId);
+                        console.log('Payment OrderId ' + resp.OrderId + ' ------ ' + respOrderId);
                         const regType = secureLocalStorage.getItem("regType");
 
 
@@ -70,10 +72,12 @@ const PaymentSuccess = () => {
                             const provisionalPaymentInfo = {
                                 ...provisionalInfo as ProvisionalPaymentProfileType,
                                 recept_date: moment().format('YYYY-MM-DD'),
-                                dd_amount: 100,
-                                receipt_no: orderId
+                                dd_amount: resp.OrderAmount,
+                                receipt_no: resp.OrderId,
+                                paymethod: resp.PaymentMethod
+
                             }
-                            orderId && setTransactionNumber(orderId);
+                            respOrderId && setTransactionNumber(respOrderId);
                             const pc = secureLocalStorage.getItem("pc");
                             const af = secureLocalStorage.getItem("af");
                             const noc = secureLocalStorage.getItem("noc");
@@ -92,41 +96,14 @@ const PaymentSuccess = () => {
 
                             const { success } = await provisionalService.provisionalRegistration(formData);
                             if (success) {
-                                {/*   const { data } = await commonService.getMtSerials('DPD');
-                            if (data) {
-                                await commonService.updateMtSerials(
-                                    {
-                                        ...data,
-                                        created_date: moment(data.created_date).format('YYYY-MM-DD h:mm:ss'),
-                                        serial_starts: Number(data.serial_starts) + 1
-                                    }
-                                );
-                            }
-                           {/*  setDoctorSerialNumber(Number(data.serial_starts) + 1);
-                            const { data: pr } = await commonService.getMtSerials('PR');
-                            if (pr) {
-                                await commonService.updateMtSerials(
-                                    {
-                                        ...pr,
-                                        created_date: moment(pr.created_date).format('YYYY-MM-DD h:mm:ss'),
-                                        serial_starts: Number(pr.serial_starts) + 1
-                                    }
-                                );
-                            }
-                       setPMRSerialNumber(Number(pr.serial_starts) + 1);
-                            const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
-                            doctorPrimaryId && await doctorService.updateDoctorIdPmrId(doctorPrimaryId, Number(data.serial_starts) + 1, Number(pr.serial_starts) + 1);
-                            LocalStorageManager.setDoctorSerialId((Number(data.serial_starts) + 1).toString());
-                            secureLocalStorage.removeItem("pc");
-                            secureLocalStorage.removeItem("af");
-                            secureLocalStorage.removeItem("noc");
-                        */}
+                                const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
+                                secureLocalStorage.removeItem("pc");
+                                secureLocalStorage.removeItem("af");
+                                secureLocalStorage.removeItem("noc");
                                 const doctorMobileno = LocalStorageManager.getDoctorMobileno();
                                 if (doctorMobileno) {
                                     await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Provisional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
-
                                     }).catch(() => {
-
                                     });
                                 }
                                 Swal.fire({
@@ -143,14 +120,12 @@ const PaymentSuccess = () => {
                         }
 
                         if (regType === 'final') {
-                            const { data} = await commonService.getMtSerials('DD');
-                            if (data) {
-                                setPaymentSerial(Number(data.serial_starts) + 1);
-                            }
                             const finalInfo = secureLocalStorage.getItem("finalInfo");
                             const finalPaymentInfo = {
                                 ...finalInfo as FinalPaymentFormType,
-                                pay_id: Number(data.serial_starts) + 1
+                                orderAmount: resp.OrderAmount,
+                                orderId: resp.OrderId,
+                                paymethod: resp.PaymentMethod
                             }
                             const af = secureLocalStorage.getItem("af");
                             const mbbs = secureLocalStorage.getItem("mbbs");
@@ -208,225 +183,117 @@ const PaymentSuccess = () => {
                             if (imr) {
                                 formData.append("imr", imr as File);
                             }
-
-
-                            
-                        const { success } = await finalService.finalRegistration(formData);
-                        if (success) {
-                            const doctorId = Number(LocalStorageManager.getDoctorSerialId());
-                            setDoctorSerialNumber(doctorId);
-                            if (paymentSerial) {
-                                const finalPaymentInfo = {
-                                    doctor_id: doctorId,
-                                    reg_date: moment().format('YYYY-MM-DD'),
-                                    recept_date: moment().format('YYYY-MM-DD'),
-                                    dd_amount: OrderAmount,
-                                    receipt_no: orderId,
-                                    pay_type: 'frn',
-                                    dd_branch: 'on',
-                                    dd_serial: paymentSerial,
-                                    createdon: moment().format('YYYY-MM-DD'),
-                                    posttime: moment().format('h:mm:ss'),
-                                }
-                                orderId && setTransactionNumber(orderId);
-                                const { success } = await commonService.createPayment(finalPaymentInfo);
-                                if (success) {
-                                    Swal.fire({
-                                        title: "Success",
-                                        text: "Provisional Successfully Registered",
-                                        icon: "success",
-                                        confirmButtonText: "OK",
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            // navigate(routes.userpanal);
+                            const { success } = await finalService.finalRegistration(formData);
+                            if (success) {
+                                const doctorId = Number(LocalStorageManager.getDoctorSerialId());
+                                setDoctorSerialNumber(doctorId);
+                                secureLocalStorage.removeItem("af");
+                                secureLocalStorage.removeItem("mbbs");
+                                secureLocalStorage.removeItem("noc");
+                                secureLocalStorage.removeItem("affidivit");
+                                secureLocalStorage.removeItem("testimonal1");
+                                secureLocalStorage.removeItem("testimonal2");
+                                secureLocalStorage.removeItem("regOfOtherState");
+                                secureLocalStorage.removeItem("screeningTestPass");
+                                secureLocalStorage.removeItem("internshipComp");
+                                secureLocalStorage.removeItem("mciEligibility");
+                                secureLocalStorage.removeItem("interVerification");
+                                secureLocalStorage.removeItem("mciReg");
+                                secureLocalStorage.removeItem("imr");
+                                Swal.fire({
+                                    title: "Success",
+                                    text: "Final registration successfully completed",
+                                    icon: "success",
+                                    confirmButtonText: "OK",
+                                }).then(async (result) => {
+                                    if (result.isConfirmed) {
+                                        const doctorMobileno = LocalStorageManager.getDoctorMobileno();
+                                        if (doctorMobileno) {
+                                            await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Final Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
+                                            }).catch(() => {
+                                            });
                                         }
-                                    });
-                                }
-                            }
-                            secureLocalStorage.removeItem("af");
-                            secureLocalStorage.removeItem("mbbs");
-                            secureLocalStorage.removeItem("noc");
-                            secureLocalStorage.removeItem("affidivit");
-                            secureLocalStorage.removeItem("testimonal1");
-                            secureLocalStorage.removeItem("testimonal2");
-                            secureLocalStorage.removeItem("regOfOtherState");
-                            secureLocalStorage.removeItem("screeningTestPass");
-                            secureLocalStorage.removeItem("internshipComp");
-                            secureLocalStorage.removeItem("mciEligibility");
-                            secureLocalStorage.removeItem("interVerification");
-                            secureLocalStorage.removeItem("mciReg");
-                            secureLocalStorage.removeItem("imr");
-                            Swal.fire({
-                                title: "Success",
-                                text: "Final registration successfully completed",
-                                icon: "success",
-                                confirmButtonText: "OK",
-                            }).then(async (result) => {
-                                if (result.isConfirmed) {
-                                    const doctorMobileno = LocalStorageManager.getDoctorMobileno();
-                                    if (doctorMobileno) {
-                                        await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Final Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
-
-                                        }).catch(() => {
-
-                                        });
                                     }
-                                    //navigate(routes.userpanal);
-                                }
-                            });
-                        }
-                            // const provisionalPaymentInfo = {
-                            //     ...finalInfo as FinalPaymentFormType,
-                            //     recept_date: moment().format('YYYY-MM-DD'),
-                            //     dd_amount: 100,
-                            //     receipt_no: orderId
-                            // }
+                                });
+                            }
                         }
                         if (regType === 'additionalInfo') {
-                            const { data } = await commonService.getMtSerials('DD');
-                            if (data) {
-                                setPaymentSerial(Number(data.serial_starts) + 1);
-                            }
                             const additionalInfo = secureLocalStorage.getItem("additionalInfo");
                             const additionalDataPaymentInfo = {
                                 ...additionalInfo as AddQualFormType,
-                                pay_id: Number(data.serial_starts) + 1
+                                orderAmount: resp.OrderAmount,
+                                orderId: resp.OrderId,
+                                paymethod: resp.PaymentMethod
                             }
                             const additional_study = secureLocalStorage.getItem("additional_study");
                             const additional_Degree = secureLocalStorage.getItem("additional_Degree");
-                          
-
                             const formData = new FormData();
                             formData.append("additionalInfo", JSON.stringify(additionalDataPaymentInfo));
-
                             if (additional_study) {
                                 formData.append("study", additional_study as File);
                             }
                             if (additional_Degree) {
                                 formData.append("Degree", additional_Degree as File);
                             }
-                            const { success } = await additionalService.additionalRegistration(formData);                        if (success) {
-                            const doctorId = Number(LocalStorageManager.getDoctorSerialId());
-                            setDoctorSerialNumber(doctorId);
-                            if (paymentSerial) {
-                                const additionalPaymentInfo = {
-                                    doctor_id: doctorId,
-                                    reg_date: moment().format('YYYY-MM-DD'),
-                                    recept_date: moment().format('YYYY-MM-DD'),
-                                    dd_amount: OrderAmount,
-                                    receipt_no: orderId,
-                                    pay_type: 'aqn',
-                                    dd_branch: 'on',
-                                    dd_serial: paymentSerial,
-                                    createdon: moment().format('YYYY-MM-DD'),
-                                    posttime: moment().format('h:mm:ss'),
-                                }
-                                orderId && setTransactionNumber(orderId);
-                                const { success } = await commonService.createPayment(additionalPaymentInfo);
-                                if (success) {
-                                    Swal.fire({
-                                        title: "Success",
-                                        text: "Provisional Successfully Registered",
-                                        icon: "success",
-                                        confirmButtonText: "OK",
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                           
+                            const { success } = await additionalService.additionalRegistration(formData);
+                            if (success) {
+                                const doctorId = Number(LocalStorageManager.getDoctorSerialId());
+                                setDoctorSerialNumber(doctorId);
+                                resp.OrderId && setTransactionNumber(resp.OrderId);
+                                secureLocalStorage.removeItem("additional_study");
+                                secureLocalStorage.removeItem("additional_Degree");
+                                Swal.fire({
+                                    title: "Success",
+                                    text: "Additional registration successfully completed",
+                                    icon: "success",
+                                    confirmButtonText: "OK",
+                                }).then(async (result) => {
+                                    if (result.isConfirmed) {
+                                        const doctorMobileno = LocalStorageManager.getDoctorMobileno();
+                                        if (doctorMobileno) {
+                                            await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Additional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
+                                            }).catch(() => {
+
+                                            });
                                         }
-                                    });
-                                }
+                                    }
+                                });
                             }
-                            secureLocalStorage.removeItem("additional_study");
-                            secureLocalStorage.removeItem("additional_Degree");
-                          
-                            Swal.fire({
-                                title: "Success",
-                                text: "Additional registration successfully completed",
-                                icon: "success",
-                                confirmButtonText: "OK",
-                            }).then(async (result) => {
-                                if (result.isConfirmed) {
-                                    const doctorMobileno = LocalStorageManager.getDoctorMobileno();
-                                   if (doctorMobileno) {
-                                      await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Additional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
-
-                                }).catch(() => {
-
-                                      });
-                                   }
-                                    
-                                }
-                            });
-                        }
-                          
                         }
                         if (regType === 'nocInfo') {
-                            const { data } = await commonService.getMtSerials('DD');
-                            if (data) {
-                                setPaymentSerial(Number(data.serial_starts) + 1);
-                            }
                             const nocInfo = secureLocalStorage.getItem("nocInfo");
                             const nocDataPaymentInfo = {
                                 ...nocInfo as nocFormType,
-                                pay_id: Number(data.serial_starts) + 1
+                                orderAmount: resp.OrderAmount,
+                                orderId: resp.OrderId,
+                                paymethod: resp.PaymentMethod
+
                             }
                             const formData = new FormData();
                             formData.append("nocInfo", JSON.stringify(nocDataPaymentInfo));
                             const { success } = await nocService.nocRegistration(formData);
-                        if (success) {
-                            const doctorId = Number(LocalStorageManager.getDoctorSerialId());
-                            setDoctorSerialNumber(doctorId);
-                            if (paymentSerial) {
-                                const nocPaymentInfo = {
-                                    doctor_id: doctorId,
-                                    reg_date: moment().format('YYYY-MM-DD'),
-                                    recept_date: moment().format('YYYY-MM-DD'),
-                                    dd_amount: OrderAmount,
-                                    receipt_no: orderId,
-                                    pay_type: 'noc',
-                                    dd_branch: 'on',
-                                    dd_serial: paymentSerial,
-                                    createdon: moment().format('YYYY-MM-DD'),
-                                    posttime: moment().format('h:mm:ss'),
-                                }
-                                orderId && setTransactionNumber(orderId);
-                                const { success } = await commonService.createPayment(nocPaymentInfo);
-                                if (success) {
-                                    Swal.fire({
-                                        title: "Success",
-                                        text: "Noc Successfully Registered",
-                                        icon: "success",
-                                        confirmButtonText: "OK",
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                           
+                            if (success) {
+                                const doctorId = Number(LocalStorageManager.getDoctorSerialId());
+                                setDoctorSerialNumber(doctorId);
+                                resp.OrderId && setTransactionNumber(resp.OrderId);
+                                Swal.fire({
+                                    title: "Success",
+                                    text: "Noc registration successfully completed",
+                                    icon: "success",
+                                    confirmButtonText: "OK",
+                                }).then(async (result) => {
+                                    if (result.isConfirmed) {
+                                        const doctorMobileno = LocalStorageManager.getDoctorMobileno();
+                                        if (doctorMobileno) {
+                                            await authService.sendSMS(doctorMobileno, 'Your Application Submitted for NOC Registration to Telangana State Medical Council is under Process.').then((response) => {
+                                            }).catch(() => {
+                                            });
                                         }
-                                    });
-                                }
+                                    }
+                                });
                             }
-                            Swal.fire({
-                                title: "Success",
-                                text: "Noc registration successfully completed",
-                                icon: "success",
-                                confirmButtonText: "OK",
-                            }).then(async (result) => {
-                                if (result.isConfirmed) {
-                                    const doctorMobileno = LocalStorageManager.getDoctorMobileno();
-                                   if (doctorMobileno) {
-                                      await authService.sendSMS(doctorMobileno, 'Your Application Submitted for NOC Registration to Telangana State Medical Council is under Process.').then((response) => {
-
-                                }).catch(() => {
-
-                                      });
-                                   }
-                                    
-                                }
-                            });
-                        }
-                          
                         }
                         setIsLoader(false);
-
                     }
                     else {
                         setIsLoader(false);
@@ -478,7 +345,7 @@ const PaymentSuccess = () => {
                                                 </div>}
                                                 <div className="col d-flex">
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Order Id:</label>
-                                                    <div className="fs-14">{respOrderId}</div>
+                                                    <div className="fs-14">{transactionNumber}</div>
                                                 </div>
                                                 <div className="col d-flex">
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>PaymentTransaction Ref No :</label>
@@ -508,11 +375,11 @@ const PaymentSuccess = () => {
                                         </div>
                                         <div className="w-150 text-center">
                                             <i className="bi-x-circle fs-42 text-danger"></i>
-                                            <h1 className='fs-22 fw-700'>Payment Error for Order Id :{orderId}</h1>
+                                            <h1 className='fs-22 fw-700'>Payment Error for Order Id :{transactionNumber}</h1>
                                         </div>
                                         <div className="col d-flex">
                                             <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Order Id:</label>
-                                            <div className="fs-14">{respOrderId}</div>
+                                            <div className="fs-14">{transactionNumber}</div>
                                         </div>
                                         <div className="col d-flex">
                                             <label htmlFor="" className='fs-14 fw-600 me-2'>PaymentTransaction Ref No:</label>

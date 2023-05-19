@@ -13,8 +13,11 @@ import Provisional from '../user-panal/provisional-registration';
 import ProvisionalDuplicate from '../user-panal/duplicates/provisional-duplicate';
 import FinalRegistration from '../user-panal/final-registration';
 import AdditionalQualificationRegistration from '../user-panal/additional-qualification';
+import EditAdditionalQualificationRegistration from '../user-panal/edit-additional-qualification';
 import TemporaryRegistration from '../user-panal/temporary-registration';
 import NocRegistration from '../user-panal/noc';
+import EditNocView from '../user-panal/edit-noc';
+
 import GoodStandingMciRegistration from '../user-panal/good-standing-mci';
 import FinalRenewals from '../user-panal/final-renewal';
 import GoodStandingRegistration from '../user-panal/good-standing';
@@ -40,12 +43,15 @@ import RenewalView from '../dashboard/renewal';
 import GoodStandingView from '../dashboard/goodstanding';
 import GoodStandingMCIView from '../dashboard/mci';
 import NocView from '../dashboard/noc';
+
 import FinalRegView from '../dashboard/final-reg-view';
 import FinalRegistrations from '../dashboard/final-registration';
 import PaymentFailure from '../payment/paymentfailure';
 import PrivacyPolicy from '../landing-pages/privacy-policy';
 import TermsConditions from '../landing-pages/terms-conditions';
 import Refund from '../landing-pages/refund';
+
+
 
 const MainRoute = () => {
 	return (
@@ -77,9 +83,11 @@ const MainRoute = () => {
 					<Route path={routes.final_edit} element={<EditFinal />} />
 					<Route path={routes.final_duplicate} element={<FinalDuplicate />} />
 					<Route path={routes.additional_qualification_registration} element={<AdditionalQualificationRegistration />} />
+					<Route path={routes.edit_additional_qualification_registration} element={<EditAdditionalQualificationRegistration />} />
 					<Route path={routes.additional_duplicate} element={<AdditionalDuplicate />} />
 					<Route path={routes.temporary_registration} element={<TemporaryRegistration />} />
 					<Route path={routes.noc_registration} element={<NocRegistration />} />
+					<Route path={routes.noc_registration_edit} element={<EditNocView />} />
 					<Route path={routes.good_standing_registration} element={<GoodStandingRegistration />} />
 					<Route path={routes.good_standing_mci_registration} element={<GoodStandingMciRegistration />} />
 					<Route path={routes.final_registration} element={<FinalRegistration />} />

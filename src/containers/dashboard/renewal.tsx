@@ -22,7 +22,7 @@ import { renewalService } from "../../lib/api/renewals";
 
 const Renewal = () => {
     const fetchIdRef = useRef(0);
-    const [finals, setFinals] = useState([]);
+    const [renewals, setRenewals] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
     const [date, setDate] = useState(defaultDate);
     const [loading, setLoading] = useState(false)
@@ -205,14 +205,14 @@ const Renewal = () => {
                 const startRow = pageSize * pageIndex
                 const endRow = startRow + pageSize
                if(data!=undefined){
-                setFinals(data.slice(startRow, endRow))
+                setRenewals(data.slice(startRow, endRow))
 
                 // Your server could send back total page count.
                 // For now we'll just fake it, too
                 setPageCount(Math.ceil(data.length / pageSize));
                 setLoading(false);
                }else{
-                   setFinals([]);
+                   setRenewals([]);
                    setLoading(false);
                 }
 
@@ -277,7 +277,7 @@ const Renewal = () => {
                             <input type="date" name="" id=""
                                 value={date}
                                 onChange={(ev) => {
-                                    setFinals([]);
+                                    setRenewals([]);
                                     setDate(ev.target.value)
                                 }} className="form-control" />
                         </span>
@@ -288,7 +288,7 @@ const Renewal = () => {
                         <div className="card-body">
                             <Table
                                 columns={columns}
-                                data={finals}
+                                data={renewals}
                                 loading={loading}
                                 pageCount={pageCount}
                                 fetchData={fetchData}

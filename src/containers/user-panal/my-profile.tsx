@@ -24,7 +24,7 @@ const Myprofile = () => {
     const [final, setFinal] = useState<FinalMyProfileType>();
     const [additional, setadditional] = useState<AddQualDataFormType>();
     const [Nocdata, setNocdata] = useState<nocFormType>();
-    
+    const [additionslGridList, setAdditionalGridList] = useState<any>([]);
     const [loading, setLoading] = useState(false)
 
 
@@ -112,7 +112,8 @@ const Myprofile = () => {
                     //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
                     const country = await commonService.getCountry(Number(data[0].country));
                     const state = await commonService.getState(Number(data[0].state));
-                    setadditional({
+                    setAdditionalGridList(data);
+                   {/* setadditional({
                         country: country.data[0].name,
                         state: state.data[0].name,
                         qualification: data[0].qualification,
@@ -123,7 +124,7 @@ const Myprofile = () => {
                         approval_status: data[0].approval_status,
                         appliedFor:data[0].appliedFor,
 
-                    });
+                    })*/};
                 }
             }
         } catch (err) {
@@ -160,6 +161,58 @@ const Myprofile = () => {
             console.log('error getProvisionalDetails', err);
         }
     }, []);
+
+
+    const columns = [
+        {
+            Header: "Doctor Id",
+            accessor: "doctor_id"
+        },
+        {
+            Header: "Doctor Name",
+            accessor: "fullname"
+        },
+        {
+            Header: "Mobile No",
+            accessor: "mobileno"
+        },
+        {
+            Header: "PMR Reg No.",
+            accessor: "pmr_no",
+            Cell: ({ cell: { value } }: any) => {
+                return (
+                    <>
+                        <span>TSMC/PMR/</span>{value}
+                    </>
+                );
+            }
+        },
+        {
+            Header: "Reg No.",
+            accessor: "fmr_no",
+            Cell: ({ cell: { value } }: any) => {
+                return (
+                    <>
+                        <span>TSMC/FMR/</span>{value}
+                    </>
+                );
+            }
+        },
+        {
+            Header: "Status",
+            accessor: "approval_status",
+            Cell: ({ cell: { value } }: any) => {
+                return (
+                    <>
+                        {value == 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
+                        {value == 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                    </>
+                );
+            }
+        },
+       
+       
+    ];
     useEffect(() => {
         //console.log('doctorProfile ' + JSON.stringify(doctorProfile));
         setLoading(true);
@@ -411,72 +464,56 @@ const Myprofile = () => {
                                                 </div>
                                             </div></>
                                         }
-                                        {additional && <div className="tsmc-timeline mb-5">
-                                            <div className="tsmc-text">
-                                                <div className="d-flex align-items-center justify-content-between mb-4">
-                                                    <h1 className='fs-18 fw-700 mb-0'>Additional Qualification</h1>
-                                                    <div>
-                                                    <div>
-                                                            {additional?.approval_status == 'apr' &&
-                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-check-circle'></i> Approved
-                                                                </span>
-                                                            }
-                                                            {additional?.approval_status == 'pen' &&
-                                                                <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-exclamation-circle'></i> Pending
-                                                                </span>
-                                                            }
-                                                            {additional?.approval_status == 'rej' &&
-                                                                <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-exclamation-circle'></i> Rejected
-                                                                </span>
-                                                            }
-                                                            {additional?.approval_status == 'pen' && <Link to={''} className='btn btn-primary btn-sm me-3'>Edit</Link>}
+                                      
+                    
+                    {additionslGridList.length > 0 &&
+                        <>
+                        <div className="tsmc-timeline mb-5">
+                          <div className="tsmc-text">
+                                                    <div className="d-flex align-items-center justify-content-between mb-4">
+                                                        <h1 className='fs-18 fw-700 mb-0'>Additional Qualification</h1>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div className="w-100">
-                                               
-                                                        <div className="d-flex mb-2">
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Qualification:</label>
-                                                                <div className="fs-14">{additional?.qualification ? additional?.qualification : 'NA'}</div>
-                                                            </div>
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Month:</label>
-                                                                <div className="fs-14">{additional?.exam_month ? additional?.exam_month : 'NA'}</div>
-                                                            </div>
                                                         </div>
-                                                        <div className="d-flex mb-2">
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Year:</label>
-                                                                <div className="fs-14">{additional?.exam_year ? additional?.exam_year : 'NA'}</div>
-                                                            </div>
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Country:</label>
-                                                                <div className="fs-14">{additional?.country ? additional?.country : 'NA'}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="d-flex mb-2">
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
-                                                                <div className="fs-14">{additional?.state ? additional?.state : 'NA'}</div>
-                                                            </div>
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>University Name:</label>
-                                                                <div className="fs-14">{additional?.university ? additional?.university : 'NA'}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="d-flex mb-2">
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>College Name:</label>
-                                                                <div className="fs-14">{additional?.college ? additional?.college : 'NA'}</div>
-                                                            </div>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                       
+                        <table className="table table-hover fs-10 table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Qualification</th>
+                                    <th>Exam month</th>
+                                    <th>Exam year</th>
+                                    <th>Country</th>
+                                    <th>State</th>
+                                    <th>Applied For</th>
+                                    <th>University</th>
+                                    <th>college</th>
+                                    <th>Registration Date</th>
+                                    <th>Approval Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {additionslGridList?.map((obj: any) => {
+                                    return (<tr>
+                                        <td>{obj.qualification}</td>
+                                        <td>{obj.exam_month}</td>
+                                        <td>{obj.exam_year}</td>
+                                        <td>{obj.country}</td>
+                                        <td>{obj.state}</td>
+                                        <td>{obj.appliedFor}</td>
+                                        <td>{obj.university}</td>
+                                        <td>{obj.college}</td>
+                                        <td>{obj.reg_date}</td>
+                                        
+                                        <td>
+                                            {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
+                                            {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                                        </td>
+                                        {/* <td><Link to={'/admin/provisional_view'} state={{ provisionalPrimaryId: obj.provisionalPrimaryId, doctorPrimaryId: obj.doctorPrimaryId }}>View</Link></td> */}
+                                    </tr>);
+                                })}
+                            </tbody></table>
+                            </div>
+                            </>
+                                         
                                         }
                                         {Nocdata&&  <div className="tsmc-timeline mb-5">
                                             <div className="tsmc-text">
@@ -484,22 +521,22 @@ const Myprofile = () => {
                                                     <h1 className='fs-18 fw-700 mb-0'>NOC Details</h1>
                                                     <div>
                                                     <div>
-                                                            {Nocdata?.approval_status == 'apr' &&
+                                                            {Nocdata?.status == 'apr' &&
                                                                 <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
                                                                     <i className='bi-check-circle'></i> Approved
                                                                 </span>
                                                             }
-                                                            {Nocdata?.approval_status == 'pen' &&
+                                                            {Nocdata?.status == 'pen' &&
                                                                 <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
                                                                     <i className='bi-exclamation-circle'></i> Pending
                                                                 </span>
                                                             }
-                                                            {Nocdata?.approval_status == 'rej' &&
+                                                            {Nocdata?.status == 'rej' &&
                                                                 <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
                                                                     <i className='bi-exclamation-circle'></i> Rejected
                                                                 </span>
                                                             }
-                                                            {Nocdata?.approval_status == 'pen' && <Link to={''} className='btn btn-primary btn-sm me-3'>Edit</Link>}
+                                                            {Nocdata?.status == 'pen' && <Link to={''} className='btn btn-primary btn-sm me-3'>Edit</Link>}
                                                         </div>
                                                     </div>
                                                 </div>
