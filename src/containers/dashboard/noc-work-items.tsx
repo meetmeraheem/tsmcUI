@@ -7,11 +7,11 @@ import Table from "../../components/Table";
 import { assignmentService } from "../../lib/api/assignments";
 import { provisionalService } from "../../lib/api/provisional";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
-import { UserRole } from "../../types/common";
+import { nocService } from "../../lib/api/noc";
 
 const MyWorkItems = () => {
     const fetchIdRef = useRef(0);
-    const [provisionals, setProvisionals] = useState([]);
+    const [nocs, setNocs] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
     const [date, setDate] = useState(defaultDate);
     const [loading, setLoading] = useState(false)
@@ -69,7 +69,7 @@ const MyWorkItems = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/noc_reg_view'} state={{ provisionalPrimaryId: cell.data[Number(cell.row.id)].provisionalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId }}>Proceed</Link>
+                    <Link to={'/admin/noc_reg_view'} state={{ nocPrimaryId: cell.data[Number(cell.row.id)].nocPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[0].assignmentId }}>Proceed</Link>
                 </>
             )
         }
@@ -87,7 +87,7 @@ const MyWorkItems = () => {
 
         var newdate = moment(date).format('YYYY-MM-DD');
         const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
-        const { data } = await provisionalService.getProvisionalsByUserId(newdate, adminPrimaryId,'provisional');
+        const { data } = await nocService.getNocByUserId(newdate, adminPrimaryId,'noc');
         if (data.length > 0) {
             // We'll even set a delay to simulate a server here
             setTimeout(() => {
@@ -96,15 +96,15 @@ const MyWorkItems = () => {
                     const startRow = pageSize * pageIndex
                     const endRow = startRow + pageSize
                     if(data!=undefined){
-                    setProvisionals(data.slice(startRow, endRow))
+                        setNocs(data.slice(startRow, endRow))
 
                     // Your server could send back total page count.
                     // For now we'll just fake it, too
                     setPageCount(Math.ceil(data.length / pageSize));
 
                 }else{
-                                          setProvisionals([]);
-                                            setLoading(false);
+                    setNocs([]);
+                    setLoading(false);
                                         }
                 }
             }, 1000)
@@ -147,7 +147,7 @@ const MyWorkItems = () => {
                             <input type="date" name="" id=""
                                 value={date}
                                 onChange={(ev) => {
-                                    setProvisionals([]);
+                                    setNocs([]);
                                     setDate(ev.target.value)
                                 }} className="form-control" />
                         </span>
@@ -158,7 +158,7 @@ const MyWorkItems = () => {
                         <div className="card-body">
                             <Table
                                 columns={columns}
-                                data={provisionals}
+                                data={nocs}
                                 loading={loading}
                                 pageCount={pageCount}
                                 fetchData={fetchData}

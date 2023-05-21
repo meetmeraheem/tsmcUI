@@ -49,6 +49,30 @@ export const nocService = {
         });
         return responseData;
 
-    }
- 
+    },
+    async getNocByUserId(reg_date: any,user_id: number,regType:any){
+        const token = tokenManager.getToken();
+        const { data: responseData } = await axios.get(serverUrl+`noc/getNocByUserId/${reg_date}/${user_id}/${regType}`, {
+            headers: {
+                'authorization': 'Bearer '+token,
+                'Content-Type': 'application/json'
+            }
+        });
+        return responseData;
+    },
+        async  getNocById(nocPrimaryId: any){
+            const token = tokenManager.getToken();
+            const { data: responseData } = await axios.get(serverUrl+`noc/getNocById/${nocPrimaryId}`, {
+                headers: {
+                    'authorization': 'Bearer '+token,
+                    'Content-Type': 'application/json'
+                }
+            });
+            return responseData;
+        },
+
+        async updateNoc(nocPrimaryId: number, data: any) {
+            const { data: responseData } = await axiosInstance.put(`noc/updatenoc/${nocPrimaryId}`, data);
+            return responseData;
+        },
 };

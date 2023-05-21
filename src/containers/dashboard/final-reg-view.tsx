@@ -91,16 +91,10 @@ const FinalRegView = () => {
             const finalInfo = {
                 approval_status: status,
                 remarks: remarks,
+                assignmnetId:assignmentId
             }
             const { success } = await finalService.updateFinal(finalPrimaryId, finalInfo);
             if (success) {
-                const assignmentInfo = {
-                    assignStatus: status,
-                    assignModified: moment().format('YYYY-MM-DD'),
-                    assignRegType: 'final'
-                }
-                const { success } = await assignmentService.updateAssignment(assignmentId, assignmentInfo);
-                if (status == 'apr') {
                     Swal.fire({
                         title: "Success",
                         text: "Final successfully approved",
@@ -148,8 +142,6 @@ const FinalRegView = () => {
                         }
                     });
                 }
-
-            }
         }
         else {
             Swal.fire({

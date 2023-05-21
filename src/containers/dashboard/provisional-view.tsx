@@ -85,16 +85,10 @@ const ProvisionalView = () => {
             const provisionalInfo = {
                 approval_status: status,
                 remarks: remarks,
+                assignmnetId:assignmentId
             }
 
             const { success } = await provisionalService.updateProvisional(provisionalPrimaryId, provisionalInfo);
-            if (success) {
-                const assignmentInfo = {
-                    AssignStatus: status,
-                    AssignModified: moment().format('YYYY-MM-DD'),
-                    AssignRegType: 'provisional'
-                }
-                const { success } = await assignmentService.updateAssignment(assignmentId, assignmentInfo);
                 if (success) {
                     Swal.fire({
                         title: "Success",
@@ -143,7 +137,7 @@ const ProvisionalView = () => {
                         }
                     });
                 }
-            }
+            
         }
         else {
             Swal.fire({

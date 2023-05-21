@@ -8,23 +8,24 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import DocDefultPic from '../../assets/images/doc-default-img.jpg';
 import { commonService } from '../../lib/api/common';
 import { doctorService } from '../../lib/api/doctot';
-import { finalService } from '../../lib/api/final';
 import { DoctorFormType } from '../../types/doctor';
-import { AdminFinalProfileType } from '../../types/final';
 import { routes } from '../routes/routes-names';
 import { serverUrl, serverImgUrl } from '../../config/constants';
 import moment from 'moment';
 import { assignmentService } from '../../lib/api/assignments';
 import { LocalStorageManager } from '../../lib/localStorage-manager';
+import { additionalService } from '../../lib/api/additional';
+import { AdminAddQualDataFormType} from '../../types/additionalQuali';
 import { authService } from '../../lib/api/auth';
+
 
 const AdditionalRegView = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { finalPrimaryId, doctorPrimaryId } = location.state
+    const { additionalPrimaryId, doctorPrimaryId ,assignmentId} = location.state
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
-    const [final, setFinal] = useState<AdminFinalProfileType>();
+    const [additionals, setAdditionals] = useState<AdminAddQualDataFormType>();
     const [remarks, setRemarks] = useState('');
     const [isLightBoxOpen, setIsLightBoxOpen] = useState(false);
     const [lightBoxImagePath, setLightBoxImagePath] = useState('');
@@ -43,67 +44,49 @@ const AdditionalRegView = () => {
         }
     };
 
-    const getFinalDetails = useCallback(async () => {
+    const getAdditionalDetails = useCallback(async () => {
         try {
-            if (finalPrimaryId) {
-                const { data } = await finalService.getFinalById(finalPrimaryId);
+            if (additionalPrimaryId) {
+                const { data } = await additionalService.getQualificationById(additionalPrimaryId);
                 if (data.length > 0) {
                     const country = await commonService.getCountry(Number(data[0].country));
                     const state = await commonService.getState(Number(data[0].state));
-                    setFinal({
-                        serialno: data[0].serialno,
+                    setAdditionals({
                         country: country.data[0].name,
                         state: state.data[0].name,
+                        university: data[0].university,
+                        college: data[0].college,
                         qualification: data[0].qualification,
                         exam_month: data[0].exam_month,
                         exam_year: data[0].exam_year,
-                        university: data[0].university,
-                        college: data[0].college,
                         approval_status: data[0].approval_status,
-                        createdon: data[0].createdon,
-                        reg_date: data[0].reg_date,
-                        posttime: data[0].posttime,
-                        edu_cert1: data[0].edu_cert1,
-                        edu_cert2: data[0].edu_cert2,
-                        edu_cert3: data[0].edu_cert3,
-                        affidivit: data[0].affidivit,
-                        testimonal1: data[0].testimonal1,
-                        testimonal2: data[0].testimonal2,
-                        reg_other_state: data[0].reg_other_state,
-                        screen_test: data[0].screen_test,
-                        internship_comp: data[0].internship_comp,
-                        mci_eligi: data[0].mci_eligi,
-                        inter_verif_cert: data[0].inter_verif_cert,
-                        mci_reg: data[0].mci_reg,
-                        imr_certificate: data[0].imr_certificate,
+                        appliedFor: data[0].appliedFor,
                         receipt_no: data[0].receipt_no,
-                        dd_amount:data[0].dd_amount
+                        dd_amount:data[0].dd_amount,
+                        reg_date:data[0].reg_date,
+                        edu_cert1:data[0].edu_cert1,
+                        edu_cert2:data[0].edu_cert2
                     });
                 }
             }
         } catch (err) {
-            console.log('error getFinalDetails', err);
+            console.log('error getAdditionalDetails', err);
         }
     }, []);
 
     const submit = useCallback(async (status: any) => {
         if (status) {
-            const finalInfo = {
+            const additionalsInfo = {
                 approval_status: status,
                 remarks: remarks,
+                assignmnetId:assignmentId
+
             }
-            const { success } = await finalService.updateFinal(finalPrimaryId, finalInfo);
+            const { success } = await additionalService.updateQualification(additionalPrimaryId, additionalsInfo);
             if (success) {
-                const assignmentInfo = {
-                    assignStatus: status,
-                    assignModified: moment().format('YYYY-MM-DD'),
-                    assignRegType: 'final'
-                }
-                const { success } = await assignmentService.updateAssignment(Number(doctor?.serial_id), assignmentInfo);
-                if (status == 'apr') {
                     Swal.fire({
                         title: "Success",
-                        text: "Final successfully approved",
+                        text: "AdditionalDetails successfully approved",
                         icon: "success",
                         confirmButtonText: "OK",
                     }).then(async (result) => {
@@ -148,8 +131,6 @@ const AdditionalRegView = () => {
                         }
                     });
                 }
-
-            }
         }
         else {
             Swal.fire({
@@ -165,14 +146,14 @@ const AdditionalRegView = () => {
         const userTypeValue = LocalStorageManager.getUserType();
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
-        getFinalDetails();
+        getAdditionalDetails();
     }, []);
     return (
         <>
             <div className="col-8 m-auto mb-4">
                 <div className="card">
                     <div className="card-body">
-                        <h3 className="fs-18 fw-600">Final View</h3>
+                        <h3 className="fs-18 fw-600">Additional Qualification View</h3>
                         <div className="row mb-3">
                             <div className="col-3">
                                 <div className="tsmc-doc-profile-box border-bottom-0">
@@ -255,155 +236,77 @@ const AdditionalRegView = () => {
                                 </div>
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Registration Date:</label>
-                                    <div className="fs-14">{final?.reg_date ? moment(final?.reg_date).format('DD/MM/YYYY') : 'NA'}</div>
+                                    <div className="fs-14">{additionals?.reg_date ? moment(additionals?.reg_date).format('DD/MM/YYYY') : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Qualification:</label>
-                                    <div className="fs-14">{final?.qualification ? final?.qualification : 'NA'}</div>
+                                    <div className="fs-14">{additionals?.qualification ? additionals?.qualification : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Month:</label>
-                                    <div className="fs-14">{final?.exam_month ? final?.exam_month : 'NA'}</div>
+                                    <div className="fs-14">{additionals?.exam_month ? additionals?.exam_month : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Year:</label>
-                                    <div className="fs-14">{final?.exam_year ? final?.exam_year : 'NA'}</div>
+                                    <div className="fs-14">{additionals?.exam_year ? additionals?.exam_year : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Country:</label>
-                                    <div className="fs-14">{final?.country ? final?.country : 'NA'}</div>
+                                    <div className="fs-14">{additionals?.country ? additionals?.country : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
-                                    <div className="fs-14">{final?.state ? final?.state : 'NA'}</div>
+                                    <div className="fs-14">{additionals?.state ? additionals?.state : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>University Name:</label>
-                                    <div className="fs-14">{final?.university ? final?.university : 'NA'}</div>
+                                    <div className="fs-14">{additionals?.university ? additionals?.university : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'> Payment Recieved</label>
-                                    <div className="fs-14">{final?.dd_amount ? final?.dd_amount : 'NA'}</div>
+                                    <div className="fs-14">{additionals?.dd_amount ? additionals?.dd_amount : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Reciept No:</label>
-                                    <div className="fs-14">{final?.receipt_no ? final?.receipt_no : 'NA'}</div>
+                                    <div className="fs-14">{additionals?.receipt_no ? additionals?.receipt_no : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>College Name:</label>
-                                    <div className="fs-14">{final?.college ? final?.college : 'NA'}</div>
+                                    <div className="fs-14">{additionals?.college ? additionals?.college : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="row mt-3">
-                                {final?.edu_cert1 &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.edu_cert1) }}>
+                                {additionals?.edu_cert1 &&
+                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(additionals?.edu_cert1) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
                                             <p className="d-flex align-items-center">
-                                                {final?.edu_cert1 ? <img src={serverImgUrl + 'final/' + final?.edu_cert1} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                                {additionals?.edu_cert1 ? <img src={serverImgUrl + 'additionals/' + additionals?.edu_cert1} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
                                             </p>
                                         </div>
                                     </div>
                                 }
-                                {final?.edu_cert2 &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.edu_cert2) }}>
+                                {additionals?.edu_cert2 &&
+                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(additionals?.edu_cert2) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center">{final?.edu_cert2 && <img src={serverImgUrl + 'final/' + final?.edu_cert2} alt="" />}</p>
+                                            <p className="d-flex align-items-center">{additionals?.edu_cert2 && <img src={serverImgUrl + 'additionals/' + additionals?.edu_cert2} alt="" />}</p>
                                         </div>
                                     </div>
                                 }
-
-
-                                {final?.edu_cert3 &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.edu_cert3) }}>
-                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center"><img width="100px" src={serverImgUrl + 'final/' + final?.edu_cert3} alt="" /></p>
-                                        </div>
-                                    </div>
-                                }
-                                {final?.affidivit &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.affidivit) }}>
-                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center"><img src={serverImgUrl + 'final/' + final?.affidivit} alt="" /></p>
-                                        </div>
-                                    </div>
-                                }
-                                {final?.testimonal1 &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.testimonal1) }}>
-                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center"><img src={serverImgUrl + 'final/' + final?.testimonal1} alt="" /></p>
-                                        </div>
-                                    </div>
-                                }
-                                {final?.testimonal2 &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.testimonal2) }}>
-                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center"><img src={serverImgUrl + 'final/' + final?.testimonal2} alt="" /></p>
-                                        </div>
-                                    </div>
-                                }
-                                {final?.reg_other_state &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.reg_other_state) }}>
-                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center"><img src={serverImgUrl + 'final/' + final?.reg_other_state} alt="" /></p>
-                                        </div>
-                                    </div>
-                                }
-                                {final?.screen_test &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.screen_test) }}>
-                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center"><img src={serverImgUrl + 'final/' + final?.screen_test} alt="" /></p>
-                                        </div>
-                                    </div>
-                                }
-                                {final?.internship_comp &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.internship_comp) }}>
-                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center"><img src={serverImgUrl + 'final/' + final?.internship_comp} alt="" /></p>
-                                        </div>
-                                    </div>
-                                }
-                                {final?.mci_eligi &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.mci_eligi) }}>
-                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center"><img src={serverImgUrl + 'final/' + final?.mci_eligi} alt="" /></p>
-                                        </div>
-                                    </div>
-                                }
-                                {final?.inter_verif_cert &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.inter_verif_cert) }}>
-                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center"><img src={serverImgUrl + 'final/' + final?.inter_verif_cert} alt="" /></p>
-                                        </div>
-                                    </div>
-                                }
-                                {final?.mci_reg &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.mci_reg) }}>
-                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center"><img src={serverImgUrl + 'final/' + final?.mci_reg} alt="" /></p>
-                                        </div>
-                                    </div>
-                                }
-                                {final?.imr_certificate &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.imr_certificate) }}>
-                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center"><img src={serverImgUrl + 'final/' + final?.imr_certificate} alt="" /></p>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
+                             </div>
+                               
                         </div>
                     </div>
-                    {userType === 'u' && final?.approval_status === 'pen' &&
+                    {userType === 'u' && additionals?.approval_status === 'pen' &&
                         <div className="card-footer">
                             <div className="mb-3">
                                 <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
@@ -434,12 +337,12 @@ const AdditionalRegView = () => {
                         close={() => setIsLightBoxOpen(false)}
                         slides={[
                             {
-                                src: serverImgUrl + 'final/' + lightBoxImagePath,
+                                src: serverImgUrl + 'additionals/' + lightBoxImagePath,
                                 alt: "edu_cert1",
                                 width: 3840,
                                 height: 2560,
                                 srcSet: [
-                                    { src: serverImgUrl + 'final/' + lightBoxImagePath, width: 100, height: 100 },
+                                    { src: serverImgUrl + 'additionals/' + lightBoxImagePath, width: 100, height: 100 },
                                 ]
                             }
                         ]}

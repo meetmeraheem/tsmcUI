@@ -1,55 +1,37 @@
-import { Field, FieldProps, Formik, FormikProps } from 'formik';
-import getValue from 'lodash/get';
-import { nocFormType } from "../../types/noc";
-import { date as dateYup, object as objectYup, string as stringYup, number as numberYup } from 'yup';
-import Select from 'react-select';
-import { City, Country, State } from "../../types/common";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import moment from "moment";
-import { nocService } from "../../lib/api/noc";
-import { doctorService } from "../../lib/api/doctot";
-import { routes } from '../routes/routes-names';
-import Swal from "sweetalert2";
-import { LocalStorageManager } from "../../lib/localStorage-manager";
-import { commonService } from "../../lib/api/common";
-import secureLocalStorage from 'react-secure-storage';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { DoctorFormType } from '../../types/doctor';
-import { serverUrl, serverImgUrl } from '../../config/constants';
+import Swal from 'sweetalert2';
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import DocDefultPic from '../../assets/images/doc-default-img.jpg';
+import { commonService } from '../../lib/api/common';
+import { doctorService } from '../../lib/api/doctot';
+import { nocService } from "../../lib/api/noc";
+import { DoctorFormType } from '../../types/doctor';
+import { AdminFinalProfileType } from '../../types/final';
+import { routes } from '../routes/routes-names';
+import { serverUrl, serverImgUrl } from '../../config/constants';
+import moment from 'moment';
+import { assignmentService } from '../../lib/api/assignments';
+import { LocalStorageManager } from '../../lib/localStorage-manager';
+import { adminNocFormType } from "../../types/noc";
 
+import { authService } from '../../lib/api/auth';
 
-const NocViews = () => {
-    const navigate = useNavigate();
+const FinalRegView = () => {
     const location = useLocation();
-    const [next, setNext] = useState(false);
-    const [Nocdata, setNocdata] = useState<nocFormType>();
+    const navigate = useNavigate();
+    const { nocPrimaryId, doctorPrimaryId,assignmentId } = location.state
+    const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
-    const { finalPrimaryId, doctorPrimaryId } = location.state
+    const [noc, setNoc] = useState<adminNocFormType>();
+    const [remarks, setRemarks] = useState('');
+    const [isLightBoxOpen, setIsLightBoxOpen] = useState(false);
+    const [lightBoxImagePath, setLightBoxImagePath] = useState('');
     const [userType, setUserType] = useState('');
 
-    const initialFormData = useMemo(
-        () => ({
-            councilname: '',
-            address1: '',
-            address2: '',
-            country: 0,
-            state: 0,
-            city: 0,
-            councilpincode: '',
-            createdon: '',
-            posttime: '',
-            modifiedon: '',
-            status: '',
-            added_by: 0,
-            approval_status:''
-        }),
-        []
-    );
-  
-    
-
-    
     const getDoctorDetails = async () => {
         try {
             if (doctorPrimaryId) {
@@ -62,46 +44,110 @@ const NocViews = () => {
             console.log('error countries getList', err);
         }
     };
-    const getNocDetails = useCallback(async () => {
+
+    const getFinalDetails = useCallback(async () => {
         try {
-            const doctorSerialId = LocalStorageManager.getDoctorSerialId();
-            if (doctorSerialId) {
-                const { data } = await nocService.nocDataByDoctorId(doctorSerialId);
+            if (nocPrimaryId) {
+                const { data } = await nocService.getNocById(nocPrimaryId);
                 if (data.length > 0) {
-                    //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
                     const country = await commonService.getCountry(Number(data[0].country));
                     const state = await commonService.getState(Number(data[0].state));
-                    setNocdata({
-                        country: country.data[0].name,
-                        state: state.data[0].name,
+                    setNoc({
                         councilname: data[0].councilname,
-                        councilpincode: data[0].councilpincode,
-                        approval_status: data[0].approval_status,
                         address1:data[0].address1,
-                        address2:data[0].Address2,
-                        createdon: data[0].createdon,
-                        posttime: data[0].posttime,
-                        modifiedon: data[0].modifiedon,
-                        city:data[0].city,
-                        status: data[0].status,
-                        added_by: data[0].added_by
+                        address2:data[0].address2,
+                        country: country.data[0].name,
+                        councilpincode:data[0].councilpincode,
+                        state: state.data[0].name,
+                        city: data[0].city,
+                        approval_status: data[0].status,
+                        receipt_no: data[0].receipt_no,
+                        dd_amount:data[0].dd_amount,
+                        reg_date:data[0].reg_date
                     });
                 }
             }
         } catch (err) {
-            console.log('error getProvisionalDetails', err);
+            console.log('error getFinalDetails', err);
         }
     }, []);
+
+    const submit = useCallback(async (status: any) => {
+        if (status) {
+            const nocInfo = {
+                approval_status: status,
+                remarks: remarks,
+                assignmnetId:assignmentId
+            }
+            const { success } = await nocService.updateNoc(nocPrimaryId, nocInfo);
+            if (success) {
+                    Swal.fire({
+                        title: "Success",
+                        text: "NOC successfully approved",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            if (doctor?.mobileno) {
+                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
+                                    
+                                }).catch(() => {
+
+                                });
+                            }
+                            if (userType === 'a') {
+                                navigate(routes.admin_final_registrations);
+                            }
+                            if (userType === 'u') {
+                                navigate(routes.admin_my_work_items);
+                            }
+                        }
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: "",
+                        text: "Final registration rejected",
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            if (doctor?.mobileno) {
+                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
+                                    
+                                }).catch(() => {
+
+                                });
+                            }
+                            if (userType === 'a') {
+                                navigate(routes.admin_final_registrations);
+                            }
+                            if (userType === 'u') {
+                                navigate(routes.admin_my_work_items);
+                            }
+                        }
+                    });
+                }
+        }
+        else {
+            Swal.fire({
+                //title: "Error",
+                text: "something went wrong",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+    }, [remarks]);
+
     useEffect(() => {
         const userTypeValue = LocalStorageManager.getUserType();
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
-        getNocDetails();
+        getFinalDetails();
     }, []);
-    
     return (
         <>
-          <div className="col-8 m-auto mb-4">
+            <div className="col-8 m-auto mb-4">
                 <div className="card">
                     <div className="card-body">
                         <h3 className="fs-18 fw-600">NOC View</h3>
@@ -179,84 +225,101 @@ const NocViews = () => {
                                 </div>
                             </div>
                         </div>
-            
-                <div className="container mt-4">
-                       {Nocdata&&  <div className="tsmc-timeline mb-5">
-                       <div className="tsmc-text">
-                           <div className="d-flex align-items-center justify-content-between mb-4">
-                               <h1 className='fs-18 fw-700 mb-0'>NOC Details</h1>
-                               <div>
-                               <div>
-                                       {Nocdata?.status == 'apr' &&
-                                           <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
-                                               <i className='bi-check-circle'></i> Approved
-                                           </span>
-                                       }
-                                       {Nocdata?.status == 'pen' &&
-                                           <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
-                                               <i className='bi-exclamation-circle'></i> Pending
-                                           </span>
-                                       }
-                                       {Nocdata?.status == 'rej' &&
-                                           <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
-                                               <i className='bi-exclamation-circle'></i> Rejected
-                                           </span>
-                                       }
-                                   </div>
-                               </div>
-                           </div>
-                           <div className="w-100">
-                          
-                                   <div className="d-flex mb-2">
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>Council Name:</label>
-                                           <div className="fs-14">{Nocdata?.councilname ? Nocdata?.councilname : 'NA'}</div>
-                                       </div>
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>Council Address1</label>
-                                           <div className="fs-14">{Nocdata?.address1 ? Nocdata?.address1 : 'NA'}</div>
-                                       </div>
-                                   </div>
-                                   <div className="d-flex mb-2">
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>Council Address2</label>
-                                           <div className="fs-14">{Nocdata?.address2 ? Nocdata?.address2 : 'NA'}</div>
-                                       </div>
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>Country:</label>
-                                           <div className="fs-14">{Nocdata?.country ? Nocdata?.country : 'NA'}</div>
-                                       </div>
-                                   </div>
-                                   <div className="d-flex mb-2">
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
-                                           <div className="fs-14">{Nocdata?.state ? Nocdata?.state : 'NA'}</div>
-                                       </div>
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>city Name:</label>
-                                           <div className="fs-14">{Nocdata?.city ? Nocdata?.city : 'NA'}</div>
-                                       </div>
-                                   </div>
-                                   <div className="d-flex mb-2">
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>council pincode :</label>
-                                           <div className="fs-14">{Nocdata?.councilpincode ? Nocdata?.councilpincode : 'NA'}</div>
-                                       </div>
-                                   </div>
-                           </div>
-                       </div>
-                   </div>
-                       }
-                 
+                        <div className="w-100">
+                            <div className="d-flex mb-2">
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Registration No:</label>
+                                    <div className="fs-14">TSMC/FMR/{doctor?.fmr_no}</div>
+                                </div>
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Registration Date:</label>
+                                    <div className="fs-14">{noc?.reg_date ? moment(noc?.reg_date).format('DD/MM/YYYY') : 'NA'}</div>
+                                </div>
+                            </div>
+                            <div className="d-flex mb-2">
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>councilname:</label>
+                                    <div className="fs-14">{noc?.councilname ? noc?.councilname : 'NA'}</div>
+                                </div>
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Council  Address:</label>
+                                    <div className="fs-14">{noc?.address1 ? noc?.address1 + noc?.address2 : 'NA'}</div>
+                                </div>
+                            </div>
+                            <div className="d-flex mb-2">
+                               
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Country:</label>
+                                    <div className="fs-14">{noc?.country ? noc?.country : 'NA'}</div>
+                                </div>
+                            </div>
+                            <div className="d-flex mb-2">
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
+                                    <div className="fs-14">{noc?.state ? noc?.state : 'NA'}</div>
+                                </div>
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>City Name:</label>
+                                    <div className="fs-14">{noc?.city ? noc?.city : 'NA'}</div>
+                                </div>
+                            </div>
+                            <div className="d-flex mb-2">
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'> Payment Recieved</label>
+                                    <div className="fs-14">{noc?.dd_amount ? noc?.dd_amount : 'NA'}</div>
+                                </div>
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Reciept No:</label>
+                                    <div className="fs-14">{noc?.receipt_no ? noc?.receipt_no : 'NA'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {userType === 'u' && noc?.approval_status === 'pen' &&
+                        <div className="card-footer">
+                            <div className="mb-3">
+                                <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
+                                <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
+                            </div>
+                            <div className='d-flex'>
+                                <div className="col">
+                                    <button type="submit" onClick={() => {
+                                        submit('rej');
+                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                                </div>
+                                <div className="col text-end">
+                                    <button type="submit"
+                                        onClick={() => {
+                                            submit('apr');
+                                        }} className='btn btn-success'><i className="bi-check-circle"></i> Approve</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
-           </div>
-           </div>
-           </div>
-           
-
-
+            </div>
+            <div>
+                <>
+                    <Lightbox
+                        open={isLightBoxOpen}
+                        plugins={[Zoom]}
+                        close={() => setIsLightBoxOpen(false)}
+                        slides={[
+                            {
+                                src: serverImgUrl + 'final/' + lightBoxImagePath,
+                                alt: "edu_cert1",
+                                width: 3840,
+                                height: 2560,
+                                srcSet: [
+                                    { src: serverImgUrl + 'final/' + lightBoxImagePath, width: 100, height: 100 },
+                                ]
+                            }
+                        ]}
+                    />
+                </>
+            </div>
         </>
     )
-};
+}
 
-export default NocViews;
+export default FinalRegView;

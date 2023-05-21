@@ -35,3 +35,19 @@ export type AddQualFormType = {
     appliedFor: string,
     approval_status:string
   }
+  export type AdminAddQualDataFormType = {
+    country: string,
+    state: string,
+    university: string,
+    college: string,
+    qualification: string;
+    exam_month: string;
+    exam_year: string;
+    appliedFor: string,
+    approval_status:string,
+    receipt_no:string,
+    dd_amount:string
+    reg_date:Date,
+    edu_cert1:string,
+    edu_cert2:string,
+  }
