@@ -25,7 +25,7 @@ import { assignmentService } from '../../lib/api/assignments';
 const ProvisionalView = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { provisionalPrimaryId, doctorPrimaryId } = location.state
+    const { provisionalPrimaryId, doctorPrimaryId,assignmentId } = location.state
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [provisional, setProvisional] = useState<AdminProvisionalProfileType>();
@@ -70,7 +70,8 @@ const ProvisionalView = () => {
                         edu_cert1: data[0].edu_cert1,
                         edu_cert2: data[0].edu_cert2,
                         edu_cert3: data[0].edu_cert3,
-
+                        dd_amount:data[0].dd_amount,
+                        receipt_no: data[0].receipt_no
                     });
                 }
             }
@@ -85,6 +86,7 @@ const ProvisionalView = () => {
                 approval_status: status,
                 remarks: remarks,
             }
+
             const { success } = await provisionalService.updateProvisional(provisionalPrimaryId, provisionalInfo);
             if (success) {
                 const assignmentInfo = {
@@ -92,8 +94,8 @@ const ProvisionalView = () => {
                     AssignModified: moment().format('YYYY-MM-DD'),
                     AssignRegType: 'provisional'
                 }
-                const { success } = await assignmentService.updateAssignment(Number(doctor?.serial_id), assignmentInfo);
-                if (status == 'apr') {
+                const { success } = await assignmentService.updateAssignment(assignmentId, assignmentInfo);
+                if (success) {
                     Swal.fire({
                         title: "Success",
                         text: "Provisional successfully approved",
@@ -279,6 +281,16 @@ const ProvisionalView = () => {
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>University Name:</label>
                                     <div className="fs-14">{provisional?.university ? provisional?.university : 'NA'}</div>
+                                </div>
+                            </div>
+                            <div className="d-flex mb-2">
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'> Payment Recieved</label>
+                                    <div className="fs-14">{provisional?.dd_amount ? provisional?.dd_amount : 'NA'}</div>
+                                </div>
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Reciept No:</label>
+                                    <div className="fs-14">{provisional?.receipt_no ? provisional?.receipt_no : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">

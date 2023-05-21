@@ -56,4 +56,9 @@ export const finalService = {
         });
         return responseData;
     },
+
+    async getFinalsByUserId( reg_date: any,user_id: number,regType:any) {
+        const { data: responseData } = await axiosInstance.get(`finalreg/getFinalsByUserId/${reg_date}/${user_id}/${regType}`);
+        return responseData as ApiResponseType;
+    },
 };

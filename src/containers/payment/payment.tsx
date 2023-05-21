@@ -16,6 +16,7 @@ import sslsecurelogo from "../../assets/images/ssl-secure.jpg";
 import mastercardlogo from "../../assets/images/mastercard.jpg";
 import rupaylogo from "../../assets/images/rupay.jpg";
 import { DoctorProfileType } from "../../types/doctor";
+import {RegPayDetailsFormType  } from "../../types/common";
 import secureLocalStorage from "react-secure-storage";
 import { ProvisionalPaymentProfileType } from "../../types/provisional";
 import { FinalPaymentFormType } from "../../types/final";
@@ -32,17 +33,9 @@ const Payment = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { doctor_id, regType } = location.state
-    const doctorProfile = useSelector((state: RootState) => state.doctor.profile);
     const getDate = moment().format('YYYY-MM-DD');
-    const [doctor, setDoctor] = useState<DoctorProfileType | null>(null);
+    const [regPayDetails, setRegPayDetails] = useState<RegPayDetailsFormType | null>(null);
     const [isNormalReg, setIsNormalReg] = useState(true);
-    const [registrationFee, setRegistrationFee] = useState(0);
-    const [penalityAmount, setPenalityAmount] = useState(0);
-    const [totalAmount, setTotalAmount] = useState(0);
-    const [extraCharges, setExtraCharges] = useState(0);
-    const [fullName, setFullName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNo, setPhoneNo] = useState('');
     const [payUrl, setPayUrl] = useState('');
     const [payOrderId, setPayOrderId] = useState('');
 
@@ -63,13 +56,25 @@ const Payment = () => {
 
             const provisionalData = await provisionalService.getProvisionalFeeDetails(formData);
             if (provisionalData.data) {
-                setFullName(provisionalData.data.fullName);
-                setEmail(provisionalData.data.email);
-                setPhoneNo(provisionalData.data.mobileNo);
-                setPenalityAmount(provisionalData.data.penalityAmount);
-                setRegistrationFee(provisionalData.data.registrationFee);
-                setExtraCharges(provisionalData.data.extraCharges);
-                setTotalAmount(provisionalData.data.totalAmount);
+                setRegPayDetails({
+                    registrationFee:provisionalData.data.registrationFee,
+                    penalityAmount:provisionalData.data.penalityAmount,
+                    totalAmount: provisionalData.data.totalAmount,
+                    extraCharges: provisionalData.data.extraCharges,
+                    fullName:  provisionalData.data.fullName,
+                    dataOfbirth: provisionalData.data.dateofBirth,
+                    phoneNo: provisionalData.data.mobileNo,
+                    address1: provisionalData.data.address1,
+                    address2: provisionalData.data.address2,
+                    examYear: provisionalData.data.examYear,
+                    examMonth: provisionalData.data.examMonth,
+                    doctor_id:provisionalData.data.doctor_id
+            });
+                if(provisionalData.data.regType !=null && provisionalData.data.regType === "tat"){
+                    setIsNormalReg(false);
+                }else{
+                    setIsNormalReg(true);
+                }
                 setPayUrl(provisionalData.data.redirectUrl);
                 setPayOrderId(provisionalData.data.orderKeyId);
             }
@@ -96,13 +101,26 @@ const Payment = () => {
 
             const finalData = await finalService.getFinalRegFeeDetails(formData);
             if (finalData.data) {
-                setFullName(finalData.data.fullName);
-                setEmail(finalData.data.email);
-                setPhoneNo(finalData.data.mobileNo);
-                setPenalityAmount(finalData.data.penalityAmount);
-                setRegistrationFee(finalData.data.registrationFee);
-                setExtraCharges(finalData.data.extraCharges);
-                setTotalAmount(finalData.data.totalAmount);
+                setRegPayDetails({
+                    registrationFee:finalData.data.registrationFee,
+                    penalityAmount:finalData.data.penalityAmount,
+                    totalAmount: finalData.data.totalAmount,
+                    extraCharges: finalData.data.extraCharges,
+                    fullName:  finalData.data.fullName,
+                    dataOfbirth: finalData.data.dateofBirth,
+                    phoneNo: finalData.data.mobileNo,
+                    address1: finalData.data.address1,
+                    address2: finalData.data.address2,
+                    examYear: finalData.data.examYear,
+                    examMonth: finalData.data.examMonth,
+                    doctor_id:finalData.data.doctor_id,
+                    
+            });
+            if(finalData.data.regType !=null && finalData.data.regType === "tat"){
+                setIsNormalReg(false);
+            }else{
+                setIsNormalReg(true);
+            }
                 setPayUrl(finalData.data.redirectUrl);
                 setPayOrderId(finalData.data.orderKeyId);
             }
@@ -128,13 +146,21 @@ const Payment = () => {
 
             const nocData = await nocService.getNocRegDetails(formData);
             if (nocData.data) {
-                setFullName(nocData.data.fullName);
-                setEmail(nocData.data.email);
-                setPhoneNo(nocData.data.mobileNo);
-                setPenalityAmount(nocData.data.penalityAmount);
-                setRegistrationFee(nocData.data.registrationFee);
-                setExtraCharges(nocData.data.extraCharges);
-                setTotalAmount(nocData.data.totalAmount);
+                setRegPayDetails({
+                    registrationFee:nocData.data.registrationFee,
+                    penalityAmount:nocData.data.penalityAmount,
+                    totalAmount: nocData.data.totalAmount,
+                    extraCharges: nocData.data.extraCharges,
+                    fullName:  nocData.data.fullName,
+                    dataOfbirth: nocData.data.dateofBirth,
+                    phoneNo: nocData.data.mobileNo,
+                    address1: nocData.data.address1,
+                    address2: nocData.data.address2,
+                    examYear: nocData.data.examYear,
+                    examMonth: nocData.data.examMonth,
+                    doctor_id:nocData.data.doctor_id,
+                   
+            });
                 setPayUrl(nocData.data.redirectUrl);
                 setPayOrderId(nocData.data.orderKeyId);
             }
@@ -161,13 +187,26 @@ const Payment = () => {
 
             const additionalRegData = await additionalService.getAdditionalRegFeeDetails(formData);
             if (additionalRegData.data) {
-                setFullName(additionalRegData.data.fullName);
-                setEmail(additionalRegData.data.email);
-                setPhoneNo(additionalRegData.data.mobileNo);
-                setPenalityAmount(additionalRegData.data.penalityAmount);
-                setRegistrationFee(additionalRegData.data.registrationFee);
-                setExtraCharges(additionalRegData.data.extraCharges);
-                setTotalAmount(additionalRegData.data.totalAmount);
+                setRegPayDetails({
+                    registrationFee:additionalRegData.data.registrationFee,
+                    penalityAmount:additionalRegData.data.penalityAmount,
+                    totalAmount: additionalRegData.data.totalAmount,
+                    extraCharges: additionalRegData.data.extraCharges,
+                    fullName:  additionalRegData.data.fullName,
+                    dataOfbirth: additionalRegData.data.dateofBirth,
+                    phoneNo: additionalRegData.data.mobileNo,
+                    address1: additionalRegData.data.address1,
+                    address2: additionalRegData.data.address2,
+                    examYear: additionalRegData.data.examYear,
+                    examMonth: additionalRegData.data.examMonth,
+                    doctor_id:additionalRegData.data.doctor_id,
+                   
+            });
+            if(additionalRegData.data.regType !=null && additionalRegData.data.regType === "tat"){
+                setIsNormalReg(false);
+            }else{
+                setIsNormalReg(true);
+            }
                 setPayUrl(additionalRegData.data.redirectUrl);
                 setPayOrderId(additionalRegData.data.orderKeyId);
             }
@@ -193,7 +232,7 @@ const Payment = () => {
             if (regType === 'additionalInfo') {
                 getAdditionalRegDetails();
             }
-        }, [registrationFee, penalityAmount, totalAmount, extraCharges]);
+        }, []);
 
 
 
@@ -241,24 +280,32 @@ const Payment = () => {
                                     {regType === 'final' &&
                                         <div className="row mb-3">
                                             <div className="col-4"><label htmlFor="">Doctor ID</label></div>
-                                            <div className="col fs-14">{doctor_id}</div>
+                                            <div className="col fs-14">{regPayDetails?.doctor_id}</div>
                                         </div>
                                     }
                                     <div className="row mb-3">
                                         <div className="col-4"><label htmlFor="">Full Name</label></div>
-                                        <div className="col fs-14">{fullName}</div>
+                                        <div className="col fs-14">{regPayDetails?.fullName}</div>
                                     </div>
                                     <div className="row mb-3">
                                         <div className="col-4"><label htmlFor="">Date Of Birth</label></div>
-                                        <div className="col fs-14">{moment(doctor?.dateofbirth).format('DD/MM/YYYY')}</div>
+                                        <div className="col fs-14">{regPayDetails?.dataOfbirth}</div>
                                     </div>
                                     <div className="row mb-3">
                                         <div className="col-4"><label htmlFor="">Mobile No</label></div>
-                                        <div className="col fs-14">{phoneNo}</div>
+                                        <div className="col fs-14">{regPayDetails?.phoneNo}</div>
                                     </div>
                                     <div className="row mb-3">
                                         <div className="col-4"><label htmlFor="">Address</label></div>
-                                        <div className="col fs-14">{doctor?.address1} {doctor?.address2}</div>
+                                        <div className="col fs-14">{regPayDetails?.address1} {regPayDetails?.address2}</div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-4"><label htmlFor="">Exam Year</label></div>
+                                        <div className="col fs-14">{regPayDetails?.examYear}</div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-4"><label htmlFor="">Exam Month</label></div>
+                                        <div className="col fs-14">{regPayDetails?.examMonth} </div>
                                     </div>
                                 </div>
                                 <div className="d-flex align-items-end ps-2">
@@ -269,20 +316,20 @@ const Payment = () => {
                                         </div>
                                         <div className="d-flex align-items-center justify-content-between mb-3">
                                             <label htmlFor="">Registration Fee</label>
-                                            <div className="fs-14"><i className="bi-currency-rupee"></i> {registrationFee}/-</div>
+                                            <div className="fs-14"><i className="bi-currency-rupee"></i> {regPayDetails?.registrationFee}/-</div>
                                         </div>
                                         <div className="d-flex align-items-center justify-content-between mb-3">
                                             <label htmlFor="">Penalty</label>
-                                            <div className="fs-14"><i className="bi-currency-rupee"></i> {penalityAmount}/-</div>
+                                            <div className="fs-14"><i className="bi-currency-rupee"></i> {regPayDetails?.penalityAmount}/-</div>
                                         </div>
                                         <div className="d-flex align-items-center justify-content-between mb-3">
                                             <label htmlFor="">Charges</label>
-                                            <div className="fs-14"><i className="bi-currency-rupee"></i> {extraCharges}/-</div>
+                                            <div className="fs-14"><i className="bi-currency-rupee"></i> {regPayDetails?.extraCharges}/-</div>
                                         </div>
                                         <hr />
                                         <div className="d-flex align-items-center justify-content-between mb-3">
                                             <label htmlFor="">Total</label>
-                                            <div className="fs-14"><i className="bi-currency-rupee"></i> {totalAmount}/-</div>
+                                            <div className="fs-14"><i className="bi-currency-rupee"></i> {regPayDetails?.totalAmount}/-</div>
                                         </div>
                                         <hr className="mb-0" />
                                     </div>
@@ -292,7 +339,7 @@ const Payment = () => {
                         <div className="card-footer text-end py-3">
                             <button type="button" onClick={() => navigate(-1)} className="btn btn-primary me-3">Back</button>
                             <button type="button" onClick={() => PayAndContinueForm(payUrl,payOrderId)} className="btn btn-primary ps-2">Continue & Pay</button>
-                        </div>=
+                        </div>
                     </div>
                     <div className="card shadow border-0 mb-3">
                         <div className="card-body d-flex justify-content-between align-items-center">

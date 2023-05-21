@@ -85,3 +85,20 @@ export type UserRole = {
     user_type: string;
     status: string;
 };
+
+export type RegPayDetailsFormType = {
+    registrationFee: number;
+    penalityAmount:string
+    totalAmount: string;
+    extraCharges: string;
+    fullName: string;
+    dataOfbirth: string;
+    phoneNo: string;
+    address1: string;
+    address2: string;
+    examYear: string;
+    examMonth: string;
+    doctor_id: string;
+   
+
+};

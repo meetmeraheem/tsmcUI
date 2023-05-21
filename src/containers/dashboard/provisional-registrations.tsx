@@ -21,7 +21,7 @@ const ProvisionalRegistrations = () => {
     const [date, setDate] = useState(defaultDate);
     const [loading, setLoading] = useState(false)
     const [pageCount, setPageCount] = useState(0);
-    const [statusValue, setStatusValue] = useState(null);
+    const [statusValue, setStatusValue] = useState('pen');
 
     const [checkBoxData, setCheckBoxData] = useState([
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
@@ -92,7 +92,7 @@ const ProvisionalRegistrations = () => {
                     <i className="bi-person" onClick={async () => {
                         const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'provisional');
                         if (data && data.length > 0) {
-                            const getUser = await adminService.getAdminById(data[0].AssignTo);
+                            const getUser = await adminService.getAdminById(data[0].assignTo);
                             if (getUser.data.length > 0) {
                                 Swal.fire({
                                     text: "Already Assigned to " + getUser.data[0].username,
@@ -105,12 +105,12 @@ const ProvisionalRegistrations = () => {
                             const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
                             if (!isDuplicate(assignedGridList, cell.data[Number(cell.row.id)])) {
                                 const doctorInfo = {
-                                    AssignBy: adminPrimaryId,
-                                    AssignCreated: moment().format('YYYY-MM-DD'),
-                                    AssignStatus: 'pen',
-                                    AssignReason: '',
+                                    assignBy: adminPrimaryId,
+                                    assignCreated: moment().format('YYYY-MM-DD'),
+                                    assignStatus: 'pen',
+                                    assignReason: '',
                                     doctor_id: cell.data[Number(cell.row.id)].doctor_id,
-                                    AssignRegType: 'provisional'
+                                    assignRegType: 'provisional'
                                 }
                                 setAssignedList([...assignedList, doctorInfo]);
                                 setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
@@ -145,18 +145,6 @@ const ProvisionalRegistrations = () => {
         data.some((el: any) =>
             Object.entries(obj).every(([key, value]) => value === el[key])
         );
-
-    const getProvisionalList = useCallback(async () => {
-        try {
-            var newdate = moment(date).format('YYYY-MM-DD');
-            const { data } = await provisionalService.getProvisionalsByFilter(newdate, statusValue);
-            if (data.length > 0) {
-                setProvisionals(data);
-            }
-        } catch (err) {
-            console.log('error getProvisionalDetails', err);
-        }
-    }, [date, statusValue]);
 
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
         // This will get called when the table needs new data
@@ -193,9 +181,12 @@ const ProvisionalRegistrations = () => {
     const assign = useCallback(async () => {
         try {
             const assignToUser = assignedList.map((obj: any) => {
-                return { ...obj, AssignTo: assignedUser };
+                return { ...obj, assignTo: assignedUser };
             })
-            const { success } = await assignmentService.assignToUser(assignToUser);
+
+            const formData = new FormData();
+            formData.append("assignmentData", JSON.stringify(assignToUser));
+            const { success } = await assignmentService.assignToUser(formData);
             if (success) {
                 Swal.fire({
                     //title: "Error",
@@ -212,6 +203,7 @@ const ProvisionalRegistrations = () => {
 
     useEffect(() => {
         getUsersByRole();
+        setStatusValue('pen');
     }, []);
 
     // const handleChange = (e: any) => {
@@ -233,7 +225,7 @@ const ProvisionalRegistrations = () => {
             return d.isChecked === true
         });
         if (eamtyArray.length === 0) {
-            setStatusValue(null);
+            setStatusValue('');
         }
         setCheckBoxData(res);
     };
@@ -248,7 +240,7 @@ const ProvisionalRegistrations = () => {
                     <div className="p-2 flex-shrink-1 input-group justify-content-end">
                         <span className="input-group-text p-0" id="filterbox">
                             <div className="btn-group">
-                                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Status <i className="bi-chevron-down"></i></button>
+                                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">{statusValue} <i className="bi-chevron-down"></i></button>
                                 <ul className="dropdown-menu shadow-sm rounded-0">
                                     {checkBoxData.map((d: any) => (
                                         <div className="p-2">
@@ -354,24 +346,3 @@ const ProvisionalRegistrations = () => {
 }
 
 export default ProvisionalRegistrations;
-
-
-
-
-{/* <li className="p-2">
-<input type='radio' id="Pending" onChange={handleChange} className="form-check-input" name="status" value="pen" />
-<label htmlFor="Pending" className="form-check-label ms-2 fw-400">Pending</label>
-</li>
-<li className="p-2">
-    <input type='radio' id="Completed" onChange={handleChange} className="form-check-input" name="status" value="apr" />
-    <label htmlFor="Completed" className="form-check-label ms-2 fw-400">Completed</label>
-</li>
-<li className="p-2">
-    <input type='radio' id="Completed" onChange={handleChange} className="form-check-input" name="status" value="rej" />
-    <label htmlFor="Completed" className="form-check-label ms-2 fw-400">Rejected</label>
-</li>
-<li className="p-2">
-    <input type='radio' id="Tatkal" onChange={handleChange} className="form-check-input" name="status" value="tat" />
-    <label htmlFor="Tatkal" className="form-check-label ms-2 fw-400">Tatkal</label>
-</li> 
-*/}

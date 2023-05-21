@@ -45,4 +45,9 @@ export const additionalService = {
         });
         return responseData;
     },
+
+    async getQualificationsByUserId(reg_date: any,user_id: number,regType:any){
+        const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByUserId/${reg_date}/${user_id}/${regType}`);
+        return responseData;
+    },
 };

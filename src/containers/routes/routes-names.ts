@@ -33,7 +33,7 @@ export const routes = {
     paymenterror: `${urlPrefix}paymentsuccess`,
 
     admin_dashboard: `${urlPrefix}admin`,
-    admin_my_work_items: `${urlPrefix}admin/${urlPrefix}my-work-items`,
+    admin_my_work_items: `${urlPrefix}admin${urlPrefix}my-work-items`,
     provisional_registrations: `${urlPrefix}admin${urlPrefix}provisional_registrations`,
     admin_final_registrations: `${urlPrefix}admin${urlPrefix}final_registrations`,
     admin_provisional_view: `${urlPrefix}admin${urlPrefix}provisional_view`,
@@ -43,6 +43,9 @@ export const routes = {
     admin_goodstanding_mci: `${urlPrefix}admin${urlPrefix}admin_goodstanding_mci`,
     admin_noc: `${urlPrefix}admin${urlPrefix}noc`,
     admin_final_reg_view: `${urlPrefix}admin${urlPrefix}final_reg_view`,
+    admin_noc_reg_view:`${urlPrefix}admin${urlPrefix}noc_reg_view`,
+    admin_additional_reg_view:`${urlPrefix}admin${urlPrefix}additional_reg_view`,
+    admin_renewals_reg_view:`${urlPrefix}admin${urlPrefix}renewals_reg_view`,
     admin_employes_works: `${urlPrefix}admin/${urlPrefix}employees-works`,
     admin_notifications: `${urlPrefix}admin/${urlPrefix}notifications`,
     admin_settings: `${urlPrefix}admin/${urlPrefix}settings`,

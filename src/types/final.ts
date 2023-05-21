@@ -135,7 +135,9 @@ export type AdminFinalProfileType = {
   createdon: string,
   reg_date: Date,
   posttime: string,
-  approval_status: string
+  approval_status: string,
+  receipt_no:String,
+  dd_amount:String
 }
 
 

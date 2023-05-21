@@ -49,8 +49,8 @@ export const provisionalService = {
         const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByFilter/${reg_date}/${status}`);
         return responseData as ApiResponseType;
     },
-    async getProvisionalsByUserId( reg_date: any,user_id: number) {
-        const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByUserId/${reg_date}/${user_id}`);
+    async getProvisionalsByUserId( reg_date: any,user_id: number,regType:any) {
+        const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByUserId/${reg_date}/${user_id}/${regType}`);
         return responseData as ApiResponseType;
     },
 

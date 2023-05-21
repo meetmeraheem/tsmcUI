@@ -14,15 +14,15 @@ import Swal from "sweetalert2";
 import Table from "../../components/Table";
 import { adminService } from "../../lib/api/admin";
 import { assignmentService } from "../../lib/api/assignments";
-import { finalService } from "../../lib/api/final";
+import { goodstandingService } from "../../lib/api/goodstanding";
 import { provisionalService } from "../../lib/api/provisional";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { UserRole } from "../../types/common";
 import { Provisional_DoctorFormType } from "../../types/provisional";
 
-const FinalRegistrations = () => {
+const GoodStanding = () => {
     const fetchIdRef = useRef(0);
-    const [finals, setFinals] = useState([]);
+    const [goodstanding, setGoodstanding] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
     const [date, setDate] = useState(defaultDate);
     const [loading, setLoading] = useState(false)
@@ -32,7 +32,7 @@ const FinalRegistrations = () => {
     const [users, setUsers] = useState<UserRole[]>([]);
     const [assignedUser, setAssignedUser] = useState(0);
 
-    const [statusValue, setStatusValue] = useState('pen');
+    const [statusValue, setStatusValue] = useState(null);
 
     const [checkBoxData, setCheckBoxData] = useState([
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
@@ -78,7 +78,7 @@ const FinalRegistrations = () => {
         },
         {
             Header: "Status",
-            accessor: "approval_status",
+            accessor: "status",
             Cell: ({ cell: { value } }: any) => {
                 return (
                     <>
@@ -103,7 +103,7 @@ const FinalRegistrations = () => {
                     <i className="bi-person" onClick={async () => {
                         const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'final');
                         if (data && data.length > 0) {
-                            const getUser = await adminService.getAdminById(data[0].assignTo);
+                            const getUser = await adminService.getAdminById(data[0].AssignTo);
                             if (getUser.data.length > 0) {
                                 Swal.fire({
                                     text: "Already Assigned to " + getUser.data[0].username,
@@ -161,10 +161,10 @@ const FinalRegistrations = () => {
     const assign = useCallback(async () => {
         try {
             const assignToUser = assignedList.map((obj: any) => {
-                return { ...obj, assignTo: assignedUser };
+                return { ...obj, AssignTo: assignedUser };
             })
             const formData = new FormData();
-            formData.append("assignmentData", JSON.stringify(assignToUser));
+            formData.append("AssignmentData", JSON.stringify(assignToUser[0]));
             const { success } = await assignmentService.assignToUser(formData);           
              if (success) {
                 Swal.fire({
@@ -181,7 +181,6 @@ const FinalRegistrations = () => {
 
     useEffect(() => {
         getUsersByRole();
-        setStatusValue('pen');
     }, []);
 
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
@@ -195,7 +194,7 @@ const FinalRegistrations = () => {
         setLoading(true)
 
         var newdate = moment(date).format('YYYY-MM-DD');
-        const { data } = await finalService.getFinalsByFilter(newdate, statusValue);
+        const { data } = await goodstandingService.getGoodstandingByFilter(newdate, statusValue);
         // if (data.length > 0) {
         //     setProvisionals(data);
         // }
@@ -206,14 +205,14 @@ const FinalRegistrations = () => {
                 const startRow = pageSize * pageIndex
                 const endRow = startRow + pageSize
                if(data!=undefined){
-                setFinals(data.slice(startRow, endRow))
+                setGoodstanding(data.slice(startRow, endRow))
 
                 // Your server could send back total page count.
                 // For now we'll just fake it, too
                 setPageCount(Math.ceil(data.length / pageSize));
                 setLoading(false);
                }else{
-                   setFinals([]);
+                   setGoodstanding([]);
                    setLoading(false);
                 }
 
@@ -237,7 +236,7 @@ const FinalRegistrations = () => {
             return d.isChecked === true
         });
         if (eamtyArray.length === 0) {
-            setStatusValue('');
+            setStatusValue(null);
         }
         setCheckBoxData(res);
     };
@@ -247,13 +246,13 @@ const FinalRegistrations = () => {
             <div className="container-fluid">
                 <div className="tsmc-filter-box d-flex align-items-center">
                     <div className="p-2 w-100">
-                        <h2 className="fs-22 fw-700 mb-0">Final Registrations</h2>
+                        <h2 className="fs-22 fw-700 mb-0">Good Standing</h2>
                     </div>
                     <div className="p-2 flex-shrink-1 input-group justify-content-end">
                         {/* <input type="text" className="form-control form-control-lg fs-16" placeholder="Search for registrations" aria-label="Search for registrations" aria-describedby="filterbox" /> */}
                         <span className="input-group-text p-0" id="filterbox">
                             <div className="btn-group">
-                                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">{statusValue}  <i className="bi-chevron-down"></i></button>
+                                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Status <i className="bi-chevron-down"></i></button>
                                 <ul className="dropdown-menu shadow-sm rounded-0">
                                     {checkBoxData.map((d: any) => (
                                         <div className="p-2">
@@ -278,7 +277,7 @@ const FinalRegistrations = () => {
                             <input type="date" name="" id=""
                                 value={date}
                                 onChange={(ev) => {
-                                    setFinals([]);
+                                    setGoodstanding([]);
                                     setDate(ev.target.value)
                                 }} className="form-control" />
                         </span>
@@ -289,7 +288,7 @@ const FinalRegistrations = () => {
                         <div className="card-body">
                             <Table
                                 columns={columns}
-                                data={finals}
+                                data={goodstanding}
                                 loading={loading}
                                 pageCount={pageCount}
                                 fetchData={fetchData}
@@ -357,30 +356,4 @@ const FinalRegistrations = () => {
     )
 }
 
-export default FinalRegistrations;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const getFinalList = useCallback(async () => {
-    //     try {
-    //         var newdate = moment(date).format('YYYY-MM-DD');
-    //         const { data } = await finalService.getFinalsByFilter(newdate);
-    //         if (data.length > 0) {
-    //             setFinals(data);
-    //         }
-    //     } catch (err) {
-    //         console.log('error getProvisionalDetails', err);
-    //     }
-    // }, [date]);
+export default GoodStanding;

@@ -14,13 +14,13 @@ import Swal from "sweetalert2";
 import Table from "../../components/Table";
 import { adminService } from "../../lib/api/admin";
 import { assignmentService } from "../../lib/api/assignments";
-import { finalService } from "../../lib/api/final";
 import { provisionalService } from "../../lib/api/provisional";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { UserRole } from "../../types/common";
 import { Provisional_DoctorFormType } from "../../types/provisional";
+import { additionalService } from "../../lib/api/additional";
 
-const FinalRegistrations = () => {
+const Additional = () => {
     const fetchIdRef = useRef(0);
     const [finals, setFinals] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
@@ -78,7 +78,7 @@ const FinalRegistrations = () => {
         },
         {
             Header: "Status",
-            accessor: "approval_status",
+            accessor: "status",
             Cell: ({ cell: { value } }: any) => {
                 return (
                     <>
@@ -92,7 +92,7 @@ const FinalRegistrations = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/final_reg_view'} state={{ finalPrimaryId: cell.data[0].finalPrimaryId, doctorPrimaryId: cell.data[0].doctorPrimaryId }}>Proceed</Link>
+                    <Link to={'/admin/additional_reg_view'} state={{ finalPrimaryId: cell.data[0].finalPrimaryId, doctorPrimaryId: cell.data[0].doctorPrimaryId }}>Proceed</Link>
                 </>
             )
         },
@@ -101,7 +101,7 @@ const FinalRegistrations = () => {
             Cell: (cell: any) => (
                 <>
                     <i className="bi-person" onClick={async () => {
-                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'final');
+                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'additional');
                         if (data && data.length > 0) {
                             const getUser = await adminService.getAdminById(data[0].assignTo);
                             if (getUser.data.length > 0) {
@@ -121,7 +121,7 @@ const FinalRegistrations = () => {
                                     assignStatus: 'pen',
                                     assignReason: '',
                                     doctor_id: cell.data[Number(cell.row.id)].doctor_id,
-                                    assignRegType: 'final'
+                                    assignRegType: 'additional'
                                 }
                                 setAssignedList([...assignedList, doctorInfo]);
                                 setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
@@ -195,7 +195,7 @@ const FinalRegistrations = () => {
         setLoading(true)
 
         var newdate = moment(date).format('YYYY-MM-DD');
-        const { data } = await finalService.getFinalsByFilter(newdate, statusValue);
+        const { data } = await additionalService.getaddlsByFilter(newdate, statusValue);
         // if (data.length > 0) {
         //     setProvisionals(data);
         // }
@@ -247,7 +247,7 @@ const FinalRegistrations = () => {
             <div className="container-fluid">
                 <div className="tsmc-filter-box d-flex align-items-center">
                     <div className="p-2 w-100">
-                        <h2 className="fs-22 fw-700 mb-0">Final Registrations</h2>
+                        <h2 className="fs-22 fw-700 mb-0">Additional Qualification</h2>
                     </div>
                     <div className="p-2 flex-shrink-1 input-group justify-content-end">
                         {/* <input type="text" className="form-control form-control-lg fs-16" placeholder="Search for registrations" aria-label="Search for registrations" aria-describedby="filterbox" /> */}
@@ -357,30 +357,4 @@ const FinalRegistrations = () => {
     )
 }
 
-export default FinalRegistrations;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const getFinalList = useCallback(async () => {
-    //     try {
-    //         var newdate = moment(date).format('YYYY-MM-DD');
-    //         const { data } = await finalService.getFinalsByFilter(newdate);
-    //         if (data.length > 0) {
-    //             setFinals(data);
-    //         }
-    //     } catch (err) {
-    //         console.log('error getProvisionalDetails', err);
-    //     }
-    // }, [date]);
+export default Additional;

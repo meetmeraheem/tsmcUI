@@ -38,12 +38,15 @@ import PaymentSuccess from '../payment/paymentsuccess';
 import EditProvisional from '../user-panal/edit-provisional';
 import EditFinal from '../user-panal/edit-final';
 import ProvisionalView from '../dashboard/provisional-view';
-import AdditionalView from '../dashboard/additional';
-import RenewalView from '../dashboard/renewal';
-import GoodStandingView from '../dashboard/goodstanding';
-import GoodStandingMCIView from '../dashboard/mci';
-import NocView from '../dashboard/noc';
+import AdditionalRegList from '../dashboard/additional-registrations';
+import AdditionalView from '../dashboard/additional-view';
+import RenewalRegList from '../dashboard/renewal-registrations';
+import RenewalView from '../dashboard/renewals-view';
 
+import GoodStandingRegList from '../dashboard/goodstanding-registrations';
+import GoodStandingMCIView from '../dashboard/mci';
+import NocRegList from '../dashboard/noc-registrations';
+import NocView from '../dashboard/noc-view';
 import FinalRegView from '../dashboard/final-reg-view';
 import FinalRegistrations from '../dashboard/final-registration';
 import PaymentFailure from '../payment/paymentfailure';
@@ -98,12 +101,15 @@ const MainRoute = () => {
 					<Route path={routes.provisional_registrations} element={<ProvisionalRegistrations />} />
 					<Route path={routes.admin_final_registrations} element={<FinalRegistrations />} />
 					<Route path={routes.admin_provisional_view} element={<ProvisionalView />} />
-					<Route path={routes.admin_additional} element={<AdditionalView />} />
-					<Route path={routes.admin_renewals} element={<RenewalView />} />
-					<Route path={routes.admin_goodstanding} element={<GoodStandingView />} />
+					<Route path={routes.admin_additional} element={<AdditionalRegList />} />
+					<Route path={routes.admin_renewals} element={<RenewalRegList />} />
+					<Route path={routes.admin_goodstanding} element={<GoodStandingRegList />} />
 					<Route path={routes.admin_goodstanding_mci} element={<GoodStandingMCIView />} />
-					<Route path={routes.admin_noc} element={<NocView />} />
+					<Route path={routes.admin_noc} element={<NocRegList />} />
 					<Route path={routes.admin_final_reg_view} element={<FinalRegView />} />
+					<Route path={routes.admin_noc_reg_view} element={<NocView />} />
+					<Route path={routes.admin_additional_reg_view} element={<AdditionalView/>} />
+					<Route path={routes.admin_renewals_reg_view} element={<RenewalView/>} />
 					<Route path={routes.admin_my_work_items} element={<MyWorkItems />} />
 					<Route path={routes.admin_employes_works} element={<EmployesWorks />} />
 					<Route path={routes.admin_notifications} element={<AdminNotifications />} />

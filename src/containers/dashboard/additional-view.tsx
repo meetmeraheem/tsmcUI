@@ -18,10 +18,10 @@ import { assignmentService } from '../../lib/api/assignments';
 import { LocalStorageManager } from '../../lib/localStorage-manager';
 import { authService } from '../../lib/api/auth';
 
-const FinalRegView = () => {
+const AdditionalRegView = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { finalPrimaryId, doctorPrimaryId,assignmentId } = location.state
+    const { finalPrimaryId, doctorPrimaryId } = location.state
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [final, setFinal] = useState<AdminFinalProfileType>();
@@ -99,7 +99,7 @@ const FinalRegView = () => {
                     assignModified: moment().format('YYYY-MM-DD'),
                     assignRegType: 'final'
                 }
-                const { success } = await assignmentService.updateAssignment(assignmentId, assignmentInfo);
+                const { success } = await assignmentService.updateAssignment(Number(doctor?.serial_id), assignmentInfo);
                 if (status == 'apr') {
                     Swal.fire({
                         title: "Success",
@@ -450,4 +450,4 @@ const FinalRegView = () => {
     )
 }
 
-export default FinalRegView;
+export default AdditionalRegView;

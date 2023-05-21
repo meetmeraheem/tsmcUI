@@ -18,8 +18,8 @@ export const assignmentService = {
         const { data: responseData } = await axiosInstance.get(`userRole/getUsersByRole`);
         return responseData as ApiResponseType;
     },
-    async updateAssignment(doctor_id: number, data: any) {
-        const { data: responseData } = await axiosInstance.put(`assignments/updateAssignMent/${doctor_id}`, data);
+    async updateAssignment(assignmnetId: number, data: any) {
+        const { data: responseData } = await axiosInstance.put(`assignments/updateAssignMent/${assignmnetId}`, data);
         return responseData;
     },
     async getAssignMentBydoctorIdAssignType(doctor_id: number, assign_type: string) {
