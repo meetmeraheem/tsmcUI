@@ -25,11 +25,11 @@ const Userheader = () => {
 	useEffect(() => {
 		const doctorSerialId = LocalStorageManager.getDoctorSerialId();
 		if (doctorSerialId) {
-			setISDoctorId(false);
+			setISDoctorId(true);
 		}
 		const doctorFMRNo = LocalStorageManager.getDoctorFMRNo();
 		if (doctorFMRNo) {
-			setISDoctorFMRNo(false);
+			setISDoctorFMRNo(true);
 		}
 	}, [isDoctorId, isDoctorFMRNo]);
 

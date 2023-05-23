@@ -20,6 +20,7 @@ import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { UserRole } from "../../types/common";
 import { Provisional_DoctorFormType } from "../../types/provisional";
 
+
 const Noc = () => {
     const fetchIdRef = useRef(0);
     const [noc, setNoc] = useState([]);

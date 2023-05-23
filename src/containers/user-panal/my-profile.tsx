@@ -48,17 +48,17 @@ const Myprofile = () => {
             if (doctorSerialId) {
                 const { data } = await provisionalService.getProvisionalByDoctorId(doctorSerialId);
                 if (data.length > 0) {
-                    const qualification = await commonService.getQualificationById(Number(data[0].qualification));
-                    const country = await commonService.getCountry(Number(data[0].country));
-                    const state = await commonService.getState(Number(data[0].state));
+                   // const qualification = await commonService.getQualificationById(Number(data[0].qualification));
+                    //const country = await commonService.getCountry(Number(data[0].country));
+                    //const state = await commonService.getState(Number(data[0].state));
                     setProvisional({
                         id: data[0].id,
                         doctor_id: data[0].DoctorId,
                         reg_date: data[0].reg_date,
                         receipt_no: data[0].receipt_no,
-                        country: country.data[0].name,
-                        state: state.data[0].name,
-                        qualification: qualification.data[0].name,
+                        country: data[0].country,
+                        state: data[0].state,
+                        qualification: data[0].qualification,
                         exam_month: data[0].exam_month,
                         exam_year: data[0].exam_year,
                         university: data[0].university,
@@ -80,15 +80,15 @@ const Myprofile = () => {
             if (doctorSerialId) {
                 const { data } = await finalService.getFinal(doctorSerialId);
                 if (data.length > 0) {
-                    const qualification = await commonService.getQualificationById(Number(data[0].qualification));
-                    const country = await commonService.getCountry(Number(data[0].country));
-                    const state = await commonService.getState(Number(data[0].state));
+                  //  const qualification = await commonService.getQualificationById(Number(data[0].qualification));
+                  //  const country = await commonService.getCountry(Number(data[0].country));
+                   // const state = await commonService.getState(Number(data[0].state));
                     setFinal({
                         serialno: data[0].serialno,
                         reg_date: data[0].reg_date,
-                        country: country.data[0].name,
-                        state: state.data[0].name,
-                        qualification: qualification.data[0].name,
+                        country: data[0].countryName,
+                        state: data[0].stateName,
+                        qualification: data[0].qualification,
                         exam_month: data[0].exam_month,
                         exam_year: data[0].exam_year,
                         university: data[0].university,
@@ -110,8 +110,6 @@ const Myprofile = () => {
                 const { data } = await additionalService.getAdditionalData(doctorSerialId);
                 if (data.length > 0) {
                     //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
-                    const country = await commonService.getCountry(Number(data[0].country));
-                    const state = await commonService.getState(Number(data[0].state));
                     setAdditionalGridList(data);
                    {/* setadditional({
                         country: country.data[0].name,
@@ -138,11 +136,11 @@ const Myprofile = () => {
                 const { data } = await nocService.nocDataByDoctorId(doctorSerialId);
                 if (data.length > 0) {
                     //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
-                    const country = await commonService.getCountry(Number(data[0].country));
-                    const state = await commonService.getState(Number(data[0].state));
+                    //const country = await commonService.getCountry(Number(data[0].country));
+                    //const state = await commonService.getState(Number(data[0].state));
                     setNocdata({
-                        country: country.data[0].name,
-                        state: state.data[0].name,
+                        country: data[0].country,
+                        state: data[0].state,
                         councilname: data[0].councilname,
                         councilpincode: data[0].councilpincode,
                         approval_status: data[0].approval_status,
@@ -235,7 +233,7 @@ const Myprofile = () => {
                                     <div className="card-header text-end">
                                         <Link to={'edit-profile'} className='btn btn-primary btn-sm'>Edit Profile</Link>
                                     </div>
-                                }
+                                 } 
                                 <div className="card-body">
                                     <div className="tsmc-timeline-box">
                                         <div className="tsmc-timeline mb-5">

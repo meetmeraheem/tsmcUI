@@ -12,13 +12,15 @@ import { DoctorFormType, DoctorSignUpFormType } from '../../types/doctor';
 import { doctorService } from '../../lib/api/doctot';
 import { getUser, setDoctorInfo } from '../../redux/doctor';
 import { LocalStorageManager } from '../../lib/localStorage-manager';
-import Swal from "sweetalert2";    
+import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { authService } from '../../lib/api/auth';
 import { tokenManager } from '../../lib/token-manager';
 import { Messages } from '../../lib/constants/messages';
 import { SMS } from '../../lib/utils/sms/sms';
 import moment from 'moment';
+const cryptojs = require("../../assets/js/cryptojs");
+
 
 const HomePage = () => {
      const navigate = useNavigate();
@@ -74,8 +76,11 @@ const HomePage = () => {
                //      Object.entries(values).map(([k, v]) => [k, v.toUpperCase()])
                //    );
                //    console.log('newObj' + JSON.stringify(newObj));
+               const encryptpassword = cryptojs.encryptData(values.password);
+
                const doctorInfo = {
                     ...values,
+                    password:encryptpassword,
                     fullname: values.fullname.toUpperCase(),
                     emailid: values.emailid.toUpperCase(),
                     prefix: 'TSMC',
@@ -84,7 +89,7 @@ const HomePage = () => {
                     dateofbirth: moment(values.dateofbirth).format('YYYY-MM-DD')
                }
                try {
-                    const message =  otp + ' is your OTP to verify your signup from Telangana State Medical Council. Please do not share this with anyone. Kindly note this is valid for the next 15 minutes.';
+                    const message = otp + ' is your OTP to verify your signup from Telangana State Medical Council. Please do not share this with anyone. Kindly note this is valid for the next 15 minutes.';
                     await authService.sendOTP(doctorInfo.mobileno, message).then((response) => {
                          if (response.status === 200) {
                               setDoctorInfoValue(doctorInfo);
@@ -159,14 +164,25 @@ const HomePage = () => {
 
      const signIn = async (e: any) => {
           e.preventDefault();
+
           try {
+               let depwd='';
                if (mobileNumber && password) {
+                    const encryptpassword = cryptojs.encryptData(password);
+                   
+                    
+
                     if (!mobileError && !passwordError) {
+
+
                          const { data, token, success } = await authService.signIn({
                               mobileno: mobileNumber,
-                              password: password,
+                              password: encryptpassword,
                          });
-                         if (success) {
+                         if(data[0].password !== null){
+                              depwd=cryptojs.decryptData(data[0].password);
+                        }
+                         if (success && password === depwd) {
                               tokenManager.setToken(token);
                               data[0].id && LocalStorageManager.setDoctorPrimaryId(data[0].id.toString());
                               data[0].mobileno && LocalStorageManager.setDoctorMobileno(data[0].mobileno);
@@ -286,7 +302,7 @@ const HomePage = () => {
                     if (data.length > 0) {
                          setIsMobileNumberRegistered(true);
                          const text1 = 'forgot';
-                         const message =  otp + ' is your OTP to verify your password from Telangana State Medical Council. Please do not share this with anyone. Kindly note this is valid for the next 15 minutes.';
+                         const message = otp + ' is your OTP to verify your password from Telangana State Medical Council. Please do not share this with anyone. Kindly note this is valid for the next 15 minutes.';
                          //const message = 'Thanks for contacting TSMC. We have received an amount 52 for your 20 - application with receipt No 89. Your OTP is ' + otp;
                          await authService.sendOTP(forgetPasswordMobileNumber, message).then((response) => {
                               if (response.status === 200) {
@@ -344,7 +360,9 @@ const HomePage = () => {
           if (forgetPassword && confirmPassword) {
                if (forgetPassword === confirmPassword) {
                     //Need to code.
-                    const { success } = await doctorService.updatePassword(forgetPasswordMobileNumber, forgetPassword);
+                    const forgetencryptpassword = cryptojs.encryptData(forgetPassword);
+
+                    const { success } = await doctorService.updatePassword(forgetPasswordMobileNumber, forgetencryptpassword);
                     if (success) {
                          Swal.fire({
                               title: Messages.SuccessText,
@@ -504,12 +522,12 @@ const HomePage = () => {
                                                                  </div>
                                                                  <button type='submit' className="btn btn-primary btn-lg w-100 mb-3">Sign In</button>
                                                             </div>
-                                                            <p className='fs-12 text-center mb-3'>By clicking Sign In or Sign Up, you agree to the TSMC 
-                                        <p>
-                                             <Link to={'/terms-and-conditions'}>Terms and Conditions ;</Link>
-                                             <Link to={'/privacy-policy'}>Privacy Policy ;</Link>
-                                             <Link to={'/refund'}>Refund.</Link>
-                                        </p>
+                                                            <p className='fs-12 text-center mb-3'>By clicking Sign In or Sign Up, you agree to the TSMC
+                                                                 <p>
+                                                                      <Link to={'/terms-and-conditions'}>Terms and Conditions ;</Link>
+                                                                      <Link to={'/privacy-policy'}>Privacy Policy ;</Link>
+                                                                      <Link to={'/refund'}>Refund.</Link>
+                                                                 </p>
                                                             </p>
                                                        </form>
                                                   </div>
