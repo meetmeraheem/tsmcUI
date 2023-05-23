@@ -273,6 +273,22 @@ const ProvisionalRegistration = () => {
                                             return (
                                                 <form onSubmit={handleSubmit}>
                                                     <div className="row mb-2">
+                                                    <div className="col-sm-auto">
+                                                            <label className="mb-2">Provisional Request Type</label>
+                                                            <select
+                                                                value={provisionalRequestType}
+                                                                onChange={(ev) => {
+                                                                    setProvisionalRequestType(ev.target.value);
+                                                                }}
+                                                                className="form-select"
+                                                            >
+                                                                <option value="">Select</option>
+                                                                <option value="nor">Normal</option>
+                                                                <option value="tat">Tatkal</option>
+                                                            </select>
+                                                        </div>
+                                                        </div>
+                                                        <div className="row mb-2">
                                                         <div className="col">
                                                             <Field name="qualification">
                                                                 {(fieldProps: FieldProps) => {
@@ -493,7 +509,7 @@ const ProvisionalRegistration = () => {
 
                                                     </div>
                                                     <div className="row mb-2">
-                                                        <div className="col">
+                                                        <div className="col-sm-auto">
                                                             <Field name="college">
                                                                 {(fieldProps: FieldProps) => {
                                                                     const { field, form } = fieldProps;
@@ -525,20 +541,7 @@ const ProvisionalRegistration = () => {
                                                                 }}
                                                             </Field>
                                                         </div>
-                                                        <div className="col">
-                                                            <label className="mb-2">Provisional Request Type</label>
-                                                            <select
-                                                                value={provisionalRequestType}
-                                                                onChange={(ev) => {
-                                                                    setProvisionalRequestType(ev.target.value);
-                                                                }}
-                                                                className="form-select"
-                                                            >
-                                                                <option value="">Select</option>
-                                                                <option value="nor">Normal</option>
-                                                                <option value="tat">Tatkal</option>
-                                                            </select>
-                                                        </div>
+                                                    
                                                     </div>
                                                     <div className="row mb-2 mt-4">
                                                         <div className="col">

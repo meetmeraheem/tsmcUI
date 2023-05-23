@@ -42,6 +42,8 @@ const AdditionalQualificationRegistration = () => {
     const [isPMRDateAbove15M, setIsPMRDateAbove15M] = useState(false);
     const [isPMRDateAbove18M, setIsPMRDateAbove18M] = useState(false);
     const [isTelangana, setIsTelangana] = useState(false);
+    const [additionalRequestType, setAdditionalRequestType] = useState<string>('nor');
+
 
     const initialFormData = {
         country: '',
@@ -193,6 +195,7 @@ const AdditionalQualificationRegistration = () => {
                     approval_status: 'pen',
                     row_type: 'on',
                     reg_date: moment().format('YYYY-MM-DD'),
+                    extra_col1:additionalRequestType,
                     doctorPrimaryId:doctorPrimaryId,
                 }
                 secureLocalStorage.setItem("regType", 'additionalInfo');
@@ -314,6 +317,22 @@ const AdditionalQualificationRegistration = () => {
                                                 <>
                                                     {/* {!isValid && JSON.stringify(errors)} */}
                                                     <form onSubmit={handleSubmit}>
+                                                    <div className="row mb-2">
+                                                    <div className="col-sm-auto">
+                                                            <label className="mb-2">Qualification Request Type</label>
+                                                            <select
+                                                                value={additionalRequestType}
+                                                                onChange={(ev) => {
+                                                                    setAdditionalRequestType(ev.target.value);
+                                                                }}
+                                                                className="form-select"
+                                                            >
+                                                                <option value="">Select</option>
+                                                                <option value="nor">Normal</option>
+                                                                <option value="tat">Tatkal</option>
+                                                            </select>
+                                                        </div>
+                                                        </div>
                                                         <div className="row mb-2">
                                                             <div className="col">
                                                                 <Field name="country">

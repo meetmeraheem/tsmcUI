@@ -23,6 +23,8 @@ const NocRegistration = () => {
     const [countries, setCountries] = useState<Country[]>([]);
     const [states, setStates] = useState<State[]>([]);
     const [cities, setCities] = useState<City[]>([]);
+    const [nocRequestType, setNocRequestType] = useState<string>('nor');
+
     const initialFormData = useMemo(
         () => ({
             councilname: '',
@@ -97,6 +99,7 @@ const NocRegistration = () => {
                     address1: values.address1.toUpperCase(),
                     address2: values.address2.toUpperCase(),
                     doctor_id: doctorId,
+                    extra_col1:nocRequestType,
                     doctorPrimaryId:doctorPrimaryId
                 }
 
@@ -187,6 +190,22 @@ const NocRegistration = () => {
                                                         <div className="card-body">
 
                                                             <div className="px-3">
+                                                            <div className="row mb-2">
+                                                    <div className="col-sm-auto">
+                                                            <label className="mb-2">Noc Request Type</label>
+                                                            <select
+                                                                value={nocRequestType}
+                                                                onChange={(ev) => {
+                                                                    setNocRequestType(ev.target.value);
+                                                                }}
+                                                                className="form-select"
+                                                            >
+                                                                <option value="">Select</option>
+                                                                <option value="nor">Normal</option>
+                                                                <option value="tat">Tatkal</option>
+                                                            </select>
+                                                        </div>
+                                                        </div>
 
                                                                 <div className="row mb-3">
                                                                     <label className="col-sm-2 col-form-label">Council Name</label>

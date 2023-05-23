@@ -48,7 +48,7 @@ export const finalService = {
     },
     async getFinalRegFeeDetails(data: any) {
         const token = tokenManager.getToken();
-        const { data: responseData } = await axios.post(serverUrl+`finalreg/getProvisionalRegFeeDetails`, data, {
+        const { data: responseData } = await axios.post(serverUrl+`finalreg/getFinalRegFeeDetails`, data, {
             headers: {
                 'authorization': 'Bearer '+token,
                 'Content-Type': 'multipart/form-data'
