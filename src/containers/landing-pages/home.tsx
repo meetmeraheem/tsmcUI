@@ -80,7 +80,7 @@ const HomePage = () => {
 
                const doctorInfo = {
                     ...values,
-                    password:encryptpassword,
+                    password: encryptpassword,
                     fullname: values.fullname.toUpperCase(),
                     emailid: values.emailid.toUpperCase(),
                     prefix: 'TSMC',
@@ -166,11 +166,15 @@ const HomePage = () => {
           e.preventDefault();
 
           try {
-               let depwd='';
+               let depwd = '';
+               LocalStorageManager.setDoctorSerialId('');
+               LocalStorageManager.setDoctorFMRNo('');
+               LocalStorageManager.setDoctorMobileno('');
+               LocalStorageManager.setDoctorPrimaryId('');
                if (mobileNumber && password) {
                     const encryptpassword = cryptojs.encryptData(password);
-                   
-                    
+
+
 
                     if (!mobileError && !passwordError) {
 
@@ -179,9 +183,9 @@ const HomePage = () => {
                               mobileno: mobileNumber,
                               password: encryptpassword,
                          });
-                         if(data[0].password !== null){
-                              depwd=cryptojs.decryptData(data[0].password);
-                        }
+                         if (data[0].password !== null) {
+                              depwd = cryptojs.decryptData(data[0].password);
+                         }
                          if (success && password === depwd) {
                               tokenManager.setToken(token);
                               data[0].id && LocalStorageManager.setDoctorPrimaryId(data[0].id.toString());
