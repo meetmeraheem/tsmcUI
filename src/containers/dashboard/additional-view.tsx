@@ -290,7 +290,7 @@ const AdditionalRegView = () => {
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(additionals?.edu_cert1) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
                                             <p className="d-flex align-items-center">
-                                                {additionals?.edu_cert1 ? <img src={serverImgUrl + 'additionals/' + additionals?.edu_cert1} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                                {additionals?.edu_cert1 ? <img src={serverImgUrl + 'additional/' + additionals?.edu_cert1} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
                                             </p>
                                         </div>
                                     </div>
@@ -298,7 +298,7 @@ const AdditionalRegView = () => {
                                 {additionals?.edu_cert2 &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(additionals?.edu_cert2) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center">{additionals?.edu_cert2 && <img src={serverImgUrl + 'additionals/' + additionals?.edu_cert2} alt="" />}</p>
+                                            <p className="d-flex align-items-center">{additionals?.edu_cert2 && <img src={serverImgUrl + 'additional/' + additionals?.edu_cert2} alt="" />}</p>
                                         </div>
                                     </div>
                                 }

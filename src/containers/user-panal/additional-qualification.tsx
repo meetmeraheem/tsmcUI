@@ -636,142 +636,130 @@ const AdditionalQualificationRegistration = () => {
                                                             </div >
                                                         </div>
                                                         <div className="row mb-2 mt-4">
-                                                           
-                                                            <div className="col-4 mt-3">
-                                                                <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                                                    <Field name="edu_cert1">
-                                                                        {(fieldProps: FieldProps) => {
-                                                                            const { field, form } = fieldProps;
-                                                                            const error =
-                                                                                getValue(form.touched, field.name) &&
-                                                                                getValue(form.errors, field.name);
-                                                                            const file = studyCertificate?.file
-                                                                                ? studyCertificate?.file.name
-                                                                                : field.value || null;
-                                                                            return file ? (
-                                                                                <p className="d-flex align-items-center">
-                                                                                    <strong>Uploaded:</strong>
-                                                                                    <span className="ms-1">{file}</span>
-                                                                                    <button
-                                                                                        type="button"
-                                                                                        onClick={() => {
-                                                                                            setFieldValue(field.name, '');
-                                                                                            setStudyCertificate(null);
-                                                                                        }}
-                                                                                        title='Delete'
-                                                                                        className="ms-2 lh-1 lt-file-del-btn"
-                                                                                    >
-                                                                                        <i className="bi-trash"></i>
-                                                                                    </button>
-                                                                                </p>
-                                                                            ) : (
-                                                                                <>
-                                                                                    <Files
-                                                                                        className="files-dropzone"
-                                                                                        onChange={(files: ReactFilesFile[]) => {
-                                                                                            if (files[0]) {
-                                                                                                const file = files[0];
-                                                                                                const isLess = isLessThanTheMB(files[0].size, 0.3);
-                                                                                                if (isLess) {
-                                                                                                    setStudyCertificate({ file });
-                                                                                                    setFieldValue(field.name, file.name);
-                                                                                                }
-                                                                                                else {
-                                                                                                    alert(Messages.isLessThanTheMB);
-                                                                                                }
-                                                                                            }
-                                                                                        }}
-                                                                                        onError={(error: ReactFilesError) => {
-                                                                                            console.log('error', error);
-                                                                                            if (error.code === 1) {
-                                                                                            }
-                                                                                        }}
-                                                                                        clickable
-                                                                                    >
-                                                                                        <div className="text-center">
-                                                                                            <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Study Certificate</p>
-                                                                                        </div>
-                                                                                    </Files>
-                                                                                    <small className="text-danger mt-1">
-                                                                                        {studyCertificate?.error}
-                                                                                    </small>
-                                                                                    {error && <small className="text-danger">{error.toString()}</small>}
-                                                                                </>
-                                                                            );
-                                                                        }}
-                                                                    </Field>
-                                                                </div>
-                                                            </div>
-                                                            
-                                                            {(!isIndia || (isIndia && isTelangana)) &&
-                                                                <div className="col-4 mt-3">
-                                                                    <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                                                        <Field name="edu_cert2">
-                                                                            {(fieldProps: FieldProps) => {
-                                                                                const { field, form } = fieldProps;
-                                                                                const error =
-                                                                                    getValue(form.touched, field.name) &&
-                                                                                    getValue(form.errors, field.name);
-                                                                                const file = DegreeCertificate?.file
-                                                                                    ? DegreeCertificate?.file.name
-                                                                                    : field.value || null;
-                                                                                return file ? (
-                                                                                    <p className="d-flex align-items-center ms-3">
-                                                                                        <strong>Uploaded:</strong>
-                                                                                        <span className="ms-1">{file}</span>
-                                                                                        <button
-                                                                                            type="button"
-                                                                                            onClick={() => {
-                                                                                                setFieldValue(field.name, '');
-                                                                                                setDegreeCertificate(null);
-                                                                                            }}
-                                                                                            title='Delete'
-                                                                                            className="ms-2 lh-1"
-                                                                                        >
-                                                                                            <i className="bi-trash"></i>
-                                                                                        </button>
-                                                                                    </p>
-                                                                                ) : (
-                                                                                    <>
-                                                                                        <Files
-                                                                                            className="files-dropzone"
-                                                                                            onChange={(files: ReactFilesFile[]) => {
-                                                                                                if (files[0]) {
-                                                                                                    const file = files[0];
-                                                                                                    const isLess = isLessThanTheMB(files[0].size, 0.3);
-                                                                                                    if (isLess) {
-                                                                                                        setDegreeCertificate({ file });
-                                                                                                        setFieldValue(field.name, file.name);
-                                                                                                    }
-                                                                                                    else {
-                                                                                                        alert(Messages.isLessThanTheMB);
-                                                                                                    }
-                                                                                                }
-                                                                                            }}
-                                                                                            onError={(error: ReactFilesError) => {
-                                                                                                console.log('error', error);
-                                                                                                if (error.code === 1) {
-                                                                                                }
-                                                                                            }}
-                                                                                            clickable
-                                                                                        >
-                                                                                            <div className="text-center">
-                                                                                                <i className="bi-file-earmark-break fs-32"></i>
-                                                                                                <p className='fs-13'>Degree Certificate</p>
-                                                                                            </div>
-                                                                                        </Files>
-                                                                                        <small className="text-danger mt-1">
-                                                                                            {DegreeCertificate?.error}
-                                                                                        </small>
-                                                                                        {error && <small className="text-danger">{error.toString()}</small>}
-                                                                                    </>
-                                                                                );
+                                                        <div className="col-3 ps-3">
+                                                        <Field name="edu_cert1">
+                                                            {(fieldProps: FieldProps) => {
+                                                                const { field, form } = fieldProps;
+                                                                const error =
+                                                                    getValue(form.touched, field.name) &&
+                                                                    getValue(form.errors, field.name);
+                                                                const file = studyCertificate?.file
+                                                                    ? studyCertificate?.file.name
+                                                                    : field.value || null;
+                                                                return file ? (
+                                                                    <p className="d-flex align-items-center">
+                                                                        <strong>Uploaded:</strong>
+                                                                        <span className="ms-1">{file}</span>
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => {
+                                                                                if (field.value) {
+                                                                                    setFieldValue(field.name, '');
+                                                                                    setStudyCertificate(null);
+                                                                                }
                                                                             }}
-                                                                        </Field>
-                                                                    </div>
-                                                                </div>
-                                                            }
+                                                                            title='Delete'
+                                                                            className="ms-2 lh-1"
+                                                                        >
+                                                                            <i className="bi-trash" />
+                                                                        </button>
+                                                                    </p>
+                                                                ) : (
+                                                                    <>
+                                                                        <Files
+                                                                            className="files-dropzone"
+                                                                            onChange={(files: ReactFilesFile[]) => {
+                                                                                if (files[0]) {
+                                                                                    const file = files[0];
+                                                                                    setStudyCertificate({ file });
+                                                                                    setFieldValue(field.name, file.name);
+                                                                                }
+                                                                            }}
+                                                                            onError={(error: ReactFilesError) => {
+                                                                                console.log('error', error);
+                                                                                if (error.code === 1) {
+                                                                                }
+                                                                            }}
+                                                                            //accepts={['.jpeg', '.jpg','.png']}
+                                                                            clickable
+                                                                        >
+                                                                            <div className="file-upload-box">
+                                                                                <i className="bi-plus-lg fs-22"></i>
+                                                                                <p className='fs-13'>Upload Study Certificate</p>
+                                                                            </div>
+                                                                        </Files>
+                                                                        <small className="text-danger mt-1">
+                                                                            {studyCertificate?.error}
+                                                                        </small>
+                                                                        {error && <small className="text-danger">{error.toString()}</small>}
+                                                                    </>
+                                                                );
+                                                            }}
+                                                        </Field>
+                                                    </div>
+                                                   
+                                                            <div className="col-3 ps-3">
+                                                        <Field name="edu_cert2">
+                                                            {(fieldProps: FieldProps) => {
+                                                                const { field, form } = fieldProps;
+                                                                const error =
+                                                                    getValue(form.touched, field.name) &&
+                                                                    getValue(form.errors, field.name);
+                                                                const file = DegreeCertificate?.file
+                                                                    ? DegreeCertificate?.file.name
+                                                                    : field.value || null;
+                                                                return file ? (
+                                                                    <p className="d-flex align-items-center">
+                                                                        <strong>Uploaded:</strong>
+                                                                        <span className="ms-1">{file}</span>
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => {
+                                                                                if (field.value) {
+                                                                                    setFieldValue(field.name, '');
+                                                                                    setDegreeCertificate(null);
+                                                                                }
+                                                                            }}
+                                                                            title='Delete'
+                                                                            className="ms-2 lh-1"
+                                                                        >
+                                                                            <i className="bi-trash" />
+                                                                        </button>
+                                                                    </p>
+                                                                ) : (
+                                                                    <>
+                                                                        <Files
+                                                                            className="files-dropzone"
+                                                                            onChange={(files: ReactFilesFile[]) => {
+                                                                                if (files[0]) {
+                                                                                    const file = files[0];
+                                                                                    setDegreeCertificate({ file });
+                                                                                    setFieldValue(field.name, file.name);
+                                                                                }
+                                                                            }}
+                                                                            onError={(error: ReactFilesError) => {
+                                                                                console.log('error', error);
+                                                                                if (error.code === 1) {
+                                                                                }
+                                                                            }}
+                                                                            //accepts={['.jpeg', '.jpg','.png']}
+                                                                            clickable
+                                                                        >
+                                                                            <div className="file-upload-box">
+                                                                                <i className="bi-plus-lg fs-22"></i>
+                                                                                <p className='fs-13'>Upload Degree Certificate</p>
+                                                                            </div>
+                                                                        </Files>
+                                                                        <small className="text-danger mt-1">
+                                                                            {DegreeCertificate?.error}
+                                                                        </small>
+                                                                        {error && <small className="text-danger">{error.toString()}</small>}
+                                                                    </>
+                                                                );
+                                                            }}
+                                                        </Field>
+                                                    </div>
+ 
                                                             
                                                         </div>
 

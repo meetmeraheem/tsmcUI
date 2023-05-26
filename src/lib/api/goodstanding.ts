@@ -11,5 +11,16 @@ export const goodstandingService = {
         const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingsByFilter/${reg_date}/${status}`);
         return responseData as ApiResponseType;
     },
+
+    async getGoodstandingInfoRegDetails( data: any) {
+        const { data: responseData } = await axiosInstance.post(`goodstanding/getGoodStandingRegFeeDetails`,data);
+        return responseData as ApiResponseType;
+    },
+    async createGoodstandingDetails( data: any) {
+        const { data: responseData } = await axiosInstance.post(`goodstanding/createGoodstanding`,data);
+        return responseData as ApiResponseType;
+    },
+
+    
  
 };

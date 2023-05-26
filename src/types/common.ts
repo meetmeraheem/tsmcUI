@@ -99,6 +99,17 @@ export type RegPayDetailsFormType = {
     examYear: string;
     examMonth: string;
     doctor_id: string;
-   
-
 };
+
+
+export type goodStandingFormType = {
+    createdon: string,
+    posttime: string,
+    modifiedon: string,
+    status: string,
+    added_by: number,
+    approval_status:string
+    doctor_id: string,
+    doctorPrimaryId:string,
+
+  }

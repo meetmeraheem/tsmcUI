@@ -17,11 +17,14 @@ import { additionalService } from '../../lib/api/additional';
 import { nocFormType } from "../../types/noc";
 import { AddQualFormType } from '../../types/additionalQuali';
 import { nocService } from "../../lib/api/noc";
+import UserHeader from "../user-panal/includes/user-header";
+import { goodStandingFormType } from "../../types/common";
+import { goodstandingService } from "../../lib/api/goodstanding";
 
 
 
 const PaymentSuccess = () => {
-    const search = useLocation().search;
+    const location = useLocation();
    // const orderId = new URLSearchParams(search).get('orderid');
     const navigate = useNavigate();
     //const location = useLocation();
@@ -62,8 +65,10 @@ const PaymentSuccess = () => {
                         setPaymentResponseText(resp.PaymentResponseText);
                         setpaymentDateTime(resp.PaymentDateTime);
                         setRespOrderAmt(resp.OrderAmount);
-
-                        console.log('Payment OrderId ' + resp.OrderId + ' ------ ' + respOrderId);
+                         setTransactionNumber(resp.OrderId);
+                         const doctorId = Number(LocalStorageManager.getDoctorSerialId());
+                         setDoctorSerialNumber(doctorId);
+                        console.log('Payment OrderId ' + resp.OrderId + ' ------ ' + resp.OrderId);
                         const regType = secureLocalStorage.getItem("regType");
 
 
@@ -77,29 +82,31 @@ const PaymentSuccess = () => {
                                 paymethod: resp.PaymentMethod
 
                             }
-                            respOrderId && setTransactionNumber(respOrderId);
-                            const pc = secureLocalStorage.getItem("pc");
-                            const af = secureLocalStorage.getItem("af");
-                            const noc = secureLocalStorage.getItem("noc");
-
                             const formData = new FormData();
-                            formData.append("provisionalInfo", JSON.stringify(provisionalPaymentInfo));
-                            if (pc) {
-                                formData.append("pc", pc as File);
-                            }
-                            if (af) {
-                                formData.append("af", af as File);
-                            }
-                            if (noc) {
-                                formData.append("noc", noc as File);
-                            }
+                             formData.append("provisionalInfo", JSON.stringify(provisionalPaymentInfo));
+                                const pc = secureLocalStorage.getItem("pcName");
+                                const af = secureLocalStorage.getItem("afName");
+                                const noc = secureLocalStorage.getItem("nocName");
+
+                                console.log('pc',pc);
+                                console.log('af',af);
+                                console.log('noc',noc);
+                                if (pc) {
+                                    formData.append("pc", pc as string);
+                                }
+                                if (af) {
+                                    formData.append("af", af as string);
+                                }
+                                if (noc) {
+                                    formData.append("noc", noc as string);
+                                }
 
                             const { success } = await provisionalService.provisionalRegistration(formData);
                             if (success) {
-                                const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
                                 secureLocalStorage.removeItem("pc");
                                 secureLocalStorage.removeItem("af");
                                 secureLocalStorage.removeItem("noc");
+                                secureLocalStorage.removeItem("regType");
                                 const doctorMobileno = LocalStorageManager.getDoctorMobileno();
                                 if (doctorMobileno) {
                                     await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Provisional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
@@ -127,66 +134,64 @@ const PaymentSuccess = () => {
                                 orderId: resp.OrderId,
                                 paymethod: resp.PaymentMethod
                             }
-                            const af = secureLocalStorage.getItem("af");
-                            const mbbs = secureLocalStorage.getItem("mbbs");
-                            const noc = secureLocalStorage.getItem("noc");
-                            const affidavit = secureLocalStorage.getItem("affidavit");
-                            const testimonal1 = secureLocalStorage.getItem("mbtestimonal1bs");
-                            const testimonal2 = secureLocalStorage.getItem("testimonal2");
-                            const regOfOtherState = secureLocalStorage.getItem("regOfOtherState");
-                            const screeningTestPass = secureLocalStorage.getItem("screeningTestPass");
-                            const internshipComp = secureLocalStorage.getItem("internshipComp");
-                            const mciEligibility = secureLocalStorage.getItem("mciEligibility");
-                            const interVerification = secureLocalStorage.getItem("interVerification");
-                            const mciReg = secureLocalStorage.getItem("mciReg");
-                            const imr = secureLocalStorage.getItem("imr");
-
                             const formData = new FormData();
                             formData.append("finalInfo", JSON.stringify(finalPaymentInfo));
+                            const af = secureLocalStorage.getItem("afName");
+                            const mbbs = secureLocalStorage.getItem("mbbsName");
+                            const noc = secureLocalStorage.getItem("nocName");
+                            const affidavit = secureLocalStorage.getItem("affidivitName");
+                            const testimonal1 = secureLocalStorage.getItem("testimonal1Name");
+                            const testimonal2 = secureLocalStorage.getItem("testimonal2Name");
+                            const regOfOtherState = secureLocalStorage.getItem("regOtherStateName");
+                            const screeningTestPass = secureLocalStorage.getItem("screenTestName");
+                            const internshipComp = secureLocalStorage.getItem("internshipCompName");
+                            const mciEligibility = secureLocalStorage.getItem("mciEligibilityName");
+                            const interVerification = secureLocalStorage.getItem("interVerificationName");
+                            const mciReg = secureLocalStorage.getItem("mciRegName");
+                            const imr = secureLocalStorage.getItem("imrName");
 
                             if (af) {
-                                formData.append("af", af as File);
+                                formData.append("af", af as string);
                             }
                             if (mbbs) {
-                                formData.append("mbbs", mbbs as File);
+                                formData.append("mbbs", mbbs as string);
                             }
                             if (noc) {
-                                formData.append("noc", noc as File);
+                                formData.append("noc", noc as string);
                             }
                             if (affidavit) {
-                                formData.append("affidivit", affidavit as File);
+                                formData.append("affidivit", affidavit as string);
                             }
                             if (testimonal1) {
-                                formData.append("testimonal1", testimonal1 as File);
+                                formData.append("testimonal1", testimonal1 as string);
                             }
                             if (testimonal2) {
-                                formData.append("testimonal2", testimonal2 as File);
+                                formData.append("testimonal2", testimonal2 as string);
                             }
                             if (regOfOtherState) {
-                                formData.append("regOfOtherState", regOfOtherState as File);
+                                formData.append("regOfOtherState", regOfOtherState as string);
                             }
                             if (screeningTestPass) {
-                                formData.append("screeningTestPass", screeningTestPass as File);
+                                formData.append("screeningTestPass", screeningTestPass as string);
                             }
                             if (internshipComp) {
-                                formData.append("internshipComp", internshipComp as File);
+                                formData.append("internshipComp", internshipComp as string);
                             }
                             if (mciEligibility) {
-                                formData.append("mciEligibility", mciEligibility as File);
+                                formData.append("mciEligibility", mciEligibility as string);
                             }
                             if (interVerification) {
-                                formData.append("interVerification", interVerification as File);
+                                formData.append("interVerification", interVerification as string);
                             }
                             if (mciReg) {
-                                formData.append("mciReg", mciReg as File);
+                                formData.append("mciReg", mciReg as string);
                             }
                             if (imr) {
-                                formData.append("imr", imr as File);
+                                formData.append("imr", imr as string);
                             }
                             const { success } = await finalService.finalRegistration(formData);
                             if (success) {
-                                const doctorId = Number(LocalStorageManager.getDoctorSerialId());
-                                setDoctorSerialNumber(doctorId);
+                              
                                 secureLocalStorage.removeItem("af");
                                 secureLocalStorage.removeItem("mbbs");
                                 secureLocalStorage.removeItem("noc");
@@ -225,23 +230,21 @@ const PaymentSuccess = () => {
                                 orderId: resp.OrderId,
                                 paymethod: resp.PaymentMethod
                             }
-                            const additional_study = secureLocalStorage.getItem("additional_study");
-                            const additional_Degree = secureLocalStorage.getItem("additional_Degree");
                             const formData = new FormData();
                             formData.append("additionalInfo", JSON.stringify(additionalDataPaymentInfo));
+                            const additional_study = secureLocalStorage.getItem("additional_study_name");
+                            const additional_Degree = secureLocalStorage.getItem("additional_Degree_name");
+                           
                             if (additional_study) {
-                                formData.append("study", additional_study as File);
+                                formData.append("study", additional_study as string);
                             }
                             if (additional_Degree) {
-                                formData.append("Degree", additional_Degree as File);
+                                formData.append("Degree", additional_Degree as string);
                             }
                             const { success } = await additionalService.additionalRegistration(formData);
                             if (success) {
-                                const doctorId = Number(LocalStorageManager.getDoctorSerialId());
-                                setDoctorSerialNumber(doctorId);
-                                resp.OrderId && setTransactionNumber(resp.OrderId);
-                                secureLocalStorage.removeItem("additional_study");
-                                secureLocalStorage.removeItem("additional_Degree");
+                                secureLocalStorage.removeItem("study");
+                                secureLocalStorage.removeItem("Degree");
                                 Swal.fire({
                                     title: "Success",
                                     text: "Additional registration successfully completed",
@@ -273,9 +276,7 @@ const PaymentSuccess = () => {
                             formData.append("nocInfo", JSON.stringify(nocDataPaymentInfo));
                             const { success } = await nocService.nocRegistration(formData);
                             if (success) {
-                                const doctorId = Number(LocalStorageManager.getDoctorSerialId());
-                                setDoctorSerialNumber(doctorId);
-                                resp.OrderId && setTransactionNumber(resp.OrderId);
+                              
                                 Swal.fire({
                                     title: "Success",
                                     text: "Noc registration successfully completed",
@@ -293,7 +294,39 @@ const PaymentSuccess = () => {
                                 });
                             }
                         }
+                        if (regType === 'goodstandingInfo') {
+                            const goodstandingInfo = secureLocalStorage.getItem("goodstandingInfo");
+                                const goodstandingInfoDataPaymentInfo = {
+                                    ...goodstandingInfo as goodStandingFormType,
+                                     orderAmount: resp.OrderAmount,
+                                     orderId: resp.OrderId,
+                                     paymethod: resp.PaymentMethod
+                                }
+                                const formData = new FormData();
+                                formData.append("goodstandingInfo", JSON.stringify(goodstandingInfoDataPaymentInfo));
+                          
+                              const  { success } = await goodstandingService.createGoodstandingDetails(formData);
+                            if (success) {
+                              
+                                Swal.fire({
+                                    title: "Success",
+                                    text: "GoodStanding registration successfully completed",
+                                    icon: "success",
+                                    confirmButtonText: "OK",
+                                }).then(async (result) => {
+                                    if (result.isConfirmed) {
+                                        const doctorMobileno = LocalStorageManager.getDoctorMobileno();
+                                        if (doctorMobileno) {
+                                            await authService.sendSMS(doctorMobileno, 'Your Application Submitted for GoodStanding Registration to Telangana State Medical Council is under Process.').then((response) => {
+                                            }).catch(() => {
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        }
                         setIsLoader(false);
+                       
                     }
                     else {
                         setIsLoader(false);
@@ -312,10 +345,12 @@ const PaymentSuccess = () => {
                 console.log('error --------- ' + error);
             }
         })();
-    }, [doctorSerialNumber, pmrSerialNumber, fmrSerialNumber, transactionNumber]);
+    }, []);
 
     return (
+
         <>
+         <UserHeader />
             {isLoader ? (<div className="spinner-border text-success" role="status"></div>) :
                 <section className='gray-banner'>
                     <div className="container vh-75 d-flex align-items-center justify-content-center">

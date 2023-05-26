@@ -56,8 +56,8 @@ const Myprofile = () => {
                         doctor_id: data[0].DoctorId,
                         reg_date: data[0].reg_date,
                         receipt_no: data[0].receipt_no,
-                        country: data[0].country,
-                        state: data[0].state,
+                        country: data[0].countryName,
+                        state: data[0].stateName,
                         qualification: data[0].qualification,
                         exam_month: data[0].exam_month,
                         exam_year: data[0].exam_year,
@@ -139,8 +139,8 @@ const Myprofile = () => {
                     //const country = await commonService.getCountry(Number(data[0].country));
                     //const state = await commonService.getState(Number(data[0].state));
                     setNocdata({
-                        country: data[0].country,
-                        state: data[0].state,
+                        country: data[0].countryName,
+                        state: data[0].stateName,
                         councilname: data[0].councilname,
                         councilpincode: data[0].councilpincode,
                         approval_status: data[0].approval_status,
@@ -161,56 +161,7 @@ const Myprofile = () => {
     }, []);
 
 
-    const columns = [
-        {
-            Header: "Doctor Id",
-            accessor: "doctor_id"
-        },
-        {
-            Header: "Doctor Name",
-            accessor: "fullname"
-        },
-        {
-            Header: "Mobile No",
-            accessor: "mobileno"
-        },
-        {
-            Header: "PMR Reg No.",
-            accessor: "pmr_no",
-            Cell: ({ cell: { value } }: any) => {
-                return (
-                    <>
-                        <span>TSMC/PMR/</span>{value}
-                    </>
-                );
-            }
-        },
-        {
-            Header: "Reg No.",
-            accessor: "fmr_no",
-            Cell: ({ cell: { value } }: any) => {
-                return (
-                    <>
-                        <span>TSMC/FMR/</span>{value}
-                    </>
-                );
-            }
-        },
-        {
-            Header: "Status",
-            accessor: "approval_status",
-            Cell: ({ cell: { value } }: any) => {
-                return (
-                    <>
-                        {value == 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
-                        {value == 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
-                    </>
-                );
-            }
-        },
-       
-       
-    ];
+    
     useEffect(() => {
         //console.log('doctorProfile ' + JSON.stringify(doctorProfile));
         setLoading(true);
@@ -494,8 +445,8 @@ const Myprofile = () => {
                                         <td>{obj.qualification}</td>
                                         <td>{obj.exam_month}</td>
                                         <td>{obj.exam_year}</td>
-                                        <td>{obj.country}</td>
-                                        <td>{obj.state}</td>
+                                        <td>{obj.countryName}</td>
+                                        <td>{obj.stateName}</td>
                                         <td>{obj.appliedFor}</td>
                                         <td>{obj.university}</td>
                                         <td>{obj.college}</td>

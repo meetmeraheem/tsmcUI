@@ -169,17 +169,7 @@ const ProvisionalRegistration = () => {
                     extra_col1:provisionalRequestType,
                     doctorPrimaryId:doctorPrimaryId,
                 }
-                // const formData = new FormData();
-                // formData.append("provisionalInfo", JSON.stringify(provisionalInfo));
-                // if (provisionalCertificate?.file) {
-                //     formData.append("pc", provisionalCertificate?.file);
-                // }
-                // if (applicationForm?.file) {
-                //     formData.append("af", applicationForm?.file);
-                // }
-                // if (nocCertificate?.file) {
-                //     formData.append("noc", nocCertificate?.file);
-                // }
+               
                 secureLocalStorage.setItem("regType", 'provisional');
                 secureLocalStorage.setItem("provisionalInfo", provisionalInfo);
                 if (provisionalCertificate?.file) {
@@ -192,29 +182,7 @@ const ProvisionalRegistration = () => {
                     secureLocalStorage.setItem("noc", nocCertificate?.file);
                 }
                 navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'provisional'}});
-                //navigate(routes.paymentsuccess);
-                // const { success } = await provisionalService.provisionalRegistration(formData);
-                // if (success) {
-                //     if (serial) {
-                //         await commonService.updateMtSerials(serial);
-                //         provisionalSerial && await commonService.updateMtSerials(provisionalSerial);
-                //         const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
-                //         doctorPrimaryId && await doctorService.updateDoctorIdPmrId(doctorPrimaryId, doctorId, pmrNo);
-                //         LocalStorageManager.setDoctorSerialId(doctorId.toString());
-                //     }
-                //     setProvisionalCertificate(null);
-                //     setApplicationForm(null);
-                //     setNOCCertificate(null);
-                //     const doctorMobileno = LocalStorageManager.getDoctorMobileno();
-                //     if (doctorMobileno) {
-                //         await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Provisional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
-
-                //         }).catch(() => {
-
-                //         });
-                //     }
-                //     //navigate(routes.payment);
-                // }
+                
             } catch (err) {
                 Swal.fire({
                     //title: "Error",

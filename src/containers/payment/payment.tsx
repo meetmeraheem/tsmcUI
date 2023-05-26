@@ -16,7 +16,8 @@ import sslsecurelogo from "../../assets/images/ssl-secure.jpg";
 import mastercardlogo from "../../assets/images/mastercard.jpg";
 import rupaylogo from "../../assets/images/rupay.jpg";
 import { DoctorProfileType } from "../../types/doctor";
-import {RegPayDetailsFormType  } from "../../types/common";
+import { RegPayDetailsFormType } from "../../types/common";
+import { goodStandingFormType } from "../../types/common";
 import secureLocalStorage from "react-secure-storage";
 import { ProvisionalPaymentProfileType } from "../../types/provisional";
 import { FinalPaymentFormType } from "../../types/final";
@@ -26,6 +27,7 @@ import { AddQualFormType } from '../../types/additionalQuali';
 import { additionalService } from '../../lib/api/additional';
 import { finalService } from "../../lib/api/final";
 import { provisionalService } from "../../lib/api/provisional";
+import { goodstandingService } from "../../lib/api/goodstanding";
 
 
 
@@ -54,29 +56,57 @@ const Payment = () => {
             const formData = new FormData();
             formData.append("provisionalInfo", JSON.stringify(provisionalPaymentInfo));
 
-            const provisionalData = await provisionalService.getProvisionalFeeDetails(formData);
-            if (provisionalData.data) {
+            const pc = secureLocalStorage.getItem("pc");
+            const af = secureLocalStorage.getItem("af");
+            const noc = secureLocalStorage.getItem("noc");
+
+            console.log('pc', pc);
+            console.log('af', af);
+            console.log('noc', noc);
+            if (pc) {
+                formData.append("pc", pc as File);
+            }
+            if (af) {
+                formData.append("af", af as File);
+            }
+            if (noc) {
+                formData.append("noc", noc as File);
+            }
+
+            const provData = await provisionalService.getProvisionalFeeDetails(formData);
+            if (provData.data) {
                 setRegPayDetails({
-                    registrationFee:provisionalData.data.registrationFee,
-                    penalityAmount:provisionalData.data.penalityAmount,
-                    totalAmount: provisionalData.data.totalAmount,
-                    extraCharges: provisionalData.data.extraCharges,
-                    fullName:  provisionalData.data.fullName,
-                    dataOfbirth: provisionalData.data.dateofBirth,
-                    phoneNo: provisionalData.data.mobileNo,
-                    address1: provisionalData.data.address1,
-                    address2: provisionalData.data.address2,
-                    examYear: provisionalData.data.examYear,
-                    examMonth: provisionalData.data.examMonth,
-                    doctor_id:provisionalData.data.doctor_id
-            });
-                if(provisionalData.data.regType !=null && provisionalData.data.regType === "tat"){
+                    registrationFee: provData.data.registrationFee,
+                    penalityAmount: provData.data.penalityAmount,
+                    totalAmount: provData.data.totalAmount,
+                    extraCharges: provData.data.extraCharges,
+                    fullName: provData.data.fullName,
+                    dataOfbirth: provData.data.dateofBirth,
+                    phoneNo: provData.data.mobileNo,
+                    address1: provData.data.address1,
+                    address2: provData.data.address2,
+                    examYear: provData.data.examYear,
+                    examMonth: provData.data.examMonth,
+                    doctor_id: provData.data.doctor_id
+                });
+                if (provData.data.regType != null && provData.data.regType === "tat") {
                     setIsNormalReg(false);
-                }else{
+                } else {
                     setIsNormalReg(true);
                 }
-                setPayUrl(provisionalData.data.redirectUrl);
-                setPayOrderId(provisionalData.data.orderKeyId);
+                setPayUrl(provData.data.redirectUrl);
+                setPayOrderId(provData.data.orderKeyId);
+                if (provData.data.provisionalInfoData.edu_cert1 != null) {
+                    secureLocalStorage.setItem("pcName", provData.data.provisionalInfoData.edu_cert1);
+                }
+                if (provData.data.provisionalInfoData.edu_cert2 != null) {
+                    secureLocalStorage.setItem("afName", provData.data.provisionalInfoData.edu_cert2);
+                }
+                if (provData.data.provisionalInfoData.edu_cert3 != null) {
+                    secureLocalStorage.setItem("nocName", provData.data.provisionalInfoData.edu_cert3);
+                }
+
+
             }
 
         } catch (err: any) {
@@ -98,31 +128,133 @@ const Payment = () => {
             }
             const formData = new FormData();
             formData.append("finalInfo", JSON.stringify(finalPaymentInfo));
+            const af = secureLocalStorage.getItem("af");
+            const mbbs = secureLocalStorage.getItem("mbbs");
+            const noc = secureLocalStorage.getItem("noc");
+            const affidavit = secureLocalStorage.getItem("affidavit");
+            const testimonal1 = secureLocalStorage.getItem("mbtestimonal1bs");
+            const testimonal2 = secureLocalStorage.getItem("testimonal2");
+            const regOfOtherState = secureLocalStorage.getItem("regOfOtherState");
+            const screeningTestPass = secureLocalStorage.getItem("screeningTestPass");
+            const internshipComp = secureLocalStorage.getItem("internshipComp");
+            const mciEligibility = secureLocalStorage.getItem("mciEligibility");
+            const interVerification = secureLocalStorage.getItem("interVerification");
+            const mciReg = secureLocalStorage.getItem("mciReg");
+            const imr = secureLocalStorage.getItem("imr");
+
+            if (af) {
+                formData.append("af", af as File);
+            }
+            if (mbbs) {
+                formData.append("mbbs", mbbs as File);
+            }
+            if (noc) {
+                formData.append("noc", noc as File);
+            }
+            if (affidavit) {
+                formData.append("affidivit", affidavit as File);
+            }
+            if (testimonal1) {
+                formData.append("testimonal1", testimonal1 as File);
+            }
+            if (testimonal2) {
+                formData.append("testimonal2", testimonal2 as File);
+            }
+            if (regOfOtherState) {
+                formData.append("regOfOtherState", regOfOtherState as File);
+            }
+            if (screeningTestPass) {
+                formData.append("screeningTestPass", screeningTestPass as File);
+            }
+            if (internshipComp) {
+                formData.append("internshipComp", internshipComp as File);
+            }
+            if (mciEligibility) {
+                formData.append("mciEligibility", mciEligibility as File);
+            }
+            if (interVerification) {
+                formData.append("interVerification", interVerification as File);
+            }
+            if (mciReg) {
+                formData.append("mciReg", mciReg as File);
+            }
+            if (imr) {
+                formData.append("imr", imr as File);
+            }
 
             const finalData = await finalService.getFinalRegFeeDetails(formData);
             if (finalData.data) {
                 setRegPayDetails({
-                    registrationFee:finalData.data.registrationFee,
-                    penalityAmount:finalData.data.penalityAmount,
+                    registrationFee: finalData.data.registrationFee,
+                    penalityAmount: finalData.data.penalityAmount,
                     totalAmount: finalData.data.totalAmount,
                     extraCharges: finalData.data.extraCharges,
-                    fullName:  finalData.data.fullName,
+                    fullName: finalData.data.fullName,
                     dataOfbirth: finalData.data.dateofBirth,
                     phoneNo: finalData.data.mobileNo,
                     address1: finalData.data.address1,
                     address2: finalData.data.address2,
                     examYear: finalData.data.examYear,
                     examMonth: finalData.data.examMonth,
-                    doctor_id:finalData.data.doctor_id,
-                    
-            });
-            if(finalData.data.regType !=null && finalData.data.regType === "tat"){
-                setIsNormalReg(false);
-            }else{
-                setIsNormalReg(true);
-            }
+                    doctor_id: finalData.data.doctor_id,
+
+                });
+                if (finalData.data.regType != null && finalData.data.regType === "tat") {
+                    setIsNormalReg(false);
+                } else {
+                    setIsNormalReg(true);
+                }
                 setPayUrl(finalData.data.redirectUrl);
                 setPayOrderId(finalData.data.orderKeyId);
+
+                 if (finalData.data.finalRegInfoData.edu_cert1 != null) {
+                    secureLocalStorage.setItem("afName", finalData.data.finalRegInfoData.edu_cert1);
+                }
+                if (finalData.data.finalRegInfoData.edu_cert2 != null) {
+                    secureLocalStorage.setItem("mbbsName", finalData.data.finalRegInfoData.edu_cert2);
+                }
+                if (finalData.data.finalRegInfoData.edu_cert3 != null) {
+                    secureLocalStorage.setItem("nocName", finalData.data.finalRegInfoData.edu_cert3);
+                }
+                if (finalData.data.finalRegInfoData.affidivit != null) {
+                    secureLocalStorage.setItem("affidivitName", finalData.data.finalRegInfoData.affidivit);
+                }
+                if (finalData.data.finalRegInfoData.testimonal1 != null) {
+                    secureLocalStorage.setItem("testimonal1Name", finalData.data.finalRegInfoData.testimonal1);
+                }
+                if (finalData.data.finalRegInfoData.testimonal2 != null) {
+                    secureLocalStorage.setItem("testimonal2Name", finalData.data.finalRegInfoData.testimonal2);
+                }
+                if (finalData.data.finalRegInfoData.reg_other_state != null) {
+                    secureLocalStorage.setItem("regOtherStateName", finalData.data.finalRegInfoData.reg_other_state);
+                }
+
+                if (finalData.data.finalRegInfoData.screen_test != null) {
+                    secureLocalStorage.setItem("screenTestName", finalData.data.finalRegInfoData.screen_test);
+                }
+
+                if (finalData.data.finalRegInfoData.screen_test != null) {
+                    secureLocalStorage.setItem("screenTestName", finalData.data.finalRegInfoData.screen_test);
+                }
+
+                if (finalData.data.finalRegInfoData.intership_comp != null) {
+                    secureLocalStorage.setItem("internshipCompName", finalData.data.finalRegInfoData.intership_comp);
+                }
+
+                if (finalData.data.finalRegInfoData.mci_eligi != null) {
+                    secureLocalStorage.setItem("mciEligibilityName", finalData.data.finalRegInfoData.mci_eligi);
+                }
+                if (finalData.data.finalRegInfoData.inter_verif_cert != null) {
+                    secureLocalStorage.setItem("interVerificationName", finalData.data.finalRegInfoData.inter_verif_cert);
+                }
+                if (finalData.data.finalRegInfoData.mci_reg != null) {
+                    secureLocalStorage.setItem("mciRegName", finalData.data.finalRegInfoData.mci_reg);
+                }
+                if (finalData.data.finalRegInfoData.imr_certificate != null) {
+                    secureLocalStorage.setItem("imrName", finalData.data.finalRegInfoData.imr_certificate);
+                }
+
+
             }
 
         } catch (err: any) {
@@ -147,20 +279,20 @@ const Payment = () => {
             const nocData = await nocService.getNocRegDetails(formData);
             if (nocData.data) {
                 setRegPayDetails({
-                    registrationFee:nocData.data.registrationFee,
-                    penalityAmount:nocData.data.penalityAmount,
+                    registrationFee: nocData.data.registrationFee,
+                    penalityAmount: nocData.data.penalityAmount,
                     totalAmount: nocData.data.totalAmount,
                     extraCharges: nocData.data.extraCharges,
-                    fullName:  nocData.data.fullName,
+                    fullName: nocData.data.fullName,
                     dataOfbirth: nocData.data.dateofBirth,
                     phoneNo: nocData.data.mobileNo,
                     address1: nocData.data.address1,
                     address2: nocData.data.address2,
                     examYear: nocData.data.examYear,
                     examMonth: nocData.data.examMonth,
-                    doctor_id:nocData.data.doctor_id,
-                   
-            });
+                    doctor_id: nocData.data.doctor_id,
+
+                });
                 setPayUrl(nocData.data.redirectUrl);
                 setPayOrderId(nocData.data.orderKeyId);
             }
@@ -184,31 +316,48 @@ const Payment = () => {
             }
             const formData = new FormData();
             formData.append("additionalInfo", JSON.stringify(additionalDataPaymentInfo));
+            
+            const additionalStudy = secureLocalStorage.getItem("additional_study");
+            const additionalDegree = secureLocalStorage.getItem("additional_Degree");
+           
+            if (additionalStudy) {
+                formData.append("study", additionalStudy as File);
+            }
+            if (additionalDegree) {
+                formData.append("Degree", additionalDegree as File);
+            }
 
             const additionalRegData = await additionalService.getAdditionalRegFeeDetails(formData);
             if (additionalRegData.data) {
                 setRegPayDetails({
-                    registrationFee:additionalRegData.data.registrationFee,
-                    penalityAmount:additionalRegData.data.penalityAmount,
+                    registrationFee: additionalRegData.data.registrationFee,
+                    penalityAmount: additionalRegData.data.penalityAmount,
                     totalAmount: additionalRegData.data.totalAmount,
                     extraCharges: additionalRegData.data.extraCharges,
-                    fullName:  additionalRegData.data.fullName,
+                    fullName: additionalRegData.data.fullName,
                     dataOfbirth: additionalRegData.data.dateofBirth,
                     phoneNo: additionalRegData.data.mobileNo,
                     address1: additionalRegData.data.address1,
                     address2: additionalRegData.data.address2,
                     examYear: additionalRegData.data.examYear,
                     examMonth: additionalRegData.data.examMonth,
-                    doctor_id:additionalRegData.data.doctor_id,
-                   
-            });
-            if(additionalRegData.data.regType !=null && additionalRegData.data.regType === "tat"){
-                setIsNormalReg(false);
-            }else{
-                setIsNormalReg(true);
-            }
+                    doctor_id: additionalRegData.data.doctor_id,
+
+                });
+                if (additionalRegData.data.regType != null && additionalRegData.data.regType === "tat") {
+                    setIsNormalReg(false);
+                } else {
+                    setIsNormalReg(true);
+                }
                 setPayUrl(additionalRegData.data.redirectUrl);
                 setPayOrderId(additionalRegData.data.orderKeyId);
+                if (additionalRegData.data.additionalInfoData.edu_cert1 != null ) {
+                    secureLocalStorage.setItem("additional_study_name", additionalRegData.data.additionalInfoData.edu_cert1);
+                }
+                if (additionalRegData.data.additionalInfoData.edu_cert2 != null) {
+                    secureLocalStorage.setItem("additional_Degree_name", additionalRegData.data.additionalInfoData.edu_cert2 );
+                }
+
             }
 
         } catch (err: any) {
@@ -217,6 +366,48 @@ const Payment = () => {
             //setLoading(false);
         }
     }, []);
+
+   const  getGoodstandingInfoRegDetails= useCallback(async () => {
+        try {
+
+            const goodstandingInfo = secureLocalStorage.getItem("goodstandingInfo");
+            const goodstandingInfoDataPaymentInfo = {
+                ...goodstandingInfo as goodStandingFormType,
+                orderId: "",
+                orderAmount: "",
+                paymethod: ""
+            }
+            const formData = new FormData();
+            formData.append("goodstandingInfo", JSON.stringify(goodstandingInfoDataPaymentInfo));
+
+            const gsData = await goodstandingService.getGoodstandingInfoRegDetails(formData);
+            if (gsData.data) {
+                setRegPayDetails({
+                    registrationFee: gsData.data.registrationFee,
+                    penalityAmount: gsData.data.penalityAmount,
+                    totalAmount: gsData.data.totalAmount,
+                    extraCharges: gsData.data.extraCharges,
+                    fullName: gsData.data.fullName,
+                    dataOfbirth: gsData.data.dateofBirth,
+                    phoneNo: gsData.data.mobileNo,
+                    address1: gsData.data.address1,
+                    address2: gsData.data.address2,
+                    examYear: gsData.data.examYear,
+                    examMonth: gsData.data.examMonth,
+                    doctor_id: gsData.data.doctor_id,
+
+                });
+                setPayUrl(gsData.data.redirectUrl);
+                setPayOrderId(gsData.data.orderKeyId);
+            }
+
+        } catch (err: any) {
+            console.log('candidateService getProfile error', err.response);
+        } finally {
+            //setLoading(false);
+        }
+    }, []);
+
     useEffect(
         () => {
 
@@ -232,11 +423,14 @@ const Payment = () => {
             if (regType === 'additionalInfo') {
                 getAdditionalRegDetails();
             }
+            if (regType === 'goodstandingInfo') {
+                getGoodstandingInfoRegDetails();
+            }
         }, []);
 
 
 
-    const PayAndContinueForm = useCallback(async (payUrl:any,payOrderId:any) => {
+    const PayAndContinueForm = useCallback(async (payUrl: any, payOrderId: any) => {
         try {
             if (payUrl) {
                 LocalStorageManager.setOrderKeyId(payOrderId);
@@ -338,7 +532,7 @@ const Payment = () => {
                         </div>
                         <div className="card-footer text-end py-3">
                             <button type="button" onClick={() => navigate(-1)} className="btn btn-primary me-3">Back</button>
-                            <button type="button" onClick={() => PayAndContinueForm(payUrl,payOrderId)} className="btn btn-primary ps-2">Continue & Pay</button>
+                            <button type="button" onClick={() => PayAndContinueForm(payUrl, payOrderId)} className="btn btn-primary ps-2">Continue & Pay</button>
                         </div>
                     </div>
                     <div className="card shadow border-0 mb-3">
