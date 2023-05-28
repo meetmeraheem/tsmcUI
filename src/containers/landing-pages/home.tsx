@@ -89,21 +89,37 @@ const HomePage = () => {
                     dateofbirth: moment(values.dateofbirth).format('YYYY-MM-DD')
                }
                try {
-                    const message = otp + ' is your OTP to verify your signup from Telangana State Medical Council. Please do not share this with anyone. Kindly note this is valid for the next 15 minutes.';
-                    await authService.sendOTP(doctorInfo.mobileno, message).then((response) => {
-                         if (response.status === 200) {
-                              setDoctorInfoValue(doctorInfo);
-                              setIsOtpSent(true);
-                              setOTPSentMessage(Messages.OTPSuccessSentMessage);
-                              setIsOTPMessageVisible(true);
-                         }
-                    }).catch((error) => {
+                    const { data,success } = await doctorService.mobileValidation(doctorInfo.mobileno);
+                         
+                              if (success){
+
+                              if(data.mobileno !== null) {
+                                   console.log('mobile registered ' + JSON.stringify(data.length));
+                                   
+                                   Swal.fire({
+                                        text: data.mobileno+' : Mobileno already Registered',
+                                        icon: "error",
+                                        confirmButtonText: Messages.OKText,
+                                   });
+                                   return false;
+                              }else{
+                                   const message = otp + ' is your OTP to verify your signup from Telangana State Medical Council. Please do not share this with anyone. Kindly note this is valid for the next 15 minutes.';
+                                   await authService.sendOTP(doctorInfo.mobileno, message).then((response) => {
+                                   if (response.status === 200) {
+                                         setDoctorInfoValue(doctorInfo);
+                                        setIsOtpSent(true);
+                                        setOTPSentMessage(Messages.OTPSuccessSentMessage);
+                                        setIsOTPMessageVisible(true);
+                                    }
+                     }).catch((error) => {
                          setDoctorInfoValue(doctorInfo);
                          setSavedOTPNumber(otp);
                          setOTPSentMessage(Messages.OTPErrorSentMessage);
                          setIsOtpSent(true);
                          setIsOTPMessageVisible(true);
                     });
+               }
+               }
                } catch (err) {
                     console.log('error doctor signup', err);
                }
@@ -303,7 +319,7 @@ const HomePage = () => {
                     setForgetPasswordMobileNumberError(false);
                     setForgetPasswordMobileNumberErrorMessage('');
                     const { data } = await doctorService.mobileValidation(forgetPasswordMobileNumber);
-                    if (data.length > 0) {
+                     if(data.mobileno !== null) {
                          setIsMobileNumberRegistered(true);
                          const text1 = 'forgot';
                          const message = otp + ' is your OTP to verify your password from Telangana State Medical Council. Please do not share this with anyone. Kindly note this is valid for the next 15 minutes.';
@@ -642,6 +658,7 @@ const HomePage = () => {
                                                                                                                         onChange={(ev) => {
                                                                                                                              setFieldTouched(field.name);
                                                                                                                              setFieldValue(field.name, ev.target.value);
+
                                                                                                                         }}
                                                                                                                         className={`form-control col-auto ${error ? 'is-invalid' : ''
                                                                                                                              }`}
@@ -877,25 +894,7 @@ const getValidationSchema = () =>
                .required('Emailid is required.'),
           mobileno: stringYup()
                .required('Mobileno is required.')
-               .min(10, 'Mobileno 10 numbers')
-               .test('Mobileno', 'Mobileno already Registered',
-                    async function (value) {
-                         if (value && value?.length == 10) {
-                              console.log('value ' + JSON.stringify(value));
-                              const getDoctor = await doctorService.mobileValidation(value);
-                              // const { list } = await doctorService.mobileValidation({
-                              //      Mobileno: value
-                              // });
-                              if (getDoctor.data.length > 0) {
-                                   console.log('mobile registered ' + JSON.stringify(getDoctor.data.length));
-                                   return false;
-                              }
-                              return true;
-                         }
-                         return true;
-                    }
-               ),
-
+               .min(10, 'Mobileno 10 numbers'),
           password: stringYup()
                .required('Password is required.')
      });

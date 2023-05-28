@@ -40,6 +40,7 @@ export const routes = {
     admin_additional: `${urlPrefix}admin${urlPrefix}admin_additional`,
     admin_renewals: `${urlPrefix}admin${urlPrefix}admin_renewals`,
     admin_goodstanding: `${urlPrefix}admin${urlPrefix}admin_goodstanding`,
+    admin_goodstanding_view: `${urlPrefix}admin${urlPrefix}admin_goodstanding_view`,
     admin_goodstanding_mci: `${urlPrefix}admin${urlPrefix}admin_goodstanding_mci`,
     admin_noc: `${urlPrefix}admin${urlPrefix}noc`,
     admin_final_reg_view: `${urlPrefix}admin${urlPrefix}final_reg_view`,

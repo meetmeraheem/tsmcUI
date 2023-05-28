@@ -28,6 +28,11 @@ import { additionalService } from '../../lib/api/additional';
 import { finalService } from "../../lib/api/final";
 import { provisionalService } from "../../lib/api/provisional";
 import { goodstandingService } from "../../lib/api/goodstanding";
+import { renewalsFormType } from "../../types/common";
+import { renewalService } from "../../lib/api/renewals";
+
+
+
 
 
 
@@ -399,6 +404,72 @@ const Payment = () => {
                 });
                 setPayUrl(gsData.data.redirectUrl);
                 setPayOrderId(gsData.data.orderKeyId);
+                
+            }
+
+        } catch (err: any) {
+            console.log('candidateService getProfile error', err.response);
+        } finally {
+            //setLoading(false);
+        }
+    }, []);
+
+    const  getRenewalsRegFeeDetails= useCallback(async () => {
+        try {
+
+            const renewalsInfo = secureLocalStorage.getItem("finalrenewalsInfo");
+            const renewalsInfoDataPaymentInfo = {
+                ...renewalsInfo as renewalsFormType,
+                orderId: "",
+                orderAmount: "",
+                paymethod: ""
+            }
+            const formData = new FormData();
+            formData.append("finalrenewalsInfo", JSON.stringify(renewalsInfoDataPaymentInfo));
+            
+            const oldregCert = secureLocalStorage.getItem("regCertificate");
+            const renewal_af = secureLocalStorage.getItem("renewal_af");
+            const renewal_noc = secureLocalStorage.getItem("renewal_noc");
+           
+            if (oldregCert) {
+                formData.append("regCertificate", oldregCert as File);
+            }
+            if (renewal_af) {
+                formData.append("renewal_af", renewal_af as File);
+            }
+            if (renewal_noc) {
+                formData.append("renewal_noc", renewal_noc as File);
+            }
+
+            const frenewalData = await renewalService.getRenewalRegFeeDetails(formData);
+            if (frenewalData.data) {
+                setRegPayDetails({
+                    registrationFee: frenewalData.data.registrationFee,
+                    penalityAmount: frenewalData.data.penalityAmount,
+                    totalAmount: frenewalData.data.totalAmount,
+                    extraCharges: frenewalData.data.extraCharges,
+                    fullName: frenewalData.data.fullName,
+                    dataOfbirth: frenewalData.data.dateofBirth,
+                    phoneNo: frenewalData.data.mobileNo,
+                    address1: frenewalData.data.address1,
+                    address2: frenewalData.data.address2,
+                    examYear: frenewalData.data.examYear,
+                    examMonth: frenewalData.data.examMonth,
+                    doctor_id: frenewalData.data.doctor_id,
+
+                });
+                setPayUrl(frenewalData.data.redirectUrl);
+                setPayOrderId(frenewalData.data.orderKeyId);
+                
+                if (frenewalData.data.renewalData.edu_cert1 != null ) {
+                    secureLocalStorage.setItem("regCertificateName", frenewalData.data.renewalData.edu_cert1);
+                }
+                if (frenewalData.data.renewalData.edu_cert2 != null ) {
+                    secureLocalStorage.setItem("renewalafName", frenewalData.data.renewalData.edu_cert2);
+                }
+                if (frenewalData.data.renewalData.edu_cert3 != null ) {
+                    secureLocalStorage.setItem("renewalnocName", frenewalData.data.renewalData.edu_cert3);
+                }
             }
 
         } catch (err: any) {
@@ -426,6 +497,10 @@ const Payment = () => {
             if (regType === 'goodstandingInfo') {
                 getGoodstandingInfoRegDetails();
             }
+            if(regType === 'finalrenewalsInfo'){
+                getRenewalsRegFeeDetails();
+            }
+
         }, []);
 
 

@@ -15,7 +15,8 @@ import { additionalService } from '../../lib/api/additional';
 import { AddQualDataFormType } from '../../types/additionalQuali';
 import { nocService } from "../../lib/api/noc";
 import { nocFormType } from "../../types/noc";
-
+import { goodStandingFormType } from "../../types/common";
+import { goodstandingService } from "../../lib/api/goodstanding";
 
 const Myprofile = () => {
     //const doctorProfile = useSelector((state: RootState) => state.doctor.profile);
@@ -24,6 +25,7 @@ const Myprofile = () => {
     const [final, setFinal] = useState<FinalMyProfileType>();
     const [additional, setadditional] = useState<AddQualDataFormType>();
     const [Nocdata, setNocdata] = useState<nocFormType>();
+    const [GoodStanding, setGoodStanding] = useState<goodStandingFormType>();
     const [additionslGridList, setAdditionalGridList] = useState<any>([]);
     const [loading, setLoading] = useState(false)
 
@@ -53,7 +55,7 @@ const Myprofile = () => {
                     //const state = await commonService.getState(Number(data[0].state));
                     setProvisional({
                         id: data[0].id,
-                        doctor_id: data[0].DoctorId,
+                        doctor_id: data[0].doctorId,
                         reg_date: data[0].reg_date,
                         receipt_no: data[0].receipt_no,
                         country: data[0].countryName,
@@ -160,6 +162,35 @@ const Myprofile = () => {
         }
     }, []);
 
+    const getgoodStandingDetails = useCallback(async () => {
+        try {
+            const doctorSerialId = LocalStorageManager.getDoctorSerialId();
+            const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
+            if (doctorSerialId) {
+                const { data } = await goodstandingService.getGoodstandingByDoctorId(doctorSerialId);
+                if (data.length > 0) {
+                    //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
+                    //const country = await commonService.getCountry(Number(data[0].country));
+                    //const state = await commonService.getState(Number(data[0].state));
+                    setGoodStanding({
+                       
+                        createdon: data[0].added_by,
+                        posttime: data[0].posttime,
+                        modifiedon: data[0].modifiedon,
+                        status: data[0].status,
+                        added_by: data[0].added_by,
+                        approval_status:data[0].status,
+                        doctor_id: data[0].doctor_id,
+                        doctorPrimaryId:doctorPrimaryId.toString(),
+                     
+                    });
+                }
+            }
+        } catch (err) {
+            console.log('error getProvisionalDetails', err);
+        }
+    }, []);
+
 
     
     useEffect(() => {
@@ -170,6 +201,7 @@ const Myprofile = () => {
         getFinalDetails();
         getAdditionalDetails();
         getNocDetails();
+        getgoodStandingDetails();
         setLoading(false);
     }, []);
 
@@ -284,7 +316,7 @@ const Myprofile = () => {
                                                                     <i className='bi-exclamation-circle'></i> Rejected
                                                                 </span>
                                                             }
-                                                            {provisional?.approval_status == 'pen' && <Link to={'edit-provisional'} className='btn btn-primary btn-sm me-3'>Edit</Link>}
+                                                            {(provisional?.approval_status == 'pen' ||provisional?.approval_status == 'rej')  && <Link to={'edit-provisional'} className='btn btn-primary btn-sm me-3'>Edit</Link>}
                                                         </div>
                                                     </div>
                                                     <div className="w-100">
@@ -359,7 +391,7 @@ const Myprofile = () => {
                                                                     <i className='bi-exclamation-circle'></i> Rejected
                                                                 </span>
                                                             }
-                                                            {final?.approval_status == 'pen' && <Link to={'edit-final'} className='btn btn-primary btn-sm me-3'>Edit</Link>}
+                                                            {(final?.approval_status == 'pen' || final?.approval_status == 'rej') && <Link to={'edit-final'} className='btn btn-primary btn-sm me-3'>Edit</Link>}
                                                         </div>
                                                     </div>
                                                     <div className="w-100">
@@ -538,107 +570,41 @@ const Myprofile = () => {
                                         )
                                         }
               
-                                    </div>
+                                  
+            {GoodStanding&& <div className="tsmc-timeline mb-5"> <div className="tsmc-text">
+                                                <div className="d-flex align-items-center justify-content-between mb-4">
+                                                    <h1 className='fs-18 fw-700 mb-0'>GoodStanding Details</h1>
+                                                    <div>
+                                                    <div>
+                                                            {GoodStanding?.status == 'apr' &&
+                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-check-circle'></i> Approved
+                                                                </span>
+                                                            }
+                                                            {GoodStanding?.status == 'pen' &&
+                                                                <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-exclamation-circle'></i> Pending
+                                                                </span>
+                                                            }
+                                                            {GoodStanding?.status == 'rej' &&
+                                                                <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-exclamation-circle'></i> Rejected
+                                                                </span>
+                                                            }
+                                                            {/*GoodStanding?.status == 'pen' && <Link to={''} className='btn btn-primary btn-sm me-3'>Edit</Link>*/}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>      
+                                                </div>
+                                            }
+                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <div className="modal fade" id="ProvisionalEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex={-1} aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div className="modal-dialog modal-lg modal-dialog-centered">
-                    <div className="modal-content">
-                        <div className="modal-header border-bottom-0">
-                            <h1 className="modal-title fs-18 fw-700 text-center w-100" id="staticBackdropLabel">Edit Provisional Details</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                            <form action="">
-                                <div className="row mb-3">
-                                    <div className="col">
-                                        <label htmlFor="" className='mb-2'>Qualification</label>
-                                        <select name="" id="" className="form-select">
-                                            <option value="">Select</option>
-                                            <option value=""></option>
-                                        </select>
-                                    </div>
-                                    <div className="col">
-                                        <label htmlFor="" className='mb-2'>Country</label>
-                                        <select name="" id="" className="form-select">
-                                            <option value="">Select</option>
-                                            <option value=""></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="row mb-3">
-                                    <div className="col">
-                                        <label htmlFor="" className='mb-2'>State</label>
-                                        <select name="" id="" className="form-select">
-                                            <option value="">Select</option>
-                                            <option value=""></option>
-                                        </select>
-                                    </div>
-                                    <div className="col">
-                                        <label htmlFor="" className='mb-2'>University</label>
-                                        <select name="" id="" className="form-select">
-                                            <option value="">Select</option>
-                                            <option value=""></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="row mb-3">
-                                    <div className="col">
-                                        <label htmlFor="" className='mb-2'>College</label>
-                                        <select name="" id="" className="form-select">
-                                            <option value="">Select</option>
-                                            <option value=""></option>
-                                        </select>
-                                    </div>
-                                    <div className="col">
-                                        <label htmlFor="" className='mb-2'>Exam Month</label>
-                                        <select name="" id="" className="form-select">
-                                            <option value="">Select</option>
-                                            <option value=""></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="row mb-3">
-                                    <div className="col-6">
-                                        <label htmlFor="" className='mb-2'>Exam Year</label>
-                                        <input type="text" className="form-control" placeholder='Enter Exam Year' />
-                                    </div>
-                                </div>
-                                <div className="row mt-4">
-                                    <div className="col">
-                                        <div className="file-upload-box">
-                                            <i className="bi-plus-lg fs-22"></i>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <div className="file-upload-box">
-                                            <i className="bi-plus-lg fs-22"></i>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <div className="file-upload-box">
-                                            <i className="bi-plus-lg fs-22"></i>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <div className="file-upload-box">
-                                            <i className="bi-plus-lg fs-22"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div className="modal-footer border-top-0">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save Changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </>
     );
 };

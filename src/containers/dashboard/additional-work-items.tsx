@@ -20,12 +20,16 @@ const AdditionalWorkItems = () => {
 
     const columns = [
         {
+            Header: "Doctor Id",
+            accessor: "doctor_id"
+        },
+        {
             Header: "Doctor Name",
             accessor: "fullname"
         },
         {
-            Header: "Doctor Id",
-            accessor: "doctor_id"
+            Header: "Mobile No",
+            accessor: "mobileno"
         },
         {
             Header: "Reg No.",
@@ -39,29 +43,28 @@ const AdditionalWorkItems = () => {
             }
         },
         {
-            Header: "Father Name",
-            accessor: "fathername"
+            Header: "FMR Reg No.",
+            accessor: "fmr_no",
+            Cell: ({ cell: { value } }: any) => {
+                return (
+                    <>
+                        <span>TSMC/FMR/</span>{value}
+                    </>
+                );
+            }
         },
-        {
-            Header: "Mother Name",
-            accessor: "mothername"
-        },
-        {
-            Header: "Mobile No",
-            accessor: "mobileno"
-        },
-        {
-            Header: "Aadhar No",
-            accessor: "aadharcard"
-        },
+       
+       
+       
         {
             Header: "Status",
-            accessor: "approval_status",
+            accessor: "status",
             Cell: ({ cell: { value } }: any) => {
                 return (
                     <>
                         {value == 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                         {value == 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                        {value == 'rej' && <span className="alert alert-danger rounded-pill py-0 px-2 fs-12">Rejected</span>}
                     </>
                 );
             }

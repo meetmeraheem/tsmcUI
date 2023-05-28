@@ -19,15 +19,19 @@ const MyWorkItems = () => {
 
     const columns = [
         {
-            Header: "Doctor Name",
-            accessor: "fullname"
-        },
-        {
             Header: "Doctor Id",
             accessor: "doctor_id"
         },
         {
-            Header: "Reg No.",
+            Header: "Doctor Name",
+            accessor: "fullname"
+        },
+        {
+            Header: "Mobile No",
+            accessor: "mobileno"
+        },
+        {
+            Header: "PMR Reg No.",
             accessor: "pmr_no",
             Cell: ({ cell: { value } }: any) => {
                 return (
@@ -38,21 +42,19 @@ const MyWorkItems = () => {
             }
         },
         {
-            Header: "Father Name",
-            accessor: "fathername"
+            Header: "FMR Reg No.",
+            accessor: "fmr_no",
+            Cell: ({ cell: { value } }: any) => {
+                return (
+                    <>
+                        <span>TSMC/FMR/</span>{value}
+                    </>
+                );
+            }
         },
-        {
-            Header: "Mother Name",
-            accessor: "mothername"
-        },
-        {
-            Header: "Mobile No",
-            accessor: "mobileno"
-        },
-        {
-            Header: "Aadhar No",
-            accessor: "aadharcard"
-        },
+       
+        
+       
         {
             Header: "Status",
             accessor: "approval_status",
@@ -61,6 +63,7 @@ const MyWorkItems = () => {
                     <>
                         {value == 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                         {value == 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                        {value == 'rej' && <span className="alert alert-danger rounded-pill py-0 px-2 fs-12">Rejected</span>}
                     </>
                 );
             }

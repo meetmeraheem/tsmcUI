@@ -20,6 +20,8 @@ import { nocService } from "../../lib/api/noc";
 import UserHeader from "../user-panal/includes/user-header";
 import { goodStandingFormType } from "../../types/common";
 import { goodstandingService } from "../../lib/api/goodstanding";
+import { renewalsFormType } from "../../types/common";
+import { renewalService } from "../../lib/api/renewals";
 
 
 
@@ -101,13 +103,15 @@ const PaymentSuccess = () => {
                                     formData.append("noc", noc as string);
                                 }
 
-                            const { success } = await provisionalService.provisionalRegistration(formData);
+                            const { success,data } = await provisionalService.provisionalRegistration(formData);
                             if (success) {
                                 secureLocalStorage.removeItem("pc");
                                 secureLocalStorage.removeItem("af");
                                 secureLocalStorage.removeItem("noc");
                                 secureLocalStorage.removeItem("regType");
                                 const doctorMobileno = LocalStorageManager.getDoctorMobileno();
+                                 LocalStorageManager.setDoctorSerialId(data[0].doctorId.toString());
+
                                 if (doctorMobileno) {
                                     await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Provisional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
                                     }).catch(() => {
@@ -189,9 +193,10 @@ const PaymentSuccess = () => {
                             if (imr) {
                                 formData.append("imr", imr as string);
                             }
-                            const { success } = await finalService.finalRegistration(formData);
+                            const { success,data} = await finalService.finalRegistration(formData);
                             if (success) {
-                              
+                                LocalStorageManager.setDoctorSerialId(data[0].doctorId.toString());
+
                                 secureLocalStorage.removeItem("af");
                                 secureLocalStorage.removeItem("mbbs");
                                 secureLocalStorage.removeItem("noc");
@@ -325,6 +330,50 @@ const PaymentSuccess = () => {
                                 });
                             }
                         }
+                        if (regType === 'finalrenewalsInfo') {
+                            const renewalsInfo = secureLocalStorage.getItem("finalrenewalsInfo");
+                            const renewalsInfoDataPaymentInfo = {
+                                ...renewalsInfo as renewalsFormType,
+                                orderId: "",
+                                orderAmount: "",
+                                paymethod: ""
+                            }
+                            const formData = new FormData();
+                            formData.append("finalrenewalsInfo", JSON.stringify(renewalsInfoDataPaymentInfo));
+                            
+                            const oldregCert = secureLocalStorage.getItem("regCertificateName");
+                            const renewalaf = secureLocalStorage.getItem("renewalafName");
+                            const renewalnoc = secureLocalStorage.getItem("renewalnocName");
+
+                            if (oldregCert) {
+                                formData.append("regCertificate", oldregCert as string);
+                            }
+                            if (renewalaf) {
+                                formData.append("renewalaf", renewalaf as string);
+                            }
+                            if (renewalnoc) {
+                                formData.append("renewalnoc", renewalnoc as string);
+                            }
+                             const  { success } = await renewalService.createRenewalDetails(formData);
+                            if (success) {
+                              
+                                Swal.fire({
+                                    title: "Success",
+                                    text: "Final Renewal  registration successfully completed",
+                                    icon: "success",
+                                    confirmButtonText: "OK",
+                                }).then(async (result) => {
+                                    if (result.isConfirmed) {
+                                        const doctorMobileno = LocalStorageManager.getDoctorMobileno();
+                                        if (doctorMobileno) {
+                                            await authService.sendSMS(doctorMobileno, 'Your Application Submitted for GoodStanding Registration to Telangana State Medical Council is under Process.').then((response) => {
+                                            }).catch(() => {
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        }
                         setIsLoader(false);
                        
                     }
@@ -366,6 +415,7 @@ const PaymentSuccess = () => {
                                         <div className="px-3 text-center">
                                             <p className="mb-3">Your application successfully submitted to <br /> Telangana State Medical Council</p>
                                             <div className="d-flex mb-2">
+                                            <div className="row mb-3">
                                                 <div className="col d-flex">
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Doctor Id:</label>
                                                     <div className="fs-14">{doctorSerialNumber}</div>
@@ -374,21 +424,28 @@ const PaymentSuccess = () => {
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>PMR No:</label>
                                                     <div className="fs-14">{pmrSerialNumber}</div>
                                                 </div>}
+                                                </div>
+                                                <div className="row mb-3">
                                                 {fmrSerialNumber && <div className="col d-flex">
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>FMR No:</label>
                                                     <div className="fs-14">{fmrSerialNumber}</div>
                                                 </div>}
+                                              
                                                 <div className="col d-flex">
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Order Id:</label>
                                                     <div className="fs-14">{transactionNumber}</div>
                                                 </div>
+                                                <div className="row mb-3">
                                                 <div className="col d-flex">
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>PaymentTransaction Ref No :</label>
                                                     <div className="fs-14">{paymentTransactionRefNo}</div>
                                                 </div>
+                                                </div>
+                                             
                                                 <div className="col d-flex">
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Payment  Date and Time:</label>
                                                     <div className="fs-14">{paymentDateTime}</div>
+                                                </div>
                                                 </div>
                                             </div>
                                             <hr className="my-4" />
@@ -408,6 +465,7 @@ const PaymentSuccess = () => {
                                         <div className="px-4 text-center">
                                             <p className="mb-3">Opps..! <br />Something went wrong</p>
                                         </div>
+                                        <div className="row mb-3">
                                         <div className="w-150 text-center">
                                             <i className="bi-x-circle fs-42 text-danger"></i>
                                             <h1 className='fs-22 fw-700'>Payment Error for Order Id :{transactionNumber}</h1>
@@ -416,6 +474,8 @@ const PaymentSuccess = () => {
                                             <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Order Id:</label>
                                             <div className="fs-14">{transactionNumber}</div>
                                         </div>
+                                        </div>
+                                        <div className="row mb-3">
                                         <div className="col d-flex">
                                             <label htmlFor="" className='fs-14 fw-600 me-2'>PaymentTransaction Ref No:</label>
                                             <div className="fs-14">{paymentTransactionRefNo}</div>
@@ -423,6 +483,7 @@ const PaymentSuccess = () => {
                                         <div className="col d-flex">
                                             <label htmlFor="" className='fs-14 fw-600 me-2'>Payment Date and Time:</label>
                                             <div className="fs-14">{paymentDateTime}</div>
+                                        </div>
                                         </div>
                                         <div>
                                             <hr className="my-4" />

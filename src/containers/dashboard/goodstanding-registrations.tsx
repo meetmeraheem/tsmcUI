@@ -32,7 +32,8 @@ const GoodStanding = () => {
     const [users, setUsers] = useState<UserRole[]>([]);
     const [assignedUser, setAssignedUser] = useState(0);
 
-    const [statusValue, setStatusValue] = useState(null);
+    const [statusValue, setStatusValue] = useState('pen');
+
 
     const [checkBoxData, setCheckBoxData] = useState([
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
@@ -84,6 +85,7 @@ const GoodStanding = () => {
                     <>
                         {value == 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                         {value == 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                        {value == 'rej' && <span className="alert alert-danger rounded-pill py-0 px-2 fs-12">Rejected</span>}
                     </>
                 );
             }
@@ -92,7 +94,7 @@ const GoodStanding = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/final_reg_view'} state={{ finalPrimaryId: cell.data[0].finalPrimaryId, doctorPrimaryId: cell.data[0].doctorPrimaryId }}>Proceed</Link>
+                    <Link to={'/admin/admin_goodstanding_view'} state={{ finalPrimaryId: cell.data[0].finalPrimaryId, doctorPrimaryId: cell.data[0].doctorPrimaryId }}>Proceed</Link>
                 </>
             )
         },
@@ -121,7 +123,7 @@ const GoodStanding = () => {
                                     assignStatus: 'pen',
                                     assignReason: '',
                                     doctor_id: cell.data[Number(cell.row.id)].doctor_id,
-                                    assignRegType: 'final'
+                                    assignRegType: 'gs'
                                 }
                                 setAssignedList([...assignedList, doctorInfo]);
                                 setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
@@ -161,10 +163,10 @@ const GoodStanding = () => {
     const assign = useCallback(async () => {
         try {
             const assignToUser = assignedList.map((obj: any) => {
-                return { ...obj, AssignTo: assignedUser };
+                return { ...obj, assignTo: assignedUser };
             })
             const formData = new FormData();
-            formData.append("AssignmentData", JSON.stringify(assignToUser[0]));
+            formData.append("assignmentData", JSON.stringify(assignToUser));
             const { success } = await assignmentService.assignToUser(formData);           
              if (success) {
                 Swal.fire({
@@ -181,6 +183,7 @@ const GoodStanding = () => {
 
     useEffect(() => {
         getUsersByRole();
+        setStatusValue('pen');
     }, []);
 
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
@@ -236,7 +239,7 @@ const GoodStanding = () => {
             return d.isChecked === true
         });
         if (eamtyArray.length === 0) {
-            setStatusValue(null);
+            setStatusValue('');
         }
         setCheckBoxData(res);
     };

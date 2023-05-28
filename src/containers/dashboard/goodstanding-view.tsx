@@ -10,23 +10,23 @@ import { commonService } from '../../lib/api/common';
 import { doctorService } from '../../lib/api/doctot';
 import { nocService } from "../../lib/api/noc";
 import { DoctorFormType } from '../../types/doctor';
-import { AdminFinalProfileType } from '../../types/final';
 import { routes } from '../routes/routes-names';
 import { serverUrl, serverImgUrl } from '../../config/constants';
 import moment from 'moment';
 import { assignmentService } from '../../lib/api/assignments';
 import { LocalStorageManager } from '../../lib/localStorage-manager';
 import { adminNocFormType } from "../../types/noc";
-
+import { goodStandingFormType } from "../../types/common";
+import { goodstandingService } from "../../lib/api/goodstanding";
 import { authService } from '../../lib/api/auth';
 
-const FinalRegView = () => {
+const GoodStandingRegView = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { nocPrimaryId, doctorPrimaryId,assignmentId } = location.state
+    const { gsPrimaryId, doctorPrimaryId,assignmentId } = location.state
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
-    const [noc, setNoc] = useState<adminNocFormType>();
+    const [goodStanding, setGoodStanding] = useState<any>();
     const [remarks, setRemarks] = useState('');
     const [isLightBoxOpen, setIsLightBoxOpen] = useState(false);
     const [lightBoxImagePath, setLightBoxImagePath] = useState('');
@@ -45,21 +45,13 @@ const FinalRegView = () => {
         }
     };
 
-    const getFinalDetails = useCallback(async () => {
+    const getGSDetails = useCallback(async () => {
         try {
-            if (nocPrimaryId) {
-                const { data } = await nocService.getNocById(nocPrimaryId);
+            if (gsPrimaryId) {
+                const { data } = await goodstandingService.getGoodstandingById(gsPrimaryId);
                 if (data.length > 0) {
-                    const country = await commonService.getCountry(Number(data[0].country));
-                    const state = await commonService.getState(Number(data[0].state));
-                    setNoc({
-                        councilname: data[0].councilname,
-                        address1:data[0].address1,
-                        address2:data[0].address2,
-                        country: country.data[0].name,
-                        councilpincode:data[0].councilpincode,
-                        state: state.data[0].name,
-                        city: data[0].city,
+                   
+                    setGoodStanding({
                         approval_status: data[0].status,
                         receipt_no: data[0].receipt_no,
                         dd_amount:data[0].dd_amount,
@@ -74,12 +66,12 @@ const FinalRegView = () => {
 
     const submit = useCallback(async (status: any) => {
         if (status) {
-            const nocInfo = {
+            const gsInfo = {
                 approval_status: status,
                 remarks: remarks,
                 assignmnetId:assignmentId
             }
-            const { success } = await nocService.updateNoc(nocPrimaryId, nocInfo);
+            const { success } = await goodstandingService.updateGoodStanding(gsPrimaryId, gsInfo);
             if (success) {
                     Swal.fire({
                         title: "Success",
@@ -143,14 +135,14 @@ const FinalRegView = () => {
         const userTypeValue = LocalStorageManager.getUserType();
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
-        getFinalDetails();
+        getGSDetails();
     }, []);
     return (
         <>
             <div className="col-8 m-auto mb-4">
                 <div className="card">
                     <div className="card-body">
-                        <h3 className="fs-18 fw-600">NOC View</h3>
+                        <h3 className="fs-18 fw-600">GoodStanding View</h3>
                         <div className="row mb-3">
                             <div className="col-3">
                                 <div className="tsmc-doc-profile-box border-bottom-0">
@@ -233,49 +225,22 @@ const FinalRegView = () => {
                                 </div>
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Registration Date:</label>
-                                    <div className="fs-14">{noc?.reg_date ? moment(noc?.reg_date).format('DD/MM/YYYY') : 'NA'}</div>
-                                </div>
-                            </div>
-                            <div className="d-flex mb-2">
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>councilname:</label>
-                                    <div className="fs-14">{noc?.councilname ? noc?.councilname : 'NA'}</div>
-                                </div>
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Council  Address:</label>
-                                    <div className="fs-14">{noc?.address1 ? noc?.address1 + noc?.address2 : 'NA'}</div>
-                                </div>
-                            </div>
-                            <div className="d-flex mb-2">
-                               
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Country:</label>
-                                    <div className="fs-14">{noc?.country ? noc?.country : 'NA'}</div>
-                                </div>
-                            </div>
-                            <div className="d-flex mb-2">
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
-                                    <div className="fs-14">{noc?.state ? noc?.state : 'NA'}</div>
-                                </div>
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>City Name:</label>
-                                    <div className="fs-14">{noc?.city ? noc?.city : 'NA'}</div>
+                                    <div className="fs-14">{goodStanding?.reg_date ? moment(goodStanding?.reg_date).format('DD/MM/YYYY') : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'> Payment Recieved</label>
-                                    <div className="fs-14">{noc?.dd_amount ? noc?.dd_amount : 'NA'}</div>
+                                    <div className="fs-14">{goodStanding?.dd_amount ? goodStanding?.dd_amount : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Reciept No:</label>
-                                    <div className="fs-14">{noc?.receipt_no ? noc?.receipt_no : 'NA'}</div>
+                                    <div className="fs-14">{goodStanding?.receipt_no ? goodStanding?.receipt_no : 'NA'}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {userType === 'u' && noc?.approval_status === 'pen' &&
+                    {userType === 'u' && goodStanding?.approval_status === 'pen' &&
                         <div className="card-footer">
                             <div className="mb-3">
                                 <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
@@ -298,11 +263,9 @@ const FinalRegView = () => {
                     }
                 </div>
             </div>
-            <div>
-                
-            </div>
+           
         </>
     )
 }
 
-export default FinalRegView;
+export default GoodStandingRegView;

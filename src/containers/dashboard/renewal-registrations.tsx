@@ -32,7 +32,7 @@ const Renewal = () => {
     const [users, setUsers] = useState<UserRole[]>([]);
     const [assignedUser, setAssignedUser] = useState(0);
 
-    const [statusValue, setStatusValue] = useState(null);
+    const [statusValue, setStatusValue] = useState('pen');
 
     const [checkBoxData, setCheckBoxData] = useState([
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
@@ -181,6 +181,7 @@ const Renewal = () => {
 
     useEffect(() => {
         getUsersByRole();
+        setStatusValue('pen');
     }, []);
 
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
@@ -194,7 +195,7 @@ const Renewal = () => {
         setLoading(true)
 
         var newdate = moment(date).format('YYYY-MM-DD');
-        const { data } = await renewalService.getNocsByFilter(newdate, statusValue);
+        const { data } = await renewalService.getRenewalsByFilter(newdate, statusValue);
         // if (data.length > 0) {
         //     setProvisionals(data);
         // }
@@ -236,7 +237,7 @@ const Renewal = () => {
             return d.isChecked === true
         });
         if (eamtyArray.length === 0) {
-            setStatusValue(null);
+            setStatusValue('');
         }
         setCheckBoxData(res);
     };

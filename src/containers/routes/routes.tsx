@@ -45,6 +45,7 @@ import RenewalView from '../dashboard/renewals-view';
 
 import GoodStandingRegList from '../dashboard/goodstanding-registrations';
 import GoodStandingMCIView from '../dashboard/mci';
+import GoodStandingView from '../dashboard/goodstanding-view';
 import NocRegList from '../dashboard/noc-registrations';
 import NocView from '../dashboard/noc-view';
 import FinalRegView from '../dashboard/final-reg-view';
@@ -105,6 +106,8 @@ const MainRoute = () => {
 					<Route path={routes.admin_renewals} element={<RenewalRegList />} />
 					<Route path={routes.admin_goodstanding} element={<GoodStandingRegList />} />
 					<Route path={routes.admin_goodstanding_mci} element={<GoodStandingMCIView />} />
+					<Route path={routes.admin_goodstanding_view} element={<GoodStandingView />} />
+					
 					<Route path={routes.admin_noc} element={<NocRegList />} />
 					<Route path={routes.admin_final_reg_view} element={<FinalRegView />} />
 					<Route path={routes.admin_noc_reg_view} element={<NocView />} />

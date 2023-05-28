@@ -194,7 +194,7 @@ const Renewal = () => {
         setLoading(true)
 
         var newdate = moment(date).format('YYYY-MM-DD');
-        const { data } = await renewalService.getNocsByFilter(newdate, statusValue);
+        const { data } = await renewalService.getRenewalsByFilter(newdate, statusValue);
         // if (data.length > 0) {
         //     setProvisionals(data);
         // }

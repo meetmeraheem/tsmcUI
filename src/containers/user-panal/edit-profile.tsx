@@ -840,7 +840,7 @@ const UserEditProfile = () => {
                                                                             </div>
                                                                         </Files>
                                                                         <small className="text-danger mt-1">
-                                                                            {passportPhoto?.error}
+                                                                            {signature?.error}
                                                                         </small>
                                                                         {error && <small className="text-danger">{error.toString()}</small>}
                                                                     </>

@@ -60,14 +60,17 @@ const AdminSideNav = () => {
 								<Link className={(activeTab === routes.admin_final_registrations || activeTab === routes.admin_final_reg_view) ? 'nav-link active' : 'nav-link'} to={"/admin/final_registrations"}><i className="bi-person"></i> Final</Link>
 							</li><li className="nav-items">
 								<Link className={activeTab === routes.admin_additional ? 'nav-link active' : 'nav-link'} to={"/admin/admin_additional"}><i className="bi-file-person"></i> Additional Qualifications</Link>
-							</li><li className="nav-items">
-								<Link className={activeTab === routes.admin_renewals ? 'nav-link active' : 'nav-link'} to={"/admin/admin_renewals"}><i className="bi-file-person"></i> Final Renewals</Link>
-							</li><li className="nav-items">
-								<Link className={activeTab === routes.admin_goodstanding ? 'nav-link active' : 'nav-link'} to={"/admin/admin_goodstanding"}><i className="bi-file-person"></i> Good Standing</Link>
 							</li>
 							<li className="nav-items">
 								<Link className={activeTab === routes.admin_noc ? 'nav-link active' : 'nav-link'} to={"/admin/noc"}><i className="bi-person-check"></i> NOC</Link>
 							</li>
+							<li className="nav-items">
+								<Link className={activeTab === routes.admin_goodstanding ? 'nav-link active' : 'nav-link'} to={"/admin/admin_goodstanding"}><i className="bi-file-person"></i> Good Standing</Link>
+							</li>
+							<li className="nav-items">
+								<Link className={activeTab === routes.admin_renewals ? 'nav-link active' : 'nav-link'} to={"/admin/admin_renewals"}><i className="bi-file-person"></i> Final Renewals</Link>
+							</li>
+							
 							{/*<li className="nav-items">
 								<Link className={activeTab === routes.admin_goodstanding_mci ? 'nav-link active' : 'nav-link'} to={"/admin/admin_goodstanding_mci"}><i className="bi-file-person"></i> Good Standing MCI</Link>
 							</li>

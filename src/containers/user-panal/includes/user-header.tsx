@@ -74,6 +74,8 @@ const Userheader = () => {
 													<li><Link className="dropdown-item" to={isDoctorFMRNo ? '' : 'final-duplicate'}>Duplicate</Link></li>
 												</ul>
 											</li>
+											{isDoctorFMRNo ?
+											<div>
 											<li className='dropdown-submenu'>
 											<Link to='additional-qualification-registration' className="dropdown-item">Additional Qualification</Link>
 											<ul className="dropdown-menu">
@@ -82,11 +84,9 @@ const Userheader = () => {
 											</ul>
 										</li>
 										<li><Link to='/my-panal/good-standing-registration' className="dropdown-item">Good Standing</Link></li>
-										{/*<li><Link to='/my-panal/good-standing-mci-registration' className="dropdown-item">Good Standing MCI</Link></li>
-										<li><Link to='/my-panal/temporary-registration' className="dropdown-item">Temporary Registration</Link></li>*/}
 										<li><Link to='/my-panal/noc-registration' className="dropdown-item">NOC for Other State</Link></li>
 										<li><Link to='/my-panal/final-renewal' className="dropdown-item">Final Renewals </Link></li>
-										
+										</div> :''}
 										</div>
 									</li>
 									<li className="nav-item"><Link to="/" className="nav-link" onClick={signOut} aria-current="page">Sign Out</Link></li>

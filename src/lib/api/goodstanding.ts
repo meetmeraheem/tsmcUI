@@ -21,6 +21,22 @@ export const goodstandingService = {
         return responseData as ApiResponseType;
     },
 
+    async getGoodstandingByDoctorId( doctor_id: any) {
+        const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingByDoctorId/${doctor_id}`);
+        return responseData as ApiResponseType;
+    },
+    async getGoodstandingById( gsid: any) {
+        const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodstandingById/${gsid}`);
+        return responseData as ApiResponseType;
+    },
     
- 
+    async getGoodStandingByUserId( createdDate: any,userId:any,regType: any) {
+        const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingByUserId/${createdDate}/${userId}/${regType}`);
+        return responseData as ApiResponseType;
+    },
+
+    async updateGoodStanding(gsPrimaryId: number, data: any) {
+        const { data: responseData } = await axiosInstance.put(`goodstanding/updateGoodStanding/${gsPrimaryId}`, data);
+        return responseData;
+    },
 };
