@@ -420,16 +420,20 @@ const PaymentSuccess = () => {
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Doctor Id:</label>
                                                     <div className="fs-14">{doctorSerialNumber}</div>
                                                 </div>
-                                                {pmrSerialNumber && <div className="col d-flex">
+                                                </div>
+                                                </div>
+                                                <div>
+                                                <div >
+                                                {pmrSerialNumber!==0 ? <div className="col d-flex">
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>PMR No:</label>
                                                     <div className="fs-14">{pmrSerialNumber}</div>
-                                                </div>}
+                                                </div>:""}
                                                 </div>
-                                                <div className="row mb-3">
-                                                {fmrSerialNumber && <div className="col d-flex">
+                                                <div >
+                                                {fmrSerialNumber !==0?  <div className="col d-flex">
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>FMR No:</label>
                                                     <div className="fs-14">{fmrSerialNumber}</div>
-                                                </div>}
+                                                </div>:""}
                                               
                                                 <div className="col d-flex">
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Order Id:</label>

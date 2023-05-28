@@ -51,7 +51,8 @@ const ProvisionalRegistration = () => {
         edu_cert1: '',
         edu_cert2: '',
         edu_cert3: '',
-        reg_date:''
+        reg_date:'',
+        status:''
     }
     useEffect(() => {
         

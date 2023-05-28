@@ -25,4 +25,15 @@ export const renewalService = {
         const { data: responseData } = await axiosInstance.post(`renewal/createRenewal`,data);
         return responseData as ApiResponseType;
     },
+
+    async getRenewalsByDoctorId(doctorId: any) {
+        const { data: responseData } = await axiosInstance.get(`renewal/getRenewalByDoctorId/${doctorId}`);
+        return responseData as ApiResponseType;
+    },
+
+
+    async getRenewalById(renewalId: number) {
+        const { data: responseData } = await axiosInstance.get(`renewal/getRenewalById/${renewalId}`);
+        return responseData as ApiResponseType;
+    },
 };

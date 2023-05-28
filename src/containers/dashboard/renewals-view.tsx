@@ -17,15 +17,24 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { DoctorFormType } from '../../types/doctor';
 import { serverUrl, serverImgUrl } from '../../config/constants';
 import DocDefultPic from '../../assets/images/doc-default-img.jpg';
+import { renewalService } from "../../lib/api/renewals";
+import { renewalsType } from "../../types/common";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+
 
 
 const RenewalsViews = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [next, setNext] = useState(false);
-    const [Nocdata, setNocdata] = useState<nocFormType>();
+    const [isEduCert1, setIsEduCert1] = useState(false);
+    const [isEduCert2, setIsEduCert2] = useState(false);
+    const [isEduCert3, setIsEduCert3] = useState(false);
+    const [renewalsData, setRenewalsData] = useState<renewalsType>();
     const [doctor, setDoctor] = useState<DoctorFormType>();
-    const { finalPrimaryId, doctorPrimaryId } = location.state
+    const { renewalPrimaryId, doctorPrimaryId, assignmentId } = location.state
     const [userType, setUserType] = useState('');
 
     const initialFormData = useMemo(
@@ -42,14 +51,14 @@ const RenewalsViews = () => {
             modifiedon: '',
             status: '',
             added_by: 0,
-            approval_status:''
+            approval_status: ''
         }),
         []
     );
-  
-    
 
-    
+
+
+
     const getDoctorDetails = async () => {
         try {
             if (doctorPrimaryId) {
@@ -62,29 +71,19 @@ const RenewalsViews = () => {
             console.log('error countries getList', err);
         }
     };
-    const getNocDetails = useCallback(async () => {
+    const getRenewalDetails = useCallback(async () => {
         try {
-            const doctorSerialId = LocalStorageManager.getDoctorSerialId();
-            if (doctorSerialId) {
-                const { data } = await nocService.nocDataByDoctorId(doctorSerialId);
-                if (data.length > 0) {
-                    //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
-                    const country = await commonService.getCountry(Number(data[0].country));
-                    const state = await commonService.getState(Number(data[0].state));
-                    setNocdata({
-                        country: country.data[0].name,
-                        state: state.data[0].name,
-                        councilname: data[0].councilname,
-                        councilpincode: data[0].councilpincode,
-                        approval_status: data[0].approval_status,
-                        address1:data[0].address1,
-                        address2:data[0].Address2,
-                        createdon: data[0].createdon,
-                        posttime: data[0].posttime,
-                        modifiedon: data[0].modifiedon,
-                        city:data[0].city,
-                        status: data[0].status,
-                        added_by: data[0].added_by
+            if (renewalPrimaryId) {
+                const { data } = await renewalService.getRenewalById(renewalPrimaryId);
+                if (data.status != null) {
+
+                    setRenewalsData({
+                        status: data.status,
+                        reg_date: data.createdon,
+                        doctor_id: data.doctorId,
+                        edu_cert1: data.document1,
+                        edu_cert2: data.document2,
+                        edu_cert3: data.document3,
                     });
                 }
             }
@@ -96,12 +95,12 @@ const RenewalsViews = () => {
         const userTypeValue = LocalStorageManager.getUserType();
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
-        getNocDetails();
+        getRenewalDetails();
     }, []);
-    
+
     return (
         <>
-          <div className="col-8 m-auto mb-4">
+            <div className="col-8 m-auto mb-4">
                 <div className="card">
                     <div className="card-body">
                         <h3 className="fs-18 fw-600">Renewals View</h3>
@@ -179,80 +178,124 @@ const RenewalsViews = () => {
                                 </div>
                             </div>
                         </div>
-            
-                <div className="container mt-4">
-                       {Nocdata&&  <div className="tsmc-timeline mb-5">
-                       <div className="tsmc-text">
-                           <div className="d-flex align-items-center justify-content-between mb-4">
-                               <h1 className='fs-18 fw-700 mb-0'>NOC Details</h1>
-                               <div>
-                               <div>
-                                       {Nocdata?.status == 'apr' &&
-                                           <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
-                                               <i className='bi-check-circle'></i> Approved
-                                           </span>
-                                       }
-                                       {Nocdata?.status == 'pen' &&
-                                           <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
-                                               <i className='bi-exclamation-circle'></i> Pending
-                                           </span>
-                                       }
-                                       {Nocdata?.status == 'rej' &&
-                                           <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
-                                               <i className='bi-exclamation-circle'></i> Rejected
-                                           </span>
-                                       }
-                                   </div>
-                               </div>
-                           </div>
-                           <div className="w-100">
-                          
-                                   <div className="d-flex mb-2">
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>Council Name:</label>
-                                           <div className="fs-14">{Nocdata?.councilname ? Nocdata?.councilname : 'NA'}</div>
-                                       </div>
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>Council Address1</label>
-                                           <div className="fs-14">{Nocdata?.address1 ? Nocdata?.address1 : 'NA'}</div>
-                                       </div>
-                                   </div>
-                                   <div className="d-flex mb-2">
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>Council Address2</label>
-                                           <div className="fs-14">{Nocdata?.address2 ? Nocdata?.address2 : 'NA'}</div>
-                                       </div>
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>Country:</label>
-                                           <div className="fs-14">{Nocdata?.country ? Nocdata?.country : 'NA'}</div>
-                                       </div>
-                                   </div>
-                                   <div className="d-flex mb-2">
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
-                                           <div className="fs-14">{Nocdata?.state ? Nocdata?.state : 'NA'}</div>
-                                       </div>
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>city Name:</label>
-                                           <div className="fs-14">{Nocdata?.city ? Nocdata?.city : 'NA'}</div>
-                                       </div>
-                                   </div>
-                                   <div className="d-flex mb-2">
-                                       <div className="col d-flex">
-                                           <label htmlFor="" className='fs-14 fw-600 me-2'>council pincode :</label>
-                                           <div className="fs-14">{Nocdata?.councilpincode ? Nocdata?.councilpincode : 'NA'}</div>
-                                       </div>
-                                   </div>
-                           </div>
-                       </div>
-                   </div>
-                       }
-                 
+
+                        <div className="container mt-4">
+                            {renewalsData && <div className="tsmc-timeline mb-5">
+                            <div className="card-footer pb-3">
+                                    <div className="d-flex align-items-center justify-content-between mb-4">
+                                        <h1 className='fs-18 fw-700 mb-0'>Renwal Details</h1>
+                                        <div>
+                                            <div>
+                                                {renewalsData?.status == 'apr' &&
+                                                    <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
+                                                        <i className='bi-check-circle'></i> Approved
+                                                    </span>
+                                                }
+                                                {renewalsData?.status == 'pen' &&
+                                                    <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
+                                                        <i className='bi-exclamation-circle'></i> Pending
+                                                    </span>
+                                                }
+                                                {renewalsData?.status == 'rej' &&
+                                                    <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
+                                                        <i className='bi-exclamation-circle'></i> Rejected
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                        </div>
+                                   
+                                   <div>
+                                        <div className="row mt-3">
+                                <div className="col">
+                                    <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                        <p className="d-flex align-items-center" onClick={() => setIsEduCert1(!isEduCert1)}>
+                                            {renewalsData?.edu_cert1 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert1} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                        </p>
+                                    </div>
+                                </div>
+                                </div>
+                                <div className="row mt-3">
+                                <div className="col">
+                                    <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                        <p className="d-flex align-items-center" onClick={() => setIsEduCert2(!isEduCert2)}>
+                                            {renewalsData?.edu_cert2 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert2} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                        </p>
+                                    </div>
+                                </div>
+                                </div>
+                                <div className="row mt-3">
+                                <div className="col">
+                                    <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                        <p className="d-flex align-items-center" onClick={() => setIsEduCert3(!isEduCert3)}>
+                                            {renewalsData?.edu_cert3 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert3} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                        </p>
+                                    </div>
+                                </div>
+                              </div>
+
+                                        <>
+
+                                            <Lightbox
+                                                open={isEduCert1}
+                                                plugins={[Zoom]}
+                                                close={() => setIsEduCert1(false)}
+                                                slides={[
+                                                    {
+                                                        src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert1,
+                                                        alt: "edu_cert1",
+                                                        width: 3840,
+                                                        height: 2560,
+                                                        srcSet: [
+                                                            { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert1, width: 100, height: 100 },
+                                                        ]
+                                                    }
+                                                ]}
+                                            />
+                                            <Lightbox
+                                                open={isEduCert2}
+                                                plugins={[Zoom]}
+                                                close={() => setIsEduCert2(false)}
+                                                slides={[
+                                                    {
+                                                        src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert2,
+                                                        alt: "edu_cert2",
+                                                        width: 3840,
+                                                        height: 2560,
+                                                        srcSet: [
+                                                            { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert2, width: 100, height: 100 },
+                                                        ]
+                                                    }
+                                                ]}
+                                            />
+                                            <Lightbox
+                                                open={isEduCert3}
+                                                plugins={[Zoom]}
+                                                close={() => setIsEduCert3(false)}
+                                                slides={[
+                                                    {
+                                                        src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert3,
+                                                        alt: "edu_cert3",
+                                                        width: 3840,
+                                                        height: 2560,
+                                                        srcSet: [
+                                                            { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert3, width: 100, height: 100 },
+                                                        ]
+                                                    }
+                                                ]}
+                                            />
+                                        </>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            }
+
+                        </div>
+                    </div>
                 </div>
-           </div>
-           </div>
-           </div>
-           
+            </div>
+
 
 
         </>

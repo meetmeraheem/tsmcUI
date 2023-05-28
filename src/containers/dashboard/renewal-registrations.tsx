@@ -92,7 +92,7 @@ const Renewal = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/renewals_reg_view'} state={{ finalPrimaryId: cell.data[0].finalPrimaryId, doctorPrimaryId: cell.data[0].doctorPrimaryId }}>Proceed</Link>
+                    <Link to={'/admin/renewals_reg_view'} state={{ renewalPrimaryId: cell.data[0].renewalPrimaryId, doctorPrimaryId: cell.data[0].doctorPrimaryId, }}>Proceed</Link>
                 </>
             )
         },
@@ -121,7 +121,7 @@ const Renewal = () => {
                                     assignStatus: 'pen',
                                     assignReason: '',
                                     doctor_id: cell.data[Number(cell.row.id)].doctor_id,
-                                    assignRegType: 'final'
+                                    assignRegType: 'renewal'
                                 }
                                 setAssignedList([...assignedList, doctorInfo]);
                                 setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
@@ -161,10 +161,10 @@ const Renewal = () => {
     const assign = useCallback(async () => {
         try {
             const assignToUser = assignedList.map((obj: any) => {
-                return { ...obj, AssignTo: assignedUser };
+                return { ...obj, assignTo: assignedUser };
             })
             const formData = new FormData();
-            formData.append("AssignmentData", JSON.stringify(assignToUser[0]));
+            formData.append("assignmentData", JSON.stringify(assignToUser));
             const { success } = await assignmentService.assignToUser(formData);           
              if (success) {
                 Swal.fire({

@@ -17,6 +17,9 @@ import { nocService } from "../../lib/api/noc";
 import { nocFormType } from "../../types/noc";
 import { goodStandingFormType } from "../../types/common";
 import { goodstandingService } from "../../lib/api/goodstanding";
+import { renewalService } from "../../lib/api/renewals";
+import { renewalsFormType } from "../../types/common";
+
 
 const Myprofile = () => {
     //const doctorProfile = useSelector((state: RootState) => state.doctor.profile);
@@ -26,6 +29,7 @@ const Myprofile = () => {
     const [additional, setadditional] = useState<AddQualDataFormType>();
     const [Nocdata, setNocdata] = useState<nocFormType>();
     const [GoodStanding, setGoodStanding] = useState<goodStandingFormType>();
+    const [renewals, setRenewals] = useState<renewalsFormType>();
     const [additionslGridList, setAdditionalGridList] = useState<any>([]);
     const [loading, setLoading] = useState(false)
 
@@ -190,6 +194,33 @@ const Myprofile = () => {
             console.log('error getProvisionalDetails', err);
         }
     }, []);
+    const getFinalRenewalDetails = useCallback(async () => {
+        try {
+            const doctorSerialId = LocalStorageManager.getDoctorSerialId();
+            const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
+            if (doctorSerialId) {
+                const { data } = await renewalService.getRenewalsByDoctorId(doctorSerialId);
+                if (data.length > 0) {
+                    //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
+                    //const country = await commonService.getCountry(Number(data[0].country));
+                    //const state = await commonService.getState(Number(data[0].state));
+                    setRenewals({
+                        oldRegDate: data[0].posttime,
+                        posttime: data[0].posttime,
+                        modifiedon: data[0].modifiedon,
+                        status:data[0].status,
+                        approval_status: data[0].status,
+                        added_by: data[0].added_by,
+                        doctor_id: data[0].doctor_id,
+                        doctorPrimaryId:doctorPrimaryId.toString(),
+                     
+                    });
+                }
+            }
+        } catch (err) {
+            console.log('error getProvisionalDetails', err);
+        }
+    }, []);
 
 
     
@@ -202,6 +233,7 @@ const Myprofile = () => {
         getAdditionalDetails();
         getNocDetails();
         getgoodStandingDetails();
+        getFinalRenewalDetails();
         setLoading(false);
     }, []);
 
@@ -592,6 +624,32 @@ const Myprofile = () => {
                                                                 </span>
                                                             }
                                                             {/*GoodStanding?.status == 'pen' && <Link to={''} className='btn btn-primary btn-sm me-3'>Edit</Link>*/}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>      
+                                                </div>
+                                            }
+                                             {renewals&& <div className="tsmc-timeline mb-5"> <div className="tsmc-text">
+                                                <div className="d-flex align-items-center justify-content-between mb-4">
+                                                    <h1 className='fs-18 fw-700 mb-0'>Renewal Details</h1>
+                                                    <div>
+                                                    <div>
+                                                            {renewals?.status == 'apr' &&
+                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-check-circle'></i> Approved
+                                                                </span>
+                                                            }
+                                                            {renewals?.status == 'pen' &&
+                                                                <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-exclamation-circle'></i> Pending
+                                                                </span>
+                                                            }
+                                                            {renewals?.status == 'rej' &&
+                                                                <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-exclamation-circle'></i> Rejected
+                                                                </span>
+                                                            }
                                                         </div>
                                                     </div>
                                                 </div>

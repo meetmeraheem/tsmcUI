@@ -125,6 +125,7 @@ export type goodStandingFormType = {
 
   }
   export type renewalsType = {
+         status: string,
         reg_date: string,
         doctor_id: number,
         edu_cert1: string,
