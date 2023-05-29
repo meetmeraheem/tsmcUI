@@ -1,16 +1,13 @@
 import DoctorInfoCard from './includes/doctor-info';
 import { Field, FieldProps, Formik, FormikProps } from 'formik';
 import getValue from 'lodash/get';
-import { nocFormType } from "../../types/noc";
+import { nocUserFormType } from '../../types/noc';
 import { date as dateYup, object as objectYup, string as stringYup, number as numberYup } from 'yup';
 import Select from 'react-select';
 import { City, Country, State } from "../../types/common";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import moment from "moment";
-import { nocService } from "../../lib/api/noc";
-import { doctorService } from "../../lib/api/doctot";
 import { routes } from '../routes/routes-names';
-import Swal from "sweetalert2";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { commonService } from "../../lib/api/common";
 import { useNavigate } from "react-router-dom";
@@ -30,9 +27,9 @@ const NocRegistration = () => {
             councilname: '',
             address1: '',
             address2: '',
-            country: 0,
-            state: 0,
-            city: 0,
+            country: '',
+            state: '',
+            city: '',
             councilpincode: '',
             createdon: '',
             posttime: '',
@@ -86,7 +83,7 @@ const NocRegistration = () => {
         getCountries();
     }, []);
     const submitForm = useCallback(
-        async (values: nocFormType) => {
+        async (values: nocUserFormType) => {
             console.log('submitForm' + JSON.stringify(values));
             const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
             const doctorId = Number(LocalStorageManager.getDoctorSerialId());
@@ -180,9 +177,9 @@ const NocRegistration = () => {
                                     onSubmit={submitForm}
                                     enableReinitialize
                                     initialValues={initialFormData}
-                                    validationSchema={getValidationSchema()}
+                                    validationSchema={getValidationSchema}
                                 >
-                                    {(formikProps: FormikProps<nocFormType>) => {
+                                    {(formikProps: FormikProps<nocUserFormType>) => {
                                         const { isValid, handleSubmit, isSubmitting, setFieldTouched, setFieldValue, resetForm, errors } = formikProps;
                                         return (
                                            
@@ -310,13 +307,9 @@ const NocRegistration = () => {
                                                                                 return (
                                                                                     <>
                                                                                         <Select
-                                                                                            name="Country"
-                                                                                            id="Country"
+                                                                                            name="country"
                                                                                             className="react-select"
                                                                                             classNamePrefix="react-select"
-                                                                                            value={countries.find(
-                                                                                                (item) => item.id === field.value
-                                                                                            )}
                                                                                             isSearchable
                                                                                             options={countries}
                                                                                             placeholder="Select country"
@@ -358,9 +351,7 @@ const NocRegistration = () => {
                                                                                             isSearchable
                                                                                             options={states}
                                                                                             placeholder="Select state"
-                                                                                            value={states.find(
-                                                                                                (item) => item.id === field.value
-                                                                                            )}
+                                                                                           
                                                                                             onChange={(selectedOption) => {
                                                                                                 const { id, name } =
                                                                                                     selectedOption as State;
@@ -396,9 +387,7 @@ const NocRegistration = () => {
                                                                                             isSearchable
                                                                                             options={cities}
                                                                                             placeholder="Select city"
-                                                                                            value={cities.find(
-                                                                                                (item) => item.id === field.value
-                                                                                            )}
+                                                                                           
                                                                                             onChange={(selectedOption) => {
                                                                                                 const { id, name } =
                                                                                                     selectedOption as City;

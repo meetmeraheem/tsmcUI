@@ -456,11 +456,11 @@ const getValidationSchema = () =>
             .required('old reg date is required.'),
             
         edu_cert1: stringYup()
-            .required('old fmr certificate is required.'),
+            .required('FMR certificate is required.'),
          edu_cert2: stringYup()
             .required('Application Form is required.'),
         edu_cert3: stringYup()
-            .required('NOC is required.'),
+            .required('Other/previous renewal documents is required.'),
       
     });
 

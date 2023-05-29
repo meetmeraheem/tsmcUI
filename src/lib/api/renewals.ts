@@ -1,9 +1,6 @@
-import axios from 'axios';
 import { ApiResponseType } from '../../types/api';
-import { FinalFormType, GetFinalResponse } from '../../types/final';
-import { tokenManager } from '../token-manager';
 import { axiosInstance } from './index';
-import { serverUrl } from '../../config/constants';
+
 
 export const renewalService = {
    
@@ -35,5 +32,10 @@ export const renewalService = {
     async getRenewalById(renewalId: number) {
         const { data: responseData } = await axiosInstance.get(`renewal/getRenewalById/${renewalId}`);
         return responseData as ApiResponseType;
+    },
+
+    async updateRenewal(renewalId: number, data: any) {
+        const { data: responseData } = await axiosInstance.put(`renewal/updateRenewal/${renewalId}`, data);
+        return responseData;
     },
 };

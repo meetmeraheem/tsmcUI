@@ -1,12 +1,12 @@
 
-export type nocFormType = {
+export type nocUserFormType = {
    
     councilname: string,
     address1: string,
     address2: string,
-    country: number,
-    state: number,
-    city: number,
+    country: string,
+    state: string,
+    city: string,
     councilpincode: string,
     createdon: string,
     posttime: string,
@@ -15,6 +15,8 @@ export type nocFormType = {
     added_by: number,
     approval_status:string
   }
+
+
 
 
   export type adminNocFormType = {

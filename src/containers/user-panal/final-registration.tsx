@@ -15,13 +15,10 @@ import { Messages } from '../../lib/constants/messages';
 import { commonService } from '../../lib/api/common';
 import Swal from 'sweetalert2';
 import { routes } from '../routes/routes-names';
-import { finalService } from '../../lib/api/final';
 import { LocalStorageManager } from '../../lib/localStorage-manager';
-import { doctorService } from '../../lib/api/doctot';
 import { dateDuration } from '../../lib/utils/dateDuration';
 import { provisionalService } from '../../lib/api/provisional';
 import moment from 'moment';
-import { authService } from '../../lib/api/auth';
 import secureLocalStorage from 'react-secure-storage';
 
 const FinalRegistration = () => {

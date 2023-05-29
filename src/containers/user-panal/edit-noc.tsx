@@ -1,7 +1,7 @@
 import DoctorInfoCard from './includes/doctor-info';
 import { Field, FieldProps, Formik, FormikProps } from 'formik';
 import getValue from 'lodash/get';
-import { nocFormType } from "../../types/noc";
+import { nocUserFormType } from "../../types/noc";
 import { date as dateYup, object as objectYup, string as stringYup, number as numberYup } from 'yup';
 import Select from 'react-select';
 import { City, Country, State } from "../../types/common";
@@ -28,9 +28,9 @@ const EditNocViews = () => {
             councilname: '',
             address1: '',
             address2: '',
-            country: 0,
-            state: 0,
-            city: 0,
+            country: '',
+            state: '',
+            city: '',
             councilpincode: '',
             createdon: '',
             posttime: '',
@@ -84,7 +84,7 @@ const EditNocViews = () => {
         getCountries();
     }, []);
     const submitForm = useCallback(
-        async (values: nocFormType) => {
+        async (values: nocUserFormType) => {
             console.log('submitForm' + JSON.stringify(values));
             const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
             const doctorId = Number(LocalStorageManager.getDoctorSerialId());
@@ -179,7 +179,7 @@ const EditNocViews = () => {
                                     initialValues={initialFormData}
                                     validationSchema={getValidationSchema()}
                                 >
-                                    {(formikProps: FormikProps<nocFormType>) => {
+                                    {(formikProps: FormikProps<nocUserFormType>) => {
                                         const { isValid, handleSubmit, isSubmitting, setFieldTouched, setFieldValue, resetForm, errors } = formikProps;
                                         return (
                                            

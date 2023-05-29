@@ -118,6 +118,7 @@ const MainRoute = () => {
 					<Route path={routes.admin_notifications} element={<AdminNotifications />} />
 					<Route path={routes.admin_settings} element={<AdminSettings />} />
 					<Route path={routes.admin_logout} element={<AdminLogout />} />
+
 				</Route>
 			</Routes>
 		</Router>

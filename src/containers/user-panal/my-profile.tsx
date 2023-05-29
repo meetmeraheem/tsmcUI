@@ -14,7 +14,7 @@ import { serverUrl, serverImgUrl } from '../../config/constants';
 import { additionalService } from '../../lib/api/additional';
 import { AddQualDataFormType } from '../../types/additionalQuali';
 import { nocService } from "../../lib/api/noc";
-import { nocFormType } from "../../types/noc";
+import { nocUserFormType } from "../../types/noc";
 import { goodStandingFormType } from "../../types/common";
 import { goodstandingService } from "../../lib/api/goodstanding";
 import { renewalService } from "../../lib/api/renewals";
@@ -27,7 +27,7 @@ const Myprofile = () => {
     const [provisional, setProvisional] = useState<ProvisionalMyProfileType>();
     const [final, setFinal] = useState<FinalMyProfileType>();
     const [additional, setadditional] = useState<AddQualDataFormType>();
-    const [Nocdata, setNocdata] = useState<nocFormType>();
+    const [Nocdata, setNocdata] = useState<nocUserFormType>();
     const [GoodStanding, setGoodStanding] = useState<goodStandingFormType>();
     const [renewals, setRenewals] = useState<renewalsFormType>();
     const [additionslGridList, setAdditionalGridList] = useState<any>([]);

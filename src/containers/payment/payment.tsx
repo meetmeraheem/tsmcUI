@@ -21,7 +21,7 @@ import { goodStandingFormType } from "../../types/common";
 import secureLocalStorage from "react-secure-storage";
 import { ProvisionalPaymentProfileType } from "../../types/provisional";
 import { FinalPaymentFormType } from "../../types/final";
-import { nocFormType } from "../../types/noc";
+import { nocUserFormType } from "../../types/noc";
 import { nocService } from "../../lib/api/noc";
 import { AddQualFormType } from '../../types/additionalQuali';
 import { additionalService } from '../../lib/api/additional';
@@ -273,7 +273,7 @@ const Payment = () => {
 
             const nocInfo = secureLocalStorage.getItem("nocInfo");
             const nocDataPaymentInfo = {
-                ...nocInfo as nocFormType,
+                ...nocInfo as nocUserFormType,
                 orderAmount: "",
                 orderId: "",
                 paymethod: ""

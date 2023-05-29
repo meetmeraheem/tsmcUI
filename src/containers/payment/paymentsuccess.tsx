@@ -14,7 +14,7 @@ import { ProvisionalFormType, ProvisionalPaymentProfileType } from "../../types/
 import { FinalFormType, FinalPaymentFormType } from "../../types/final";
 import { finalService } from "../../lib/api/final";
 import { additionalService } from '../../lib/api/additional';
-import { nocFormType } from "../../types/noc";
+import { nocUserFormType } from "../../types/noc";
 import { AddQualFormType } from '../../types/additionalQuali';
 import { nocService } from "../../lib/api/noc";
 import UserHeader from "../user-panal/includes/user-header";
@@ -32,56 +32,29 @@ const PaymentSuccess = () => {
     //const location = useLocation();
     // const { orderid } = location.state
     
-    const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [isLoader, setIsLoader] = useState(true);
-    const [paymentSerial, setPaymentSerial] = useState(0);
     const [doctorSerialNumber, setDoctorSerialNumber] = useState(0);
     const [pmrSerialNumber, setPMRSerialNumber] = useState(0);
     const [fmrSerialNumber, setFMRSerialNumber] = useState(0);
-    const [transactionNumber, setTransactionNumber] = useState('');
-    const [respOrderId, setRespOrderId] = useState('');
-    const [paymentTransactionRefNo, setPaymentTransactionRefNo] = useState('');
-    const [paymentResponseText, setPaymentResponseText] = useState('');
-    const [paymentDateTime, setpaymentDateTime] = useState('');
-    const [respOrderAmt, setRespOrderAmt] = useState('');
+    const [transactionMsg, setTransactionMsg] = useState('');
 
 
     useEffect(() => {
         (async () => {
 
             try {
-                const orderKeyId = LocalStorageManager.getOrderKeyId();
-                console.log('orderKeyId ----: ' + orderKeyId);
-
-                //const data = await commonService.orderDetails(orderKeyId, '31921');
-
-                const { success, data } = await commonService.getJavaOrderDetails(orderKeyId);
-
-                if (success) {
-                    let resp = JSON.parse(data);
-                    console.log('order details ----: ' + JSON.stringify(resp));
-                    if (resp && resp.OrderId && resp.OrderId !== null && resp.OrderId !== "" && resp.PaymentResponseText === "Approved") {
-                        setPaymentSuccess(true);
-                        setRespOrderId(resp.OrderId);
-                        setPaymentTransactionRefNo(resp.PaymentTransactionRefNo);
-                        setPaymentResponseText(resp.PaymentResponseText);
-                        setpaymentDateTime(resp.PaymentDateTime);
-                        setRespOrderAmt(resp.OrderAmount);
-                         setTransactionNumber(resp.OrderId);
+                         setIsLoader(true);
+                         const respOrderKeyId = LocalStorageManager.getOrderKeyId();
                          const doctorId = Number(LocalStorageManager.getDoctorSerialId());
                          setDoctorSerialNumber(doctorId);
-                        console.log('Payment OrderId ' + resp.OrderId + ' ------ ' + resp.OrderId);
-                        const regType = secureLocalStorage.getItem("regType");
-
-
+                         const regType = secureLocalStorage.getItem("regType");
+                         console.log('orderKeyId ----: ' + respOrderKeyId);
+                        
                         if (regType === 'provisional') {
                             const provisionalInfo = secureLocalStorage.getItem("provisionalInfo");
                             const provisionalPaymentInfo = {
                                 ...provisionalInfo as ProvisionalPaymentProfileType,
-                                recept_date: moment().format('YYYY-MM-DD'),
-                                dd_amount: resp.OrderAmount,
-                                receipt_no: resp.OrderId,
-                                paymethod: resp.PaymentMethod
+                                orderKeyId:respOrderKeyId
 
                             }
                             const formData = new FormData();
@@ -103,8 +76,10 @@ const PaymentSuccess = () => {
                                     formData.append("noc", noc as string);
                                 }
 
-                            const { success,data } = await provisionalService.provisionalRegistration(formData);
+                            const { success,data,message} = await provisionalService.provisionalRegistration(formData);
                             if (success) {
+                                setIsLoader(false);
+                                setTransactionMsg(message);
                                 secureLocalStorage.removeItem("pc");
                                 secureLocalStorage.removeItem("af");
                                 secureLocalStorage.removeItem("noc");
@@ -119,7 +94,7 @@ const PaymentSuccess = () => {
                                 }
                                 Swal.fire({
                                     title: "Success",
-                                    text: "Provisional Successfully Registered",
+                                    text: message,
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then((result) => {
@@ -134,9 +109,7 @@ const PaymentSuccess = () => {
                             const finalInfo = secureLocalStorage.getItem("finalInfo");
                             const finalPaymentInfo = {
                                 ...finalInfo as FinalPaymentFormType,
-                                orderAmount: resp.OrderAmount,
-                                orderId: resp.OrderId,
-                                paymethod: resp.PaymentMethod
+                                orderKeyId:respOrderKeyId
                             }
                             const formData = new FormData();
                             formData.append("finalInfo", JSON.stringify(finalPaymentInfo));
@@ -193,10 +166,11 @@ const PaymentSuccess = () => {
                             if (imr) {
                                 formData.append("imr", imr as string);
                             }
-                            const { success,data} = await finalService.finalRegistration(formData);
+                            const { success,data,message} = await finalService.finalRegistration(formData);
                             if (success) {
+                                setIsLoader(false);
                                 LocalStorageManager.setDoctorSerialId(data[0].doctorId.toString());
-
+                                setTransactionMsg(message);
                                 secureLocalStorage.removeItem("af");
                                 secureLocalStorage.removeItem("mbbs");
                                 secureLocalStorage.removeItem("noc");
@@ -231,9 +205,7 @@ const PaymentSuccess = () => {
                             const additionalInfo = secureLocalStorage.getItem("additionalInfo");
                             const additionalDataPaymentInfo = {
                                 ...additionalInfo as AddQualFormType,
-                                orderAmount: resp.OrderAmount,
-                                orderId: resp.OrderId,
-                                paymethod: resp.PaymentMethod
+                                orderKeyId:respOrderKeyId
                             }
                             const formData = new FormData();
                             formData.append("additionalInfo", JSON.stringify(additionalDataPaymentInfo));
@@ -246,8 +218,11 @@ const PaymentSuccess = () => {
                             if (additional_Degree) {
                                 formData.append("Degree", additional_Degree as string);
                             }
-                            const { success } = await additionalService.additionalRegistration(formData);
+                            const { success,message } = await additionalService.additionalRegistration(formData);
                             if (success) {
+                                setIsLoader(false);
+                                setTransactionMsg(message);
+
                                 secureLocalStorage.removeItem("study");
                                 secureLocalStorage.removeItem("Degree");
                                 Swal.fire({
@@ -271,17 +246,16 @@ const PaymentSuccess = () => {
                         if (regType === 'nocInfo') {
                             const nocInfo = secureLocalStorage.getItem("nocInfo");
                             const nocDataPaymentInfo = {
-                                ...nocInfo as nocFormType,
-                                orderAmount: resp.OrderAmount,
-                                orderId: resp.OrderId,
-                                paymethod: resp.PaymentMethod
+                                ...nocInfo as nocUserFormType,
+                                orderKeyId:respOrderKeyId
 
                             }
                             const formData = new FormData();
                             formData.append("nocInfo", JSON.stringify(nocDataPaymentInfo));
-                            const { success } = await nocService.nocRegistration(formData);
+                            const { success,message } = await nocService.nocRegistration(formData);
                             if (success) {
-                              
+                                setIsLoader(false);
+                                setTransactionMsg(message);
                                 Swal.fire({
                                     title: "Success",
                                     text: "Noc registration successfully completed",
@@ -303,16 +277,15 @@ const PaymentSuccess = () => {
                             const goodstandingInfo = secureLocalStorage.getItem("goodstandingInfo");
                                 const goodstandingInfoDataPaymentInfo = {
                                     ...goodstandingInfo as goodStandingFormType,
-                                     orderAmount: resp.OrderAmount,
-                                     orderId: resp.OrderId,
-                                     paymethod: resp.PaymentMethod
+                                    orderKeyId:respOrderKeyId
                                 }
                                 const formData = new FormData();
                                 formData.append("goodstandingInfo", JSON.stringify(goodstandingInfoDataPaymentInfo));
                           
-                              const  { success } = await goodstandingService.createGoodstandingDetails(formData);
+                              const  { success,message } = await goodstandingService.createGoodstandingDetails(formData);
                             if (success) {
-                              
+                                setIsLoader(false);
+                                setTransactionMsg(message);
                                 Swal.fire({
                                     title: "Success",
                                     text: "GoodStanding registration successfully completed",
@@ -334,9 +307,7 @@ const PaymentSuccess = () => {
                             const renewalsInfo = secureLocalStorage.getItem("finalrenewalsInfo");
                             const renewalsInfoDataPaymentInfo = {
                                 ...renewalsInfo as renewalsFormType,
-                                orderId: "",
-                                orderAmount: "",
-                                paymethod: ""
+                                orderKeyId:respOrderKeyId
                             }
                             const formData = new FormData();
                             formData.append("finalrenewalsInfo", JSON.stringify(renewalsInfoDataPaymentInfo));
@@ -354,9 +325,10 @@ const PaymentSuccess = () => {
                             if (renewalnoc) {
                                 formData.append("renewalnoc", renewalnoc as string);
                             }
-                             const  { success } = await renewalService.createRenewalDetails(formData);
+                             const  { success,message } = await renewalService.createRenewalDetails(formData);
                             if (success) {
-                              
+                                setIsLoader(false);
+                                setTransactionMsg(message);
                                 Swal.fire({
                                     title: "Success",
                                     text: "Final Renewal  registration successfully completed",
@@ -374,23 +346,8 @@ const PaymentSuccess = () => {
                                 });
                             }
                         }
-                        setIsLoader(false);
-                       
-                    }
-                    else {
-                        setIsLoader(false);
-                        setPaymentSuccess(false);
-                        setRespOrderId(resp.OrderId);
-                        setPaymentTransactionRefNo(resp.PaymentTransactionRefNo);
-                        setPaymentResponseText(resp.PaymentResponseText);
-                        setpaymentDateTime(resp.PaymentDateTime);
-                    }
-                } else {
-                    alert("Error" + data);
-                }
-            } catch (error) {
+             } catch (error) {
                 setIsLoader(false);
-                setPaymentSuccess(false);
                 console.log('error --------- ' + error);
             }
         })();
@@ -403,8 +360,6 @@ const PaymentSuccess = () => {
             {isLoader ? (<div className="spinner-border text-success" role="status"></div>) :
                 <section className='gray-banner'>
                     <div className="container vh-75 d-flex align-items-center justify-content-center">
-                        {/* Payment Success message */}
-                        {paymentSuccess &&
                             <div className="col-5">
                                 <div className="card shadow border-0 p-4">
                                     <div className="card-body">
@@ -416,10 +371,7 @@ const PaymentSuccess = () => {
                                             <p className="mb-3">Your application successfully submitted to <br /> Telangana State Medical Council</p>
                                             <div className="d-flex mb-2">
                                             <div className="row mb-3">
-                                                <div className="col d-flex">
-                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Doctor Id:</label>
-                                                    <div className="fs-14">{doctorSerialNumber}</div>
-                                                </div>
+                                               
                                                 </div>
                                                 </div>
                                                 <div>
@@ -434,21 +386,8 @@ const PaymentSuccess = () => {
                                                     <label htmlFor="" className='fs-14 fw-600 me-2'>FMR No:</label>
                                                     <div className="fs-14">{fmrSerialNumber}</div>
                                                 </div>:""}
-                                              
                                                 <div className="col d-flex">
-                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Order Id:</label>
-                                                    <div className="fs-14">{transactionNumber}</div>
-                                                </div>
-                                                <div className="row mb-3">
-                                                <div className="col d-flex">
-                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>PaymentTransaction Ref No :</label>
-                                                    <div className="fs-14">{paymentTransactionRefNo}</div>
-                                                </div>
-                                                </div>
-                                             
-                                                <div className="col d-flex">
-                                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Payment  Date and Time:</label>
-                                                    <div className="fs-14">{paymentDateTime}</div>
+                                                    <div className="fs-14">{transactionMsg}</div>
                                                 </div>
                                                 </div>
                                             </div>
@@ -460,45 +399,6 @@ const PaymentSuccess = () => {
                                     </div>
                                 </div>
                             </div>
-                        }
-                        {/* Payment Error message */}
-                        {!paymentSuccess &&
-                            <div className="col-6">
-                                <div className="card shadow border-0 p-4">
-                                    <div className="card-body">
-                                        <div className="px-4 text-center">
-                                            <p className="mb-3">Opps..! <br />Something went wrong</p>
-                                        </div>
-                                        <div className="row mb-3">
-                                        <div className="w-150 text-center">
-                                            <i className="bi-x-circle fs-42 text-danger"></i>
-                                            <h1 className='fs-22 fw-700'>Payment Error for Order Id :{transactionNumber}</h1>
-                                        </div>
-                                        <div className="col d-flex">
-                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Order Id:</label>
-                                            <div className="fs-14">{transactionNumber}</div>
-                                        </div>
-                                        </div>
-                                        <div className="row mb-3">
-                                        <div className="col d-flex">
-                                            <label htmlFor="" className='fs-14 fw-600 me-2'>PaymentTransaction Ref No:</label>
-                                            <div className="fs-14">{paymentTransactionRefNo}</div>
-                                        </div>
-                                        <div className="col d-flex">
-                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Payment Date and Time:</label>
-                                            <div className="fs-14">{paymentDateTime}</div>
-                                        </div>
-                                        </div>
-                                        <div>
-                                            <hr className="my-4" />
-                                            <div className="w-400 text-center mt-3">
-                                                <button type="button" onClick={() => { navigate(routes.userpanal); }} className="btn btn-primary">Back to Profile</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
                     </div>
                 </section>
 

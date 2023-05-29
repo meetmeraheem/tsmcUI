@@ -1,6 +1,6 @@
 import { Field, FieldProps, Formik, FormikProps } from 'formik';
 import getValue from 'lodash/get';
-import { nocFormType } from "../../types/noc";
+import { nocUserFormType } from "../../types/noc";
 import { date as dateYup, object as objectYup, string as stringYup, number as numberYup } from 'yup';
 import Select from 'react-select';
 import { City, Country, State } from "../../types/common";
@@ -22,6 +22,7 @@ import { renewalsType } from "../../types/common";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import { authService } from '../../lib/api/auth';
 
 
 
@@ -36,6 +37,7 @@ const RenewalsViews = () => {
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const { renewalPrimaryId, doctorPrimaryId, assignmentId } = location.state
     const [userType, setUserType] = useState('');
+    const [remarks, setRemarks] = useState('');
 
     const initialFormData = useMemo(
         () => ({
@@ -97,6 +99,75 @@ const RenewalsViews = () => {
         getDoctorDetails();
         getRenewalDetails();
     }, []);
+
+    const submit = useCallback(async (status: any) => {
+        if (status) {
+            const renewalInfo = {
+                approval_status: status,
+                remarks: remarks,
+                assignmnetId:assignmentId
+            }
+
+            const { success } = await renewalService.updateRenewal(renewalPrimaryId, renewalInfo);
+                if (success) {
+                    Swal.fire({
+                        title: "Success",
+                        text: "Renewal successfully approved",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            if (doctor?.mobileno) {
+                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
+                                    
+                                }).catch(() => {
+
+                                });
+                            }
+                            if (userType === 'a') {
+                                navigate(routes.provisional_registrations);
+                            }
+                            if (userType === 'u') {
+                                navigate(routes.admin_my_work_items);
+                            }
+                        }
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: "",
+                        text: "Provisional registration rejected",
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            if (doctor?.mobileno) {
+                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Rejected from Telangana State Medical Council.').then((response) => {
+                                    
+                                }).catch(() => {
+
+                                });
+                            }
+                            if (userType === 'a') {
+                                navigate(routes.provisional_registrations);
+                            }
+                            if (userType === 'u') {
+                                navigate(routes.admin_my_work_items);
+                            }
+                        }
+                    });
+                }
+            
+        }
+        else {
+            Swal.fire({
+                //title: "Error",
+                text: "something went wrong",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+    }, [remarks]);
 
     return (
         <>
@@ -180,12 +251,11 @@ const RenewalsViews = () => {
                         </div>
 
                         <div className="container mt-4">
-                            {renewalsData && <div className="tsmc-timeline mb-5">
-                            <div className="card-footer pb-3">
-                                    <div className="d-flex align-items-center justify-content-between mb-4">
-                                        <h1 className='fs-18 fw-700 mb-0'>Renwal Details</h1>
-                                        <div>
-                                            <div>
+                            {renewalsData && 
+                                        <div className="row tsmc-timeline mb-5">
+                                          <h1 className='col fs-18 fw-700 mb-0'>Renwal Details</h1>
+                                      
+                                            <div className="col text-end">
                                                 {renewalsData?.status == 'apr' &&
                                                     <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
                                                         <i className='bi-check-circle'></i> Approved
@@ -201,8 +271,7 @@ const RenewalsViews = () => {
                                                         <i className='bi-exclamation-circle'></i> Rejected
                                                     </span>
                                                 }
-                                            </div>
-                                        </div>
+                                            
                                         </div>
                                    
                                    <div>
@@ -233,7 +302,27 @@ const RenewalsViews = () => {
                                     </div>
                                 </div>
                               </div>
-
+                              {userType === 'u' && renewalsData?.status === 'pen' &&
+                        <div className="card-footer">
+                            <div className="mb-3">
+                                <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
+                                <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
+                            </div>
+                            <div className='d-flex'>
+                                <div className="col">
+                                    <button type="submit" onClick={() => {
+                                        submit('rej');
+                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                                </div>
+                                <div className="col text-end">
+                                    <button type="submit"
+                                        onClick={() => {
+                                            submit('apr');
+                                        }} className='btn btn-success'><i className="bi-check-circle"></i> Approve</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
                                         <>
 
                                             <Lightbox
@@ -287,7 +376,7 @@ const RenewalsViews = () => {
                                         </>
                                     </div>
                                 </div>
-                            </div>
+                            
                            
                             }
 
