@@ -722,6 +722,7 @@ const UserEditProfile = () => {
                                                         </Field>
                                                     </div>
                                                 </div>
+                                                <div className="row mb-3">
                                                 <div className="d-flex justify-content-center my-5">
                                                     <div className="col-3 pe-3">
                                                         <Field name="passphoto">
@@ -787,7 +788,10 @@ const UserEditProfile = () => {
                                                             }}
                                                         </Field>
                                                     </div>
-                                                    <div className="col-3 ps-3">
+                                                    </div>
+                                                    <div className="row mb-3 ">
+                                                      <div className="d-flex justify-content-center my-5">  
+                                                    <div className="col-3 pe-3">
                                                         <Field name="signature">
                                                             {(fieldProps: FieldProps) => {
                                                                 const { field, form } = fieldProps;
@@ -848,6 +852,8 @@ const UserEditProfile = () => {
                                                             }}
                                                         </Field>
                                                     </div>
+                                                </div>
+                                                </div>
                                                 </div>
                                             </div>
                                         </div>

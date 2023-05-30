@@ -94,7 +94,7 @@ const PaymentSuccess = () => {
                                 }
                                 Swal.fire({
                                     title: "Success",
-                                    text: message,
+                                    text: "Provisional registration successfully completed",
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then((result) => {
@@ -102,6 +102,9 @@ const PaymentSuccess = () => {
                                         // navigate(routes.userpanal);
                                     }
                                 });
+                            }else{
+                                setIsLoader(false);
+                                setTransactionMsg(message);
                             }
                         }
 
@@ -199,6 +202,9 @@ const PaymentSuccess = () => {
                                         }
                                     }
                                 });
+                            }else{
+                                setIsLoader(false);
+                                setTransactionMsg(message);
                             }
                         }
                         if (regType === 'additionalInfo') {
@@ -241,6 +247,9 @@ const PaymentSuccess = () => {
                                         }
                                     }
                                 });
+                            }else{
+                                setIsLoader(false);
+                                setTransactionMsg(message);
                             }
                         }
                         if (regType === 'nocInfo') {
@@ -271,6 +280,9 @@ const PaymentSuccess = () => {
                                         }
                                     }
                                 });
+                            }else{
+                                setIsLoader(false);
+                                setTransactionMsg(message);
                             }
                         }
                         if (regType === 'goodstandingInfo') {
@@ -301,6 +313,9 @@ const PaymentSuccess = () => {
                                         }
                                     }
                                 });
+                            }else{
+                                setIsLoader(false);
+                                setTransactionMsg(message);
                             }
                         }
                         if (regType === 'finalrenewalsInfo') {
@@ -344,7 +359,11 @@ const PaymentSuccess = () => {
                                         }
                                     }
                                 });
+                            }else{
+                                setIsLoader(false);
+                                setTransactionMsg(message);
                             }
+
                         }
              } catch (error) {
                 setIsLoader(false);
@@ -357,9 +376,29 @@ const PaymentSuccess = () => {
 
         <>
          <UserHeader />
-            {isLoader ? (<div className="spinner-border text-success" role="status"></div>) :
+            {isLoader ? (
+              <div className="d-flex justify-content-center">
+              <div className="spinner-border text-success mt-5" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+                )  :
                 <section className='gray-banner'>
-                    <div className="container vh-75 d-flex align-items-center justify-content-center">
+                   {transactionMsg.includes("Failed")? 
+                    <div className="card-body">
+                  
+                                        <div className="w-100 text-center">
+                                            <i className="bi-x-circle fs-42 text-danger"></i>
+                                            <h1 className='fs-22 fw-700'>Payment Error</h1>
+                                        </div>
+                                        <div className="px-3 text-center">
+                                            <p className="mb-3 text-muted">{transactionMsg}</p>
+                                            <hr className="my-4" />
+                                            <button type="button" onClick={() => { navigate(routes.userpanal); }} className="btn btn-primary">Back to Profile</button>
+                                        </div>
+                                    </div>
+
+                   :<div className="container vh-75 d-flex align-items-center justify-content-center">
                             <div className="col-5">
                                 <div className="card shadow border-0 p-4">
                                     <div className="card-body">
@@ -387,7 +426,7 @@ const PaymentSuccess = () => {
                                                     <div className="fs-14">{fmrSerialNumber}</div>
                                                 </div>:""}
                                                 <div className="col d-flex">
-                                                    <div className="fs-14">{transactionMsg}</div>
+                                                    <div className="fs-14 ">{transactionMsg}</div>
                                                 </div>
                                                 </div>
                                             </div>
@@ -399,7 +438,7 @@ const PaymentSuccess = () => {
                                     </div>
                                 </div>
                             </div>
-                    </div>
+                    </div>}
                 </section>
 
             }

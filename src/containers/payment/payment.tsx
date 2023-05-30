@@ -40,6 +40,8 @@ const Payment = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { doctor_id, regType } = location.state
+    const [isLoader, setIsLoader] = useState(true);
+
     const getDate = moment().format('YYYY-MM-DD');
     const [regPayDetails, setRegPayDetails] = useState<RegPayDetailsFormType | null>(null);
     const [isNormalReg, setIsNormalReg] = useState(true);
@@ -117,7 +119,7 @@ const Payment = () => {
         } catch (err: any) {
             console.log('candidateService getProfile error', err.response);
         } finally {
-            //setLoading(false);
+            setIsLoader(false);
         }
     }, []);
 
@@ -265,7 +267,7 @@ const Payment = () => {
         } catch (err: any) {
             console.log('candidateService getProfile error', err.response);
         } finally {
-            //setLoading(false);
+            setIsLoader(false);
         }
     }, []);
     const getNocRegDetails = useCallback(async () => {
@@ -305,7 +307,7 @@ const Payment = () => {
         } catch (err: any) {
             console.log('candidateService getProfile error', err.response);
         } finally {
-            //setLoading(false);
+            setIsLoader(false);
         }
     }, []);
 
@@ -368,7 +370,7 @@ const Payment = () => {
         } catch (err: any) {
             console.log('candidateService getProfile error', err.response);
         } finally {
-            //setLoading(false);
+            setIsLoader(false);
         }
     }, []);
 
@@ -410,7 +412,7 @@ const Payment = () => {
         } catch (err: any) {
             console.log('candidateService getProfile error', err.response);
         } finally {
-            //setLoading(false);
+            setIsLoader(false);
         }
     }, []);
 
@@ -475,7 +477,7 @@ const Payment = () => {
         } catch (err: any) {
             console.log('candidateService getProfile error', err.response);
         } finally {
-            //setLoading(false);
+            setIsLoader(false);
         }
     }, []);
 
@@ -520,7 +522,15 @@ const Payment = () => {
     return (
         <>
             <UserHeader />
-            <section className='gray-banner'>
+
+              {isLoader ? (
+              <div className="d-flex justify-content-center">
+              <div className="spinner-border text-success mt-5" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+                ) :
+              <section className='gray-banner'>
                 <div className="col-7 m-auto mt-4">
                     <div className="card mb-3 shadow border-0">
                         <div className="card-header">
@@ -628,7 +638,7 @@ const Payment = () => {
                     </div>
 
                 </div>
-            </section>
+            </section>}
         </>
     )
 };

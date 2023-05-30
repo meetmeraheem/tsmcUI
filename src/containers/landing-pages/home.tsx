@@ -471,35 +471,40 @@ const HomePage = () => {
                                    <div className='tsmc-main-options'>
                                         <div className="tsmc-option-img"><i className="bi-bell"></i></div>
                                         <div className="tsmc-option-title">
-                                             <h2 className='fs-16 fw-700'>Notifications</h2>
+                                             <h2 className='fs-16 fw-700 text-secondary'>
+                                             <a href="https://onlinetsmc.in/notifications/" target="_blank">Notifications</a></h2>
                                              <p className='fs-12'>Read all TSMC notifications here</p>
                                         </div>
                                    </div>
                                    <div className='tsmc-main-options'>
                                         <div className="tsmc-option-img"><i className="bi-people"></i></div>
                                         <div className="tsmc-option-title">
-                                             <h2 className='fs-16 fw-700'>Executive Members</h2>
+                                             <h2 className='fs-16 fw-700'>
+                                             <a href="https://onlinetsmc.in/executive-members/" target="_blank">Executive Members</a></h2>
                                              <p className='fs-12'>Read all TSMC notifications here</p>
                                         </div>
                                    </div>
                                    <div className='tsmc-main-options'>
                                         <div className="tsmc-option-img"><i className="bi-briefcase"></i></div>
                                         <div className="tsmc-option-title">
-                                             <h2 className='fs-16 fw-700'>Officers</h2>
+                                             <h2 className='fs-16 fw-700'> 
+                                              <a href="https://onlinetsmc.in/officers/" target="_blank">Officers</a></h2>
                                              <p className='fs-12'>Read all TSMC notifications here</p>
                                         </div>
                                    </div>
                                    <div className='tsmc-main-options'>
                                         <div className="tsmc-option-img"><i className="bi-collection"></i></div>
                                         <div className="tsmc-option-title">
-                                             <h2 className='fs-16 fw-700'>Registration Act</h2>
+                                             <h2 className='fs-16 fw-700'>
+                                             <a href="https://onlinetsmc.in/download/Registration%20Act.pdf" target="_blank">Registration Act</a></h2>
                                              <p className='fs-12'>Read all TSMC registration act</p>
                                         </div>
                                    </div>
                                    <div className='tsmc-main-options'>
                                         <div className="tsmc-option-img"><i className="bi-calendar-week"></i></div>
                                         <div className="tsmc-option-title">
-                                             <h2 className='fs-16 fw-700'>Academic Calender</h2>
+                                             <h2 className='fs-16 fw-700'>
+                                             <a href="https://onlinetsmc.in/academic-calender/" target="_blank">Academic Calender</a></h2>
                                              <p className='fs-12'>Read all TSMC Academic calender here</p>
                                         </div>
                                    </div>
