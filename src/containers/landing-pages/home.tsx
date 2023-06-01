@@ -19,6 +19,7 @@ import { tokenManager } from '../../lib/token-manager';
 import { Messages } from '../../lib/constants/messages';
 import { SMS } from '../../lib/utils/sms/sms';
 import moment from 'moment';
+
 const cryptojs = require("../../assets/js/cryptojs");
 
 
@@ -208,6 +209,7 @@ const HomePage = () => {
                               data[0].mobileno && LocalStorageManager.setDoctorMobileno(data[0].mobileno);
                               data[0].serial_id && LocalStorageManager.setDoctorSerialId(data[0].serial_id.toString());
                               data[0].fmr_no && LocalStorageManager.setDoctorFMRNo(data[0].fmr_no.toString());
+                              data[0].fmrstatus&&LocalStorageManager.setDoctorFMRStatus(data[0].fmrstatus);
                               dispatch(setDoctorInfo(data[0]));
                               setMobileError(false);
                               setMobileErrorMessage('');
@@ -471,40 +473,40 @@ const HomePage = () => {
                                    <div className='tsmc-main-options'>
                                         <div className="tsmc-option-img"><i className="bi-bell"></i></div>
                                         <div className="tsmc-option-title">
-                                             <h2 className='fs-16 fw-700 text-secondary'>
-                                             <a href="https://onlinetsmc.in/notifications/" target="_blank">Notifications</a></h2>
+                                             <h2 className='fs-16 fw-500 text-secondary'>
+                                             <a href="https://onlinetsmc.in/notifications/"  style={{color: "black"}} target="_blank">Notifications</a></h2>
                                              <p className='fs-12'>Read all TSMC notifications here</p>
                                         </div>
                                    </div>
                                    <div className='tsmc-main-options'>
                                         <div className="tsmc-option-img"><i className="bi-people"></i></div>
                                         <div className="tsmc-option-title">
-                                             <h2 className='fs-16 fw-700'>
-                                             <a href="https://onlinetsmc.in/executive-members/" target="_blank">Executive Members</a></h2>
+                                             <h2 className='fs-16 fw-500'>
+                                             <a href="https://onlinetsmc.in/executive-members/" style={{color: "black"}} target="_blank">Executive Members</a></h2>
                                              <p className='fs-12'>Read all TSMC notifications here</p>
                                         </div>
                                    </div>
                                    <div className='tsmc-main-options'>
                                         <div className="tsmc-option-img"><i className="bi-briefcase"></i></div>
                                         <div className="tsmc-option-title">
-                                             <h2 className='fs-16 fw-700'> 
-                                              <a href="https://onlinetsmc.in/officers/" target="_blank">Officers</a></h2>
+                                             <h2 className='fs-16 fw-500'> 
+                                              <a href="https://onlinetsmc.in/officers/" style={{color: "black"}} target="_blank">Officers</a></h2>
                                              <p className='fs-12'>Read all TSMC notifications here</p>
                                         </div>
                                    </div>
                                    <div className='tsmc-main-options'>
                                         <div className="tsmc-option-img"><i className="bi-collection"></i></div>
                                         <div className="tsmc-option-title">
-                                             <h2 className='fs-16 fw-700'>
-                                             <a href="https://onlinetsmc.in/download/Registration%20Act.pdf" target="_blank">Registration Act</a></h2>
+                                             <h2 className='fs-16 fw-500'>
+                                             <a href="https://onlinetsmc.in/download/Registration%20Act.pdf" style={{color: "black"}} target="_blank">Registration Act</a></h2>
                                              <p className='fs-12'>Read all TSMC registration act</p>
                                         </div>
                                    </div>
                                    <div className='tsmc-main-options'>
                                         <div className="tsmc-option-img"><i className="bi-calendar-week"></i></div>
                                         <div className="tsmc-option-title">
-                                             <h2 className='fs-16 fw-700'>
-                                             <a href="https://onlinetsmc.in/academic-calender/" target="_blank">Academic Calender</a></h2>
+                                             <h2 className='fs-16 fw-500'>
+                                             <a href="https://onlinetsmc.in/academic-calender/" style={{color: "black"}} target="_blank">Academic Calender</a></h2>
                                              <p className='fs-12'>Read all TSMC Academic calender here</p>
                                         </div>
                                    </div>

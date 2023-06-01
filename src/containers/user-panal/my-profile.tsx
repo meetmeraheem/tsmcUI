@@ -151,7 +151,7 @@ const Myprofile = () => {
                         councilpincode: data[0].councilpincode,
                         approval_status: data[0].approval_status,
                         address1:data[0].address1,
-                        address2:data[0].Address2,
+                        address2:data[0].address2,
                         createdon: data[0].createdon,
                         posttime: data[0].posttime,
                         modifiedon: data[0].modifiedon,

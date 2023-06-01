@@ -43,6 +43,21 @@ export const LocalStorageManager = {
         }
     },
 
+    getDoctorFMRStatus: function () {
+        const doctorFMRNo = localStorage.getItem('doctorFMRStatus');
+        return doctorFMRNo || null;
+    },
+
+    setDoctorFMRStatus: function (FMRStatus: string) {
+        localStorage.setItem('doctorFMRStatus', FMRStatus);
+    },
+
+    removeDoctorFMRStatus: function () {
+        if (this.getDoctorFMRNo()) {
+            localStorage.removeItem('doctorFMRNo');
+        }
+    },
+
     getDoctorMobileno: function () {
         const mobileno = localStorage.getItem('mobileno');
         return mobileno || null;

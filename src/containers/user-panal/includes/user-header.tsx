@@ -12,6 +12,7 @@ const Userheader = () => {
 	const dispatch = useDispatch();
 	const [isDoctorId, setISDoctorId] = useState(false);
 	const [isDoctorFMRNo, setISDoctorFMRNo] = useState(false);
+	const [isDoctorFMRapproved, setISDoctorFMRapproved] = useState(false);
 	const signOut = () => {
 		tokenManager.removeToken();
 		LocalStorageManager.removeDoctorPrimaryId();
@@ -31,6 +32,13 @@ const Userheader = () => {
 		if (doctorFMRNo) {
 			setISDoctorFMRNo(true);
 		}
+		const doctorFMRstatus = LocalStorageManager.getDoctorFMRStatus();
+		if(doctorFMRstatus === 'apr'){
+			setISDoctorFMRapproved(true);
+		}
+		
+
+
 	}, [isDoctorId, isDoctorFMRNo]);
 
 	return (
@@ -74,7 +82,7 @@ const Userheader = () => {
 													<li><Link className="dropdown-item" to={isDoctorFMRNo ? '' : 'final-duplicate'}>Duplicate</Link></li>
 												</ul>
 											</li>
-											{isDoctorFMRNo ?
+											{isDoctorFMRapproved ?
 											<div>
 											<li className='dropdown-submenu'>
 											<Link to='additional-qualification-registration' className="dropdown-item">Additional Qualification</Link>
