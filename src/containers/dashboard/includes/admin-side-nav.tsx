@@ -12,15 +12,7 @@ import { adminService } from "../../../lib/api/admin";
 const AdminSideNav = () => {
 	const location = useLocation();
 	const activeTab = location.pathname;
-	const signOut = () => {
-		tokenManager.removeToken();
-		LocalStorageManager.removeDoctorPrimaryId();
-		LocalStorageManager.removeDoctorSerialId();
-		LocalStorageManager.removeAdminPrimaryId();
-		LocalStorageManager.removeDoctorFMRNo();
-		LocalStorageManager.removeUserType();
-		dispatch(deleteDoctorInfo);
-	};
+	
 
 	//const [adminPrimaryId, setAdminPrimaryId] = useState(0);
 	const [user, setUser] = useState<AdminFormType>();
@@ -51,7 +43,7 @@ const AdminSideNav = () => {
 				<ul className="nav flex-column">
 					{user?.user_type === 'a' 
 						&&
-						<><li className="nav-item">
+						<>{/*<li className="nav-item">
 							<Link className={activeTab === routes.admin_dashboard ? 'nav-link active' : 'nav-link'} to={'/admin'}><i className="bi-columns-gap me-2"></i> Dashboard</Link>
 							</li>
 							<li className="nav-items">
@@ -88,9 +80,7 @@ const AdminSideNav = () => {
 								<Link className="nav-link" to={'/admin/settings'}><i className="bi-lock me-2"></i> Change Password</Link>
 							</li></>
 					}
-					<li className="nav-item">
-						<Link className="nav-link" to="/login" onClick={signOut}><i className="bi-box-arrow-right me-2"></i> Logout</Link>
-					</li>
+					
 				</ul>
 			</aside>
 		</>

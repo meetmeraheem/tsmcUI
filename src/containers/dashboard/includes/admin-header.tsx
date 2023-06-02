@@ -6,6 +6,11 @@ import Clock from '../../../components/clock';
 import { adminService } from '../../../lib/api/admin';
 import { LocalStorageManager } from '../../../lib/localStorage-manager';
 import { AdminFormType } from '../../../types/admin';
+import { Link } from "react-router-dom";
+import { tokenManager } from "../../../lib/token-manager";
+import { deleteDoctorInfo } from "../../../redux/doctor";
+import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
+
 
 const AdminHeader = () => {
 	const [adminPrimaryId, setAdminPrimaryId] = useState(0);
@@ -27,6 +32,16 @@ const AdminHeader = () => {
         }
     }, [user]);
 
+	const signOut = () => {
+		tokenManager.removeToken();
+		LocalStorageManager.removeDoctorPrimaryId();
+		LocalStorageManager.removeDoctorSerialId();
+		LocalStorageManager.removeAdminPrimaryId();
+		LocalStorageManager.removeDoctorFMRNo();
+		LocalStorageManager.removeUserType();
+		dispatch(deleteDoctorInfo);
+	};
+
 	useEffect(() => {
         getAdminProfile();
     }, []);
@@ -38,15 +53,17 @@ const AdminHeader = () => {
 					<div className="col">
 						<div className="d-flex align-items-center">
 							<img src={SiteLogo} width="70" alt="" />
-							<div className="ms-3">
+							<div className="ms-4">
 								<h1 className="mb-0 fs-20 fw-700 tsmc-text-white">TELANGANA STATE MEDICAL COUNCIL</h1>
 								<p className="fs-14 tsmc-text-white">
 									<span className="fw-600">User:</span> {user?.username}
 									<span className="fw-600 ms-2">Role:</span> {user?.role_name}
+									<span className="fw-600 ms-2 tsmc-text-white"><Link className="nav-link" to="/login" onClick={signOut}><i className="tsmc-nav-items text-light nav-link"></i> Logout</Link></span>
 								</p>
 							</div>
 						</div>
 					</div>
+				
 					<div className="col-auto">
 						<div className="d-flex align-items-center">
 							<div className="tsmc-datetime me-3 d-flex align-items-center justify-content-center">
@@ -56,12 +73,16 @@ const AdminHeader = () => {
 										<h1 className="fs-20 fw-700 tsmc-text-primary mb-1"><Clock /></h1>
 										<h2 className="fs-16 fw-400 tsmc-text-primary mb-0">{moment().format('ll')}</h2>
 									</div>
-								</div>
-							</div>
+									</div>
+									</div>
+									
+							
 							<img src={SiteSubLogo} width="70" alt="" />
-						</div>
+							</div>
+							
 					</div>
 				</div>
+					
 			</div>
 		</header>
         </>
@@ -69,3 +90,6 @@ const AdminHeader = () => {
 }
 
 export default AdminHeader;
+function dispatch(deleteDoctorInfo: ActionCreatorWithoutPayload<"doctorInfo/deleteDoctorInfo">) {
+	throw new Error("Function not implemented.");
+}

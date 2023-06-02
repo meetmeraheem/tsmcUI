@@ -1,82 +1,62 @@
+import React, { useState } from "react";
+import TabComponent from "./../Tabs/TabComponent";
+import FinalRegistrations from '../dashboard/final-registration';
+import ProvisionalRegistrations from '../dashboard/provisional-registrations';
+import AdditionalRegList from '../dashboard/additional-registrations';
+import GoodStandingRegList from '../dashboard/goodstanding-registrations';
+import NocRegList from '../dashboard/noc-registrations';
+import RenewalRegList from '../dashboard/renewal-registrations';
+
+
+
+type TabsType = {
+    label: string;
+    index: number;
+    Component: React.FC<{}>;
+  }[];
+  
+  // Tabs Array
+  const tabs: TabsType = [
+    {
+      label: "Provisional",
+      index: 1,
+      Component: ProvisionalRegistrations
+    },
+    {
+      label: "Finals",
+      index: 2,
+      Component: FinalRegistrations
+    },
+    {
+      label: "Additonals",
+      index: 3,
+      Component: AdditionalRegList
+    },
+    {
+      label: "Noc",
+      index: 4,
+      Component: NocRegList
+    },
+    {
+      label: "Good Standing",
+      index: 5,
+      Component: GoodStandingRegList
+    },
+    {
+      label: "Finals Renewals",
+      index: 6,
+      Component: RenewalRegList
+    },
+    
+  ];
 
 const AdminDashboardHome = () => {
+    const [selectedTab, setSelectedTab] = useState<number>(tabs[0].index);
     return (
         <>
-            <div className="container-fluid">
-                {/* Top overal matrics */}
-                <div className="row mb-4">
-                    <div className="col">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-body">
-                                <h2 className="fs-16 fw-600">New Registrations <i className="bi-info-circle"></i></h2>
-                                <div className="d-flex align-items-center">
-                                    <div className="p-2 w-100">
-                                        <div className="card-icon-box">
-                                            <i className="bi-person fs-32"></i>
-                                        </div>
-                                    </div>
-                                    <div className="p-2 flex-shrink-1">
-                                        <h2 className="fs-32 fw-600 tsmc-typo-secondary">250</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-body">
-                                <h2 className="fs-16 fw-600">Pending Registrations <i className="bi-info-circle"></i></h2>
-                                <div className="d-flex align-items-center">
-                                    <div className="p-2 w-100">
-                                        <div className="card-icon-box">
-                                            <i className="bi-exclamation-square fs-32"></i>
-                                        </div>
-                                    </div>
-                                    <div className="p-2 flex-shrink-1">
-                                        <h2 className="fs-32 fw-600 tsmc-typo-secondary">250</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-body">
-                                <h2 className="fs-16 fw-600">Tatkal Registrations <i className="bi-info-circle"></i></h2>
-                                <div className="d-flex align-items-center">
-                                    <div className="p-2 w-100">
-                                        <div className="card-icon-box">
-                                            <i className="bi-stopwatch fs-32"></i>
-                                        </div>
-                                    </div>
-                                    <div className="p-2 flex-shrink-1">
-                                        <h2 className="fs-32 fw-600 tsmc-typo-secondary">250</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-body">
-                                <h2 className="fs-16 fw-600">Total Payments <i className="bi-info-circle"></i></h2>
-                                <div className="d-flex align-items-center">
-                                    <div className="p-2 w-100">
-                                        <div className="card-icon-box">
-                                            <i className="bi-currency-rupee fs-32"></i>
-                                        </div>
-                                    </div>
-                                    <div className="p-2 flex-shrink-1">
-                                        <h2 className="fs-32 fw-600 tsmc-typo-secondary">2,50,000</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <TabComponent selectedTab={selectedTab} onClick={setSelectedTab} tabs={tabs} />
         </>
-    )
+    );
 }
 
 export default AdminDashboardHome;

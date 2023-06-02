@@ -80,9 +80,9 @@ const PaymentSuccess = () => {
                             if (success) {
                                 setIsLoader(false);
                                 setTransactionMsg(message);
-                                secureLocalStorage.removeItem("pc");
-                                secureLocalStorage.removeItem("af");
-                                secureLocalStorage.removeItem("noc");
+                                secureLocalStorage.removeItem("pcName");
+                                secureLocalStorage.removeItem("afName");
+                                secureLocalStorage.removeItem("nocName");
                                 secureLocalStorage.removeItem("regType");
                                 const doctorMobileno = LocalStorageManager.getDoctorMobileno();
                                  LocalStorageManager.setDoctorSerialId(data[0].doctorId.toString());
@@ -174,19 +174,19 @@ const PaymentSuccess = () => {
                                 setIsLoader(false);
                                 LocalStorageManager.setDoctorSerialId(data[0].doctorId.toString());
                                 setTransactionMsg(message);
-                                secureLocalStorage.removeItem("af");
-                                secureLocalStorage.removeItem("mbbs");
-                                secureLocalStorage.removeItem("noc");
-                                secureLocalStorage.removeItem("affidivit");
-                                secureLocalStorage.removeItem("testimonal1");
-                                secureLocalStorage.removeItem("testimonal2");
-                                secureLocalStorage.removeItem("regOfOtherState");
-                                secureLocalStorage.removeItem("screeningTestPass");
-                                secureLocalStorage.removeItem("internshipComp");
-                                secureLocalStorage.removeItem("mciEligibility");
-                                secureLocalStorage.removeItem("interVerification");
-                                secureLocalStorage.removeItem("mciReg");
-                                secureLocalStorage.removeItem("imr");
+                                secureLocalStorage.removeItem("afName");
+                                secureLocalStorage.removeItem("mbbsName");
+                                secureLocalStorage.removeItem("nocName");
+                                secureLocalStorage.removeItem("affidivitName");
+                                secureLocalStorage.removeItem("testimonal1Name");
+                                secureLocalStorage.removeItem("testimonal2Name");
+                                secureLocalStorage.removeItem("regOtherStateName");
+                                secureLocalStorage.removeItem("screenTestName");
+                                secureLocalStorage.removeItem("internshipCompName");
+                                secureLocalStorage.removeItem("mciEligibilityName");
+                                secureLocalStorage.removeItem("interVerificationName");
+                                secureLocalStorage.removeItem("mciRegName");
+                                secureLocalStorage.removeItem("imrName");
                                 Swal.fire({
                                     title: "Success",
                                     text: "Final registration successfully completed",
@@ -229,8 +229,8 @@ const PaymentSuccess = () => {
                                 setIsLoader(false);
                                 setTransactionMsg(message);
 
-                                secureLocalStorage.removeItem("study");
-                                secureLocalStorage.removeItem("Degree");
+                                secureLocalStorage.removeItem("additional_study_name");
+                                secureLocalStorage.removeItem("additional_Degree_name");
                                 Swal.fire({
                                     title: "Success",
                                     text: "Additional registration successfully completed",
@@ -265,6 +265,7 @@ const PaymentSuccess = () => {
                             if (success) {
                                 setIsLoader(false);
                                 setTransactionMsg(message);
+                                secureLocalStorage.removeItem("nocInfo");
                                 Swal.fire({
                                     title: "Success",
                                     text: "Noc registration successfully completed",
@@ -344,6 +345,10 @@ const PaymentSuccess = () => {
                             if (success) {
                                 setIsLoader(false);
                                 setTransactionMsg(message);
+                                secureLocalStorage.removeItem("regCertificateName");
+                                secureLocalStorage.removeItem("renewalafName");
+                                secureLocalStorage.removeItem("renewalnocName");
+
                                 Swal.fire({
                                     title: "Success",
                                     text: "Final Renewal  registration successfully completed",
