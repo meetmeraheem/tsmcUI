@@ -14,9 +14,10 @@ const AdminDashboard = () => {
         return (
             <>
             <AdminHeader />
-            <div className="d-flex">
-                <AdminSideNav />
-                <section className="page-wapper">
+           
+            <div >
+               <AdminSideNav />
+                <section >
                     {outlet}
                 </section>
             </div>

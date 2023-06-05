@@ -55,13 +55,18 @@ import PrivacyPolicy from '../landing-pages/privacy-policy';
 import TermsConditions from '../landing-pages/terms-conditions';
 import Refund from '../landing-pages/refund';
 
+	
 
 
 const MainRoute = () => {
 	return (
+		
+
 		<Router>
 			<ScrollToTop />
+		
 			<Routes>
+		
 				<Route path={routes.main} element={<MainHomePage />}>
 					<Route path={routes.main} element={<HomePage />} />
 					<Route path={routes.home} element={<HomePage />} />
@@ -98,7 +103,6 @@ const MainRoute = () => {
 					<Route path={routes.final_renewal} element={<FinalRenewals />} />
 				</Route>
 				<Route path={routes.admin_dashboard} element={<AdminDashboard />}>
-					<Route path={routes.admin_dashboard} element={<AdminDashboardHome />} />
 					<Route path={routes.provisional_registrations} element={<ProvisionalRegistrations />} />
 					<Route path={routes.admin_final_registrations} element={<FinalRegistrations />} />
 					<Route path={routes.admin_provisional_view} element={<ProvisionalView />} />
@@ -107,7 +111,6 @@ const MainRoute = () => {
 					<Route path={routes.admin_goodstanding} element={<GoodStandingRegList />} />
 					<Route path={routes.admin_goodstanding_mci} element={<GoodStandingMCIView />} />
 					<Route path={routes.admin_goodstanding_view} element={<GoodStandingView />} />
-					
 					<Route path={routes.admin_noc} element={<NocRegList />} />
 					<Route path={routes.admin_final_reg_view} element={<FinalRegView />} />
 					<Route path={routes.admin_noc_reg_view} element={<NocView />} />
@@ -118,6 +121,8 @@ const MainRoute = () => {
 					<Route path={routes.admin_notifications} element={<AdminNotifications />} />
 					<Route path={routes.admin_settings} element={<AdminSettings />} />
 					<Route path={routes.admin_logout} element={<AdminLogout />} />
+
+
 
 				</Route>
 			</Routes>

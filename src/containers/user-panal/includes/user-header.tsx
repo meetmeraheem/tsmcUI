@@ -44,7 +44,7 @@ const Userheader = () => {
 	return (
 		<>
 			<header>
-				<nav className="navbar navbar-expand-lg bg-light tsmc-header">
+				<nav className="navbar navbar-expand-lg  tsmc-header">
 					<div className="container">
 						<div className='col-1'>
 							<Link to="" className="navbar-brand tsmc-site-logo">

@@ -9,7 +9,7 @@ const LandingHeader = () => {
 	return (
 		<>
 			<header>
-				<nav className="navbar navbar-expand-lg bg-light tsmc-header py-3">
+				<nav className="navbar navbar-expand-lg  tsmc-header py-3">
 					<div className="container">
 						<div className='col-1'>
 							<Link to="" className="navbar-brand tsmc-site-logo">

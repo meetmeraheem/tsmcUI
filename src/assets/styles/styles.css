@@ -867,7 +867,7 @@ aside>ul>li>a:hover {
   
   .tabs-component [role="tablist"] button.active {
 	color: #495057;
-	background-color: #66bb8f;
+	background-color: #d4fde8
   }
   
   .tabs-component [role="tabpanel"] {
