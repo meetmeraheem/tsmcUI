@@ -582,27 +582,23 @@ const FinalRegistration = () => {
                                                                         return (
                                                                             <>
                                                                                 <label className="mb-2">Qualification</label>
-                                                                                <select
-                                                                                    value={field.value}
-                                                                                    onChange={(ev) => {
-                                                                                        setFieldTouched(field.name);
-                                                                                        setFieldValue(
-                                                                                            field.name,
-                                                                                            ev.target.value
-                                                                                        );
-                                                                                    }}
-                                                                                    className={`form-select ${error ? 'is-invalid' : ''
-                                                                                        }`}
-                                                                                >
-                                                                                    <option value="">Select</option>
-                                                                                    {qualifications.map(
-                                                                                        (item, index) => (
-                                                                                            <option key={index} value={item.id.toString()}>
-                                                                                                {item.name}
-                                                                                            </option>
-                                                                                        )
-                                                                                    )}
-                                                                                </select>
+                                                                                <Select
+                                                                                name="qualification"
+                                                                                className="react-select"
+                                                                                classNamePrefix="react-select"
+                                                                                isSearchable
+                                                                                options={qualifications}
+                                                                                placeholder="Select Qualification"
+                                                                                onChange={(selectedOption) => {
+                                                                                    const { id, name } =
+                                                                                        selectedOption as Qualification;
+                                                                                    setFieldTouched(field.name);
+                                                                                    setFieldValue(field.name, id);
+                                                                                   
+                                                                                }}
+                                                                                getOptionLabel={(option) => option.name}
+                                                                                getOptionValue={(option) => option.id.toString()}
+                                                                            />
                                                                                 {error && <small className="text-danger">{error.toString()}</small>}
                                                                             </>
                                                                         );

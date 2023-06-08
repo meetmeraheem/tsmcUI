@@ -16,6 +16,10 @@ import { doctorService } from "../../lib/api/doctot";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { routes } from "../routes/routes-names";
 import moment from "moment";
+import { isLessThanTheMB } from "../../lib/utils/lessthan-max-filesize";
+import { Messages } from "../../lib/constants/messages";
+
+
 
 
 const options = [
@@ -111,9 +115,12 @@ const UserEditProfile = () => {
                 setDoctorPrimaryId(doctorPrimaryId);
                 const getDoctor = await doctorService.getDoctorById(doctorPrimaryId);
                 if (getDoctor.data.length > 0) {
-                    getStates(getDoctor.data[0]?.country);
-                    getCities(getDoctor.data[0]?.state);
+                    if(getDoctor.data[0]?.country!==null){
+                        getStates(getDoctor.data[0]?.country);
+                        getCities(getDoctor.data[0]?.state);
+                    }
                     setDoctor(getDoctor.data[0]);
+
                 }
             }
         } catch (err: any) {
@@ -724,7 +731,7 @@ const UserEditProfile = () => {
                                                 </div>
                                                 <div className="row mb-3">
                                                 <div className="d-flex justify-content-center my-5">
-                                                    <div className="col-3 pe-3">
+                                                    <div className="col-3 pe-3 ">
                                                         <Field name="passphoto">
                                                             {(fieldProps: FieldProps) => {
                                                                 const { field, form } = fieldProps;
@@ -762,8 +769,15 @@ const UserEditProfile = () => {
                                                                                 }
                                                                                 if (files[0]) {
                                                                                     const file = files[0];
-                                                                                    setPassportPhoto({ file });
-                                                                                    setFieldValue(field.name, file.name);
+                                                                                    const isLess = isLessThanTheMB(files[0].size, 0.05);
+                                                                                    if (isLess) {
+                                                                                        setPassportPhoto({ file });
+                                                                                        setFieldValue(field.name, file.name);
+                                                                                    }
+                                                                                    else {
+                                                                                        alert(Messages.isLessThan50KB);
+                                                                                    }
+                                                                                  
                                                                                 }
                                                                             }}
                                                                             onError={(error: ReactFilesError) => {
@@ -789,8 +803,8 @@ const UserEditProfile = () => {
                                                         </Field>
                                                     </div>
                                                     </div>
-                                                    <div className="row mb-3 ">
-                                                      <div className="d-flex justify-content-center my-5">  
+                                                    <div className="row mb-3">
+                                                      <div className="d-flex justify-content-center my-2">  
                                                     <div className="col-3 pe-3">
                                                         <Field name="signature">
                                                             {(fieldProps: FieldProps) => {
@@ -826,8 +840,15 @@ const UserEditProfile = () => {
                                                                             onChange={(files: ReactFilesFile[]) => {
                                                                                 if (files[0]) {
                                                                                     const file = files[0];
-                                                                                    setSignature({ file });
-                                                                                    setFieldValue(field.name, file.name);
+                                                                                    const isLess = isLessThanTheMB(files[0].size, 0.05);
+                                                                                    if (isLess) {
+                                                                                        setSignature({ file });
+                                                                                        setFieldValue(field.name, file.name);
+                                                                                    }
+                                                                                    else {
+                                                                                        alert(Messages.isLessThan50KB);
+                                                                                    }
+                                                                                    
                                                                                 }
                                                                             }}
                                                                             onError={(error: ReactFilesError) => {

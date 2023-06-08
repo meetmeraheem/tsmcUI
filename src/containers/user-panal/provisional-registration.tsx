@@ -267,27 +267,23 @@ const ProvisionalRegistration = () => {
                                                                     return (
                                                                         <>
                                                                             <label className="mb-2">Qualification</label>
-                                                                            <select
-                                                                                value={field.value}
-                                                                                onChange={(ev) => {
+                                                                            <Select
+                                                                                name="qualification"
+                                                                                className="react-select"
+                                                                                classNamePrefix="react-select"
+                                                                                isSearchable
+                                                                                options={qualifications}
+                                                                                placeholder="Select Qualification"
+                                                                                onChange={(selectedOption) => {
+                                                                                    const { id, name } =
+                                                                                        selectedOption as Qualification;
                                                                                     setFieldTouched(field.name);
-                                                                                    setFieldValue(
-                                                                                        field.name,
-                                                                                        ev.target.value
-                                                                                    );
+                                                                                    setFieldValue(field.name, id);
+                                                                                   
                                                                                 }}
-                                                                                className={`form-select ${error ? 'is-invalid' : ''
-                                                                                    }`}
-                                                                            >
-                                                                                <option value="">Select</option>
-                                                                                {qualifications.map(
-                                                                                    (item, index) => (
-                                                                                        <option key={index} value={item.id.toString()}>
-                                                                                            {item.name}
-                                                                                        </option>
-                                                                                    )
-                                                                                )}
-                                                                            </select>
+                                                                                getOptionLabel={(option) => option.name}
+                                                                                getOptionValue={(option) => option.id.toString()}
+                                                                            />
                                                                             {error && <small className="text-danger">{error.toString()}</small>}
                                                                         </>
                                                                     );
@@ -477,7 +473,7 @@ const ProvisionalRegistration = () => {
 
                                                     </div>
                                                     <div className="row mb-2">
-                                                        <div className="col-sm-auto">
+                                                        <div className="col-6">
                                                             <Field name="college">
                                                                 {(fieldProps: FieldProps) => {
                                                                     const { field, form } = fieldProps;
@@ -512,8 +508,8 @@ const ProvisionalRegistration = () => {
                                                     
                                                     </div>
                                                     <div className="row mb-2 mt-4">
-                                                        <div className="col">
-                                                            <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                    <div className="d-flex  justify-content-center my-2">
+                                                        <div className="col-3 pe-3 drag-img-box ">
                                                                 <Field name="edu_cert1">
                                                                     {(fieldProps: FieldProps) => {
                                                                         const { field, form } = fieldProps;
@@ -582,8 +578,11 @@ const ProvisionalRegistration = () => {
 
                                                             </div>
                                                         </div>
-                                                        <div className="col">
-                                                            <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                        </div>
+                                                        <div className="row mb-2 mt-4">
+                                                        <div className="d-flex  justify-content-center">
+                                                        <div className="col-3 pe-3 drag-img-box">
+                                                           
                                                                 <Field name="edu_cert2">
                                                                     {(fieldProps: FieldProps) => {
                                                                         const { field, form } = fieldProps;
@@ -650,8 +649,10 @@ const ProvisionalRegistration = () => {
                                                                 </Field>
                                                             </div>
                                                         </div>
-                                                        <div className="col">
-                                                            <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                        </div>
+                                                        <div className="row mb-2 mt-4">
+                                                        <div className=" d-flex  justify-content-center">
+                                                        <div className="col-3 pe-3 drag-img-box">
                                                                 <Field name="edu_cert3">
                                                                     {(fieldProps: FieldProps) => {
                                                                         const { field, form } = fieldProps;
@@ -767,95 +768,3 @@ const getValidationSchema = () =>
             .required('NOC is required.'),
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* <select
-    value={field.value}
-    onChange={(ev) => {
-        setFieldTouched(field.name);
-        setFieldValue(
-            field.name,
-            ev.target.value
-        );
-    }}
-    className={`form-select ${error ? 'is-invalid' : ''
-        } form-select-sm`}
->
-    <option value="">Select</option>
-    {examYears.map(
-        (item) => (
-            <option key={item} value={item}>
-                {item}
-            </option>
-        )
-    )}
-</select> */}

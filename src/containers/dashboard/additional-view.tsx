@@ -84,15 +84,24 @@ const AdditionalRegView = () => {
             }
             const { success } = await additionalService.updateQualification(additionalPrimaryId, additionalsInfo);
             if (success) {
+                let msg="";
+                let smsmsg="";
+                if(status !== 'rej' ){
+                    msg="Additional Details successfully approved";
+                    smsmsg="Your Additional Application has been Approved from Telangana State Medical Council.";
+                }else{
+                    msg="Additional Details successfully Rejected";
+                    smsmsg="Your Additional Application has been Rejected from Telangana State Medical Council.";
+                }
                     Swal.fire({
                         title: "Success",
-                        text: "AdditionalDetails successfully approved",
+                        text: msg,
                         icon: "success",
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
+                                await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
                                     
                                 }).catch(() => {
 
@@ -110,7 +119,7 @@ const AdditionalRegView = () => {
                 else {
                     Swal.fire({
                         title: "",
-                        text: "Final registration rejected",
+                        text: "AdditionalDetails registration rejected",
                         icon: "error",
                         confirmButtonText: "OK",
                     }).then(async (result) => {

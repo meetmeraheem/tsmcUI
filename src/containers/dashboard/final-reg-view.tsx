@@ -95,15 +95,24 @@ const FinalRegView = () => {
             }
             const { success } = await finalService.updateFinal(finalPrimaryId, finalInfo);
             if (success) {
+                let msg="";
+                let smsmsg="";
+                if(status !== 'rej' ){
+                    msg="Final successfully approved";
+                    smsmsg="Your Final Application has been Approved from Telangana State Medical Council.";
+                }else{
+                    msg="Final successfully Rejected";
+                    smsmsg="Your Final Application has been Rejected from Telangana State Medical Council.";
+                }
                     Swal.fire({
                         title: "Success",
-                        text: "Final successfully approved",
+                        text: msg,
                         icon: "success",
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
+                                await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
                                     
                                 }).catch(() => {
 
@@ -127,7 +136,7 @@ const FinalRegView = () => {
                     }).then(async (result) => {
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
+                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been rejected from Telangana State Medical Council.').then((response) => {
                                     
                                 }).catch(() => {
 

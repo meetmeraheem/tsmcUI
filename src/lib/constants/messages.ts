@@ -1,5 +1,6 @@
 export const Messages = {
     isLessThanTheMB: 'file accept less than 200kb only!',
+    isLessThan50KB: 'file accept less than 50kb only!',
     OKText: 'OK',
     ErrorText: 'Error',
     SuccessText: 'Success',

@@ -110,15 +110,24 @@ const RenewalsViews = () => {
 
             const { success } = await renewalService.updateRenewal(renewalPrimaryId, renewalInfo);
                 if (success) {
+                    let msg="";
+                    let smsmsg="";
+                    if(status !== 'rej' ){
+                        msg="Renewal successfully approved";
+                        smsmsg="Your Renewal  Application has been Approved from Telangana State Medical Council.";
+                    }else{
+                        msg="Renewal successfully Rejected";
+                        smsmsg="Your Renewal Application has been Rejected from Telangana State Medical Council.";
+                    }
                     Swal.fire({
                         title: "Success",
-                        text: "Renewal successfully approved",
+                        text: msg,
                         icon: "success",
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
+                                await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
                                     
                                 }).catch(() => {
 
@@ -136,13 +145,13 @@ const RenewalsViews = () => {
                 else {
                     Swal.fire({
                         title: "",
-                        text: "Provisional registration rejected",
+                        text: "Renewal registration rejected",
                         icon: "error",
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Rejected from Telangana State Medical Council.').then((response) => {
+                                await authService.sendSMS(doctor?.mobileno, 'Your Renewal  Application has been Rejected from Telangana State Medical Council.').then((response) => {
                                     
                                 }).catch(() => {
 

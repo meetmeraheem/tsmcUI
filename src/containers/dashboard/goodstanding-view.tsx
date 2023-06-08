@@ -73,15 +73,24 @@ const GoodStandingRegView = () => {
             }
             const { success } = await goodstandingService.updateGoodStanding(gsPrimaryId, gsInfo);
             if (success) {
+                let msg="";
+                let smsmsg="";
+                if(status !== 'rej' ){
+                    msg="Good Standing successfully approved";
+                    smsmsg="Your Good Standing  Application has been Approved from Telangana State Medical Council.";
+                }else{
+                    msg="Good Standing successfully Rejected";
+                    smsmsg="Your Good Standing Application has been Rejected from Telangana State Medical Council.";
+                }
                     Swal.fire({
                         title: "Success",
-                        text: "NOC successfully approved",
+                        text: msg,
                         icon: "success",
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
+                                await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
                                     
                                 }).catch(() => {
 

@@ -45,8 +45,10 @@ const PaymentSuccess = () => {
             try {
                          setIsLoader(true);
                          const respOrderKeyId = LocalStorageManager.getOrderKeyId();
-                         const doctorId = Number(LocalStorageManager.getDoctorSerialId());
-                         setDoctorSerialNumber(doctorId);
+                         if(LocalStorageManager.getDoctorSerialId()!=null){
+                             const doctorId = Number(LocalStorageManager.getDoctorSerialId());
+                             setDoctorSerialNumber(doctorId);
+                        }
                          const regType = secureLocalStorage.getItem("regType");
                          console.log('orderKeyId ----: ' + respOrderKeyId);
                         
@@ -80,12 +82,15 @@ const PaymentSuccess = () => {
                             if (success) {
                                 setIsLoader(false);
                                 setTransactionMsg(message);
+                                if(data && data.doctorId !==null){
+                                    LocalStorageManager.setDoctorSerialId(data.doctorId.toString());
+                                }
                                 secureLocalStorage.removeItem("pcName");
                                 secureLocalStorage.removeItem("afName");
                                 secureLocalStorage.removeItem("nocName");
                                 secureLocalStorage.removeItem("regType");
                                 const doctorMobileno = LocalStorageManager.getDoctorMobileno();
-                                 LocalStorageManager.setDoctorSerialId(data[0].doctorId.toString());
+                               
 
                                 if (doctorMobileno) {
                                     await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Provisional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
@@ -172,7 +177,9 @@ const PaymentSuccess = () => {
                             const { success,data,message} = await finalService.finalRegistration(formData);
                             if (success) {
                                 setIsLoader(false);
-                                LocalStorageManager.setDoctorSerialId(data[0].doctorId.toString());
+                                if(data && data.doctorId !==null){
+                                    LocalStorageManager.setDoctorSerialId(data.doctorId.toString());
+                                }
                                 setTransactionMsg(message);
                                 secureLocalStorage.removeItem("afName");
                                 secureLocalStorage.removeItem("mbbsName");
