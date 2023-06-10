@@ -24,14 +24,16 @@ const Renewal = () => {
     const fetchIdRef = useRef(0);
     const [renewals, setRenewals] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
-    const [date, setDate] = useState(defaultDate);
+    let default7Days = moment().subtract(7,'d').format('YYYY-MM-DD');
+    const [fromdate, setFromDate] = useState(default7Days);
+    const [todate, setToDate] = useState(defaultDate);
     const [loading, setLoading] = useState(false)
     const [pageCount, setPageCount] = useState(0);
     const [assignedList, setAssignedList] = useState<any>([]);
     const [assignedGridList, setAssignedGridList] = useState<any>([]);
     const [users, setUsers] = useState<UserRole[]>([]);
     const [assignedUser, setAssignedUser] = useState(0);
-
+    const [statusName, setStatusName] = useState('Pending');
     const [statusValue, setStatusValue] = useState('pen');
 
     const [checkBoxData, setCheckBoxData] = useState([
@@ -76,6 +78,7 @@ const Renewal = () => {
                 );
             }
         },
+       
         {
             Header: "Status",
             accessor: "status",
@@ -84,6 +87,7 @@ const Renewal = () => {
                     <>
                         {value == 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                         {value == 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                        {value == 'rej' && <span className="alert alert-danger rounded-pill py-0 px-2 fs-12">Rejected</span>}
                     </>
                 );
             }
@@ -100,7 +104,7 @@ const Renewal = () => {
             Header: "Assign",
             Cell: (cell: any) => (
                 <>
-                    <i className="bi-person" onClick={async () => {
+                    <i className="bi bi-plus-square" onClick={async () => {
                         const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'final');
                         if (data && data.length > 0) {
                             const getUser = await adminService.getAdminById(data[0].AssignTo);
@@ -121,7 +125,8 @@ const Renewal = () => {
                                     assignStatus: 'pen',
                                     assignReason: '',
                                     doctor_id: cell.data[Number(cell.row.id)].doctor_id,
-                                    assignRegType: 'renewal'
+                                    assignRegType: 'renewal',
+                                    regTypeId:cell.data[0].renewalPrimaryId
                                 }
                                 setAssignedList([...assignedList, doctorInfo]);
                                 setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
@@ -194,8 +199,9 @@ const Renewal = () => {
         // Set the loading state
         setLoading(true)
 
-        var newdate = moment(date).format('YYYY-MM-DD');
-        const { data } = await renewalService.getRenewalsByFilter(newdate, statusValue);
+        let vfromdate = moment(fromdate).format('YYYY-MM-DD');
+        let vtodate = moment(todate).format('YYYY-MM-DD');
+        const { data } = await renewalService.getRenewalsByFilter(vfromdate,vtodate,statusValue);
         // if (data.length > 0) {
         //     setProvisionals(data);
         // }
@@ -220,24 +226,25 @@ const Renewal = () => {
                 setLoading(false)
             }
         }, 1000)
-    }, [date, statusValue]);
+    }, [fromdate, statusValue]);
 
     const handleChecked = (e: any) => {
         setStatusValue(e.target.value);
+        setStatusName(e.target.name);
         const res = checkBoxData.map((d) => {
-            if (d.id.toString() === e.target.name) {
+            if (d.id.toString() === e.target.id) {
                 return { ...d, isChecked: !d.isChecked };
             }
             else {
                 return { ...d, isChecked: false };
             }
         });
-
         const eamtyArray = res.filter((d) => {
             return d.isChecked === true
         });
         if (eamtyArray.length === 0) {
             setStatusValue('');
+            setStatusName('');
         }
         setCheckBoxData(res);
     };
@@ -249,20 +256,26 @@ const Renewal = () => {
                     <div className="p-2 w-100">
                         <h2 className="fs-22 fw-700 mb-0">Renewals</h2>
                     </div>
-                    <div className="p-2 flex-shrink-1 input-group justify-content-end">
-                        {/* <input type="text" className="form-control form-control-lg fs-16" placeholder="Search for registrations" aria-label="Search for registrations" aria-describedby="filterbox" /> */}
                         <span className="input-group-text p-0" id="filterbox">
-                            <div className="btn-group">
-                                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Status <i className="bi-chevron-down"></i></button>
+                        <div className="btn-group">
+                        <button className="btn p-0" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            <div className="input-group-text p-0">
+                                <label className="m-1">Status</label>
+                                <span className="form-control">
+                                    {statusName} <i className="bi-chevron-down"></i>
+                                    </span>
+                                </div>   
+                                   </button> 
                                 <ul className="dropdown-menu shadow-sm rounded-0">
                                     {checkBoxData.map((d: any) => (
                                         <div className="p-2">
                                             <label>
-                                                <input
+                                            <input
                                                     className="form-check-input"
+                                                    id={d.id}
                                                     type="checkbox"
                                                     checked={d.isChecked}
-                                                    name={d.id}
+                                                    name={d.name}
                                                     value={d.value}
                                                     onChange={handleChecked}
                                                     key={d.id}
@@ -275,14 +288,24 @@ const Renewal = () => {
                             </div>
                         </span>
                         <span className="input-group-text p-0">
+                        <label>From Date </label>
                             <input type="date" name="" id=""
-                                value={date}
+                                value={fromdate}
                                 onChange={(ev) => {
                                     setRenewals([]);
-                                    setDate(ev.target.value)
+                                    setFromDate(ev.target.value)
                                 }} className="form-control" />
                         </span>
-                    </div>
+                        <span className="input-group-text p-0">
+                        <label>To Date </label>
+                            <input type="date" name="" id=""
+                                value={todate}
+                                onChange={(ev) => {
+                                    setRenewals([]);
+                                    setToDate(ev.target.value)
+                                }} className="form-control" />
+                        </span>
+                    
                 </div>
                 <div className="mt-3">
                     <div className="card">

@@ -11,13 +11,7 @@ export const finalService = {
     //     return responseData;
     // },
     async finalRegistration(data: any) {
-        const token = tokenManager.getToken();
-        const { data: responseData } = await axios.post(serverUrl+`finalreg/createFinalReg`, data, {
-            headers: {
-                'authorization': 'Bearer '+token,
-                'Content-Type': 'multipart/form-data'
-            }
-        });
+        const { data: responseData } = await axiosInstance.post(serverUrl+`finalreg/createFinalReg`, data);
         return responseData;
     },
     async getFinal(doctorId : string) {
@@ -33,27 +27,16 @@ export const finalService = {
         return responseData;
     },
     async updateFinalData(finalId: number, data: any) {
-        const token = tokenManager.getToken();
-        const { data: responseData } = await axios.put(serverUrl+`finalreg/updateFinalData/${finalId}`, data, {
-            headers: {
-                'authorization': 'Bearer '+token,
-                'Content-Type': 'multipart/form-data'
-            }
-        });
+        const { data: responseData } = await axiosInstance.put(serverUrl+`finalreg/updateFinalData/${finalId}`, data);
         return responseData;
     },
-    async getFinalsByFilter( reg_date: any,status: any) {
-        const { data: responseData } = await axiosInstance.get(`finalreg/getFinalsByFilter/${reg_date}/${status}`);
+    async getFinalsByFilter( from_date: any,to_date:any,status: any) {
+        const { data: responseData } = await axiosInstance.get(`finalreg/getFinalsByFilter/${from_date}/${to_date}/${status}`);
         return responseData as ApiResponseType;
     },
     async getFinalRegFeeDetails(data: any) {
         const token = tokenManager.getToken();
-        const { data: responseData } = await axios.post(serverUrl+`finalreg/getFinalRegFeeDetails`, data, {
-            headers: {
-                'authorization': 'Bearer '+token,
-                'Content-Type': 'multipart/form-data'
-            }
-        });
+        const { data: responseData } = await axiosInstance.post(serverUrl+`finalreg/getFinalRegFeeDetails`, data);
         return responseData;
     },
 

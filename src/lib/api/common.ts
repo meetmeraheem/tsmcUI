@@ -1,13 +1,7 @@
 import axios from 'axios';
-import { constant } from 'lodash';
-import { paymentURL } from '../../config/constants';
 import { ApiResponseType } from '../../types/api';
 import { City, Country, GetCitiesResponseType, GetCollegesResponseType, GetCountriesResponseType, GetQualificationsResponseType, GetStatesResponseType, GetUniversitiesResponseType, SerialResponseType, Serials, State } from '../../types/common';
-import { PaymentFormType } from '../../types/payment';
 import { axiosInstance } from './index';
-import { thiredPartyAxiosInstance } from './thired-party';
-import queryString from 'query-string'
-import { Base64 } from 'js-base64';
 
 export const commonService = {
     async getQualifications() {
@@ -56,44 +50,7 @@ export const commonService = {
         return responseData as Serials;
     },
 
-    async payviaPayG(paymentDetails: any, auth: string) {
-        //const authString = 'YjAwZTU5MDdhODMwNGIwZDk5YTU0MzIwZTg3ZDNiMjQ6MTE3ZmRiOTdiOTc2NGI3OWIxNjJkNTZiM2ZkNmNmMGQ6TTo3MTNDMDAxOEZCMjAzMTE=';
-        const authString = 'ODdhMmY2ODIyNDFlNDc2MzgxMjlkMzIzZDVlNzJhNWQ6NDNjMTg1YTE1YjkwNDMwNWFjOGM2OGJjNjQ2ZTBiMTA6TTozMTkyMQ==';
-        const { data } = await axios.post(paymentURL, paymentDetails, {
-            headers: {
-                'authorization': 'Basic ' + auth,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Access-Control-Allow-Credentials': "true",
-                'Access-Control-Allow-Methods': "GET,HEAD,OPTIONS,POST,PUT",
-                'Access-Control-Allow-Headers': "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, content-type, Access-Control-Request-Method, Access-Control-Request-Headers"
-            }
-        });
-        return data;
-    },
-    async orderDetails(orderKeyId: any, merchantKeyId: string) {
-        console.log('merchantKeyId  ----: ' + merchantKeyId);
-        //const authString = 'YjAwZTU5MDdhODMwNGIwZDk5YTU0MzIwZTg3ZDNiMjQ6MTE3ZmRiOTdiOTc2NGI3OWIxNjJkNTZiM2ZkNmNmMGQ6TTo3MTNDMDAxOEZCMjAzMTE=';
-        //const authString = 'ODdhMmY2ODIyNDFlNDc2MzgxMjlkMzIzZDVlNzJhNWQ6NDNjMTg1YTE1YjkwNDMwNWFjOGM2OGJjNjQ2ZTBiMTA6TToxMTEzMA==';
-        const authString = Base64.encode('87a2f682241e47638129d323d5e72a5d:43c185a15b904305ac8c68bc646e0b10:M:31921');
-        const { data } = await axios.post('https://paygapi.payg.in/payment/api/order/Detail', {
-            OrderKeyId: orderKeyId,
-            MerchantKeyId: merchantKeyId,
-            PaymentType: ''
-        }, {
-            headers: {
-                'authorization': 'Basic ' + authString,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Access-Control-Allow-Credentials': "true",
-                'Access-Control-Allow-Methods': "POST",
-                'Access-Control-Allow-Headers': "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, content-type, Access-Control-Request-Method, Access-Control-Request-Headers"
-            }
-        });
-        return data;
-    },
-
-
+    
     //Payment
     async createPayment(data: any) {
         const { data: responseData } = await axiosInstance.post(`payments/createPayment`, data);

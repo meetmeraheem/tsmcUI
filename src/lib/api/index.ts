@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { apiUrl } from '../../config/constants';
 import { tokenManager } from '../token-manager';
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../containers/routes/routes-names";
+
+
 
 export const axiosInstance = axios.create({
     withCredentials: false,
@@ -35,7 +39,20 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     async (error) => {
-        console.log('error ' + JSON.stringify(error));
-        return Promise.reject(error);
+        if (error.response.status === 401) {
+            window.location.href = "/";
+           }else{
+            console.log('error ' + JSON.stringify(error));
+             return Promise.reject(error);
+        }
     }
 );
+
+axios.interceptors.response.use(response => {
+    return response;
+ }, error => {
+   if (error.response.status === 401) {
+    //place your reentry code
+   }
+   return error;
+ });

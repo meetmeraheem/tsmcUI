@@ -100,30 +100,7 @@ const EditFinal = () => {
                 }
             }
         } catch (err) {
-            console.log('error getProvisionalDetails', err);
-        }
-    }, []);
-
-    const getProvisionalDetails = useCallback(async () => {
-        try {
-            const doctorSerialId = LocalStorageManager.getDoctorSerialId();
-            if (doctorSerialId) {
-                const { data } = await provisionalService.getProvisionalByDoctorId(Number(doctorSerialId));
-                if (data.length > 0) {
-                    const date = moment(new Date(data[0].reg_date));
-                    const currentDate = moment(new Date());
-                    const diffMonths = currentDate.diff(date, 'months');
-                    console.log('diffMonths' + diffMonths);
-                    if (diffMonths > 15) {
-                        setIsPMRDateAbove15M(true);
-                        if (diffMonths > 18) {
-                            setIsPMRDateAbove18M(true);
-                        }
-                    }
-                }
-            }
-        } catch (err) {
-            console.log('error getProvisionalDetails', err);
+            console.log('error getFinalDetails', err);
         }
     }, []);
 
@@ -156,7 +133,6 @@ const EditFinal = () => {
 
     useEffect(() => {
         getFinalDetails();
-        getProvisionalDetails();
         getQualifications();
         getCountries();
         // eslint-disable-next-line react-hooks/exhaustive-deps

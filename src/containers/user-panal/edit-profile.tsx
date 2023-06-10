@@ -204,7 +204,7 @@ const UserEditProfile = () => {
                                             </div>
                                             <div className="px-3">
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-2 col-form-label">Full Name</label>
+                                                    <label className="col-sm-2 col-form-label">Full Name <p className="fs-10 text-secondary" >(As per MBBS certificate)</p></label>
                                                     <div className="col-sm-4">
                                                         <Field name="fullname">
                                                             {(fieldProps: FieldProps) => {
@@ -233,7 +233,7 @@ const UserEditProfile = () => {
                                                             }}
                                                         </Field>
                                                     </div>
-                                                    <label className="col-sm-2 col-form-label">Father Name</label>
+                                                    <label className="col-sm-2 col-form-label">Father Name<p className="fs-10 text-secondary" >(As per SSC certificate/passport)</p></label>
                                                     <div className="col-sm-4">
                                                         <Field name="fathername">
                                                             {(fieldProps: FieldProps) => {
@@ -264,7 +264,7 @@ const UserEditProfile = () => {
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-2 col-form-label">Mother Name</label>
+                                                    <label className="col-sm-2 col-form-label">Mother Name<p className="fs-10 text-secondary" >(As per SSC certificate/passport)</p></label>
                                                     <div className="col-sm-4">
                                                         <Field name="mothername">
                                                             {(fieldProps: FieldProps) => {
@@ -293,7 +293,7 @@ const UserEditProfile = () => {
                                                             }}
                                                         </Field>
                                                     </div>
-                                                    <label className="col-sm-2 col-form-label">Date Of Birth</label>
+                                                    <label className="col-sm-2 col-form-label">Date Of Birth<p className="fs-10 text-secondary" >(As per SSC certificate)</p></label>
                                                     <div className="col-sm-4">
                                                         <Field name="dateofbirth">
                                                             {(fieldProps: FieldProps) => {

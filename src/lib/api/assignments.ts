@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { ApiResponseType } from '../../types/api';
-import { GetProvisionalResponse, ProvisionalEditFormType, ProvisionalFormType } from '../../types/provisional';
-import { tokenManager } from '../token-manager';
+
 import { axiosInstance } from './index';
 import { serverUrl } from '../../config/constants';
 

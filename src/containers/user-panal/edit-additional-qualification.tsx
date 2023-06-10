@@ -25,6 +25,7 @@ import { authService } from '../../lib/api/auth';
 import secureLocalStorage from 'react-secure-storage';
 
 
+
 const EditAdditionalQualificationRegistration = () => {
     const navigate = useNavigate();
     const [next, setNext] = useState(false);
@@ -195,22 +196,20 @@ const EditAdditionalQualificationRegistration = () => {
                     reg_date: moment().format('YYYY-MM-DD'),
                     doctorPrimaryId:doctorPrimaryId,
                 }
-                secureLocalStorage.setItem("regType", 'additionalInfo');
-                secureLocalStorage.setItem("additionalInfo", additionalInfo);
+                const formData = new FormData();
+                formData.append("additionalInfo", JSON.stringify(additionalInfo));
+                
               
               
                 if (studyCertificate?.file) {
-                    secureLocalStorage.setItem("additional_study", studyCertificate?.file);
+                    formData.append("additional_study", studyCertificate?.file);
                 }
                
                 if (DegreeCertificate?.file) {
-                    secureLocalStorage.setItem("additional_Degree", DegreeCertificate?.file);
+                    formData.append("additional_Degree", DegreeCertificate?.file);
                 }
-                navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'additionalInfo'}});
-             
-                
-                
-              {/*
+              
+              
                 const { success } = await additionalService.additionalRegistration(formData);
                 if (success) {
                     setStudyCertificate(null);
@@ -233,7 +232,7 @@ const EditAdditionalQualificationRegistration = () => {
                             navigate(routes.userpanal);
                         }
                     });
-                }*/}
+                }
             } catch (err) {
                 Swal.fire({
                     text: "Additional registeration failed",

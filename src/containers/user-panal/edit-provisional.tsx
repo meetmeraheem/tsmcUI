@@ -188,20 +188,7 @@ const EditProvisional = () => {
                     <div className="col-9 m-auto">
                         <div className="card shadow border-0 mb-4">
                             <div className="card-body">
-                                <div className="d-flex align-items-center justify-content-between">
-                                    <h1 className='fs-22 fw-700'>Update Provisional</h1>
-                                    <label className="mb-2">Provisional Request Type</label>
-                                    <select
-                                        value={provisionalRequestType}
-                                        onChange={(ev) => {
-                                            setProvisionalRequestType(ev.target.value);
-                                        }}
-                                        className="form-control"
-                                    >
-                                        <option value="nor">Normal</option>
-                                        <option value="tat">Tatkal</option>
-                                    </select>
-                                </div>
+                            <h1 className='fs-22 fw-700'>Update Provisional</h1>
                                 <hr />
                                 <Formik
                                     onSubmit={submitForm}

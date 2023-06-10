@@ -25,6 +25,7 @@ import { authService } from '../../lib/api/auth';
 import secureLocalStorage from 'react-secure-storage';
 
 
+
 const AdditionalQualificationRegistration = () => {
     const navigate = useNavigate();
     const [next, setNext] = useState(false);
@@ -671,8 +672,14 @@ const AdditionalQualificationRegistration = () => {
                                                                             onChange={(files: ReactFilesFile[]) => {
                                                                                 if (files[0]) {
                                                                                     const file = files[0];
-                                                                                    setStudyCertificate({ file });
-                                                                                    setFieldValue(field.name, file.name);
+                                                                                    const isLess = isLessThanTheMB(files[0].size, 0.3);
+                                                                                    if (isLess) {
+                                                                                        setStudyCertificate({ file });
+                                                                                        setFieldValue(field.name, file.name);
+                                                                                    }
+                                                                                    else {
+                                                                                        alert(Messages.isLessThanTheMB);
+                                                                                    }
                                                                                 }
                                                                             }}
                                                                             onError={(error: ReactFilesError) => {
@@ -733,8 +740,14 @@ const AdditionalQualificationRegistration = () => {
                                                                             onChange={(files: ReactFilesFile[]) => {
                                                                                 if (files[0]) {
                                                                                     const file = files[0];
-                                                                                    setDegreeCertificate({ file });
-                                                                                    setFieldValue(field.name, file.name);
+                                                                                    const isLess = isLessThanTheMB(files[0].size, 0.3);
+                                                                                    if (isLess) {
+                                                                                        setDegreeCertificate({ file });
+                                                                                        setFieldValue(field.name, file.name);
+                                                                                    }
+                                                                                    else {
+                                                                                        alert(Messages.isLessThanTheMB);
+                                                                                    }
                                                                                 }
                                                                             }}
                                                                             onError={(error: ReactFilesError) => {

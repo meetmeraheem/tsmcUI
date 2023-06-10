@@ -604,7 +604,7 @@ const HomePage = () => {
                                                                                                          );
                                                                                                     }}
                                                                                                </Field>
-                                                                                               <label htmlFor="Fullname">Enter Fullname</label>
+                                                                                               <label htmlFor="Fullname">Enter Fullname <span className="fs-10 text-secondary">(As per MBBS certificate)</span></label>
                                                                                           </div>
                                                                                      </div>
                                                                                      <div className="col">
@@ -645,7 +645,7 @@ const HomePage = () => {
                                                                                                          );
                                                                                                     }}
                                                                                                </Field>
-                                                                                               <label htmlFor="Dateofbirth">Enter Date Of Birth</label>
+                                                                                               <label htmlFor="Dateofbirth">Enter Date Of Birth<span className="fs-12" >(As per SSC certificate)</span></label>
                                                                                           </div>
                                                                                      </div>
                                                                                 </div><div className="row">
@@ -708,9 +708,9 @@ const HomePage = () => {
                                                                                                                    }`}
                                                                                                               >
                                                                                                                    <option value="">Select Gender</option>
-                                                                                                                   <option value="m">MALE</option>
-                                                                                                                   <option value="f">FEMALE</option>
-                                                                                                                   <option value="o">OTHERS</option>
+                                                                                                                   <option value="M">MALE</option>
+                                                                                                                   <option value="F">FEMALE</option>
+                                                                                                                   <option value="O">OTHERS</option>
                                                                                                               </select>
 
                                                                                                                    {error && <small className="text-danger">{error.toString()}</small>}

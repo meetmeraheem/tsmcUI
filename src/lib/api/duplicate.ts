@@ -10,13 +10,7 @@ export const duplicateService = {
     //     return responseData;
     // },
     async duplicateRegistration(data: any) {
-        const token = tokenManager.getToken();
-        const { data: responseData } = await axios.post(serverUrl+`duplicate/createDuplicate`, data, {
-            headers: {
-                'authorization': 'Bearer '+token,
-                'Content-Type': 'multipart/form-data'
-            }
-        });
+        const { data: responseData } = await axiosInstance.post(`duplicate/createDuplicate`, data);
         return responseData;
     },
     async getDuplicateById(duplicateId: number) {
@@ -36,13 +30,7 @@ export const duplicateService = {
     //     return responseData;
     // },
     async updateSingleDuplicate(duplicateId: number, data: any) {
-        const token = tokenManager.getToken();
-        const { data: responseData } = await axios.put(serverUrl+`duplicate/updateDuplicateData/${duplicateId}`, data, {
-            headers: {
-                'authorization': 'Bearer '+token,
-                'Content-Type': 'multipart/form-data'
-            }
-        });
+        const { data: responseData } = await axiosInstance.put(`duplicate/updateDuplicateData/${duplicateId}`, data);
         return responseData;
     },
     async getduplicatesByFilter( reg_date: any,status: any) {

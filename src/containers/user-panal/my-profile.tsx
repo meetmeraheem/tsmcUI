@@ -298,7 +298,7 @@ const Myprofile = () => {
                                                             </div>
                                                             <div className="col d-flex">
                                                                 <label htmlFor="" className='fs-14 fw-600 me-2'>Gender:</label>
-                                                                <div className="fs-14">{doctor?.gender == 'm' ? 'MALE' : doctor?.gender == 'f' ? 'FEMALE' : 'OTHERS'}</div>
+                                                                <div className="fs-14">{doctor?.gender == 'M' ? 'MALE' : doctor?.gender == 'F' ? 'FEMALE' : 'OTHERS'}</div>
                                                             </div>
                                                         </div>
                                                         <div className="d-flex mb-2">
@@ -488,7 +488,7 @@ const Myprofile = () => {
                                                         </div>
                                                         </div>
                                                        
-                        <table className="table table-hover fs-10 table-striped">
+                        <table className="table table-hover fs-10 table-bordered">
                             <thead>
                                 <tr>
                                     <th>Qualification</th>
@@ -514,7 +514,7 @@ const Myprofile = () => {
                                         <td>{obj.appliedFor}</td>
                                         <td>{obj.university}</td>
                                         <td>{obj.college}</td>
-                                        <td>{obj.reg_date}</td>
+                                        <td>{moment(obj.reg_date).format('DD/MM/YYYY')}</td>
                                         
                                         <td>
                                             {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}

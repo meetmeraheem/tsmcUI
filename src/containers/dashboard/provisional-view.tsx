@@ -19,6 +19,7 @@ import { serverUrl, serverImgUrl } from '../../config/constants';
 import moment from 'moment';
 import { assignmentService } from '../../lib/api/assignments';
 
+
 //type Props = OutletProps<{ id: string }>;
 //const ProvisionalView: React.FC<Props> = ({match}: any) => {
 
@@ -33,6 +34,8 @@ const ProvisionalView = () => {
     const [isEduCert1, setIsEduCert1] = useState(false);
     const [isEduCert2, setIsEduCert2] = useState(false);
     const [isEduCert3, setIsEduCert3] = useState(false);
+    const [numPages, setNumPages] = useState(null);
+
     const [userType, setUserType] = useState('');
 
     const getDoctorDetails = async () => {
@@ -104,7 +107,7 @@ const ProvisionalView = () => {
                         text: msg,
                         icon: "success",
                         confirmButtonText: "OK",
-                    }).then(async (result) => {
+                    }).then(async (result:any) => {
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
                                 await authService.sendSMS(doctor?.mobileno,smsmsg).then((response) => {
@@ -128,7 +131,7 @@ const ProvisionalView = () => {
                         text: "Provisional registration rejected",
                         icon: "error",
                         confirmButtonText: "OK",
-                    }).then(async (result) => {
+                    }).then(async (result:any) => {
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
                                 await authService.sendSMS(doctor?.mobileno, 'Your Provisional  Application has been Rejected from Telangana State Medical Council.').then((response) => {
@@ -157,13 +160,15 @@ const ProvisionalView = () => {
             });
         }
     }, [remarks]);
-
+   
     useEffect(() => {
         const userTypeValue = LocalStorageManager.getUserType();
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getProvisionalDetails();
     }, []);
+
+  
 
     return (
         <>
@@ -320,9 +325,14 @@ const ProvisionalView = () => {
                                 <div className="col">
                                     <div className="drag-img-box d-flex align-items-center justify-content-center">
                                         <p className="d-flex align-items-center" onClick={() => setIsEduCert3(!isEduCert3)}>
-                                            {provisional?.edu_cert3 ? <img src={serverImgUrl + 'provisional/' + provisional?.edu_cert3} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                   
+  
+                                            {provisional?.edu_cert3 ? <img src={serverImgUrl + 'provisional/' + provisional?.edu_cert3} alt="" className="w-100" />  : <img src={DocDefultPic} alt="" />}
+                                    
                                         </p>
                                     </div>
+                                    
+
                                 </div>
                                 {/* <div className="col">
                                     <div className="drag-img-box d-flex align-items-center justify-content-center">

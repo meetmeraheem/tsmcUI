@@ -4,8 +4,8 @@ import { axiosInstance } from './index';
 
 export const renewalService = {
    
-    async getRenewalsByFilter( reg_date: any,status: any) {
-        const { data: responseData } = await axiosInstance.get(`renewal/getRenewalsByFilter/${reg_date}/${status}`);
+    async getRenewalsByFilter( fromdate: any,todate:any,status: any) {
+        const { data: responseData } = await axiosInstance.get(`renewal/getRenewalsByFilter/${fromdate}/${todate}/${status}`);
         return responseData as ApiResponseType;
     },
     async getRenewalRegFeeDetails( data: any) {

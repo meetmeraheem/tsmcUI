@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { ApiResponseType } from '../../types/api';
 import { DoctorFormType, DoctorSignUpFormType, GetDoctorResponseType } from '../../types/doctor';
-import { tokenManager } from '../token-manager';
 import { axiosInstance } from './index';
-import { serverUrl } from '../../config/constants';
+
 
 export const doctorService = {
     async getDoctorById(doctorId: number) {
@@ -43,13 +42,7 @@ export const doctorService = {
         return responseData;
     },
     async updateDoctorInfo(doctorPrimaryId: number, data: any) {
-        const token = tokenManager.getToken();
-        const { data: responseData } = await axios.put(serverUrl+`doctor/updateSingleDoctor/${doctorPrimaryId}`, data, {
-            headers: {
-                'authorization': 'Bearer '+token,
-                'Content-Type': 'multipart/form-data'
-            }
-        });
+        const { data: responseData } = await axiosInstance.put(`doctor/updateSingleDoctor/${doctorPrimaryId}`, data);
         return responseData;
     },
     async updatePassword(mobileno: string, password: string) {
