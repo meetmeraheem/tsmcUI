@@ -188,7 +188,7 @@ const NocRegistration = () => {
 
                                                             <div className="px-3">
                                                             <div className="row mb-2">
-                                                    <div className="col-sm-auto">
+                                                          <div className="col-sm-auto">
                                                             <label className="mb-2">Noc Request Type</label>
                                                             <select
                                                                 value={nocRequestType}

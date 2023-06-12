@@ -28,8 +28,8 @@ export const goodstandingService = {
         return responseData as ApiResponseType;
     },
     
-    async getGoodStandingByUserId( createdDate: any,userId:any,regType: any) {
-        const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingByUserId/${createdDate}/${userId}/${regType}`);
+    async getGoodStandingByUserId( fromdate: any,todate: any,userId:any,regType: any) {
+        const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingByUserId/${fromdate}/${todate}/${userId}/${regType}`);
         return responseData as ApiResponseType;
     },
 

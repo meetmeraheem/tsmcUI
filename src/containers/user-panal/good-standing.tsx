@@ -27,6 +27,8 @@ import secureLocalStorage from 'react-secure-storage';
 const GoodStandingRegistration = () => {
     const navigate = useNavigate();
     const [duration, setDuration] = useState('');
+    const [gsRequestType, setGsRequestType] = useState<string>('nor');
+
   
     useEffect(() => {
     }, []);
@@ -38,12 +40,14 @@ const GoodStandingRegistration = () => {
             const goodstandingInfo = {
                 createdon: moment().format('YYYY-MM-DD'),
                 posttime: moment().format('h:mm:ss'),
-                doctor_id: doctorId && Number(doctorId),
                 prefix: 'TSMC',
                 approval_status: 'pen',
                 row_type: 'on',
                 reg_date: moment().format('YYYY-MM-DD'),
-                doctorPrimaryId:doctorPrimaryId,
+                doctor_id: doctorId && Number(doctorId),
+                extra_col1:gsRequestType,
+                doctorPrimaryId:doctorPrimaryId
+
             }
             secureLocalStorage.setItem("regType", 'goodstandingInfo');
             secureLocalStorage.setItem("goodstandingInfo", goodstandingInfo);
@@ -69,6 +73,25 @@ const GoodStandingRegistration = () => {
                                 <hr />
                                 <DoctorInfoCard />
                             </div>
+                            <div className="row mb-2">
+                                                          <div className="col-sm-auto">
+                                                            <label className="mb-2">Good standing Request Type</label>
+                                                            </div>
+                                                            <div className="col-sm-auto">
+                                                            <select
+                                                                value={gsRequestType}
+                                                                onChange={(ev) => {
+                                                                    setGsRequestType(ev.target.value);
+                                                                }}
+                                                                className="form-select"
+                                                            >
+                                                                <option value="">Select</option>
+                                                                <option value="nor">Normal</option>
+                                                                <option value="tat">Tatkal</option>
+                                                            </select>
+                                                        </div>
+                                                        </div>
+
                             <div className="card-footer text-end">
                             <button type="button" onClick={() => ContinueForm()} className="btn btn-primary ps-2">Continue</button>
                             </div>

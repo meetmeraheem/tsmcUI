@@ -13,8 +13,8 @@ export const renewalService = {
         return responseData as ApiResponseType;
     },
 
-    async getRenewalsByUserId( created: any,userId: any,regType:any) {
-        const { data: responseData } = await axiosInstance.get(`renewal/getRenewalByUserId/${created}/${userId}/${regType}`);
+    async getRenewalsByUserId( fromdate: any,todate: any,userId: any,regType:any) {
+        const { data: responseData } = await axiosInstance.get(`renewal/getRenewalByUserId/${fromdate}/${todate}/${userId}/${regType}`);
         return responseData as ApiResponseType;
     },
 

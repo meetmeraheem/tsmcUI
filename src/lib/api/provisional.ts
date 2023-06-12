@@ -28,8 +28,8 @@ export const provisionalService = {
         const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByFilter/${from_date}/${to_Date}/${status}`);
         return responseData as ApiResponseType;
     },
-    async getProvisionalsByUserId( reg_date: any,user_id: number,regType:any) {
-        const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByUserId/${reg_date}/${user_id}/${regType}`);
+    async getProvisionalsByUserId( fromdate: any,todate: any,user_id: number,regType:any) {
+        const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByUserId/${fromdate}/${todate}/${user_id}/${regType}`);
         return responseData as ApiResponseType;
     },
 

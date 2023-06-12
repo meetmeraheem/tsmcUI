@@ -64,6 +64,15 @@ const GoodStandingRegView = () => {
         }
     }, []);
 
+    const closewindow = useCallback(async () => {
+        if (userType === 'a') {
+            navigate(routes.admin_dashboard);
+        }
+        if (userType === 'u') {
+            navigate(routes.admin_my_work_items);
+        }
+    },[userType]);
+
     const submit = useCallback(async (status: any) => {
         if (status) {
             const gsInfo = {
@@ -97,7 +106,7 @@ const GoodStandingRegView = () => {
                                 });
                             }
                             if (userType === 'a') {
-                                navigate(routes.admin_final_registrations);
+                                navigate(routes.admin_dashboard);
                             }
                             if (userType === 'u') {
                                 navigate(routes.admin_my_work_items);
@@ -121,7 +130,7 @@ const GoodStandingRegView = () => {
                                 });
                             }
                             if (userType === 'a') {
-                                navigate(routes.admin_final_registrations);
+                                navigate(routes.admin_dashboard);
                             }
                             if (userType === 'u') {
                                 navigate(routes.admin_my_work_items);
@@ -151,7 +160,15 @@ const GoodStandingRegView = () => {
             <div className="col-8 m-auto mb-4">
                 <div className="card">
                     <div className="card-body">
-                        <h3 className="fs-18 fw-600">GoodStanding View</h3>
+                    <div className="row mb-3">
+                        <h3 className="col fs-18 fw-600">GoodStanding View</h3>
+                        <div className="col-2 align-items-center justify-content-center ">
+                                    <button type="button"
+                                        onClick={() => {
+                                            closewindow();
+                                        }} className='btn btn-outline-dark'><i className="bi-x-circle-fill"></i> Close</button>
+                                </div>
+                               </div>             
                         <div className="row mb-3">
                             <div className="col-3">
                                 <div className="tsmc-doc-profile-box border-bottom-0">

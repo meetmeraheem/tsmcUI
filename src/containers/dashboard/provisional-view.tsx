@@ -83,6 +83,15 @@ const ProvisionalView = () => {
         }
     }, []);
 
+    const closewindow = useCallback(async () => {
+        if (userType === 'a') {
+            navigate(routes.admin_dashboard);
+        }
+        if (userType === 'u') {
+            navigate(routes.admin_my_work_items);
+        }
+    },[userType]);
+
     const submit = useCallback(async (status: any) => {
         if (status) {
             const provisionalInfo = {
@@ -117,7 +126,7 @@ const ProvisionalView = () => {
                                 });
                             }
                             if (userType === 'a') {
-                                navigate(routes.provisional_registrations);
+                                navigate(routes.admin_dashboard);
                             }
                             if (userType === 'u') {
                                 navigate(routes.admin_my_work_items);
@@ -141,7 +150,7 @@ const ProvisionalView = () => {
                                 });
                             }
                             if (userType === 'a') {
-                                navigate(routes.provisional_registrations);
+                                navigate(routes.admin_dashboard);
                             }
                             if (userType === 'u') {
                                 navigate(routes.admin_my_work_items);
@@ -150,7 +159,7 @@ const ProvisionalView = () => {
                     });
                 }
             
-        }
+        } 
         else {
             Swal.fire({
                 //title: "Error",
@@ -175,8 +184,17 @@ const ProvisionalView = () => {
             <div className="col-8 m-auto mb-4">
                 <div className="card">
                     <div className="card-body">
-                        <h3 className="fs-18 fw-600">Provisional View</h3>
-                        <div className="row mb-3">
+                    <div className="row mb-3">
+                        <h3 className="col fs-18 fw-600">Provisional View</h3>
+                        
+                                <div className="col-2 align-items-center justify-content-center ">
+                                    <button type="button"
+                                        onClick={() => {
+                                            closewindow();
+                                        }} className='btn btn-outline-dark'><i className="bi-x-circle-fill"></i> Close</button>
+                                </div>
+                          </div>  
+                        <div className="row mb-3"> 
                             <div className="col-3">
                                 <div className="tsmc-doc-profile-box border-bottom-0">
                                     <div className='tsmc-doc-img mb-3'>
@@ -342,6 +360,7 @@ const ProvisionalView = () => {
                             </div>
                         </div>
                     </div>
+                   
                     {userType === 'u' && provisional?.approval_status === 'pen' &&
                         <div className="card-footer pb-3">
                             <div className="mb-3">
@@ -363,6 +382,9 @@ const ProvisionalView = () => {
                             </div>
                         </div>
                     }
+                                
+
+
                 </div>
             </div>
             <div>

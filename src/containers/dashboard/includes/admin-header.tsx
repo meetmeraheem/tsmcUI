@@ -55,11 +55,14 @@ const AdminHeader = () => {
 							<img src={SiteLogo} width="70" alt="" />
 							<div className="ms-4">
 								<h1 className="mb-0 fs-20 fw-700 tsmc-text-white">TELANGANA STATE MEDICAL COUNCIL</h1>
+								<div className="row">
 								<p className="fs-14 tsmc-text-white">
 									<span className="fw-600">User:</span> {user?.username}
 									<span className="fw-600 ms-2">Role:</span> {user?.role_name}
-									<span className="fw-600 ms-2 tsmc-text-white"><Link className="nav-link" to="/login" onClick={signOut}><i className="tsmc-nav-items text-light nav-link"></i> Logout</Link></span>
+									<span className="fw-600 ms-2 tsmc-text-white"><Link className="nav-link" to="/login" onClick={signOut}><i className="tsmc-nav-items text-light nav-link bi-box-arrow-right"> Logout </i></Link></span>
+									
 								</p>
+								</div>
 							</div>
 						</div>
 					</div>

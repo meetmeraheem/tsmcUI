@@ -637,6 +637,7 @@ const AdditionalQualificationRegistration = () => {
                                                             </div >
                                                         </div>
                                                         <div className="row mb-2 mt-4">
+                                                        <div className="d-flex justify-content-center my-5">    
                                                         <div className="col-3 ps-3">
                                                         <Field name="edu_cert1">
                                                             {(fieldProps: FieldProps) => {
@@ -704,8 +705,11 @@ const AdditionalQualificationRegistration = () => {
                                                             }}
                                                         </Field>
                                                     </div>
-                                                   
-                                                            <div className="col-3 ps-3">
+                                                   </div>
+                                                   </div>
+                                                    <div className="row mb-2">
+                                                    <div className="d-flex justify-content-center my-5">
+                                                     <div className="col-3 ps-3">
                                                         <Field name="edu_cert2">
                                                             {(fieldProps: FieldProps) => {
                                                                 const { field, form } = fieldProps;
@@ -772,9 +776,8 @@ const AdditionalQualificationRegistration = () => {
                                                             }}
                                                         </Field>
                                                     </div>
- 
-                                                            
-                                                        </div>
+                                                    </div>
+                                                     </div>
 
                                                         <div className="w-100 text-end mt-3">
                                                             {/* isValid? setNext(false):setNext(true) */}

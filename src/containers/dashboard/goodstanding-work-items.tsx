@@ -15,7 +15,9 @@ const GoodStandingWorkItems = () => {
     const fetchIdRef = useRef(0);
     const [goodstandings, setGoodstandings] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
-    const [date, setDate] = useState(defaultDate);
+    let default7Days = moment().subtract(7,'d').format('YYYY-MM-DD');
+    const [fromdate, setFromDate] = useState(default7Days);
+    const [todate, setToDate] = useState(defaultDate);
     const [loading, setLoading] = useState(false)
     const [pageCount, setPageCount] = useState(0);
 
@@ -91,9 +93,10 @@ const GoodStandingWorkItems = () => {
         // Set the loading state
         setLoading(true)
 
-        var newdate = moment(date).format('YYYY-MM-DD');
+        let vfromdate = moment(fromdate).format('YYYY-MM-DD');
+        let vtodate = moment(todate).format('YYYY-MM-DD');
         const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
-        const { data } = await goodstandingService.getGoodStandingByUserId(newdate, adminPrimaryId, 'gs');
+        const { data } = await goodstandingService.getGoodStandingByUserId(vfromdate,vtodate, adminPrimaryId, 'gs');
         if (data.length > 0) {
             // We'll even set a delay to simulate a server here
             setTimeout(() => {
@@ -116,7 +119,7 @@ const GoodStandingWorkItems = () => {
             }, 1000)
         }
         setLoading(false);
-    }, [date]);
+    }, [fromdate,todate]);
 
     return (
         <>
@@ -126,12 +129,23 @@ const GoodStandingWorkItems = () => {
                         <h2 className="fs-22 fw-700 mb-0">Goodstanding Registrations</h2>
                     </div>
                     <div className="p-2 flex-shrink-1 input-group justify-content-end">
+                       
                         <span className="input-group-text p-0">
+                        <label>From Date </label>
                             <input type="date" name="" id=""
-                                value={date}
+                                value={fromdate}
                                 onChange={(ev) => {
                                     setGoodstandings([]);
-                                    setDate(ev.target.value)
+                                    setFromDate(ev.target.value)
+                                }} className="form-control" />
+                        </span>
+                        <span className="input-group-text p-0">
+                        <label>To Date </label>
+                            <input type="date" name="" id=""
+                                value={todate}
+                                onChange={(ev) => {
+                                    setGoodstandings([]);
+                                    setToDate(ev.target.value)
                                 }} className="form-control" />
                         </span>
                     </div>

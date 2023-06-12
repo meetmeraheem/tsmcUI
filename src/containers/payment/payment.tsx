@@ -302,6 +302,11 @@ const Payment = () => {
                 });
                 setPayUrl(nocData.data.redirectUrl);
                 setPayOrderId(nocData.data.orderKeyId);
+                if (nocData.data.regType != null && nocData.data.regType === "tat") {
+                    setIsNormalReg(false);
+                } else {
+                    setIsNormalReg(true);
+                }
             }
 
         } catch (err: any) {
@@ -406,6 +411,11 @@ const Payment = () => {
                 });
                 setPayUrl(gsData.data.redirectUrl);
                 setPayOrderId(gsData.data.orderKeyId);
+                if (gsData.data.regType != null && gsData.data.regType === "tat") {
+                    setIsNormalReg(false);
+                } else {
+                    setIsNormalReg(true);
+                }
                 
             }
 
@@ -471,6 +481,11 @@ const Payment = () => {
                 }
                 if (frenewalData.data.renewalData.edu_cert3 != null ) {
                     secureLocalStorage.setItem("renewalnocName", frenewalData.data.renewalData.edu_cert3);
+                }
+                if (frenewalData.data.regType != null && frenewalData.data.regType === "tat") {
+                    setIsNormalReg(false);
+                } else {
+                    setIsNormalReg(true);
                 }
             }
 
@@ -548,7 +563,10 @@ const Payment = () => {
                                         <div className="col-4"><label htmlFor="">Registration Type</label></div>
                                         {regType === 'provisional' && <div className="col fs-14">Provisional (PMR)</div>}
                                         {regType === 'final' && <div className="col fs-14">Final (FMR)</div>}
+                                        {regType === 'additionalInfo' && <div className="col fs-14">Additional Registration</div>}
                                         {regType === 'nocInfo' && <div className="col fs-14">NOC</div>}
+                                        {regType === 'goodstandingInfo' && <div className="col fs-14">Good standing </div>}
+                                        {regType === 'finalrenewalsInfo' && <div className="col fs-14">Final renewals</div>}
                                     </div>
                                     {/* <div className="row mb-3">
                                         <div className="col-4"><label htmlFor="">Final Registration No.</label></div>
@@ -590,8 +608,8 @@ const Payment = () => {
                                 <div className="d-flex align-items-end ps-2">
                                     <div>
                                         <div className="d-flex align-items-center justify-content-between mb-3">
-                                            <label htmlFor="">Registration Request</label>
-                                            <div className="fs-14">{isNormalReg ? 'Non-Tatkal' : 'Tatkal'}</div>
+                                            <label htmlFor="">Registration Type: </label>
+                                            <div className="fs-14">{isNormalReg === true ? 'Normal' : 'Tatkal'}</div>
                                         </div>
                                         <div className="d-flex align-items-center justify-content-between mb-3">
                                             <label htmlFor="">Registration Fee</label>

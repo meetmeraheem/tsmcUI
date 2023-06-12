@@ -24,8 +24,8 @@ export const nocService = {
         return responseData;
 
     },
-    async getNocByUserId(reg_date: any,user_id: number,regType:any){
-        const { data: responseData } = await axiosInstance.get(`noc/getNocByUserId/${reg_date}/${user_id}/${regType}`);
+    async getNocByUserId(fromdate: any,todate: any,user_id: number,regType:any){
+        const { data: responseData } = await axiosInstance.get(`noc/getNocByUserId/${fromdate}/${todate}/${user_id}/${regType}`);
         return responseData;
     },
         async  getNocById(nocPrimaryId: any){
