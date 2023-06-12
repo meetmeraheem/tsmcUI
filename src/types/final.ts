@@ -107,7 +107,8 @@ export type FinalMyProfileType = {
   exam_year: string;
   approval_status: string;
   createdon: string,
-  posttime: string
+  posttime: string,
+  extra_col3:string;
 }
 
 export type AdminFinalProfileType = {

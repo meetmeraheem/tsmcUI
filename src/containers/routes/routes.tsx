@@ -54,6 +54,8 @@ import PaymentFailure from '../payment/paymentfailure';
 import PrivacyPolicy from '../landing-pages/privacy-policy';
 import TermsConditions from '../landing-pages/terms-conditions';
 import Refund from '../landing-pages/refund';
+import ChangeofNameRegistration from '../user-panal/change-of-name';
+import ProvisionalRevalidation from '../user-panal/provisional-revalidation';
 
 	
 
@@ -101,6 +103,8 @@ const MainRoute = () => {
 					<Route path={routes.good_standing_mci_registration} element={<GoodStandingMciRegistration />} />
 					<Route path={routes.final_registration} element={<FinalRegistration />} />
 					<Route path={routes.final_renewal} element={<FinalRenewals />} />
+					<Route path={routes.change_of_name} element={<ChangeofNameRegistration />} />
+					<Route path={routes.prov_revalidation} element={<ProvisionalRevalidation />} />
 				</Route>
 				<Route path={routes.admin_dashboard} element={<AdminDashboard />}>
 					<Route path={routes.provisional_registrations} element={<ProvisionalRegistrations />} />

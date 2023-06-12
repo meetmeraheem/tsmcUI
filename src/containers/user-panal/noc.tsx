@@ -36,7 +36,8 @@ const NocRegistration = () => {
             modifiedon: '',
             status: '',
             added_by: 0,
-            approval_status:''
+            approval_status:'',
+            extra_col3:'',
         }),
         []
     );

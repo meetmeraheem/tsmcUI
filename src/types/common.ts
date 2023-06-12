@@ -111,6 +111,8 @@ export type goodStandingFormType = {
     approval_status:string
     doctor_id: string,
     doctorPrimaryId:string,
+    extra_col3:string;
+    
 
   }
   export type renewalsFormType = {
@@ -122,6 +124,7 @@ export type goodStandingFormType = {
     approval_status:string
     doctor_id: string,
     doctorPrimaryId:string,
+    document10:string;
 
   }
   export type renewalsType = {
@@ -132,3 +135,13 @@ export type goodStandingFormType = {
         edu_cert2: string,
         edu_cert3: string,
   };
+
+  export type changeOfNameType = {
+   status: string,
+   reg_date: string,
+   doctor_id: number,
+   edu_cert1: string,
+   Gazette_No:string,
+   extra_col3:string,
+   newName:string,
+};

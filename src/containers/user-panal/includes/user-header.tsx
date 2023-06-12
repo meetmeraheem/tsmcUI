@@ -71,7 +71,11 @@ const Userheader = () => {
 											<li className='dropdown-submenu'>
 												<p className="dropdown-item">Provisional</p>
 												<ul className="dropdown-menu">
-													{isDoctorId ? '' : <li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>}
+													{isDoctorId ? '' : 
+													<p>
+													<li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>
+													<li><Link to='/my-panal/revalidation' className="dropdown-item">Provisional Revalidation</Link></li> </p>	}
+													
 													<li><Link className="dropdown-item" to={isDoctorId ? '' : 'provisional-duplicate'}>Duplicate</Link></li>
 												</ul>
 											</li>
@@ -94,6 +98,7 @@ const Userheader = () => {
 										<li><Link to='/my-panal/good-standing-registration' className="dropdown-item">Good Standing</Link></li>
 										<li><Link to='/my-panal/noc-registration' className="dropdown-item">NOC for Other State</Link></li>
 										<li><Link to='/my-panal/final-renewal' className="dropdown-item">Final Renewals </Link></li>
+										<li><Link to='/my-panal/chnage-of-name' className="dropdown-item">Change of Name</Link></li>
 										</div> :''}
 									
 										</div>

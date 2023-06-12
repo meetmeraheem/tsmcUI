@@ -13,7 +13,8 @@ export type nocUserFormType = {
     modifiedon: string,
     status: string,
     added_by: number,
-    approval_status:string
+    approval_status:string,
+    extra_col3:string;
   }
 
 

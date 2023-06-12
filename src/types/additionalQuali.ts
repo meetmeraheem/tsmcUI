@@ -33,7 +33,8 @@ export type AddQualFormType = {
     exam_month: string;
     exam_year: string;
     appliedFor: string,
-    approval_status:string
+    approval_status:string,
+    extra_col3:string
   }
   export type AdminAddQualDataFormType = {
     country: string,

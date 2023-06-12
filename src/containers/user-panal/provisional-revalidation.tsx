@@ -26,7 +26,7 @@ import { authService } from "../../lib/api/auth";
 import DatePicker from 'react-date-picker';
 
 
-const RenewalRegistration = () => {
+const ProvisionalRevalidation = () => {
     const navigate = useNavigate();
     const doctorReduxProfile = useSelector((state: RootState) => state.doctor.profile);
     const [next, setNext] = useState(false);
@@ -133,7 +133,7 @@ const RenewalRegistration = () => {
                             <div className="card shadow border-0 mb-4">
                                 <div className="card-body">
                                     <div className="d-flex align-items-center justify-content-between">
-                                        <h1 className='fs-22 fw-700 text-nowrap'>Final Renewals Registration</h1>
+                                        <h1 className='fs-22 fw-700 text-nowrap'>Provisional Revalidation Registration</h1>
                                         <div>
                                             
                                         </div>
@@ -447,7 +447,7 @@ const RenewalRegistration = () => {
     )
 };
 
-export default RenewalRegistration;
+export default ProvisionalRevalidation;
 
 const getValidationSchema = () =>
     objectYup().shape({

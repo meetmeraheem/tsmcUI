@@ -30,6 +30,8 @@ import { provisionalService } from "../../lib/api/provisional";
 import { goodstandingService } from "../../lib/api/goodstanding";
 import { renewalsFormType } from "../../types/common";
 import { renewalService } from "../../lib/api/renewals";
+import { changeofnameService } from "../../lib/api/changeofname";
+
 
 
 
@@ -496,6 +498,60 @@ const Payment = () => {
         }
     }, []);
 
+    const  getNameChangeRegFeeDetails= useCallback(async () => {
+        try {
+
+            const changeofNameInfo = secureLocalStorage.getItem("changeofNameInfo");
+            const changeofNameInfoDataPaymentInfo = {
+                ...changeofNameInfo as renewalsFormType,
+                orderId: "",
+                orderAmount: "",
+                paymethod: ""
+            }
+            const formData = new FormData();
+            formData.append("changeofNameInfo", JSON.stringify(changeofNameInfoDataPaymentInfo));
+            
+            const gazzettCertificate = secureLocalStorage.getItem("gazzettCertificate");
+            if (gazzettCertificate) {
+                formData.append("gazzetCertificate", gazzettCertificate as File);
+            }
+            const namechangeData = await changeofnameService.getNameChangeRegFeeDetails(formData);
+            if (namechangeData.data) {
+                setRegPayDetails({
+                    registrationFee: namechangeData.data.registrationFee,
+                    penalityAmount: namechangeData.data.penalityAmount,
+                    totalAmount: namechangeData.data.totalAmount,
+                    extraCharges: namechangeData.data.extraCharges,
+                    fullName: namechangeData.data.fullName,
+                    dataOfbirth: namechangeData.data.dateofBirth,
+                    phoneNo: namechangeData.data.mobileNo,
+                    address1: namechangeData.data.address1,
+                    address2: namechangeData.data.address2,
+                    examYear: namechangeData.data.examYear,
+                    examMonth: namechangeData.data.examMonth,
+                    doctor_id: namechangeData.data.doctor_id,
+
+                });
+                setPayUrl(namechangeData.data.redirectUrl);
+                setPayOrderId(namechangeData.data.orderKeyId);
+                
+                if (namechangeData.data.nameData.edu_cert1 != null ) {
+                    secureLocalStorage.setItem("gazzetCertificateName", namechangeData.data.nameData.edu_cert1);
+                }
+                
+                if (namechangeData.data.regType != null && namechangeData.data.regType === "tat") {
+                    setIsNormalReg(false);
+                } else {
+                    setIsNormalReg(true);
+                }
+            }
+
+        } catch (err: any) {
+            console.log('candidateService getProfile error', err.response);
+        } finally {
+            setIsLoader(false);
+        }
+    }, []);
     useEffect(
         () => {
 
@@ -517,6 +573,11 @@ const Payment = () => {
             if(regType === 'finalrenewalsInfo'){
                 getRenewalsRegFeeDetails();
             }
+            
+            if(regType === 'changeofNameInfo'){
+                getNameChangeRegFeeDetails();
+            }
+            
 
         }, []);
 
@@ -567,6 +628,7 @@ const Payment = () => {
                                         {regType === 'nocInfo' && <div className="col fs-14">NOC</div>}
                                         {regType === 'goodstandingInfo' && <div className="col fs-14">Good standing </div>}
                                         {regType === 'finalrenewalsInfo' && <div className="col fs-14">Final renewals</div>}
+                                        {regType === 'changeofNameInfo' && <div className="col fs-14">Change of Name</div>}
                                     </div>
                                     {/* <div className="row mb-3">
                                         <div className="col-4"><label htmlFor="">Final Registration No.</label></div>

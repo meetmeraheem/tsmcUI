@@ -73,6 +73,7 @@ const Myprofile = () => {
                         edu_cert1: data[0].edu_cert1,
                         edu_cert2: data[0].edu_cert2,
                         edu_cert3: data[0].edu_cert3,
+                        extra_col3:data[0].extra_col3,
                     });
                 }
             }
@@ -101,7 +102,8 @@ const Myprofile = () => {
                         college: data[0].college,
                         approval_status: data[0].approval_status,
                         createdon: data[0].createdon,
-                        posttime: data[0].posttime
+                        posttime: data[0].posttime,
+                        extra_col3:data[0].extra_col3,
                     });
                 }
             }
@@ -157,7 +159,8 @@ const Myprofile = () => {
                         modifiedon: data[0].modifiedon,
                         city:data[0].city,
                         status: data[0].status,
-                        added_by: data[0].added_by
+                        added_by: data[0].added_by,
+                        extra_col3:data[0].extra_col3,
                     });
                 }
             }
@@ -186,6 +189,7 @@ const Myprofile = () => {
                         approval_status:data[0].status,
                         doctor_id: data[0].doctor_id,
                         doctorPrimaryId:doctorPrimaryId.toString(),
+                        extra_col3:data[0].extra_col3
                      
                     });
                 }
@@ -213,7 +217,7 @@ const Myprofile = () => {
                         added_by: data[0].added_by,
                         doctor_id: data[0].doctor_id,
                         doctorPrimaryId:doctorPrimaryId.toString(),
-                     
+                        document10:data[0].document10
                     });
                 }
             }
@@ -237,6 +241,8 @@ const Myprofile = () => {
         setLoading(false);
     }, []);
 
+   
+
     return (
         <>
             <section className='gray-banner'>
@@ -244,6 +250,7 @@ const Myprofile = () => {
                     <div className="row">
                         <div className="col-10 m-auto">
                             <div className="card shadow border-0 mb-4">
+                            
                                 {!doctor?.serial_id &&
                                     <div className="card-header text-end">
                                         <Link to={'edit-profile'} className='btn btn-primary btn-sm'>Edit Profile</Link>
@@ -398,6 +405,16 @@ const Myprofile = () => {
                                                                 <div className="fs-14">{provisional?.college ? provisional?.college : 'NA'}</div>
                                                             </div>
                                                         </div>
+                                                            {provisional?.approval_status === 'rej'?<div className="d-flex mb-2">
+                                                           
+                                                            <div className='col-5 alert alert-danger  fs-14'>
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Reject Reason:</label>
+                                                               {provisional?.extra_col3 ? provisional?.extra_col3 : 'NA'}
+                                                                </div>
+                                                            </div>
+                                                       :""}
+
+                                                       
                                                     </div>
                                                 </div>
                                             </div>
@@ -473,6 +490,14 @@ const Myprofile = () => {
                                                                 <div className="fs-14">{final?.college ? final?.college : 'NA'}</div>
                                                             </div>
                                                         </div>
+                                                        {final?.approval_status === 'rej'?<div className="d-flex mb-2">
+                                                           
+                                                            <div className='col-5 alert alert-danger  fs-14'>
+                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Reject Reason:</label>
+                                                               {final?.extra_col3 ? final?.extra_col3 : 'NA'}
+                                                                </div>
+                                                            </div>
+                                                       :""}
                                                     </div>
                                                 </div>
                                             </div></>
@@ -501,6 +526,7 @@ const Myprofile = () => {
                                     <th>college</th>
                                     <th>Registration Date</th>
                                     <th>Approval Status</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -520,6 +546,7 @@ const Myprofile = () => {
                                             {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                                             {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
                                         </td>
+                                        {obj.approval_status === 'rej'?  <td>{obj.extra_col3}</td>:""}  
                                         {/* <td><Link to={'/admin/provisional_view'} state={{ provisionalPrimaryId: obj.provisionalPrimaryId, doctorPrimaryId: obj.doctorPrimaryId }}>View</Link></td> */}
                                     </tr>);
                                 })}
@@ -591,19 +618,19 @@ const Myprofile = () => {
                                                                 <div className="fs-14">{Nocdata?.councilpincode ? Nocdata?.councilpincode : 'NA'}</div>
                                                             </div>
                                                         </div>
+                                                        {Nocdata?.approval_status === 'rej'?<div className="d-flex mb-2">
+                                                           
+                                                           <div className='col-5 alert alert-danger  fs-14'>
+                                                               <label htmlFor="" className='fs-14 fw-600 me-2'>Reject Reason:</label>
+                                                              {Nocdata?.extra_col3 ? Nocdata?.extra_col3 : 'NA'}
+                                                               </div>
+                                                           </div>
+                                                      :""}
                                                 </div>
                                             </div>
                                         </div>
                                             }
-                                        {loading && (
-                                            <div>
-                                          
-                                              </div>
-                                        )
-                                        }
-              
-                                  
-            {GoodStanding&& <div className="tsmc-timeline mb-5"> <div className="tsmc-text">
+                                {GoodStanding&& <div className="tsmc-timeline mb-5"> <div className="tsmc-text">
                                                 <div className="d-flex align-items-center justify-content-between mb-4">
                                                     <h1 className='fs-18 fw-700 mb-0'>GoodStanding Details</h1>
                                                     <div>
@@ -626,6 +653,14 @@ const Myprofile = () => {
                                                             {/*GoodStanding?.status == 'pen' && <Link to={''} className='btn btn-primary btn-sm me-3'>Edit</Link>*/}
                                                         </div>
                                                     </div>
+                                                    {GoodStanding?.approval_status === 'rej'?<div className="d-flex mb-2">
+                                                           
+                                                           <div className='col-5 alert alert-danger  fs-14'>
+                                                               <label htmlFor="" className='fs-14 fw-600 me-2'>Reject Reason:</label>
+                                                              {GoodStanding?.extra_col3 ? GoodStanding?.extra_col3 : 'NA'}
+                                                               </div>
+                                                           </div>
+                                                      :""}
                                                 </div>
                                                 </div>      
                                                 </div>
@@ -652,6 +687,14 @@ const Myprofile = () => {
                                                             }
                                                         </div>
                                                     </div>
+                                                    {renewals?.status === 'rej'?<div className="d-flex mb-2">
+                                                           
+                                                           <div className='col-5 alert alert-danger  fs-14'>
+                                                               <label htmlFor="" className='fs-14 fw-600 me-2'>Reject Reason:</label>
+                                                              {renewals?.document10 ? renewals?.document10 : 'NA'}
+                                                               </div>
+                                                           </div>
+                                                      :""}
                                                 </div>
                                                 </div>      
                                                 </div>

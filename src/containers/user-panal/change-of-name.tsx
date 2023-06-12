@@ -8,7 +8,7 @@ import Files from 'react-files';
 import secureLocalStorage from "react-secure-storage";
 import Swal from "sweetalert2";
 import moment from "moment";
-import { renewalsType } from "../../types/common";
+import { changeOfNameType } from "../../types/common";
 import DoctorInfoCard from "./includes/doctor-info";
 import { ReactFilesError, ReactFilesFile } from "../../types/files";
 import { useCallback, useEffect, useState } from "react";
@@ -26,7 +26,7 @@ import { authService } from "../../lib/api/auth";
 import DatePicker from 'react-date-picker';
 
 
-const RenewalRegistration = () => {
+const ChangeofNameRegistration = () => {
     const navigate = useNavigate();
     const doctorReduxProfile = useSelector((state: RootState) => state.doctor.profile);
     const [next, setNext] = useState(false);
@@ -49,11 +49,13 @@ const RenewalRegistration = () => {
     const initialFormData = {
         doctor_id: 0,
         edu_cert1: '',
-        edu_cert2: '',
-        edu_cert3: '',
+        extra_col3:'',
         reg_date:'',
-        status:''
+        status:'',
+        Gazette_No:'',
+        newName:'',
     }
+
     useEffect(() => {
         
     }, []);
@@ -61,12 +63,12 @@ const RenewalRegistration = () => {
     
 
     const submitForm = useCallback(
-        async (values: renewalsType) => {
+        async (values: changeOfNameType) => {
             try {
                 const doctorPrimaryId = LocalStorageManager.getDoctorPrimaryId()
                 const doctorId = LocalStorageManager.getDoctorSerialId();
 
-                const renewalInfo = {
+                const changeofNameInfo = {
                     ...values,
                     createdon: moment().format('YYYY-MM-DD'),
                     posttime: moment().format('h:mm:ss'),
@@ -74,24 +76,20 @@ const RenewalRegistration = () => {
                     prefix: 'TSMC',
                     approval_status: 'pen',
                     row_type: 'on',
-                    reg_date: moment(values.reg_date).format('YYYY-MM-DD'),
+                    gazzetNotificationDate: moment(values.reg_date).format('YYYY-MM-DD'),
+                    gazzetNotificationNo:values.Gazette_No,
                     extra_col1:provisionalRequestType,
                     doctorPrimaryId:doctorPrimaryId,
                 }
                
-                secureLocalStorage.setItem("regType", 'finalrenewalsInfo');
-                secureLocalStorage.setItem("finalrenewalsInfo", renewalInfo);
+                secureLocalStorage.setItem("regType", 'changeofNameInfo');
+                secureLocalStorage.setItem("changeofNameInfo", changeofNameInfo);
                 if (provisionalCertificate?.file) {
-                    secureLocalStorage.setItem("regCertificate", provisionalCertificate?.file);
+                    secureLocalStorage.setItem("gazzettCertificate", provisionalCertificate?.file);
                 }
-                if (applicationForm?.file) {
-                    secureLocalStorage.setItem("renewal_af", applicationForm?.file);
-                }
-                if (nocCertificate?.file) {
-                    secureLocalStorage.setItem("renewal_noc", nocCertificate?.file);
-                }
+                
                
-                navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'finalrenewalsInfo'}});
+                navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'changeofNameInfo'}});
                 
             } catch (err) {
                 Swal.fire({
@@ -115,7 +113,7 @@ const RenewalRegistration = () => {
                             <div className="card shadow border-0 mb-4">
                                 <div className="card-body">
                                     <div className="d-flex align-items-center">
-                                        <h1 className='fs-22 fw-700 me-2 mb-0'>Final Renewals Registration</h1>
+                                        <h1 className='fs-22 fw-700 me-2 mb-0'>Change Of Registration</h1>
                                         <p className='mb-0 fs-13'>(Please check your personal details and click on next)</p>
                                     </div>
                                     <hr />
@@ -133,7 +131,7 @@ const RenewalRegistration = () => {
                             <div className="card shadow border-0 mb-4">
                                 <div className="card-body">
                                     <div className="d-flex align-items-center justify-content-between">
-                                        <h1 className='fs-22 fw-700 text-nowrap'>Final Renewals Registration</h1>
+                                        <h1 className='fs-22 fw-700 text-nowrap'>Change Of Name Registration</h1>
                                         <div>
                                             
                                         </div>
@@ -145,14 +143,14 @@ const RenewalRegistration = () => {
                                         validationSchema={getValidationSchema}
                                         initialValues={initialFormData}
                                     >
-                                        {(formikProps: FormikProps<renewalsType>) => {
+                                        {(formikProps: FormikProps<changeOfNameType>) => {
                                             const { isValid, handleSubmit, isSubmitting, setFieldTouched, setFieldValue, resetForm } = formikProps;
 
                                             return (
                                                 <form onSubmit={handleSubmit}>
                                                     <div className="row mb-2">
                                                     <div className="col-sm-auto">
-                                                            <label className="mb-2">Provisional Request Type</label>
+                                                            <label className="mb-2"> Request Type</label>
                                                             <select
                                                                 value={provisionalRequestType}
                                                                 onChange={(ev) => {
@@ -167,21 +165,73 @@ const RenewalRegistration = () => {
                                                         </div>
                                                         </div>
                                                         <div className="row mb-2">
-                                                       
-                                                        
+                                                        <div className="col-8">
+                                                            <Field name="newName">
+                                                                {(fieldProps: FieldProps) => {
+                                                                    const { field, form } = fieldProps;
+                                                                    const error =
+                                                                        getValue(form.touched, field.name) &&
+                                                                        getValue(form.errors, field.name);
+                                                                    return (
+                                                                        <>
+                                                                            <label className="mb-2">New Name</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                value={field.value}
+                                                                                onChange={(ev) => {
+                                                                                    setFieldTouched(field.name);
+                                                                                    setFieldValue(field.name, ev.target.value);
+                                                                                }}
+                                                                                className={`form-control ${error ? 'is-invalid' : ''
+                                                                                    }`}
+                                                                                placeholder="Enter New Name"
+                                                                                maxLength={100}
+                                                                            />
 
-                                                    </div>
-                                                    <div className="row mb-2">
-                                                       
+                                                                            {error && <small className="text-danger">{error.toString()}</small>}
 
-                                                    </div>
-                                                    <div className="row mb-2">
-                                                      
 
+                                                                        </>
+                                                                    );
+                                                                }}
+                                                            </Field>
+                                                        </div>
                                                     </div>
-                                                    <div className="row mb-2">
+                                                     <div className="row mb-2">
+                                                        <div className="col-4">
+                                                            <Field name="Gazette_No">
+                                                                {(fieldProps: FieldProps) => {
+                                                                    const { field, form } = fieldProps;
+                                                                    const error =
+                                                                        getValue(form.touched, field.name) &&
+                                                                        getValue(form.errors, field.name);
+                                                                    return (
+                                                                        <>
+                                                                            <label className="mb-2">Gazette Notification No</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                value={field.value}
+                                                                                onChange={(ev) => {
+                                                                                    setFieldTouched(field.name);
+                                                                                    setFieldValue(field.name, ev.target.value);
+                                                                                }}
+                                                                                className={`form-control ${error ? 'is-invalid' : ''
+                                                                                    }`}
+                                                                                placeholder="Gazette Notification No"
+                                                                                maxLength={20}
+                                                                            />
+
+                                                                            {error && <small className="text-danger">{error.toString()}</small>}
+
+
+                                                                        </>
+                                                                    );
+                                                                }}
+                                                            </Field>
+                                                        </div>
+                                                   
                                                         <div className="col-sm-auto">
-                                                        <label htmlFor="Dateofbirth">Enter Last registration Date</label>
+                                                        <label htmlFor="DateofGazette">Gazette Date </label>
                                                         <Field name="reg_date">
                                                                     {(fieldProps: FieldProps) => {
                                                                         const { field, form } = fieldProps;
@@ -197,15 +247,10 @@ const RenewalRegistration = () => {
                                                                                         setFieldValue(field.name, date);
                                                                                         setReg_date(date);
                                                                                     }}
-
-
-                                                                                    maxDate={moment().add('years', -5).toDate()}
                                                                                     clearIcon={null}
                                                                                     value={reg_date}
                                                                                     className={`form-control ${error ? 'is-invalid' : ''}`}
                                                                                 />
-
-
                                                                                 {error && <small className="text-danger">{error.toString()}</small>}
                                                                             </>
                                                                         );
@@ -270,7 +315,7 @@ const RenewalRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload fmr Certificate</p>
+                                                                                            <p className='fs-13'>Upload Gazette Notification</p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>
@@ -285,142 +330,7 @@ const RenewalRegistration = () => {
 
 
                                                             </div>
-                                                            <div className="col">
-                                                            <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                                                <Field name="edu_cert2">
-                                                                    {(fieldProps: FieldProps) => {
-                                                                        const { field, form } = fieldProps;
-                                                                        const error =
-                                                                            getValue(form.touched, field.name) &&
-                                                                            getValue(form.errors, field.name);
-                                                                        const file = applicationForm?.file
-                                                                            ? applicationForm?.file.name
-                                                                            : field.value || null;
-                                                                        return file ? (
-                                                                            <p className="d-flex align-items-center">
-                                                                                <strong>Uploaded:</strong>
-                                                                                <span className="ms-1">{file}</span>
-                                                                                <button
-                                                                                    type="button"
-                                                                                    onClick={() => {
-                                                                                        setFieldValue(field.name, '');
-                                                                                        setApplicationForm(null);
-                                                                                    }}
-                                                                                    title='Delete'
-                                                                                    className="ms-2 lh-1"
-                                                                                >
-                                                                                    <i className="bi-trash" />
-                                                                                </button>
-                                                                            </p>
-                                                                        ) : (
-                                                                            <>
-                                                                                <Files
-                                                                                    className="files-dropzone"
-                                                                                    onChange={(files: ReactFilesFile[]) => {
-                                                                                        if (files[0]) {
-                                                                                            const file = files[0];
-                                                                                            const isLess = isLessThanTheMB(files[0].size, 0.3);
-                                                                                            if (isLess) {
-                                                                                                setApplicationForm({ file });
-                                                                                                setFieldValue(field.name, file.name);
-                                                                                            }
-                                                                                            else {
-                                                                                                alert(Messages.isLessThanTheMB);
-                                                                                            }
-                                                                                        }
-                                                                                    }}
-                                                                                    onError={(error: ReactFilesError) => {
-                                                                                        console.log('error', error);
-                                                                                        if (error.code === 1) {
-                                                                                        }
-                                                                                    }}
-                                                                                    clickable
-                                                                                >
-                                                                                    <div className="drag-drop-box mt-3">
-                                                                                        <div className="text-center">
-                                                                                            <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload Application Form</p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </Files>
-                                                                                <small className="text-danger mt-1">
-                                                                                    {applicationForm?.error}
-                                                                                </small>
-                                                                                {error && <small className="text-danger">{error.toString()}</small>}
-                                                                            </>
-                                                                        );
-                                                                    }}
-                                                                </Field>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col">
-                                                            <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                                                <Field name="edu_cert3">
-                                                                    {(fieldProps: FieldProps) => {
-                                                                        const { field, form } = fieldProps;
-                                                                        const error =
-                                                                            getValue(form.touched, field.name) &&
-                                                                            getValue(form.errors, field.name);
-                                                                        const file = nocCertificate?.file
-                                                                            ? nocCertificate?.file.name
-                                                                            : field.value || null;
-                                                                        return file ? (
-                                                                            <p className="d-flex align-items-center">
-                                                                                <strong>Uploaded:</strong>
-                                                                                <span className="ms-1">{file}</span>
-                                                                                <button
-                                                                                    type="button"
-                                                                                    onClick={() => {
-                                                                                        setFieldValue(field.name, '');
-                                                                                        setNOCCertificate(null);
-                                                                                    }}
-                                                                                    title='Delete'
-                                                                                    className="ms-2 lh-1"
-                                                                                >
-                                                                                    <i className="bi-trash" />
-                                                                                </button>
-                                                                            </p>
-                                                                        ) : (
-                                                                            <>
-                                                                                <Files
-                                                                                    className="files-dropzone"
-                                                                                    onChange={(files: ReactFilesFile[]) => {
-                                                                                        if (files[0]) {
-                                                                                            const file = files[0];
-                                                                                            const isLess = isLessThanTheMB(files[0].size, 0.3);
-                                                                                            if (isLess) {
-                                                                                                setNOCCertificate({ file });
-                                                                                                setFieldValue(field.name, file.name);
-                                                                                            }
-                                                                                            else {
-                                                                                                alert(Messages.isLessThanTheMB);
-                                                                                            }
-                                                                                        }
-                                                                                    }}
-                                                                                    onError={(error: ReactFilesError) => {
-                                                                                        console.log('error', error);
-                                                                                        if (error.code === 1) {
-                                                                                        }
-                                                                                    }}
-                                                                                    clickable
-                                                                                >
-                                                                                    <div className="drag-drop-box mt-3">
-                                                                                        <div className="text-center">
-                                                                                            <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload NOC</p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </Files>
-                                                                                <small className="text-danger mt-1">
-                                                                                    {nocCertificate?.error}
-                                                                                </small>
-                                                                                {error && <small className="text-danger">{error.toString()}</small>}
-                                                                            </>
-                                                                        );
-                                                                    }}
-                                                                </Field>
-                                                            </div>
-                                                            </div>
+                                                          
                                                         </div>
                                                         <div className="col">
                                                             
@@ -447,20 +357,22 @@ const RenewalRegistration = () => {
     )
 };
 
-export default RenewalRegistration;
+export default ChangeofNameRegistration;
 
 const getValidationSchema = () =>
     objectYup().shape({
-     
+        Gazette_No:stringYup()
+        .required('Gazette No is required.')
+        .matches(/^[0-9]+$/, "Must be only digits"),
+        newName:stringYup()
+        .required('New Name is required.'),
+        
         reg_date: stringYup()
-            .required('old reg date is required.'),
+            .required('Gazette date is required.'),
             
         edu_cert1: stringYup()
-            .required('FMR certificate is required.'),
-         edu_cert2: stringYup()
-            .required('Application Form is required.'),
-        edu_cert3: stringYup()
-            .required('Other/previous renewal documents is required.'),
+            .required('Gazette  certificate is required.'),
+       
       
     });
 
