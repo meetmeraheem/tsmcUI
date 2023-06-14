@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ApiResponseType } from '../../types/api';
 import { DoctorFormType, DoctorSignUpFormType, GetDoctorResponseType } from '../../types/doctor';
 import { axiosInstance } from './index';

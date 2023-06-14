@@ -1,8 +1,8 @@
 import { ApiResponseType } from "./api";
 
 export type AddQualFormType = {
-    country: string,
-    state: string,
+    country: number,
+    state: number,
     university: string,
     college: string,
     qualification: string;

@@ -41,6 +41,7 @@ const ProvisionalRegistration = () => {
     const [applicationForm, setApplicationForm] = useState<{ file?: File; error?: string } | null>(null);
     const [nocCertificate, setNOCCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [provisionalRequestType, setProvisionalRequestType] = useState<string>('nor');
+    const [localRequestType, setLocalRequestType] = useState<string>('telangana');
 
     const initialFormData = {
         doctor_id: 0,
@@ -241,6 +242,34 @@ const ProvisionalRegistration = () => {
                                             return (
                                                 <form onSubmit={handleSubmit}>
                                                     <div className="row mb-2">
+                                                    <div className="col-sm-auto">
+                                                            <label className="mb-2"> Local/Non Local</label>
+                                                            <select
+                                                                value={localRequestType}
+                                                                onChange={(ev) => {
+                                                                    if(ev.target.value==='non-telangana'){
+                                                                        Swal.fire({
+                                                                            //title: "Error",
+                                                                            text: "Provisional Not allowed for Other States",
+                                                                            icon: "error",
+                                                                            confirmButtonText: "OK",
+                                                                         }).then(async (result) => {
+                                                                            if (result.isConfirmed) {
+                                                                                navigate(routes.userpanal);
+                                                                            }
+                                                                        });
+                                                                    }else{
+                                                                    setLocalRequestType(ev.target.value);
+                                                                     }
+                                                                }}
+                                                                className="form-select"
+                                                            >
+                                                                <option value="">Select</option>
+                                                                <option value="telangana">Telangana</option>
+                                                                <option value="non-telangana">Non Telangana</option>
+                                                                <option value="other-country">Other countries</option>
+                                                            </select>
+                                                        </div>
                                                     <div className="col-sm-auto">
                                                             <label className="mb-2">Provisional Request Type</label>
                                                             <select
@@ -635,7 +664,10 @@ const ProvisionalRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
+                                                                                            {(localRequestType === 'other-country')?
+                                                                                            <p className='fs-13'>Upload Marks List</p>:
                                                                                             <p className='fs-13'>Upload Application Form</p>
+                                                                                            }
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>

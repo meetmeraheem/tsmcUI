@@ -98,7 +98,7 @@ const RenewalsViews = () => {
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getRenewalDetails();
-    }, []);
+    }, [renewalPrimaryId, doctorPrimaryId]);
 
     const closewindow = useCallback(async () => {
         if (userType === 'a') {

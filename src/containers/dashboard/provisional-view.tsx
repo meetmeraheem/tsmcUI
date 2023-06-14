@@ -175,7 +175,7 @@ const ProvisionalView = () => {
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getProvisionalDetails();
-    }, []);
+    }, [provisionalPrimaryId, doctorPrimaryId]);
 
   
 

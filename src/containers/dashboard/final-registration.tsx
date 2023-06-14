@@ -19,6 +19,7 @@ import { provisionalService } from "../../lib/api/provisional";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { UserRole } from "../../types/common";
 import { Provisional_DoctorFormType } from "../../types/provisional";
+import FinalRegView from "../../containers/dashboard/final-reg-view";
 
 const FinalRegistrations = () => {
     const fetchIdRef = useRef(0);
@@ -98,7 +99,7 @@ const FinalRegistrations = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/final_reg_view'} state={{ finalPrimaryId: cell.data[0].finalPrimaryId, doctorPrimaryId: cell.data[0].doctorPrimaryId }}>Proceed</Link>
+                    <Link to={'/admin/final_reg_view'} state={{ finalPrimaryId: cell.data[Number(cell.row.id)].finalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId }}>Proceed...</Link>
                 </>
             )
         },

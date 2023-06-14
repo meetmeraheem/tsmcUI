@@ -21,7 +21,8 @@ export type FinalFormType = {
   mci_eligi: string,
   inter_verif_cert: string,
   mci_reg: string,
-  imr_certificate: string
+  imr_certificate: string,
+  telanganapmrNo:string,
 }
 
 export type FinalEditFormType = {

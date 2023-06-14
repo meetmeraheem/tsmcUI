@@ -363,7 +363,7 @@ const getValidationSchema = () =>
     objectYup().shape({
         Gazette_No:stringYup()
         .required('Gazette No is required.')
-        .matches(/^[0-9]+$/, "Must be only digits"),
+        .matches(/^[a-zA-Z0-9]*$/, "Must be Alphanumeric only"),
         newName:stringYup()
         .required('New Name is required.'),
         
@@ -376,95 +376,3 @@ const getValidationSchema = () =>
       
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* <select
-    value={field.value}
-    onChange={(ev) => {
-        setFieldTouched(field.name);
-        setFieldValue(
-            field.name,
-            ev.target.value
-        );
-    }}
-    className={`form-select ${error ? 'is-invalid' : ''
-        } form-select-sm`}
->
-    <option value="">Select</option>
-    {examYears.map(
-        (item) => (
-            <option key={item} value={item}>
-                {item}
-            </option>
-        )
-    )}
-</select> */}

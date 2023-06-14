@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ApiResponseType } from '../../types/api';
 import { tokenManager } from '../token-manager';
 import { axiosInstance } from './index';

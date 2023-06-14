@@ -46,7 +46,8 @@ const FinalDuplicate = () => {
         mci_eligi: '',
         inter_verif_cert: '',
         mci_reg: '',
-        imr_certificate: ''
+        imr_certificate: '',
+        telanganapmrNo:''
     }
     const submitForm = useCallback(
         async (values: FinalFormType) => {

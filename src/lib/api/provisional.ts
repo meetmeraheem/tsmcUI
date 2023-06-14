@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ApiResponseType } from '../../types/api';
 import { axiosInstance } from './index';
 export const provisionalService = {
@@ -34,7 +33,7 @@ export const provisionalService = {
     },
 
     async getProvisionalFeeDetails(data: any) {
-        const { data: responseData } = await axios.post(`provisional/getProvisionalRegFeeDetails`, data);
+        const { data: responseData } = await axiosInstance.post(`provisional/getProvisionalRegFeeDetails`, data);
         return responseData;
     },
 };

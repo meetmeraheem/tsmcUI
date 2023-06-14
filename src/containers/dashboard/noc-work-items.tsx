@@ -74,7 +74,7 @@ const MyWorkItems = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/noc_reg_view'} state={{ nocPrimaryId: cell.data[Number(cell.row.id)].nocPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[0].assignmentId }}>Proceed</Link>
+                    <Link to={'/admin/noc_reg_view'} state={{ nocPrimaryId: cell.data[Number(cell.row.id)].nocPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[Number(cell.row.id)].assignmentId }}>Proceed</Link>
                 </>
             )
         }

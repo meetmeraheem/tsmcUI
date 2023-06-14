@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ApiResponseType } from '../../types/api';
 import { axiosInstance } from './index';
 
@@ -34,6 +33,11 @@ export const additionalService = {
 
     async getQualificationsByUserId(fromdate: any,todate: any,user_id: number,regType:any){
         const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByUserId/${fromdate}/${todate}/${user_id}/${regType}`);
+        return responseData;
+    },
+
+    async editQualification(additionalId: number, data: any) {
+        const { data: responseData } = await axiosInstance.put(`additionalQualification/editQualification/${additionalId}`, data);
         return responseData;
     },
 };

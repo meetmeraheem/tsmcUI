@@ -47,8 +47,8 @@ const AdditionalQualificationRegistration = () => {
 
 
     const initialFormData = {
-        country: '',
-        state: '',
+        country: 0,
+        state: 0,
         university: '',
         college: '',
         qualification: '',
@@ -270,11 +270,8 @@ const AdditionalQualificationRegistration = () => {
             .required('applied For is required.'),    
             edu_cert1: stringYup()
                 .required('Study certificate is required.'),
-            edu_cert2: stringYup().when(['country', 'state'], {
-                is: (country: any, state: any) => ((country != 101) || (country == 101 && state == 36 && isPMRDateAbove15M)),
-                then: stringYup().required('Degree is required.'),
-                otherwise: stringYup()
-            }),
+            edu_cert2: stringYup().required('Degree is required.'),
+            
            
         });
 

@@ -96,7 +96,7 @@ const Renewal = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/renewals_reg_view'} state={{ renewalPrimaryId: cell.data[0].renewalPrimaryId, doctorPrimaryId: cell.data[0].doctorPrimaryId, }}>Proceed</Link>
+                    <Link to={'/admin/renewals_reg_view'} state={{ renewalPrimaryId: cell.data[Number(cell.row.id)].renewalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId, }}>Proceed</Link>
                 </>
             )
         },

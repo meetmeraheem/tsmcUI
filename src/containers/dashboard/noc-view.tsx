@@ -162,7 +162,7 @@ const FinalRegView = () => {
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getFinalDetails();
-    }, []);
+    }, [nocPrimaryId, doctorPrimaryId]);
     return (
         <>
             <div className="col-8 m-auto mb-4">

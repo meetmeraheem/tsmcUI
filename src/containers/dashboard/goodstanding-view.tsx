@@ -154,7 +154,7 @@ const GoodStandingRegView = () => {
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getGSDetails();
-    }, []);
+    }, [gsPrimaryId, doctorPrimaryId]);
     return (
         <>
             <div className="col-8 m-auto mb-4">

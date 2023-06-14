@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ApiResponseType } from '../../types/api';
 import { FinalFormType, GetFinalResponse } from '../../types/final';
 import { tokenManager } from '../token-manager';

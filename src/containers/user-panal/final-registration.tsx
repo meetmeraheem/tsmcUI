@@ -45,11 +45,14 @@ const FinalRegistration = () => {
     const [mciRegisrationCertificate, setMCIRegisrationCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [imrCertificate, setIMRCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [duration, setDuration] = useState('');
+    const [statepmrNo, setStatepmrNo] = useState('');
     const [isIndia, setIsIndia] = useState(false);
     const [isPMRDateAbove15M, setIsPMRDateAbove15M] = useState(false);
     const [isPMRDateAbove18M, setIsPMRDateAbove18M] = useState(false);
     const [isTelangana, setIsTelangana] = useState(false);
     const [finalRequestType, setFinalRequestType] = useState<string>('nor');
+    const [localRequestType, setLocalRequestType] = useState<string>('non-telangana');
+
 
 
     const initialFormData = {
@@ -73,7 +76,8 @@ const FinalRegistration = () => {
         mci_eligi: '',
         inter_verif_cert: '',
         mci_reg: '',
-        imr_certificate: ''
+        imr_certificate: '',
+        telanganapmrNo:''
     }
 
     const getProvisionalDetails = useCallback(async () => {
@@ -273,6 +277,8 @@ const FinalRegistration = () => {
                 .required('College Name is required.'),
             qualification: stringYup()
                 .required('Qualification is required.'),
+            telanganapmrNo: stringYup()
+                .required('PMR No is required.'),   
             exam_month: stringYup()
                 .required('Exam Month is required.'),
             exam_year: stringYup()
@@ -403,6 +409,55 @@ const FinalRegistration = () => {
                                                     {/* {!isValid && JSON.stringify(errors)} */}
                                                     <form onSubmit={handleSubmit}>
                                                     <div className="row mb-2">
+                                                    <div className="col-sm-auto">
+                                                            <label className="mb-2"> Local/Non Local</label>
+                                                            <select
+                                                                value={localRequestType}
+                                                                onChange={(ev) => {
+                                                                    setLocalRequestType(ev.target.value);
+                                                                }}
+                                                                className="form-select"
+                                                            >
+                                                                <option value="">Select</option>
+                                                                <option value="telangana">Telangana</option>
+                                                                <option value="non-telangana">Non Telangana</option>
+                                                                <option value="other-country">Other countries</option>
+                                                            </select>
+                                                        </div>
+                                                {(localRequestType==='telangana')?      
+                                                       <div className="col-8">
+                                                       <Field name="telanganapmrNo">
+                                                           {(fieldProps: FieldProps) => {
+                                                               const { field, form } = fieldProps;
+                                                               const error =
+                                                                   getValue(form.touched, field.name) &&
+                                                                   getValue(form.errors, field.name);
+                                                               return (
+                                                                   <>
+                                                                       <label className="mb-2">Telangana Pmr No </label>
+                                                                       <input
+                                                                           type="text"
+                                                                           value={field.value}
+                                                                           onChange={(ev) => {
+                                                                               setFieldTouched(field.name);
+                                                                               setFieldValue(field.name, ev.target.value);
+                                                                           }}
+                                                                           className={`form-control ${error ? 'is-invalid' : ''
+                                                                               }`}
+                                                                           placeholder="Enter Telangana Pmr No"
+                                                                           maxLength={100}
+                                                                       />
+
+                                                                       {error && <small className="text-danger">{error.toString()}</small>}
+
+
+                                                                   </>
+                                                               );
+                                                           }}
+                                                       </Field>
+                                                   </div>:""}
+                                                         </div>
+                                                         <div className="row mb-2">
                                                     <div className="col-sm-auto">
                                                             <label className="mb-2">Final Request Type</label>
                                                             <select
@@ -1441,7 +1496,7 @@ const FinalRegistration = () => {
                                                                                             >
                                                                                                 <div className="text-center">
                                                                                                     <i className="bi-file-earmark-break fs-32"></i>
-                                                                                                    <p className='fs-13'>Boad of Intermediate Verification Certificate</p>
+                                                                                                    <p className='fs-13'>Board of Intermediate Verification Certificate</p>
                                                                                                 </div>
                                                                                             </Files>
                                                                                             <small className="text-danger mt-1">

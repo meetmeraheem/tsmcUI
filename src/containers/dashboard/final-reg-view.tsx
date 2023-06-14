@@ -176,7 +176,7 @@ const FinalRegView = () => {
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getFinalDetails();
-    }, []);
+    }, [finalPrimaryId, doctorPrimaryId]);
     return (
         <>
             <div className="col-8 m-auto mb-4">
@@ -339,8 +339,8 @@ const FinalRegView = () => {
                                         </div>
                                     </div>
                                 }
-
-
+                                </div>
+                                <div className="row mt-3">
                                 {final?.edu_cert3 &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.edu_cert3) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -355,6 +355,9 @@ const FinalRegView = () => {
                                         </div>
                                     </div>
                                 }
+                                 </div>
+                                <div className="row mt-3">
+
                                 {final?.testimonal1 &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.testimonal1) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -369,6 +372,8 @@ const FinalRegView = () => {
                                         </div>
                                     </div>
                                 }
+                                 </div>
+                                <div className="row mt-3">
                                 {final?.reg_other_state &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.reg_other_state) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -383,6 +388,8 @@ const FinalRegView = () => {
                                         </div>
                                     </div>
                                 }
+                                   </div>
+                                <div className="row mt-3">
                                 {final?.internship_comp &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.internship_comp) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -397,6 +404,8 @@ const FinalRegView = () => {
                                         </div>
                                     </div>
                                 }
+                                   </div>
+                                <div className="row mt-3">
                                 {final?.inter_verif_cert &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.inter_verif_cert) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -411,6 +420,8 @@ const FinalRegView = () => {
                                         </div>
                                     </div>
                                 }
+                                   </div>
+                                <div className="row mt-3">
                                 {final?.imr_certificate &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.imr_certificate) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -418,7 +429,7 @@ const FinalRegView = () => {
                                         </div>
                                     </div>
                                 }
-                            </div>
+                            </div>  
                         </div>
                     </div>
                     {userType === 'u' && final?.approval_status === 'pen' &&

@@ -97,7 +97,7 @@ const GoodStanding = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/admin_goodstanding_view'} state={{ gsPrimaryId: cell.data[0].gsPrimaryId, doctorPrimaryId: cell.data[0].doctorPrimaryId }}>Proceed</Link>
+                    <Link to={'/admin/admin_goodstanding_view'} state={{ gsPrimaryId: cell.data[Number(cell.row.id)].gsPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId }}>Proceed</Link>
                 </>
             )
         },

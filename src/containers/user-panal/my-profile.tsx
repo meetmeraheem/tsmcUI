@@ -526,7 +526,8 @@ const Myprofile = () => {
                                     <th>college</th>
                                     <th>Registration Date</th>
                                     <th>Approval Status</th>
-                                    
+                                    <th> </th>
+                                    <th> </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -546,8 +547,10 @@ const Myprofile = () => {
                                             {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                                             {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
                                         </td>
-                                        {obj.approval_status === 'rej'?  <td>{obj.extra_col3}</td>:""}  
-                                        {/* <td><Link to={'/admin/provisional_view'} state={{ provisionalPrimaryId: obj.provisionalPrimaryId, doctorPrimaryId: obj.doctorPrimaryId }}>View</Link></td> */}
+                                        {(obj.approval_status == 'pen' ||obj.approval_status == 'rej')  ?<td> <Link to={'edit_additional-qualification-registration'} state={{ additionalPrimaryId: obj.id}}className='btn btn-primary btn-sm me-3'>Edit</Link></td>:<td></td>}
+
+                                        {obj.approval_status === 'rej'?  <td>{obj.extra_col3}</td>:<td></td>}  
+
                                     </tr>);
                                 })}
                             </tbody></table>

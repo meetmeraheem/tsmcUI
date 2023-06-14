@@ -1,9 +1,9 @@
 import { Field, FieldProps, Formik, FormikProps } from 'formik';
 import { date as dateYup, object as objectYup, string as stringYup, number as numberYup } from 'yup';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import getValue from 'lodash/get';
 import Select from 'react-select';
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 //@ts-ignore
 import Files from 'react-files';
 import { College, Country, Qualification, Serials, State, University } from '../../types/common';
@@ -17,45 +17,42 @@ import Swal from 'sweetalert2';
 import { routes } from '../routes/routes-names';
 import { additionalService } from '../../lib/api/additional';
 import { LocalStorageManager } from '../../lib/localStorage-manager';
-import { doctorService } from '../../lib/api/doctot';
 import { dateDuration } from '../../lib/utils/dateDuration';
-import { provisionalService } from '../../lib/api/provisional';
 import moment from 'moment';
 import { authService } from '../../lib/api/auth';
-import secureLocalStorage from 'react-secure-storage';
+import { AdminAddQualDataFormType} from '../../types/additionalQuali';
 
 
 
 const EditAdditionalQualificationRegistration = () => {
     const navigate = useNavigate();
-    const [next, setNext] = useState(false);
-    const [finalSerial, setFinalSerial] = useState<Serials>();
-    const [fmrNo, setFMRNo] = useState(0);
+    const location = useLocation();
+    const { additionalPrimaryId} = location.state
     const [countries, setCountries] = useState<Country[]>([]);
     const [states, setStates] = useState<State[]>([]);
     const [universities, setUniversities] = useState<University[]>([]);
     const [colleges, setColleges] = useState<College[]>([]);
     const [qualifications, setQualifications] = useState<Qualification[]>([]);
+    const [additionals, setAdditionals] = useState<AddQualFormType>();
     const [studyCertificate, setStudyCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [DegreeCertificate, setDegreeCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [duration, setDuration] = useState('');
     const [isIndia, setIsIndia] = useState(false);
-    const [isPMRDateAbove15M, setIsPMRDateAbove15M] = useState(false);
-    const [isPMRDateAbove18M, setIsPMRDateAbove18M] = useState(false);
     const [isTelangana, setIsTelangana] = useState(false);
 
-    const initialFormData = {
-        country: '',
-        state: '',
-        university: '',
-        college: '',
-        qualification: '',
-        exam_month: '',
-        exam_year: '',
-        duration: '',
-        edu_cert1: '',
-        edu_cert2: '',
-        appliedFor: '',
+    const initialFormData =  useMemo(
+        () => ({
+        country: Number(additionals?.country) || 0,
+        state:Number(additionals?.state) ||0,
+        university: additionals?.university || '',
+        college: additionals?.college || '',
+        qualification :additionals?.qualification || '',
+        exam_month: additionals?.exam_month || '',
+        exam_year: additionals?.exam_year || '',
+        duration: additionals?.duration || '',
+        edu_cert1: additionals?.edu_cert1 || '',
+        edu_cert2: additionals?.edu_cert2 || '',
+        appliedFor: additionals?.appliedFor || '',
         affidivit: '',
         testimonal1: '',
         testimonal2: '',
@@ -67,48 +64,10 @@ const EditAdditionalQualificationRegistration = () => {
         mci_reg: '',
         imr_certificate: '',
         approval_status:''
-    }
 
-    const getProvisionalDetails = useCallback(async () => {
-        try {
-            const doctorSerialId = LocalStorageManager.getDoctorSerialId();
-            if (doctorSerialId) {
-                const { data } = await provisionalService.getProvisionalByDoctorId(Number(doctorSerialId));
-                if (data.length > 0) {
-                    const date = moment(new Date(data[0].reg_date));
-                    const currentDate = moment(new Date());
-                    const diffMonths = currentDate.diff(date, 'months');
-                    console.log('diffMonths' + diffMonths);
-                    if (diffMonths > 15) {
-                        setIsPMRDateAbove15M(true);
-                        if (diffMonths > 18) {
-                            setIsPMRDateAbove18M(true);
-                        }
-                    }
-                }
-            }
-        } catch (err) {
-            console.log('error getProvisionalDetails', err);
-        }
-    }, []);
-
-    const getMtSerials = useCallback(async () => {
-        try {
-            const { data: fr } = await commonService.getMtSerials('FR');
-            if (fr) {
-                setFinalSerial({
-                    ...fr,
-                    created_date: moment(fr.created_date).format('YYYY-MM-DD h:mm:ss'),
-                    serial_starts: Number(fr.serial_starts) + 1
-                });
-                setFMRNo(Number(fr.serial_starts) + 1);
-            }
-        } catch (err) {
-            console.log('error getMtSerials', err);
-        } finally {
-            //setLoading(false);
-        }
-    }, [fmrNo]);
+    }),
+    [additionals]
+);
 
     const getQualifications = useCallback(async () => {
         try {
@@ -138,8 +97,7 @@ const EditAdditionalQualificationRegistration = () => {
     }, []);
 
     useEffect(() => {
-        getProvisionalDetails();
-        getMtSerials();
+        getAdditionalDetails();
         getQualifications();
         getCountries();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -162,6 +120,7 @@ const EditAdditionalQualificationRegistration = () => {
             if (data.length > 0) {
                 setUniversities(data);
                 setColleges([]);
+                return data;
             }
         } catch (err) {
             console.log('error university getList', err);
@@ -178,7 +137,50 @@ const EditAdditionalQualificationRegistration = () => {
             console.log('error colleges getList', err);
         }
     }, []);
+    const getAdditionalDetails = useCallback(async () => {
+        try {
+            if (additionalPrimaryId) {
+                const { data } = await additionalService.getQualificationById(additionalPrimaryId);
+                if (data.length > 0) {
+                    const country = await commonService.getCountry(Number(data[0].country));
+                    const state = await commonService.getState(Number(data[0].state));
+                    setAdditionals({
 
+                        country: data[0].country,
+                        state: data[0].state,
+                        university: data[0].university,
+                        college: data[0].college,
+                        qualification: data[0].qualification,
+                        exam_month: data[0].exam_month,
+                        exam_year: data[0].exam_year,
+                        duration:data[0].duration,
+                        edu_cert1:data[0].edu_cert1,
+                        edu_cert2:data[0].edu_cert2,
+                        appliedFor: data[0].appliedFor,
+                        affidivit: '',
+                        testimonal1: '',
+                        testimonal2: '',
+                        reg_other_state: '',
+                        screen_test: '',
+                        intership_comp: '',
+                        mci_eligi: '',
+                        inter_verif_cert: '',
+                        mci_reg: '',
+                        imr_certificate: '',
+                        approval_status:''
+                       
+                    });
+                    setDuration(data[0]?.duration);
+                    getStates(data[0]?.country);
+                    const universityList = await getUniversityNames(data[0]?.state);
+                    const univerOBJ = universityList.filter((obj: any) => obj.university == data[0]?.university);
+                    getColleges(univerOBJ[0].id);
+                }
+            }
+        } catch (err) {
+            console.log('error getAdditionalDetails', err);
+        }
+    }, []);
     const submitForm = useCallback(
         async (values: AddQualFormType) => {
             try {
@@ -202,15 +204,14 @@ const EditAdditionalQualificationRegistration = () => {
               
               
                 if (studyCertificate?.file) {
-                    formData.append("additional_study", studyCertificate?.file);
+                    formData.append("study", studyCertificate?.file);
                 }
                
                 if (DegreeCertificate?.file) {
-                    formData.append("additional_Degree", DegreeCertificate?.file);
+                    formData.append("Degree", DegreeCertificate?.file);
                 }
               
-              
-                const { success } = await additionalService.additionalRegistration(formData);
+                const { success } = await additionalService.editQualification(additionalPrimaryId,formData);
                 if (success) {
                     setStudyCertificate(null);
                     setDegreeCertificate(null);
@@ -241,7 +242,7 @@ const EditAdditionalQualificationRegistration = () => {
                 })
             }
         },
-        [ studyCertificate,  DegreeCertificate,  finalSerial, fmrNo]
+        [ studyCertificate,  DegreeCertificate]
     );
 
     const getValidationSchema = () =>
@@ -265,40 +266,20 @@ const EditAdditionalQualificationRegistration = () => {
             .required('applied For is required.'),    
             edu_cert1: stringYup()
                 .required('Study certificate is required.'),
-            edu_cert2: stringYup().when(['country', 'state'], {
-                is: (country: any, state: any) => ((country != 101) || (country == 101 && state == 36 && isPMRDateAbove15M)),
-                then: stringYup().required('Degree is required.'),
-                otherwise: stringYup()
-            }),
+            edu_cert2: stringYup() 
+                .required('Degree is required.')
+            });
            
-        });
+        
 
     return (
         <>
             <section className='gray-banner'>
                 <div className="container mt-4">
-                    {!next && <div className="col-9 m-auto">
-                        <div className="card shadow border-0 mb-4">
-                            <div className="card-body">
-                                <div className="d-flex align-items-center">
-                                    <h1 className='fs-22 fw-700 me-2 mb-0'>Additional Qualification Registration</h1>
-                                    <p className='mb-0 fs-13'>(Please check your personal details and click on next)</p>
-                                </div>
-                                <hr />
-                                <DoctorInfoCard />
-                            </div>
-                            <div className="card-footer text-end">
-                                <button type='submit' onClick={() => setNext(true)} className='btn btn-primary'>Next <i className="bi-chevron-right"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    }
-
-                    
-                {next &&  <div className="col-9 m-auto">
+              <div className="col-9 m-auto">
                             <div className="card shadow border-0 mb-4">
                                 <div className="card-body">
-                                    <h1 className='fs-22 fw-700'>Educational Institution Details</h1>
+                                    <h1 className='fs-18 fw-700'>Additional Educational Institution Details</h1>
                                     <hr />
                                     <Formik
                                         onSubmit={submitForm}
@@ -331,6 +312,9 @@ const EditAdditionalQualificationRegistration = () => {
                                                                                     isSearchable
                                                                                     options={countries}
                                                                                     placeholder="Select country"
+                                                                                    value={countries.find(
+                                                                                        (item) => item.id === field.value
+                                                                                    )}
                                                                                     onChange={(selectedOption) => {
                                                                                         const { id, name } =
                                                                                             selectedOption as Country;
@@ -370,6 +354,10 @@ const EditAdditionalQualificationRegistration = () => {
                                                                                     classNamePrefix="react-select"
                                                                                     isSearchable
                                                                                     options={states}
+                                                                                    value={states.find(
+                                                                                        (item) => item.id === field.value
+                                                                                    )}
+                                                                                   
                                                                                     placeholder="Select state"
                                                                                     onChange={(selectedOption) => {
                                                                                         const { id, name } =
@@ -415,6 +403,9 @@ const EditAdditionalQualificationRegistration = () => {
                                                                                     isSearchable
                                                                                     options={universities}
                                                                                     placeholder="Select university"
+                                                                                    value={universities.find(
+                                                                                        (item) => item.university === field.value
+                                                                                    )}
                                                                                     onChange={(selectedOption) => {
                                                                                         const { id, university } =
                                                                                             selectedOption as University;
@@ -449,6 +440,9 @@ const EditAdditionalQualificationRegistration = () => {
                                                                                     classNamePrefix="react-select"
                                                                                     isSearchable
                                                                                     options={colleges}
+                                                                                    value={colleges.find(
+                                                                                        (item) => item.college === field.value
+                                                                                    )}
                                                                                     placeholder="Select college"
                                                                                     onChange={(selectedOption) => {
                                                                                         const { id, college } =
@@ -757,7 +751,7 @@ const EditAdditionalQualificationRegistration = () => {
 
                                                         <div className="w-100 text-end mt-3">
                                                             {/* isValid? setNext(false):setNext(true) */}
-                                                            <button type='button' onClick={() => { setNext(false) }} className='btn btn-primary me-3'><i className="bi-chevron-left"></i>Back </button>
+                                                          
                                                             <button type="submit" disabled={isSubmitting} className="btn btn-primary">
                                                                 {isSubmitting && <span className="spinner-border spinner-border-sm" />} Submit
                                                             </button>
@@ -770,8 +764,6 @@ const EditAdditionalQualificationRegistration = () => {
                                 </div>
                             </div>
                         </div>
-                    }
-
                 </div>
             </section>
         </>

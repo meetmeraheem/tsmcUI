@@ -17,13 +17,15 @@ import { additionalService } from '../../lib/api/additional';
 import { nocUserFormType } from "../../types/noc";
 import { AddQualFormType } from '../../types/additionalQuali';
 import { nocService } from "../../lib/api/noc";
-import UserHeader from "../user-panal/includes/user-header";
 import { goodStandingFormType } from "../../types/common";
 import { goodstandingService } from "../../lib/api/goodstanding";
 import { renewalsFormType } from "../../types/common";
 import { renewalService } from "../../lib/api/renewals";
 import { changeofnameService } from "../../lib/api/changeofname";
 import { changeOfNameType } from "../../types/common";
+import SiteLogo from '../../assets/images/logo.png'
+import SiteSubLogo from '../../assets/images/tsgovt-logo.png'
+import { Link } from 'react-router-dom';
 
 
 const PaymentSuccess = () => {
@@ -434,7 +436,32 @@ const PaymentSuccess = () => {
     return (
 
         <>
-            <UserHeader />
+          <header>
+				<nav className="navbar navbar-expand-lg  tsmc-header">
+					<div className="container">
+						<div className='col-1'>
+							<Link to="" className="navbar-brand tsmc-site-logo">
+								<img src={SiteLogo} alt="Site Logo" className='mt-3'/>
+							</Link>
+						</div>
+						<div>
+							<h1 className="fs-22 fw-700 mb-0 text-light">Telangana State Medical Council</h1>
+						</div>
+                        <div>
+                        </div>
+                        <div>
+                        </div>
+
+						<button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#MainMenu" aria-controls="MainMenu">
+							<i className="bi bi-list"></i>
+						</button>
+                        </div>
+                        <Link to="" className="navbar-brand tsmc-site-logo tsmc-site-sub-logo">
+							<img src={SiteSubLogo} alt="Site Logo" />
+						</Link>
+                        </nav>
+                        </header>
+
             {isLoader ? (
                 <div className="d-flex justify-content-center">
                     <div className="spinner-border text-success mt-5" role="status">
