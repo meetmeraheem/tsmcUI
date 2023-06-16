@@ -73,6 +73,17 @@ const ProvisionalRegistrations = () => {
             }
         },
         {
+            Header: "RequstType",
+            accessor: "extra_col1",
+            Cell: ({ cell: { value } }: any) => {
+                return (
+                    <>
+                        {value!=='tat'?"Normal":"Tatkal"}
+                    </>
+                );
+            }
+        },
+        {
             Header: "Status",
             accessor: "approval_status",
             Cell: ({ cell: { value } }: any) => {
@@ -119,7 +130,7 @@ const ProvisionalRegistrations = () => {
                                     assignReason: '',
                                     doctor_id: cell.data[Number(cell.row.id)].doctor_id,
                                     assignRegType: 'provisional',
-                                    regTypeId:cell.data[0].provisionalPrimaryId
+                                    regTypeId:cell.data[Number(cell.row.id)].provisionalPrimaryId
 
                                 }
                                 setAssignedList([...assignedList, doctorInfo]);
@@ -205,8 +216,13 @@ const ProvisionalRegistrations = () => {
                     text: "Assigned",
                     icon: "success",
                     confirmButtonText: "OK",
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        setAssignedList([]);
+                        setAssignedGridList([]);
+                       
+                    }
                 });
-                fetchData({});
             }
         } catch (err) {
             console.log('error get users by role', err);

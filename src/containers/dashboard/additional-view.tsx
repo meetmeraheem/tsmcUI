@@ -111,7 +111,7 @@ const AdditionalRegView = () => {
                                 navigate(routes.admin_final_registrations);
                             }
                             if (userType === 'u') {
-                                navigate(routes.admin_my_work_items);
+                                navigate(routes.admin_dashboard);
                             }
                         }
                     });

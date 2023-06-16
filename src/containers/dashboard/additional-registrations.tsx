@@ -19,9 +19,13 @@ import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { UserRole } from "../../types/common";
 import { Provisional_DoctorFormType } from "../../types/provisional";
 import { additionalService } from "../../lib/api/additional";
+import { routes } from '../routes/routes-names';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 
 const Additional = () => {
     const fetchIdRef = useRef(0);
+    const navigate = useNavigate();
     const [finals, setFinals] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
     let default7Days = moment().subtract(7,'d').format('YYYY-MM-DD');
@@ -84,6 +88,17 @@ const Additional = () => {
             }
         },
         {
+            Header: "RequstType",
+            accessor: "extra_col1",
+            Cell: ({ cell: { value } }: any) => {
+                return (
+                    <>
+                        {value!=='tat'?"Normal":"Tatkal"}
+                    </>
+                );
+            }
+        },
+        {
             Header: "Status",
             accessor: "status",
             Cell: ({ cell: { value } }: any) => {
@@ -130,7 +145,7 @@ const Additional = () => {
                                     assignReason: '',
                                     doctor_id: cell.data[Number(cell.row.id)].doctor_id,
                                     assignRegType: 'additional',
-                                    regTypeId:cell.data[0].additionalPrimaryId
+                                    regTypeId:cell.data[Number(cell.row.id)].additionalPrimaryId
                                 }
                                 setAssignedList([...assignedList, doctorInfo]);
                                 setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
@@ -140,7 +155,7 @@ const Additional = () => {
                                     text: "Already Added",
                                     icon: "warning",
                                     confirmButtonText: "OK",
-                                })
+                                });
                             }
                         }
 
@@ -181,7 +196,13 @@ const Additional = () => {
                     text: "Assigned",
                     icon: "success",
                     confirmButtonText: "OK",
-                })
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        setAssignedList([]);
+                        setAssignedGridList([]);
+                        navigate(routes.admin_dashboard);
+                    }
+                });
             }
         } catch (err) {
             console.log('error get users by role', err);

@@ -270,7 +270,7 @@ const RenewalRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload fmr Certificate</p>
+                                                                                            <p className='fs-13'>Upload Last Renewal Certificate</p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>
@@ -456,7 +456,7 @@ const getValidationSchema = () =>
             .required('old reg date is required.'),
             
         edu_cert1: stringYup()
-            .required('FMR certificate is required.'),
+            .required('Last Renewal certificate is required.'),
          edu_cert2: stringYup()
             .required('Application Form is required.'),
         edu_cert3: stringYup()

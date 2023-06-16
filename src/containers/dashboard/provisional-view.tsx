@@ -153,7 +153,7 @@ const ProvisionalView = () => {
                                 navigate(routes.admin_dashboard);
                             }
                             if (userType === 'u') {
-                                navigate(routes.admin_my_work_items);
+                                navigate(routes.admin_dashboard);
                             }
                         }
                     });

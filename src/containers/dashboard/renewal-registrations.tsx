@@ -78,7 +78,17 @@ const Renewal = () => {
                 );
             }
         },
-       
+        {
+            Header: "RequstType",
+            accessor: "extra_col1",
+            Cell: ({ cell: { value } }: any) => {
+                return (
+                    <>
+                        {value!=='tat'?"Normal":"Tatkal"}
+                    </>
+                );
+            }
+        },
         {
             Header: "Status",
             accessor: "status",
@@ -105,7 +115,7 @@ const Renewal = () => {
             Cell: (cell: any) => (
                 <>
                     <i className="bi bi-plus-square" onClick={async () => {
-                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'final');
+                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'renewal');
                         if (data && data.length > 0) {
                             const getUser = await adminService.getAdminById(data[0].AssignTo);
                             if (getUser.data.length > 0) {
@@ -126,7 +136,7 @@ const Renewal = () => {
                                     assignReason: '',
                                     doctor_id: cell.data[Number(cell.row.id)].doctor_id,
                                     assignRegType: 'renewal',
-                                    regTypeId:cell.data[0].renewalPrimaryId
+                                    regTypeId:cell.data[Number(cell.row.id)].renewalPrimaryId
                                 }
                                 setAssignedList([...assignedList, doctorInfo]);
                                 setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
@@ -177,7 +187,13 @@ const Renewal = () => {
                     text: "Assigned",
                     icon: "success",
                     confirmButtonText: "OK",
-                })
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        setAssignedList([]);
+                        setAssignedGridList([]);
+                       
+                    }
+                });
             }
         } catch (err) {
             console.log('error get users by role', err);

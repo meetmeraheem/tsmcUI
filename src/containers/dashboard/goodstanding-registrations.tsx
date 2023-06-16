@@ -81,6 +81,17 @@ const GoodStanding = () => {
             }
         },
         {
+            Header: "RequstType",
+            accessor: "extra_col1",
+            Cell: ({ cell: { value } }: any) => {
+                return (
+                    <>
+                        {value!=='tat'?"Normal":"Tatkal"}
+                    </>
+                );
+            }
+        },
+        {
             Header: "Status",
             accessor: "status",
             Cell: ({ cell: { value } }: any) => {
@@ -127,7 +138,7 @@ const GoodStanding = () => {
                                     assignReason: '',
                                     doctor_id: cell.data[Number(cell.row.id)].doctor_id,
                                     assignRegType: 'gs',
-                                    regTypeId:cell.data[0].gsPrimaryId
+                                    regTypeId:cell.data[Number(cell.row.id)].gsPrimaryId
                                 }
                                 setAssignedList([...assignedList, doctorInfo]);
                                 setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
@@ -178,7 +189,13 @@ const GoodStanding = () => {
                     text: "Assigned",
                     icon: "success",
                     confirmButtonText: "OK",
-                })
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        setAssignedList([]);
+                        setAssignedGridList([]);
+                       
+                    }
+                });
             }
         } catch (err) {
             console.log('error get users by role', err);

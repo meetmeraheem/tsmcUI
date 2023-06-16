@@ -434,7 +434,7 @@ const FinalRegistration = () => {
                                                                    getValue(form.errors, field.name);
                                                                return (
                                                                    <>
-                                                                       <label className="mb-2">Telangana Pmr No </label>
+                                                                       <label className="mb-2">Telangana Provisional Registration Number  </label>
                                                                        <input
                                                                            type="text"
                                                                            value={field.value}
@@ -444,7 +444,7 @@ const FinalRegistration = () => {
                                                                            }}
                                                                            className={`form-control ${error ? 'is-invalid' : ''
                                                                                }`}
-                                                                           placeholder="Enter Telangana Pmr No"
+                                                                           placeholder="Enter Telangana Provisional Registration Number"
                                                                            maxLength={100}
                                                                        />
 
