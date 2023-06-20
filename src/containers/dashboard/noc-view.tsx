@@ -96,15 +96,16 @@ const FinalRegView = () => {
                     msg="NOC successfully approved";
                     smsmsg="Your  NOC Application has been Approved from Telangana State Medical Council.";
                 }else{
-                    msg="NOC successfully Rejected";
+                    msg="NOC Application Rejected";
                     smsmsg="Your NOC Application has been Rejected from Telangana State Medical Council.";
                 }
                     Swal.fire({
-                        title: "Success",
+                        title: "",
                         text: msg,
-                        icon: "success",
+                        icon: status !== 'rej' ?"success":"error",
                         confirmButtonText: "OK",
-                    }).then(async (result) => {
+                      }).then(async (result) => {
+                    let userType= LocalStorageManager.getUserType();
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
                                 await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {

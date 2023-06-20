@@ -125,7 +125,7 @@ const RenewalsViews = () => {
                         msg="Renewal successfully approved";
                         smsmsg="Your Renewal  Application has been Approved from Telangana State Medical Council.";
                     }else{
-                        msg="Renewal successfully Rejected";
+                        msg="Renewal Application Rejected";
                         smsmsg="Your Renewal Application has been Rejected from Telangana State Medical Council.";
                     }
                     Swal.fire({
@@ -137,9 +137,7 @@ const RenewalsViews = () => {
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
                                 await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
-                                    
                                 }).catch(() => {
-
                                 });
                             }
                             if (userType === 'a') {

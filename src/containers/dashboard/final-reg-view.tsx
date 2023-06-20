@@ -110,16 +110,17 @@ const FinalRegView = () => {
                     msg="Final successfully approved";
                     smsmsg="Your Final Application has been Approved from Telangana State Medical Council.";
                 }else{
-                    msg="Final successfully Rejected";
+                    msg="Final Application Rejected";
                     smsmsg="Your Final Application has been Rejected from Telangana State Medical Council.";
                 }
                     Swal.fire({
-                        title: "Success",
-                        text: msg,
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    }).then(async (result) => {
-                        if (result.isConfirmed) {
+                                title: "",
+                                text: msg,
+                                icon: status !== 'rej' ?"success":"error",
+                                confirmButtonText: "OK",
+                     }).then(async (result) => {
+                           let userType= LocalStorageManager.getUserType();
+                            if (result.isConfirmed) {
                             if (doctor?.mobileno) {
                                 await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
                                     

@@ -88,16 +88,17 @@ const GoodStandingRegView = () => {
                     msg="Good Standing successfully approved";
                     smsmsg="Your Good Standing  Application has been Approved from Telangana State Medical Council.";
                 }else{
-                    msg="Good Standing successfully Rejected";
+                    msg="Good Standing Application Rejected";
                     smsmsg="Your Good Standing Application has been Rejected from Telangana State Medical Council.";
                 }
                     Swal.fire({
-                        title: "Success",
+                        title: "",
                         text: msg,
-                        icon: "success",
+                        icon: status !== 'rej' ?"success":"error",
                         confirmButtonText: "OK",
-                    }).then(async (result) => {
-                        if (result.isConfirmed) {
+                      }).then(async (result) => {
+                             let userType= LocalStorageManager.getUserType();
+                            if (result.isConfirmed) {
                             if (doctor?.mobileno) {
                                 await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
                                     

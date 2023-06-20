@@ -85,6 +85,8 @@ const PaymentSuccess = () => {
                     if (success) {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                         if (data && data.doctorId !== null) {
                             LocalStorageManager.setDoctorSerialId(data.doctorId.toString());
                         }
@@ -113,6 +115,8 @@ const PaymentSuccess = () => {
                     } else {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                     }
                 }
 
@@ -184,6 +188,8 @@ const PaymentSuccess = () => {
                             LocalStorageManager.setDoctorSerialId(data.doctorId.toString());
                         }
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                         secureLocalStorage.removeItem("afName");
                         secureLocalStorage.removeItem("mbbsName");
                         secureLocalStorage.removeItem("nocName");
@@ -215,6 +221,8 @@ const PaymentSuccess = () => {
                     } else {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                     }
                 }
                 if (regType === 'additionalInfo') {
@@ -238,7 +246,8 @@ const PaymentSuccess = () => {
                     if (success) {
                         setIsLoader(false);
                         setTransactionMsg(message);
-
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                         secureLocalStorage.removeItem("additional_study_name");
                         secureLocalStorage.removeItem("additional_Degree_name");
                         Swal.fire({
@@ -260,6 +269,8 @@ const PaymentSuccess = () => {
                     } else {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                     }
                 }
                 if (regType === 'nocInfo') {
@@ -275,6 +286,8 @@ const PaymentSuccess = () => {
                     if (success) {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                         secureLocalStorage.removeItem("nocInfo");
                         Swal.fire({
                             title: "Success",
@@ -294,6 +307,8 @@ const PaymentSuccess = () => {
                     } else {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                     }
                 }
                 if (regType === 'goodstandingInfo') {
@@ -309,6 +324,8 @@ const PaymentSuccess = () => {
                     if (success) {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                         Swal.fire({
                             title: "Success",
                             text: "GoodStanding registration successfully completed",
@@ -327,6 +344,8 @@ const PaymentSuccess = () => {
                     } else {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                     }
                 }
                 if (regType === 'finalrenewalsInfo') {
@@ -355,6 +374,8 @@ const PaymentSuccess = () => {
                     if (success) {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                         secureLocalStorage.removeItem("regCertificateName");
                         secureLocalStorage.removeItem("renewalafName");
                         secureLocalStorage.removeItem("renewalnocName");
@@ -377,6 +398,8 @@ const PaymentSuccess = () => {
                     } else {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                     }
 
                 }
@@ -398,6 +421,8 @@ const PaymentSuccess = () => {
                     if (success) {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                         secureLocalStorage.removeItem("gazzetCertificateName");
                         Swal.fire({
                             title: "Success",
@@ -417,6 +442,8 @@ const PaymentSuccess = () => {
                     } else {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        const element=document.getElementById("msgId") as HTMLElement;
+                        element.innerHTML=message;
                     }
 
                 }
@@ -517,9 +544,8 @@ const PaymentSuccess = () => {
                                                         <label htmlFor="" className='fs-14 fw-600 me-2'>FMR No:</label>
                                                         <div className="fs-14">{fmrSerialNumber}</div>
                                                     </div> : ""}
-                                                    <div className="col d-flex">
-                                                        <div className="fs-14 ">{transactionMsg}</div>
-                                                    </div>
+                                                    <div className="col d-flex" id="msgId">
+                                                     </div>
                                                 </div>
                                             </div>
                                             <hr className="my-4" />
