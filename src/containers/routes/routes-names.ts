@@ -11,6 +11,7 @@ export const routes = {
 
     userpanal: `${urlPrefix}my-panal`,
     usereditprofile: `${urlPrefix}my-panal${urlPrefix}edit-profile`,
+    user_data_edit:`${urlPrefix}my-panal${urlPrefix}edit-data`,
     provisional_registration: `${urlPrefix}my-panal${urlPrefix}provisional-registration`,
     provisional_edit: `${urlPrefix}my-panal${urlPrefix}edit-provisional`,
     provisional_duplicate: `${urlPrefix}my-panal${urlPrefix}provisional-duplicate`,
@@ -49,6 +50,7 @@ export const routes = {
     admin_noc_reg_view:`${urlPrefix}admin${urlPrefix}noc_reg_view`,
     admin_additional_reg_view:`${urlPrefix}admin${urlPrefix}additional_reg_view`,
     admin_renewals_reg_view:`${urlPrefix}admin${urlPrefix}renewals_reg_view`,
+    admin_changeofname_view:`${urlPrefix}admin${urlPrefix}changeofname_reg_view`,
     admin_employes_works: `${urlPrefix}admin/${urlPrefix}employees-works`,
     admin_notifications: `${urlPrefix}admin/${urlPrefix}notifications`,
     admin_settings: `${urlPrefix}admin/${urlPrefix}settings`,

@@ -8,7 +8,7 @@ import NocWorkItems from "../../dashboard/noc-work-items";
 import AdditionalWorkItems from "../../dashboard/additional-work-items";
 import GoodStandingWorkItems from "../../dashboard/goodstanding-work-items";
 import FinalRenewalsWorkItems from "../../dashboard/renewals-work-items";
-
+import ChangeofNameWorkItems from "../../dashboard/changeofname-work-items";
 type TabsType = {
   label: string;
   index: number;
@@ -46,6 +46,11 @@ const tabs: TabsType = [
     label: "Finals Renewals",
     index: 6,
     Component: FinalRenewalsWorkItems
+  },
+  {
+    label: "Change of Name ",
+    index: 7,
+    Component: ChangeofNameWorkItems
   },
   
 ];

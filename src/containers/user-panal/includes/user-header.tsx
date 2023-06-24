@@ -64,28 +64,37 @@ const Userheader = () => {
 							</div>
 							<div className="offcanvas-body">
 								<ul className="navbar-nav justify-content-center flex-grow-1 pe-3 tsmc-nav-items">
+								<li className="nav-item"><Link to='/my-panal/edit-data' className="nav-link" aria-current="page">One Time Edit</Link></li>
 									<li className="nav-item"><Link to="/my-panal" className="nav-link" aria-current="page">My Profile</Link></li>
 									<li className="nav-item dropdown">
 										<Link to='' className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">New Registrations <i className='bi-chevron-down'></i></Link>
 										<div className="dropdown-menu shadow">
 											<li className='dropdown-submenu'>
 												<p className="dropdown-item">Provisional</p>
-												<ul className="dropdown-menu">
-													{isDoctorId ? '' : 
-													<p>
-													<li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>
-													<li><Link className="dropdown-item" to={isDoctorId ? '' : 'provisional-duplicate'}>Duplicate</Link></li>
-													{/*<li><Link to='/my-panal/revalidation' className="dropdown-item">Provisional Revalidation</Link></li>*/} </p>	}
+											
+													{isDoctorId ? 
 													
+													<ul className="dropdown-menu">
+													<li><Link to='/my-panal/revalidation' className="dropdown-item">Provisional Revalidation</Link></li>
+													</ul>	
+														 : 
+														<ul className="dropdown-menu">
+													<li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>
+													<li><Link to='/my-panal/revalidation' className="dropdown-item">Provisional Revalidation</Link></li>
+													{/*<li><Link className="dropdown-item" to={isDoctorId ? '' : 'provisional-duplicate'}>Duplicate</Link></li>
+													 
 													
 												</ul>
+													}
 											</li>
 											<li className='dropdown-submenu'>
 												<p className="dropdown-item">Final Registration</p>
-												<ul className="dropdown-menu">
-													{isDoctorFMRNo ? '' : <li><Link className="dropdown-item" to={'final-registration'}>New Registration</Link></li>}
-													<li><Link className="dropdown-item" to={isDoctorFMRNo ? '' : 'final-duplicate'}>Duplicate</Link></li>
-												</ul>
+													{isDoctorFMRNo ? '' :
+													<ul className="dropdown-menu">
+													<li><Link className="dropdown-item" to={'final-registration'}>New Registration</Link></li>
+													{/*<li><Link className="dropdown-item" to={isDoctorFMRNo ? '' : 'final-duplicate'}>Duplicate</Link></li>*/}
+													</ul>
+													}
 											</li>
 											{isDoctorFMRapproved ?
 											<div>
@@ -93,13 +102,13 @@ const Userheader = () => {
 											<Link to='additional-qualification-registration' className="dropdown-item">Additional Qualification</Link>
 											<ul className="dropdown-menu">
 												<li><Link className="dropdown-item" to={'additional-qualification-registration'}>New Registration</Link></li>
-												<li><Link className="dropdown-item" to={'additional-duplicate'}>Duplicate</Link></li>
+												{/*<li><Link className="dropdown-item" to={'additional-duplicate'}>Duplicate</Link></li>*/}
 											</ul>
 										</li>
 										<li><Link to='/my-panal/good-standing-registration' className="dropdown-item">Good Standing</Link></li>
 										<li><Link to='/my-panal/noc-registration' className="dropdown-item">NOC for Other State</Link></li>
 										<li><Link to='/my-panal/final-renewal' className="dropdown-item">Final Renewals </Link></li>
-										{/*<li><Link to='/my-panal/chnage-of-name' className="dropdown-item">Change of Name</Link></li>*/}
+										<li><Link to='/my-panal/chnage-of-name' className="dropdown-item">Change of Name</Link></li>
 										</div> :''}
 									
 										</div>

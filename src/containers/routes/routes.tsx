@@ -42,6 +42,7 @@ import AdditionalRegList from '../dashboard/additional-registrations';
 import AdditionalView from '../dashboard/additional-view';
 import RenewalRegList from '../dashboard/renewal-registrations';
 import RenewalView from '../dashboard/renewals-view';
+import ChangeofNameRegView from  '../dashboard/changeofname-view';
 
 import GoodStandingRegList from '../dashboard/goodstanding-registrations';
 import GoodStandingMCIView from '../dashboard/mci';
@@ -56,9 +57,8 @@ import TermsConditions from '../landing-pages/terms-conditions';
 import Refund from '../landing-pages/refund';
 import ChangeofNameRegistration from '../user-panal/change-of-name';
 import ProvisionalRevalidation from '../user-panal/provisional-revalidation';
-
+import MyDataEdit from '../user-panal/my-data-edit';
 	
-
 
 const MainRoute = () => {
 	return (
@@ -86,6 +86,7 @@ const MainRoute = () => {
 				<Route path={routes.paymenterror} element={<PaymentSuccess />} />
 				<Route path={routes.userpanal} element={<UserPanal />}>
 					<Route path={routes.userpanal} element={<Myprofile />} />
+					<Route path={routes.user_data_edit} element={<MyDataEdit />} />
 					<Route path={routes.usereditprofile} element={<UserEditProfile />} />
 					<Route path={routes.provisional_registration} element={<Provisional />} />
 					<Route path={routes.provisional_edit} element={<EditProvisional />} />
@@ -119,13 +120,15 @@ const MainRoute = () => {
 					<Route path={routes.admin_final_reg_view} element={<FinalRegView />} />
 					<Route path={routes.admin_noc_reg_view} element={<NocView />} />
 					<Route path={routes.admin_additional_reg_view} element={<AdditionalView/>} />
+					<Route path={routes.admin_changeofname_view} element={<ChangeofNameRegView/>} />
 					<Route path={routes.admin_renewals_reg_view} element={<RenewalView/>} />
 					<Route path={routes.admin_my_work_items} element={<MyWorkItems />} />
 					<Route path={routes.admin_employes_works} element={<EmployesWorks />} />
 					<Route path={routes.admin_notifications} element={<AdminNotifications />} />
 					<Route path={routes.admin_settings} element={<AdminSettings />} />
 					<Route path={routes.admin_logout} element={<AdminLogout />} />
-
+					
+					
 
 
 				</Route>

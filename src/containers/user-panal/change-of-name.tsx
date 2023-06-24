@@ -12,17 +12,13 @@ import { changeOfNameType } from "../../types/common";
 import DoctorInfoCard from "./includes/doctor-info";
 import { ReactFilesError, ReactFilesFile } from "../../types/files";
 import { useCallback, useEffect, useState } from "react";
-import { commonService } from "../../lib/api/common";
 import { College, Country, Qualification, Serials, State, University } from "../../types/common";
-import { provisionalService } from "../../lib/api/provisional";
-import { doctorService } from "../../lib/api/doctot";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux";
 import { routes } from "../routes/routes-names";
 import { isLessThanTheMB } from "../../lib/utils/lessthan-max-filesize";
 import { Messages } from "../../lib/constants/messages";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
-import { authService } from "../../lib/api/auth";
 import DatePicker from 'react-date-picker';
 
 
@@ -31,14 +27,7 @@ const ChangeofNameRegistration = () => {
     const doctorReduxProfile = useSelector((state: RootState) => state.doctor.profile);
     const [next, setNext] = useState(false);
     const [doctorId, setDoctorId] = useState(0);
-    const [pmrNo, setPMRNo] = useState(0);
     const [serial, setserial] = useState<Serials>();
-    const [provisionalSerial, setProvisionalSerial] = useState<Serials>();
-    const [qualifications, setQualifications] = useState<Qualification[]>([]);
-    const [countries, setCountries] = useState<Country[]>([]);
-    const [states, setStates] = useState<State[]>([]);
-    const [universities, setUniversities] = useState<University[]>([]);
-    const [colleges, setColleges] = useState<College[]>([]);
     const [provisionalCertificate, setProvisionalCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [applicationForm, setApplicationForm] = useState<{ file?: File; error?: string } | null>(null);
     const [nocCertificate, setNOCCertificate] = useState<{ file?: File; error?: string } | null>(null);
@@ -113,7 +102,7 @@ const ChangeofNameRegistration = () => {
                             <div className="card shadow border-0 mb-4">
                                 <div className="card-body">
                                     <div className="d-flex align-items-center">
-                                        <h1 className='fs-22 fw-700 me-2 mb-0'>Change Of Registration</h1>
+                                        <h1 className='fs-22 fw-700 me-2 mb-0'>Change Of Name Registration</h1>
                                         <p className='mb-0 fs-13'>(Please check your personal details and click on next)</p>
                                     </div>
                                     <hr />

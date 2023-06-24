@@ -6,7 +6,7 @@ import AdditionalRegList from '../dashboard/additional-registrations';
 import GoodStandingRegList from '../dashboard/goodstanding-registrations';
 import NocRegList from '../dashboard/noc-registrations';
 import RenewalRegList from '../dashboard/renewal-registrations';
-
+import ChangeofNameReg from '../dashboard/changeofname-registrations';
 
 
 type TabsType = {
@@ -47,7 +47,11 @@ type TabsType = {
       index: 6,
       Component: RenewalRegList
     },
-    
+    {
+      label: "Change of Name",
+      index: 7,
+      Component: ChangeofNameReg
+    },
   ];
 
 const AdminDashboardHome = () => {

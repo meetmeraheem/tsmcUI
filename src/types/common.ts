@@ -145,3 +145,15 @@ export type goodStandingFormType = {
    extra_col3:string,
    newName:string,
 };
+
+
+
+export type provisional_Revalidation = {
+    status: string,
+    prov_reg_date: string,
+    doctor_id: number,
+    edu_cert1: string,
+    revalidation_reason:string,
+    extra_col3:string,
+    
+ };

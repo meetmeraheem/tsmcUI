@@ -40,6 +40,7 @@ const HomePage = () => {
      const [getDoctorInfo, setDoctorInfoValue] = useState<DoctorSignUpFormType | null>(null);
      const otp = SMS.generateOTP();
      const [otpError, setOTPError] = useState<boolean>(false);
+     const [otpbuttonStatus, setOTPbuttonStatus] = useState<boolean>(false);
      const [otpErrorMessage, setOTPErrorMessage] = useState<string>('');
      const [enteredOTPNumber, setEnteredOTPNumber] = useState<string>('');
      const [savedOTPNumber, setSavedOTPNumber] = useState<string>('');
@@ -73,10 +74,12 @@ const HomePage = () => {
 
      const submitForm = useCallback(
           async (values: DoctorSignUpFormType) => {
+               
                // const newObj = Object.fromEntries(
                //      Object.entries(values).map(([k, v]) => [k, v.toUpperCase()])
                //    );
                //    console.log('newObj' + JSON.stringify(newObj));
+               
                const encryptpassword = cryptojs.encryptData(values.password);
 
                const doctorInfo = {
@@ -104,6 +107,7 @@ const HomePage = () => {
                                    });
                                    return false;
                               }else{
+                                   setOTPbuttonStatus(false);
                                    const message = otp + ' is your OTP to verify your signup from Telangana State Medical Council. Please do not share this with anyone. Kindly note this is valid for the next 15 minutes.';
                                    await authService.sendOTP(doctorInfo.mobileno, message).then((response) => {
                                    if (response.status === 200) {
@@ -131,6 +135,7 @@ const HomePage = () => {
      const verifyOTP = useCallback(async () => {
           try {
                if (enteredOTPNumber) {
+                    setOTPbuttonStatus(true);
                     setOTPError(false);
                     setOTPErrorMessage('');
                     if (savedOTPNumber === enteredOTPNumber) {
@@ -148,6 +153,7 @@ const HomePage = () => {
                               });
                          }
                          else {
+                              setOTPbuttonStatus(false);
                               Swal.fire({
                                    title: Messages.ErrorText,
                                    text: "Unable to registered, please try after sometime.",
@@ -157,6 +163,7 @@ const HomePage = () => {
                          }
                     }
                     else {
+                         setOTPbuttonStatus(false);
                          Swal.fire({
                               text: "OTP Incorrect",
                               icon: "error",
@@ -165,11 +172,13 @@ const HomePage = () => {
                     }
                }
                else {
+                    setOTPbuttonStatus(false);
                     setOTPError(true);
                     setOTPErrorMessage('OTP number is required.');
                }
 
           } catch (error) {
+               setOTPbuttonStatus(false);
                Swal.fire({
                     title: Messages.ErrorText,
                     text: "Unable to registered, please try after sometime.",
@@ -289,10 +298,12 @@ const HomePage = () => {
                //Need to code.
                setEnteredOTPNumber(value);
                setOTPError(false);
+               setOTPbuttonStatus(false);
                setOTPErrorMessage('');
           }
           else {
                setOTPError(true);
+               setOTPbuttonStatus(false);
                setOTPErrorMessage('OTP number is required.');
           }
 
@@ -817,7 +828,7 @@ const HomePage = () => {
                                                                  {otpError && <small className="text-danger">{otpErrorMessage}</small>}
                                                             </div>
                                                             <div className="w-50 m-auto text-center my-3">
-                                                                 <button type="submit" onClick={verifyOTP} className='btn btn-primary btn-lg'>Verify OTP</button>
+                                                                 <button type="submit" disabled={otpbuttonStatus} onClick={verifyOTP} className='btn btn-primary btn-lg'>Verify OTP</button>
                                                             </div>
                                                        </>}
                                                   </div>
