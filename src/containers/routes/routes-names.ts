@@ -51,6 +51,7 @@ export const routes = {
     admin_additional_reg_view:`${urlPrefix}admin${urlPrefix}additional_reg_view`,
     admin_renewals_reg_view:`${urlPrefix}admin${urlPrefix}renewals_reg_view`,
     admin_changeofname_view:`${urlPrefix}admin${urlPrefix}changeofname_reg_view`,
+    admin_revalidation_view:`${urlPrefix}admin${urlPrefix}revalidation_reg_view`,
     admin_employes_works: `${urlPrefix}admin/${urlPrefix}employees-works`,
     admin_notifications: `${urlPrefix}admin/${urlPrefix}notifications`,
     admin_settings: `${urlPrefix}admin/${urlPrefix}settings`,

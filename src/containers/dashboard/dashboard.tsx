@@ -7,6 +7,7 @@ import GoodStandingRegList from '../dashboard/goodstanding-registrations';
 import NocRegList from '../dashboard/noc-registrations';
 import RenewalRegList from '../dashboard/renewal-registrations';
 import ChangeofNameReg from '../dashboard/changeofname-registrations';
+import  ProvRevalidationReg  from '../dashboard/prov-revalidation-registrations';
 
 
 type TabsType = {
@@ -51,6 +52,11 @@ type TabsType = {
       label: "Change of Name",
       index: 7,
       Component: ChangeofNameReg
+    },
+    {
+      label: "Provisional Revalidations",
+      index: 8,
+      Component: ProvRevalidationReg
     },
   ];
 

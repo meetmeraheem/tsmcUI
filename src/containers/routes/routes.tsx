@@ -43,6 +43,7 @@ import AdditionalView from '../dashboard/additional-view';
 import RenewalRegList from '../dashboard/renewal-registrations';
 import RenewalView from '../dashboard/renewals-view';
 import ChangeofNameRegView from  '../dashboard/changeofname-view';
+import ProvRevalidationRegView from  '../dashboard/prov-revalidation-view';
 
 import GoodStandingRegList from '../dashboard/goodstanding-registrations';
 import GoodStandingMCIView from '../dashboard/mci';
@@ -58,6 +59,7 @@ import Refund from '../landing-pages/refund';
 import ChangeofNameRegistration from '../user-panal/change-of-name';
 import ProvisionalRevalidation from '../user-panal/provisional-revalidation';
 import MyDataEdit from '../user-panal/my-data-edit';
+
 	
 
 const MainRoute = () => {
@@ -121,6 +123,7 @@ const MainRoute = () => {
 					<Route path={routes.admin_noc_reg_view} element={<NocView />} />
 					<Route path={routes.admin_additional_reg_view} element={<AdditionalView/>} />
 					<Route path={routes.admin_changeofname_view} element={<ChangeofNameRegView/>} />
+					<Route path={routes.admin_revalidation_view} element={<ProvRevalidationRegView/>}/>
 					<Route path={routes.admin_renewals_reg_view} element={<RenewalView/>} />
 					<Route path={routes.admin_my_work_items} element={<MyWorkItems />} />
 					<Route path={routes.admin_employes_works} element={<EmployesWorks />} />
