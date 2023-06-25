@@ -137,7 +137,7 @@ const ProvRevalidationReg = () => {
                                     assignReason: '',
                                     doctor_id: cell.data[Number(cell.row.id)].doctor_id,
                                     assignRegType: 'revalidation',
-                                    regTypeId:cell.data[Number(cell.row.id)].additionalPrimaryId
+                                    regTypeId:cell.data[Number(cell.row.id)].prvId
                                 }
                                 setAssignedList([...assignedList, doctorInfo]);
                                 setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);

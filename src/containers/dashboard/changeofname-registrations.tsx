@@ -137,7 +137,7 @@ const ChangeofNameReg = () => {
                                     assignReason: '',
                                     doctor_id: cell.data[Number(cell.row.id)].doctor_id,
                                     assignRegType: 'changeofname',
-                                    regTypeId:cell.data[Number(cell.row.id)].additionalPrimaryId
+                                    regTypeId:cell.data[Number(cell.row.id)].nameChangeId
                                 }
                                 setAssignedList([...assignedList, doctorInfo]);
                                 setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
@@ -184,7 +184,6 @@ const ChangeofNameReg = () => {
             const { success } = await assignmentService.assignToUser(formData);           
              if (success) {
                 Swal.fire({
-                    //title: "Error",
                     text: "Assigned",
                     icon: "success",
                     confirmButtonText: "OK",

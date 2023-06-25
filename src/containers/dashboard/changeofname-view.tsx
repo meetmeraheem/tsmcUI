@@ -15,7 +15,7 @@ import moment from 'moment';
 import { assignmentService } from '../../lib/api/assignments';
 import { LocalStorageManager } from '../../lib/localStorage-manager';
 import { changeofnameService } from "../../lib/api/changeofname";
-import { AdminAddQualDataFormType} from '../../types/additionalQuali';
+import { AdminChangeOfNameType} from '../../types/common';
 import { authService } from '../../lib/api/auth';
 
 
@@ -25,7 +25,7 @@ const ChangeofNameRegView = () => {
     const { nameChangeId, doctorPrimaryId ,assignmentId} = location.state
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
-    const [additionals, setAdditionals] = useState<AdminAddQualDataFormType>();
+    const [changeofname, setChangeofname] = useState<AdminChangeOfNameType>();
     const [remarks, setRemarks] = useState('');
     const [isLightBoxOpen, setIsLightBoxOpen] = useState(false);
     const [lightBoxImagePath, setLightBoxImagePath] = useState('');
@@ -48,24 +48,18 @@ const ChangeofNameRegView = () => {
         try {
             if (nameChangeId) {
                 const { data } = await changeofnameService.getNameChangeById(nameChangeId);
-                if (data.length > 0) {
-                    const country = await commonService.getCountry(Number(data[0].country));
-                    const state = await commonService.getState(Number(data[0].state));
-                    setAdditionals({
-                        country: country.data[0].name,
-                        state: state.data[0].name,
-                        university: data[0].university,
-                        college: data[0].college,
-                        qualification: data[0].qualification,
-                        exam_month: data[0].exam_month,
-                        exam_year: data[0].exam_year,
-                        approval_status: data[0].approval_status,
-                        appliedFor: data[0].appliedFor,
-                        receipt_no: data[0].receipt_no,
-                        dd_amount:data[0].dd_amount,
-                        reg_date:data[0].reg_date,
-                        edu_cert1:data[0].edu_cert1,
-                        edu_cert2:data[0].edu_cert2
+                if (data && data.approval_status !=  null) {
+                    setChangeofname({
+                        approval_status: data.approval_status,
+                        gazzetNotificationDate: data.gazzetNotificationDate,
+                        doctor_id: data.doctor_id,
+                        gazzetNotificationDocument: data.gazzetNotificationDocument,
+                        gazzetNotificationNo:data.gazzetNotificationNo,
+                        extra_col1:data.extraCol1,
+                        newName:data.newName,
+                        currentName:data.currentName,
+                        dd_amount:data.dd_amount,
+                        receipt_no:data.receipt_no
                     });
                 }
             }
@@ -76,22 +70,22 @@ const ChangeofNameRegView = () => {
 
     const submit = useCallback(async (status: any) => {
         if (status) {
-            const additionalsInfo = {
+            const changeofnameInfo = {
                 approval_status: status,
                 remarks: remarks,
                 assignmnetId:assignmentId
 
             }
-            const { success } = await changeofnameService.updateNameChange(nameChangeId, additionalsInfo);
+            const { success } = await changeofnameService.updateNameChange(nameChangeId, changeofnameInfo);
             if (success) {
                 let msg="";
                 let smsmsg="";
                 if(status !== 'rej' ){
-                    msg="Additional Details successfully approved";
-                    smsmsg="Your Additional Application has been Approved from Telangana State Medical Council.";
+                    msg="Change of Name Details successfully approved";
+                    smsmsg="Your Change of Name Application has been Approved from Telangana State Medical Council.";
                 }else{
-                    msg="Additional Details Application Rejected";
-                    smsmsg="Your Additional Application has been Rejected from Telangana State Medical Council.";
+                    msg="Change of Name Details Application Rejected";
+                    smsmsg="Your Change of Name Application has been Rejected from Telangana State Medical Council.";
                 }
                     Swal.fire({
                         title: "",
@@ -136,7 +130,7 @@ const ChangeofNameRegView = () => {
                                 navigate(routes.admin_final_registrations);
                             }
                             if (userType === 'u') {
-                                navigate(routes.admin_my_work_items);
+                                navigate(routes.admin_dashboard);
                             }
                         }
                     });
@@ -171,7 +165,7 @@ const ChangeofNameRegView = () => {
                 <div className="card">
                     <div className="card-body">
                     <div className="row mb-3">
-                        <h3 className="col fs-18 fw-600">Additional View</h3>
+                        <h3 className="col fs-18 fw-600">Change Of Name Details</h3>
                         <div className="col-2 align-items-center justify-content-center ">
                                     <button type="button"
                                         onClick={() => {
@@ -259,71 +253,47 @@ const ChangeofNameRegView = () => {
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Registration No:</label>
                                     <div className="fs-14">TSMC/FMR/{doctor?.fmr_no}</div>
                                 </div>
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Registration Date:</label>
-                                    <div className="fs-14">{additionals?.reg_date ? moment(additionals?.reg_date).format('DD/MM/YYYY') : 'NA'}</div>
-                                </div>
+                                
                             </div>
                             <div className="d-flex mb-2">
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Qualification:</label>
-                                    <div className="fs-14">{additionals?.qualification ? additionals?.qualification : 'NA'}</div>
+                            <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Current Name</label>
+                                    <div className="fs-14">{changeofname?.currentName ? changeofname?.currentName : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Month:</label>
-                                    <div className="fs-14">{additionals?.exam_month ? additionals?.exam_month : 'NA'}</div>
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>New Name:</label>
+                                    <div className="fs-14">{changeofname?.newName ? changeofname?.newName : 'NA'}</div>
                                 </div>
+                               
                             </div>
                             <div className="d-flex mb-2">
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Year:</label>
-                                    <div className="fs-14">{additionals?.exam_year ? additionals?.exam_year : 'NA'}</div>
+                            <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Gazzet Notification Number:</label>
+                                    <div className="fs-14">{changeofname?.gazzetNotificationNo ? changeofname?.gazzetNotificationNo : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Country:</label>
-                                    <div className="fs-14">{additionals?.country ? additionals?.country : 'NA'}</div>
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Gazzet Notification Date:</label>
+                                    <div className="fs-14">{changeofname?.gazzetNotificationDate ? moment(changeofname?.gazzetNotificationDate).format('DD/MM/YYYY') : 'NA'}</div>
                                 </div>
-                            </div>
-                            <div className="d-flex mb-2">
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
-                                    <div className="fs-14">{additionals?.state ? additionals?.state : 'NA'}</div>
-                                </div>
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>University Name:</label>
-                                    <div className="fs-14">{additionals?.university ? additionals?.university : 'NA'}</div>
-                                </div>
+                               
                             </div>
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'> Payment Recieved</label>
-                                    <div className="fs-14">{additionals?.dd_amount ? additionals?.dd_amount : 'NA'}</div>
+                                    <div className="fs-14">{changeofname?.dd_amount ? changeofname?.dd_amount : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Reciept No:</label>
-                                    <div className="fs-14">{additionals?.receipt_no ? additionals?.receipt_no : 'NA'}</div>
-                                </div>
-                            </div>
-                            <div className="d-flex mb-2">
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>College Name:</label>
-                                    <div className="fs-14">{additionals?.college ? additionals?.college : 'NA'}</div>
+                                    <div className="fs-14">{changeofname?.receipt_no ? changeofname?.receipt_no : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="row mt-3">
-                                {additionals?.edu_cert1 &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(additionals?.edu_cert1) }}>
+                                {changeofname?.gazzetNotificationDocument &&
+                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(changeofname?.gazzetNotificationDocument) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
                                             <p className="d-flex align-items-center">
-                                                {additionals?.edu_cert1 ? <img src={serverImgUrl + 'additional/' + additionals?.edu_cert1} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                                {changeofname?.gazzetNotificationDocument ? <img src={serverImgUrl + 'namechange/' + changeofname?.gazzetNotificationDocument} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
                                             </p>
-                                        </div>
-                                    </div>
-                                }
-                                {additionals?.edu_cert2 &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(additionals?.edu_cert2) }}>
-                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center">{additionals?.edu_cert2 && <img src={serverImgUrl + 'additional/' + additionals?.edu_cert2} alt="" />}</p>
                                         </div>
                                     </div>
                                 }
@@ -331,7 +301,7 @@ const ChangeofNameRegView = () => {
                                
                         </div>
                     </div>
-                    {userType === 'u' && additionals?.approval_status === 'pen' &&
+                    {userType === 'u' && changeofname?.approval_status === 'pen' &&
                         <div className="card-footer">
                             <div className="mb-3">
                                 <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
@@ -362,12 +332,12 @@ const ChangeofNameRegView = () => {
                         close={() => setIsLightBoxOpen(false)}
                         slides={[
                             {
-                                src: serverImgUrl + 'additionals/' + lightBoxImagePath,
+                                src: serverImgUrl + 'namechange/' + lightBoxImagePath,
                                 alt: "edu_cert1",
                                 width: 3840,
                                 height: 2560,
                                 srcSet: [
-                                    { src: serverImgUrl + 'additionals/' + lightBoxImagePath, width: 100, height: 100 },
+                                    { src: serverImgUrl + 'namechange/' + lightBoxImagePath, width: 100, height: 100 },
                                 ]
                             }
                         ]}

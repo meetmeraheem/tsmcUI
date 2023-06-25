@@ -89,7 +89,7 @@ const ProvRevalidationRegWorkItems = () => {
         let vfromdate = moment(fromdate).format('YYYY-MM-DD');
         let vtodate = moment(todate).format('YYYY-MM-DD');
         const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
-        const { data } = await revalidationService.getRevalidationByUserId(vfromdate,vtodate,adminPrimaryId,'changeofname');
+        const { data } = await revalidationService.getRevalidationByUserId(vfromdate,vtodate,adminPrimaryId,'revalidation');
         if (data.length > 0) {
             // We'll even set a delay to simulate a server here
             setTimeout(() => {

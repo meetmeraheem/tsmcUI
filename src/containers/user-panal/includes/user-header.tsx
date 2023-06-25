@@ -63,8 +63,8 @@ const Userheader = () => {
 								<button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 							</div>
 							<div className="offcanvas-body">
-								<ul className="navbar-nav justify-content-center flex-grow-1 pe-3 tsmc-nav-items">
-								<li className="nav-item"><Link to='/my-panal/edit-data' className="nav-link" aria-current="page">One Time Edit</Link></li>
+								<ul className="navbar-nav justify-content-center flex-grow-1 pe-5 tsmc-nav-items">
+								    <li className="nav-item"><Link to='/my-panal/edit-data' className="nav-link" aria-current="page">One Time Edit</Link></li>
 									<li className="nav-item"><Link to="/my-panal" className="nav-link" aria-current="page">My Profile</Link></li>
 									<li className="nav-item dropdown">
 										<Link to='' className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">New Registrations <i className='bi-chevron-down'></i></Link>
@@ -113,11 +113,11 @@ const Userheader = () => {
 									
 										</div>
 									</li>
-									<li className="nav-item"><Link to="/" className="nav-link" onClick={signOut} aria-current="page">Sign Out</Link></li>
+									<li className="nav-item p-0"><Link to="/" className="nav-link" onClick={signOut} aria-current="page">Sign Out</Link></li>
 								</ul>
 							</div>
 						</div>
-						<Link to="" className="navbar-brand tsmc-site-logo tsmc-site-sub-logo">
+						<Link to="" className="navbar-brand ml-3 tsmc-site-logo tsmc-site-sub-logo">
 							<img src={SiteSubLogo} alt="Site Logo" />
 						</Link>
 					</div>

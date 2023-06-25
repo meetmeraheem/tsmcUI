@@ -14,7 +14,7 @@ export const revalidationService = {
     },
 
     async getRevalidationByUserId( fromdate: any,todate: any,userId: any,regType:any) {
-        const { data: responseData } = await axiosInstance.get(`revalidation/getRevaldationByUserId/${fromdate}/${todate}/${userId}/${regType}`);
+        const { data: responseData } = await axiosInstance.get(`revalidation/getRevalidationByUserId/${fromdate}/${todate}/${userId}/${regType}`);
         return responseData as ApiResponseType;
     },
 

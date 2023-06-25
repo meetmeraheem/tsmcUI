@@ -31,6 +31,7 @@ import { goodstandingService } from "../../lib/api/goodstanding";
 import { renewalsFormType } from "../../types/common";
 import { renewalService } from "../../lib/api/renewals";
 import { changeofnameService } from "../../lib/api/changeofname";
+import { revalidationService } from "../../lib/api/revalidation";
 import SiteLogo from '../../assets/images/logo.png'
 import SiteSubLogo from '../../assets/images/tsgovt-logo.png'
 
@@ -553,6 +554,66 @@ const Payment = () => {
             setIsLoader(false);
         }
     }, []);
+    const  getProvRevalidationRegFeeDetails= useCallback(async () => {
+        try {
+
+            const provRevalidationInfo = secureLocalStorage.getItem("provRevalidationInfo");
+            const provRevalidationInfoDataPaymentInfo = {
+                ...provRevalidationInfo as renewalsFormType,
+                orderId: "",
+                orderAmount: "",
+                paymethod: ""
+            }
+            const formData = new FormData();
+            formData.append("provRevalidationInfo", JSON.stringify(provRevalidationInfoDataPaymentInfo));
+            
+            const revalidationCertificate = secureLocalStorage.getItem("revalidationCertificate");
+            if (revalidationCertificate) {
+                formData.append("revalidationCertificate", revalidationCertificate as File);
+            }
+            const supportCertificate = secureLocalStorage.getItem("supportCertificate");
+            if (supportCertificate) {
+                formData.append("supportCertificate", supportCertificate as File);
+            }
+            const revalidationData = await revalidationService.getRevalidationRegFeeDetails(formData);
+            if (revalidationData.data) {
+                setRegPayDetails({
+                    registrationFee: revalidationData.data.registrationFee,
+                    penalityAmount: revalidationData.data.penalityAmount,
+                    totalAmount: revalidationData.data.totalAmount,
+                    extraCharges: revalidationData.data.extraCharges,
+                    fullName: revalidationData.data.fullName,
+                    dataOfbirth: revalidationData.data.dateofBirth,
+                    phoneNo: revalidationData.data.mobileNo,
+                    address1: revalidationData.data.address1,
+                    address2: revalidationData.data.address2,
+                    examYear: revalidationData.data.examYear,
+                    examMonth: revalidationData.data.examMonth,
+                    doctor_id: revalidationData.data.doctor_id,
+
+                });
+                setPayUrl(revalidationData.data.redirectUrl);
+                setPayOrderId(revalidationData.data.orderKeyId);
+                
+                if (revalidationData.data.revalidationData.edu_cert1 != null ) {
+                    secureLocalStorage.setItem("revalidationCertificateName", revalidationData.data.revalidationData.edu_cert1);
+                }
+                if (revalidationData.data.revalidationData.edu_cert2 != null ) {
+                    secureLocalStorage.setItem("supportCertificateName", revalidationData.data.revalidationData.edu_cert2);
+                }
+                if (revalidationData.data.regType != null && revalidationData.data.regType === "tat") {
+                    setIsNormalReg(false);
+                } else {
+                    setIsNormalReg(true);
+                }
+            }
+
+        } catch (err: any) {
+            console.log('candidateService getProfile error', err.response);
+        } finally {
+            setIsLoader(false);
+        }
+    }, []);
     useEffect(
         () => {
 
@@ -579,6 +640,9 @@ const Payment = () => {
                 getNameChangeRegFeeDetails();
             }
             
+            if(regType === 'provRevalidationInfo'){
+                getProvRevalidationRegFeeDetails();
+            }
 
         }, []);
 
@@ -653,6 +717,7 @@ const Payment = () => {
                                         {regType === 'goodstandingInfo' && <div className="col fs-14">Good standing </div>}
                                         {regType === 'finalrenewalsInfo' && <div className="col fs-14">Final renewals</div>}
                                         {regType === 'changeofNameInfo' && <div className="col fs-14">Change of Name</div>}
+                                        {regType === 'provRevalidationInfo' && <div className="col fs-14">Provisional Revalidation </div>}
                                     </div>
                                     {/* <div className="row mb-3">
                                         <div className="col-4"><label htmlFor="">Final Registration No.</label></div>

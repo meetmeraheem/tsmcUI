@@ -14,17 +14,17 @@ import { serverUrl, serverImgUrl } from '../../config/constants';
 import moment from 'moment';
 import { LocalStorageManager } from '../../lib/localStorage-manager';
 import { revalidationService } from "../../lib/api/revalidation";
-import { AdminAddQualDataFormType} from '../../types/additionalQuali';
+import { admin_provisional_Revalidation } from "../../types/common";
 import { authService } from '../../lib/api/auth';
 
 
 const ProvRevalidationRegView = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { nameChangeId, doctorPrimaryId ,assignmentId} = location.state
+    const { prvId, doctorPrimaryId, assignmentId } = location.state
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
-    const [additionals, setAdditionals] = useState<AdminAddQualDataFormType>();
+    const [revalidations, setRevalidations] = useState<admin_provisional_Revalidation>();
     const [remarks, setRemarks] = useState('');
     const [isLightBoxOpen, setIsLightBoxOpen] = useState(false);
     const [lightBoxImagePath, setLightBoxImagePath] = useState('');
@@ -43,33 +43,27 @@ const ProvRevalidationRegView = () => {
         }
     };
 
-    const getAdditionalDetails = useCallback(async () => {
+    const getrevalidation = useCallback(async () => {
+
         try {
-            if (nameChangeId) {
-                const { data } = await revalidationService.getRevalidationById(nameChangeId);
-                if (data.length > 0) {
-                    const country = await commonService.getCountry(Number(data[0].country));
-                    const state = await commonService.getState(Number(data[0].state));
-                    setAdditionals({
-                        country: country.data[0].name,
-                        state: state.data[0].name,
-                        university: data[0].university,
-                        college: data[0].college,
-                        qualification: data[0].qualification,
-                        exam_month: data[0].exam_month,
-                        exam_year: data[0].exam_year,
-                        approval_status: data[0].approval_status,
-                        appliedFor: data[0].appliedFor,
-                        receipt_no: data[0].receipt_no,
-                        dd_amount:data[0].dd_amount,
-                        reg_date:data[0].reg_date,
-                        edu_cert1:data[0].edu_cert1,
-                        edu_cert2:data[0].edu_cert2
+            if (prvId) {
+                const { data } = await revalidationService.getRevalidationById(prvId);
+                if (data.approval_status != null) {
+                    setRevalidations({
+                        approval_status: data.approval_status,
+                        prov_reg_date: data.oldProvisionalDate,
+                        doctor_id: 0,
+                        edu_cert1: data.provisionalDocument,
+                        edu_cert2: data.otherDocument,
+                        revalidationReason: data.revalidationReason,
+                        extra_col1: data.extra_col1,
+                        dd_amount: data.dd_amount,
+                        receipt_no: data.receipt_no
                     });
                 }
             }
         } catch (err) {
-            console.log('error getAdditionalDetails', err);
+            console.log('error getrevalidation', err);
         }
     }, []);
 
@@ -78,68 +72,68 @@ const ProvRevalidationRegView = () => {
             const additionalsInfo = {
                 approval_status: status,
                 remarks: remarks,
-                assignmnetId:assignmentId
+                assignmnetId: assignmentId
 
             }
-            const { success } = await revalidationService.updateRevalidation(nameChangeId, additionalsInfo);
+            const { success } = await revalidationService.updateRevalidation(prvId, additionalsInfo);
             if (success) {
-                let msg="";
-                let smsmsg="";
-                if(status !== 'rej' ){
-                    msg="Additional Details successfully approved";
-                    smsmsg="Your Additional Application has been Approved from Telangana State Medical Council.";
-                }else{
-                    msg="Additional Details Application Rejected";
-                    smsmsg="Your Additional Application has been Rejected from Telangana State Medical Council.";
+                let msg = "";
+                let smsmsg = "";
+                if (status !== 'rej') {
+                    msg = "Revalidation Details successfully approved";
+                    smsmsg = "Your Revalidation Application has been Approved from Telangana State Medical Council.";
+                } else {
+                    msg = "Revalidation Details Application Rejected";
+                    smsmsg = "Your Revalidation Application has been Rejected from Telangana State Medical Council.";
                 }
-                    Swal.fire({
-                        title: "",
-                        text: msg,
-                        icon: status !== 'rej' ?"success":"error",
-                        confirmButtonText: "OK",
-                    }).then(async (result) => {
-                        let userType= LocalStorageManager.getUserType();
-                        if (result.isConfirmed) {
-                            if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
-                                    
-                                }).catch(() => {
+                Swal.fire({
+                    title: "",
+                    text: msg,
+                    icon: status !== 'rej' ? "success" : "error",
+                    confirmButtonText: "OK",
+                }).then(async (result) => {
+                    let userType = LocalStorageManager.getUserType();
+                    if (result.isConfirmed) {
+                        if (doctor?.mobileno) {
+                            await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
 
-                                });
-                            }
-                            if (userType === 'a') {
-                                navigate(routes.admin_final_registrations);
-                            }
-                            if (userType === 'u') {
-                                navigate(routes.admin_dashboard);
-                            }
-                        }
-                    });
-                }
-                else {
-                    Swal.fire({
-                        title: "",
-                        text: "AdditionalDetails registration rejected",
-                        icon: "error",
-                        confirmButtonText: "OK",
-                    }).then(async (result) => {
-                        if (result.isConfirmed) {
-                            if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
-                                    
-                                }).catch(() => {
+                            }).catch(() => {
 
-                                });
-                            }
-                            if (userType === 'a') {
-                                navigate(routes.admin_final_registrations);
-                            }
-                            if (userType === 'u') {
-                                navigate(routes.admin_my_work_items);
-                            }
+                            });
                         }
-                    });
-                }
+                        if (userType === 'a') {
+                            navigate(routes.admin_final_registrations);
+                        }
+                        if (userType === 'u') {
+                            navigate(routes.admin_dashboard);
+                        }
+                    }
+                });
+            }
+            else {
+                Swal.fire({
+                    title: "",
+                    text: "Revalidation registration rejected",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        if (doctor?.mobileno) {
+                            await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
+
+                            }).catch(() => {
+
+                            });
+                        }
+                        if (userType === 'a') {
+                            navigate(routes.admin_final_registrations);
+                        }
+                        if (userType === 'u') {
+                            navigate(routes.admin_dashboard);
+                        }
+                    }
+                });
+            }
         }
         else {
             Swal.fire({
@@ -157,28 +151,28 @@ const ProvRevalidationRegView = () => {
         if (userType === 'u') {
             navigate(routes.admin_my_work_items);
         }
-    },[userType]);
+    }, [userType]);
     useEffect(() => {
         const userTypeValue = LocalStorageManager.getUserType();
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
-        getAdditionalDetails();
-    }, [nameChangeId, doctorPrimaryId]);
+        getrevalidation();
+    }, [prvId, doctorPrimaryId]);
     return (
         <>
             <div className="col-8 m-auto mb-4">
                 <div className="card">
                     <div className="card-body">
-                    <div className="row mb-3">
-                        <h3 className="col fs-18 fw-600">Additional View</h3>
-                        <div className="col-2 align-items-center justify-content-center ">
-                                    <button type="button"
-                                        onClick={() => {
-                                            closewindow();
-                                        }} className='btn btn-outline-dark'><i className="bi-x-circle-fill"></i> Close</button>
-                                </div>
-                            </div> 
-                                <div className="row mb-3">   
+                        <div className="row mb-3">
+                            <h3 className="col fs-18 fw-600">Revalidation View</h3>
+                            <div className="col-2 align-items-center justify-content-center ">
+                                <button type="button"
+                                    onClick={() => {
+                                        closewindow();
+                                    }} className='btn btn-outline-dark'><i className="bi-x-circle-fill"></i> Close</button>
+                            </div>
+                        </div>
+                        <div className="row mb-3">
                             <div className="col-3">
                                 <div className="tsmc-doc-profile-box border-bottom-0">
                                     <div className='tsmc-doc-img mb-3'>
@@ -259,78 +253,57 @@ const ProvRevalidationRegView = () => {
                                     <div className="fs-14">TSMC/FMR/{doctor?.fmr_no}</div>
                                 </div>
                                 <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Registration Date:</label>
-                                    <div className="fs-14">{additionals?.reg_date ? moment(additionals?.reg_date).format('DD/MM/YYYY') : 'NA'}</div>
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Current Provisional Registration Date:</label>
+                                    <div className="fs-14">{revalidations?.prov_reg_date ? moment(revalidations?.prov_reg_date).format('DD/MM/YYYY') : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Qualification:</label>
-                                    <div className="fs-14">{additionals?.qualification ? additionals?.qualification : 'NA'}</div>
-                                </div>
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Month:</label>
-                                    <div className="fs-14">{additionals?.exam_month ? additionals?.exam_month : 'NA'}</div>
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Revalidation Reason:</label>
+                                    <div className="fs-14">{revalidations?.revalidationReason ? revalidations?.revalidationReason : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Year:</label>
-                                    <div className="fs-14">{additionals?.exam_year ? additionals?.exam_year : 'NA'}</div>
-                                </div>
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Country:</label>
-                                    <div className="fs-14">{additionals?.country ? additionals?.country : 'NA'}</div>
-                                </div>
+
                             </div>
                             <div className="d-flex mb-2">
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
-                                    <div className="fs-14">{additionals?.state ? additionals?.state : 'NA'}</div>
-                                </div>
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>University Name:</label>
-                                    <div className="fs-14">{additionals?.university ? additionals?.university : 'NA'}</div>
-                                </div>
+
                             </div>
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'> Payment Recieved</label>
-                                    <div className="fs-14">{additionals?.dd_amount ? additionals?.dd_amount : 'NA'}</div>
+                                    <div className="fs-14">{revalidations?.dd_amount ? revalidations?.dd_amount : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Reciept No:</label>
-                                    <div className="fs-14">{additionals?.receipt_no ? additionals?.receipt_no : 'NA'}</div>
+                                    <div className="fs-14">{revalidations?.receipt_no ? revalidations?.receipt_no : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">
-                                <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>College Name:</label>
-                                    <div className="fs-14">{additionals?.college ? additionals?.college : 'NA'}</div>
-                                </div>
+
                             </div>
                             <div className="row mt-3">
-                                {additionals?.edu_cert1 &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(additionals?.edu_cert1) }}>
+                                {revalidations?.edu_cert1 &&
+                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(revalidations?.edu_cert1) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
                                             <p className="d-flex align-items-center">
-                                                {additionals?.edu_cert1 ? <img src={serverImgUrl + 'additional/' + additionals?.edu_cert1} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                                {revalidations?.edu_cert1 ? <img src={serverImgUrl + 'prrevalidation/' + revalidations?.edu_cert1} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
                                             </p>
                                         </div>
                                     </div>
                                 }
-                                {additionals?.edu_cert2 &&
-                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(additionals?.edu_cert2) }}>
+                                {revalidations?.edu_cert2 &&
+                                    <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(revalidations?.edu_cert2) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                            <p className="d-flex align-items-center">{additionals?.edu_cert2 && <img src={serverImgUrl + 'additional/' + additionals?.edu_cert2} alt="" />}</p>
+                                            <p className="d-flex align-items-center">{revalidations?.edu_cert2 && <img src={serverImgUrl + 'prrevalidation/' + revalidations?.edu_cert2} alt="" />}</p>
                                         </div>
                                     </div>
                                 }
-                             </div>
-                               
+                            </div>
+
                         </div>
                     </div>
-                    {userType === 'u' && additionals?.approval_status === 'pen' &&
+                    {userType === 'u' && revalidations?.approval_status === 'pen' &&
                         <div className="card-footer">
                             <div className="mb-3">
                                 <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
@@ -361,12 +334,12 @@ const ProvRevalidationRegView = () => {
                         close={() => setIsLightBoxOpen(false)}
                         slides={[
                             {
-                                src: serverImgUrl + 'additionals/' + lightBoxImagePath,
+                                src: serverImgUrl + 'prrevalidation/' + lightBoxImagePath,
                                 alt: "edu_cert1",
                                 width: 3840,
                                 height: 2560,
                                 srcSet: [
-                                    { src: serverImgUrl + 'additionals/' + lightBoxImagePath, width: 100, height: 100 },
+                                    { src: serverImgUrl + 'prrevalidation/' + lightBoxImagePath, width: 100, height: 100 },
                                 ]
                             }
                         ]}

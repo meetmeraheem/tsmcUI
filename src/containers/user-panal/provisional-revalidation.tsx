@@ -20,6 +20,8 @@ import { isLessThanTheMB } from "../../lib/utils/lessthan-max-filesize";
 import { Messages } from "../../lib/constants/messages";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import DatePicker from 'react-date-picker';
+import { provisionalService } from '../../lib/api/provisional';
+import { ProvisionalEditFormType, ProvisionalProfileType } from "../../types/provisional";
 
 
 const ProvisionalRevalidation = () => {
@@ -30,9 +32,10 @@ const ProvisionalRevalidation = () => {
     const [serial, setserial] = useState<Serials>();
     const [provisionalCertificate, setProvisionalCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [applicationForm, setApplicationForm] = useState<{ file?: File; error?: string } | null>(null);
-    const [nocCertificate, setNOCCertificate] = useState<{ file?: File; error?: string } | null>(null);
+    const [supportCertificate, setSupportCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [provisionalRequestType, setProvisionalRequestType] = useState<string>('nor');
     const [reg_date, setReg_date] = useState(new Date());
+    const [provisional, setProvisional] = useState<ProvisionalProfileType | null>(null);
 
 
     const initialFormData = {
@@ -40,12 +43,26 @@ const ProvisionalRevalidation = () => {
         status: '',
         prov_reg_date:'',
         edu_cert1: '',
-        revalidation_reason:'',
+        edu_cert2:'',
+        revalidationReason:'',
         extra_col3:'',
     }
-
+    const getProvisionalDetails = useCallback(async () => {
+           try {
+                const doctorSerialId = LocalStorageManager.getDoctorSerialId();
+                if (doctorSerialId) {
+                    const { data } = await provisionalService.getProvisionalByDoctorId(doctorSerialId);
+                    if (data.length > 0) {
+                        setProvisional(data[0]);
+                        setReg_date(data[0].reg_date);
+                    }
+                }
+            } catch (err) {
+                console.log('error getProvisionalDetails', err);
+            }
+    }, []);
     useEffect(() => {
-        
+        getProvisionalDetails();
     }, []);
 
     
@@ -64,7 +81,7 @@ const ProvisionalRevalidation = () => {
                     prefix: 'TSMC',
                     approval_status: 'pen',
                     row_type: 'on',
-                    prov_reg_date: moment(values.prov_reg_date).format('YYYY-MM-DD'),
+                    oldProvisionalDate: moment(reg_date).format('YYYY-MM-DD'),
                     extra_col1:provisionalRequestType,
                     doctorPrimaryId:doctorPrimaryId,
                 }
@@ -73,6 +90,9 @@ const ProvisionalRevalidation = () => {
                 secureLocalStorage.setItem("provRevalidationInfo", provRevalidationInfo);
                 if (provisionalCertificate?.file) {
                     secureLocalStorage.setItem("revalidationCertificate", provisionalCertificate?.file);
+                }
+                if (supportCertificate?.file) {
+                    secureLocalStorage.setItem("supportCertificate", supportCertificate?.file);
                 }
                 
                
@@ -87,7 +107,7 @@ const ProvisionalRevalidation = () => {
                 console.log('error in provisional Revalidation registeration update', err);
             }
         },
-        [doctorId, serial, provisionalCertificate, applicationForm, nocCertificate]
+        [doctorId, serial, provisionalCertificate, applicationForm, supportCertificate]
     );
 
     return (
@@ -168,7 +188,8 @@ const ProvisionalRevalidation = () => {
                                                                                 setFieldValue(field.name, new Date(date));
                                                                             }}
                                                                             clearIcon={null}
-                                                                            value={field.value}
+                                                                            value={reg_date}
+                                                                            disabled={true}
                                                                             className={`form-control ${error ? 'is-invalid' : ''}`}
                                                                         />
                                                                         {error && <small className="text-danger">{error.toString()}</small>}
@@ -180,7 +201,7 @@ const ProvisionalRevalidation = () => {
                                                     </div>
                                                      <div className="row mb-2">
                                                         <div className="col-4">
-                                                            <Field name="Reason">
+                                                            <Field name="revalidationReason">
                                                                 {(fieldProps: FieldProps) => {
                                                                     const { field, form } = fieldProps;
                                                                     const error =
@@ -210,7 +231,7 @@ const ProvisionalRevalidation = () => {
                                                       
                                                     </div>
                                                     <div className="row mb-2 mt-4">
-                                                        <div className="col">
+                                                        <div className="col-4">
                                                             <div className="drag-img-box d-flex align-items-center justify-content-center">
                                                                 <Field name="edu_cert1">
                                                                     {(fieldProps: FieldProps) => {
@@ -264,7 +285,7 @@ const ProvisionalRevalidation = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload document</p>
+                                                                                            <p className='fs-13'>Upload Provisional Document</p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>
@@ -276,14 +297,84 @@ const ProvisionalRevalidation = () => {
                                                                         );
                                                                     }}
                                                                 </Field>
-
-
                                                             </div>
-                                                          
-                                                        </div>
-                                                        <div className="col">
+                                                          <div className="col">
+                                                          </div>
+                                                           </div>
+                                                    <div className="row mb-2 mt-4">
+                                                        <div className="col-4">
+                                                            <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                                <Field name="edu_cert2">
+                                                                    {(fieldProps: FieldProps) => {
+                                                                        const { field, form } = fieldProps;
+                                                                        const error =
+                                                                            getValue(form.touched, field.name) &&
+                                                                            getValue(form.errors, field.name);
+                                                                        const file = supportCertificate?.file
+                                                                            ? supportCertificate?.file.name
+                                                                            : field.value || null;
+                                                                        return file ? (
+                                                                            <p className="d-flex align-items-center">
+                                                                                <strong>Uploaded:</strong>
+                                                                                <span className="ms-1">{file}</span>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() => {
+                                                                                        setFieldValue(field.name, '');
+                                                                                        setSupportCertificate(null);
+                                                                                    }}
+                                                                                    title='Delete'
+                                                                                    className="ms-2 lh-1"
+                                                                                >
+                                                                                    <i className="bi-trash" />
+                                                                                </button>
+                                                                            </p>
+                                                                        ) : (
+                                                                            <>
+                                                                                <Files
+                                                                                    className="files-dropzone"
+                                                                                    onChange={(files: ReactFilesFile[]) => {
+                                                                                        if (files[0]) {
+                                                                                            const file = files[0];
+                                                                                            const isLess = isLessThanTheMB(files[0].size, 0.3);
+                                                                                            if (isLess) {
+                                                                                                setSupportCertificate({ file });
+                                                                                                setFieldValue(field.name, file.name);
+                                                                                            }
+                                                                                            else {
+                                                                                                alert(Messages.isLessThanTheMB);
+                                                                                            }
+                                                                                        }
+                                                                                    }}
+                                                                                    onError={(error: ReactFilesError) => {
+                                                                                        console.log('error', error);
+                                                                                        if (error.code === 1) {
+                                                                                        }
+                                                                                    }}
+                                                                                    clickable
+                                                                                >
+                                                                                    <div className="drag-drop-box mt-3">
+                                                                                        <div className="text-center">
+                                                                                            <i className="bi-file-earmark-break fs-32"></i>
+                                                                                            <p className='fs-13'>Upload supporting Document</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </Files>
+                                                                                <small className="text-danger mt-1">
+                                                                                    {supportCertificate?.error}
+                                                                                </small>
+                                                                                {error && <small className="text-danger">{error.toString()}</small>}
+                                                                            </>
+                                                                        );
+                                                                    }}
+                                                                </Field>
+                                                            </div>
                                                             
-                                                        </div>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            <div className="col">
+                                                          </div>
                                                     </div>
                                                     <div className="w-100 text-end mt-3">
                                                         {/* isValid? setNext(false):setNext(true) */}
@@ -310,18 +401,11 @@ export default ProvisionalRevalidation;
 
 const getValidationSchema = () =>
     objectYup().shape({
-        Gazette_No:stringYup()
-        .required('Gazette No is required.')
-        .matches(/^[a-zA-Z0-9]*$/, "Must be Alphanumeric only"),
-        newName:stringYup()
-        .required('New Name is required.'),
-        
-        prov_reg_date: stringYup()
-            .required('Provisional Registration date is required.'),
-            
+        revalidationReason:stringYup()
+        .required('Reason is required.'),
         edu_cert1: stringYup()
-            .required('document is required.'),
-       
-      
+            .required('Provisional Document is required.'),
+        edu_cert2: stringYup()
+            .required('Supporting Document is required.'),    
     });
 

@@ -146,6 +146,18 @@ export type goodStandingFormType = {
    newName:string,
 };
 
+export type AdminChangeOfNameType = {
+    approval_status: string,
+    gazzetNotificationDate: string,
+    doctor_id: number,
+    gazzetNotificationDocument: string,
+    gazzetNotificationNo:string,
+    extra_col1:string,
+    currentName:string,
+    newName:string,
+    dd_amount:string,
+    receipt_no:string
+ };
 
 
 export type provisional_Revalidation = {
@@ -153,7 +165,20 @@ export type provisional_Revalidation = {
     prov_reg_date: string,
     doctor_id: number,
     edu_cert1: string,
-    revalidation_reason:string,
+    edu_cert2: string,
+    revalidationReason:string,
     extra_col3:string,
     
+ };
+
+ export type admin_provisional_Revalidation = {
+    approval_status: string,
+    prov_reg_date: string,
+    doctor_id: number,
+    edu_cert1: string,
+    edu_cert2: string,
+    revalidationReason:string,
+    extra_col1:string,
+    dd_amount:string,
+    receipt_no:string
  };
