@@ -1,13 +1,10 @@
 import moment from 'moment';
 import { useCallback, useEffect, useState,useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { FinalMyProfileType } from '../../types/final';
-import { ProvisionalMyProfileType } from '../../types/provisional';
 import { SMS } from '../../lib/utils/sms/sms';
 import { authService } from '../../lib/api/auth';
 import { Messages } from '../../lib/constants/messages';
 import Swal from "sweetalert2";
-import { DoctorFormType, DoctorProfileType } from "../../types/doctor";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import ProfileDataEdit from '../editdata/profile-data-edit';
 import ProvisionalDataEdit from '../editdata/provisional-data-edit';
@@ -28,7 +25,7 @@ const MyDataEdit= () => {
     const sendDataEditSMS = useCallback(async (mobileNumber:any) => {
         if (mobileNumber) {
                        const message = otp + ' is your OTP to verify Data Edit from Telangana State Medical Council. Please do not share this with anyone. Kindly note this is valid for the next 15 minutes.';
-                       await authService.sendOTP(mobileNumber, message).then((response) => {
+                       await authService.sendSMS(mobileNumber, message).then((response) => {
                             if (response.status === 200) {
                                  setSavedDataEditOTPNumber(otp);
                                  setIsDataEditOtpSent(true);
@@ -80,7 +77,9 @@ const MyDataEdit= () => {
                     <div className="row">
                         <div className="col-10 m-auto">
                             <div className="card shadow border-0 mb-4">
+
                                 <div className="card-body">
+                                
                                 {!isDataEditOTP&&
                                         <div>
                                         <div className="row">
@@ -113,9 +112,11 @@ const MyDataEdit= () => {
                                                             <div className="col-2">
                                                               <button type="submit" onClick={dataEditOTPVerify} className='w-100 btn btn-primary'>Verify OTP</button>
                                                        </div>
+                                                      
                                                        </div>
                                                   </>
                                              }
+                                             
                                         </div>}
                                     {isDataEditOTP? <div>
                                        <ProfileDataEdit ></ProfileDataEdit>
@@ -183,7 +184,9 @@ const MyDataEdit= () => {
                         </div>                
                         </div>
                     </div>
+                 
                 </div>
+               
             </section>
         </>
     

@@ -71,6 +71,7 @@ const ChangeofNameRegView = () => {
     const submit = useCallback(async (status: any) => {
         if (status) {
             const changeofnameInfo = {
+                doctorPrimaryId:doctorPrimaryId,
                 approval_status: status,
                 remarks: remarks,
                 assignmnetId:assignmentId
