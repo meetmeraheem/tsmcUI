@@ -28,6 +28,7 @@ const HomePage = () => {
      const dispatch = useDispatch();
      const [startDate, setStartDate] = useState(new Date());
      const [mobileNumber, setMobileNumber] = useState('');
+     const [signupMobNo, setSignupMobNo] = useState('');
      const [password, setPassword] = useState('');
      const [mobileError, setMobileError] = useState(false);
      const [mobileErrorMessage, setMobileErrorMessage] = useState('');
@@ -108,7 +109,8 @@ const HomePage = () => {
                                    return false;
                               }else{
                                    setOTPbuttonStatus(false);
-                                   const message = otp + ' is your OTP to verify your signup from Telangana State Medical Council. Please do not share this with anyone. Kindly note this is valid for the next 15 minutes.';
+                                   const message = 'signup';
+                                   setSignupMobNo(doctorInfo.mobileno);
                                    await authService.sendOTP(doctorInfo.mobileno, message).then((response) => {
                                    if (response.status === 200) {
                                          setDoctorInfoValue(doctorInfo);
@@ -138,7 +140,9 @@ const HomePage = () => {
                     setOTPbuttonStatus(true);
                     setOTPError(false);
                     setOTPErrorMessage('');
-                    if (savedOTPNumber === enteredOTPNumber) {
+                    const message = 'signup';
+                    const { data, success } = await authService.verifyOTP(signupMobNo,message,enteredOTPNumber);
+                    if(success){
                          const { success } = await doctorService.doctorSignUp(getDoctorInfo);
                          if (success) {
                               Swal.fire({
@@ -151,18 +155,16 @@ const HomePage = () => {
                                         window.location.reload();
                                    }
                               });
-                         }
-                         else {
-                              setOTPbuttonStatus(false);
+                    }else{
+                         setOTPbuttonStatus(false);
                               Swal.fire({
                                    title: Messages.ErrorText,
                                    text: "Unable to registered, please try after sometime.",
                                    icon: "error",
                                    confirmButtonText: Messages.OKText,
                               });
-                         }
                     }
-                    else {
+               }else {
                          setOTPbuttonStatus(false);
                          Swal.fire({
                               text: "OTP Incorrect",
@@ -306,7 +308,6 @@ const HomePage = () => {
                setOTPbuttonStatus(false);
                setOTPErrorMessage('OTP number is required.');
           }
-
      }, []);
 
      const mobileNumberValidation = useCallback(async (mobileNo: any) => {
@@ -336,7 +337,7 @@ const HomePage = () => {
                      if(data.mobileno !== null) {
                          setIsMobileNumberRegistered(true);
                          const text1 = 'forgot';
-                         const message = otp + ' is your OTP to verify your password from Telangana State Medical Council. Please do not share this with anyone. Kindly note this is valid for the next 15 minutes.';
+                         const message = 'password';
                          //const message = 'Thanks for contacting TSMC. We have received an amount 52 for your 20 - application with receipt No 89. Your OTP is ' + otp;
                          await authService.sendOTP(forgetPasswordMobileNumber, message).then((response) => {
                               if (response.status === 200) {
@@ -369,7 +370,9 @@ const HomePage = () => {
 
      const forgetPasswordOTPVerify = useCallback(async () => {
           if (enteredForgetPasswordOTPNumber) {
-               if (enteredForgetPasswordOTPNumber === savedForgetPasswordOTPNumber) {
+               const message = 'password';
+               const { data, success } = await authService.verifyOTP(forgetPasswordMobileNumber,message,enteredForgetPasswordOTPNumber);
+               if(success){
                     //Need to code.
                     setIsForgetPasswordOTP(false);
                     setIsForgetPassword(true);

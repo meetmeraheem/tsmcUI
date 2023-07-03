@@ -51,7 +51,7 @@ const FinalRegistration = () => {
     const [isPMRDateAbove18M, setIsPMRDateAbove18M] = useState(false);
     const [isTelangana, setIsTelangana] = useState(false);
     const [finalRequestType, setFinalRequestType] = useState<string>('nor');
-    const [localRequestType, setLocalRequestType] = useState<string>('non-telangana');
+    const [localRequestType, setLocalRequestType] = useState<string>('telangana');
 
 
 

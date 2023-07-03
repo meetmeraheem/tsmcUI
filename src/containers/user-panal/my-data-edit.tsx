@@ -24,15 +24,15 @@ const MyDataEdit= () => {
      const otp = SMS.generateOTP();
     const sendDataEditSMS = useCallback(async (mobileNumber:any) => {
         if (mobileNumber) {
-                       const message = otp + ' is your OTP to verify Data Edit from Telangana State Medical Council. Please do not share this with anyone. Kindly note this is valid for the next 15 minutes.';
-                       await authService.sendSMS(mobileNumber, message).then((response) => {
+                       const message = 'DataEdit';
+                       await authService.sendOTP(mobileNumber, message).then((response) => {
                             if (response.status === 200) {
                                  setSavedDataEditOTPNumber(otp);
                                  setIsDataEditOtpSent(true);
                             }
                        }).catch((error) => {
-                            setSavedDataEditOTPNumber(otp);
-                            setIsDataEditOtpSent(true);
+                            
+                            
                        });
                   }
                   else {
@@ -45,20 +45,23 @@ const MyDataEdit= () => {
    }, []);
 
    const dataEditOTPVerify = useCallback(async () => {
+
+
+   const mobNo=  LocalStorageManager.getDoctorMobileno();
         if (enteredDataEditOTPNumber) {
-             if (enteredDataEditOTPNumber === savedDataEditOTPNumber) {
-                  //Need to code.
-                  setIsDataEditOTP(true);
-                  setDataEditOTPError(false);
-                  setDataEditOTPErrorMessage('');
-             }
-             else {
-                  Swal.fire({
-                       text: "OTP Incorrect",
-                       icon: "error",
-                       confirmButtonText: Messages.OKText,
-                  });
-             }
+          
+          const { data, success } = await authService.verifyOTP(mobNo,'DataEdit',enteredDataEditOTPNumber);
+               if(success){
+               setIsDataEditOTP(true);
+               setDataEditOTPError(false);
+               setDataEditOTPErrorMessage('');
+               }else{
+                    Swal.fire({
+                         text: "OTP Incorrect",
+                         icon: "error",
+                         confirmButtonText: Messages.OKText,
+                    });
+               }
         }
         else {
              setDataEditOTPError(true);

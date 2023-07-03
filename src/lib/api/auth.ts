@@ -8,7 +8,7 @@ export const authService = {
         const { data: responseData } = await axiosInstance.post('auth/signIn' , data);
         return responseData as ApiLoginResponseType;
     },
-    async sendOTP(mobileNumber: string, message: string) {
+ /*    async sendOTP(mobileNumber: string, message: string) {
         //const data = await thiredPartyAxiosInstance.get(`${smsBaseURL}phone=${mobileNumber}&text=${message}&priority=ndnd&stype=normal`);
         const { data } = await axios.post(`${smsBaseURL}phone=${mobileNumber}&text=${message}&priority=ndnd&stype=normal`, {
             headers: {
@@ -21,7 +21,7 @@ export const authService = {
         });
         return data;
     },
-    async sendSMS(mobileNumber: string, message: string) {
+   async sendSMS(mobileNumber: string, message: string) {
         const data = axios.post(`${smsBaseURL}phone=${mobileNumber}&text=${message}&priority=ndnd&stype=normal`, {
             headers: {
                 'Content-Type': 'application/json',
@@ -32,5 +32,18 @@ export const authService = {
             }
         });
         return data;
+    },*/
+    async sendOTP(mobileNumber: string, message: string) {
+        const data = await axiosInstance.get(`sms/sendotp?mobile=${mobileNumber}&message=${message}`);
+        return data;
+    },
+    async sendSMS(mobileNumber: string, message: string) {
+        const data = await axiosInstance.get(`sms/sendsms/${mobileNumber}/${message}`);
+        return data;
+    },
+   
+    async verifyOTP(mobileNumber:any, message:any,otpstr:any) {
+        const { data: responseData } = await axiosInstance.get(`sms/verifyOtp?mobile=${mobileNumber}&message=${message}&strotp=${otpstr}`);
+        return responseData as ApiLoginResponseType;
     },
 };
