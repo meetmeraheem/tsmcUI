@@ -277,8 +277,6 @@ const FinalRegistration = () => {
                 .required('College Name is required.'),
             qualification: stringYup()
                 .required('Qualification is required.'),
-            telanganapmrNo: stringYup()
-                .required('PMR No is required.'),   
             exam_month: stringYup()
                 .required('Exam Month is required.'),
             exam_year: stringYup()
@@ -446,6 +444,7 @@ const FinalRegistration = () => {
                                                                                }`}
                                                                            placeholder="Enter Telangana Provisional Registration Number"
                                                                            maxLength={100}
+                                                                           required
                                                                        />
 
                                                                        {error && <small className="text-danger">{error.toString()}</small>}

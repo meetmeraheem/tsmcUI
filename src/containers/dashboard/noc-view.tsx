@@ -77,7 +77,7 @@ const FinalRegView = () => {
             navigate(routes.admin_dashboard);
         }
         if (userType === 'u') {
-            navigate(routes.admin_my_work_items);
+            navigate(routes.admin_dashboard);
         }
     },[userType]);
 
@@ -94,10 +94,10 @@ const FinalRegView = () => {
                 let smsmsg="";
                 if(status !== 'rej' ){
                     msg="NOC successfully approved";
-                    smsmsg="Your  NOC Application has been Approved from Telangana State Medical Council.";
+                    smsmsg="Approved";
                 }else{
                     msg="NOC Application Rejected";
-                    smsmsg="Your NOC Application has been Rejected from Telangana State Medical Council.";
+                    smsmsg="Rejected";
                 }
                     Swal.fire({
                         title: "",
@@ -108,7 +108,7 @@ const FinalRegView = () => {
                     let userType= LocalStorageManager.getUserType();
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
+                                await authService.sendApproval(doctor?.mobileno, smsmsg).then((response) => {
                                     
                                 }).catch(() => {
 
@@ -118,7 +118,7 @@ const FinalRegView = () => {
                                 navigate(routes.admin_dashboard);
                             }
                             if (userType === 'u') {
-                                navigate(routes.admin_my_work_items);
+                                navigate(routes.admin_dashboard);
                             }
                         }
                     });
@@ -131,18 +131,12 @@ const FinalRegView = () => {
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                            if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, 'NOC Application has been Rejected from Telangana State Medical Council.').then((response) => {
-                                    
-                                }).catch(() => {
-
-                                });
-                            }
+                          
                             if (userType === 'a') {
                                 navigate(routes.admin_dashboard);
                             }
                             if (userType === 'u') {
-                                navigate(routes.admin_my_work_items);
+                                navigate(routes.admin_dashboard);
                             }
                         }
                     });

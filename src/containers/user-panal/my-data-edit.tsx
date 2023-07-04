@@ -25,7 +25,8 @@ const MyDataEdit= () => {
     const sendDataEditSMS = useCallback(async (mobileNumber:any) => {
         if (mobileNumber) {
                        const message = 'DataEdit';
-                       await authService.sendOTP(mobileNumber, message).then((response) => {
+                       const  smsmsg="Approved";
+                       await authService.sendOTP(mobileNumber, message).then((response)=> {
                             if (response.status === 200) {
                                  setSavedDataEditOTPNumber(otp);
                                  setIsDataEditOtpSent(true);
@@ -51,6 +52,7 @@ const MyDataEdit= () => {
         if (enteredDataEditOTPNumber) {
           
           const { data, success } = await authService.verifyOTP(mobNo,'DataEdit',enteredDataEditOTPNumber);
+          
                if(success){
                setIsDataEditOTP(true);
                setDataEditOTPError(false);

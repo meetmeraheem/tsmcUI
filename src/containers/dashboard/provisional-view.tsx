@@ -88,7 +88,7 @@ const ProvisionalView = () => {
             navigate(routes.admin_dashboard);
         }
         if (userType === 'u') {
-            navigate(routes.admin_my_work_items);
+            navigate(routes.admin_dashboard);
         }
     },[userType]);
 
@@ -106,10 +106,10 @@ const ProvisionalView = () => {
                     let smsmsg="";
                     if(status !== 'rej' ){
                         msg="Provisional successfully approved";
-                        smsmsg="Your Provisional  Application has been Approved from Telangana State Medical Council.";
+                        smsmsg="Approved";
                     }else{
                         msg="Provisional Application Rejected";
-                        smsmsg="Your Provisional Application has been Rejected from Telangana State Medical Council.";
+                        smsmsg="Rejected";
                     }
                     Swal.fire({
                         title: "",
@@ -120,7 +120,7 @@ const ProvisionalView = () => {
                     let userType= LocalStorageManager.getUserType();
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno,smsmsg).then((response) => {
+                                await authService.sendApproval(doctor?.mobileno,smsmsg).then((response) => {
                                     
                                 }).catch(() => {
 
@@ -130,7 +130,7 @@ const ProvisionalView = () => {
                                 navigate(routes.admin_dashboard);
                             }
                             if (userType === 'u') {
-                                navigate(routes.admin_my_work_items);
+                                navigate(routes.admin_dashboard);
                             }
                         }
                     });
@@ -143,13 +143,6 @@ const ProvisionalView = () => {
                         confirmButtonText: "OK",
                     }).then(async (result:any) => {
                         if (result.isConfirmed) {
-                            if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, 'Your Provisional  Application has been Rejected from Telangana State Medical Council.').then((response) => {
-                                    
-                                }).catch(() => {
-
-                                });
-                            }
                             if (userType === 'a') {
                                 navigate(routes.admin_dashboard);
                             }

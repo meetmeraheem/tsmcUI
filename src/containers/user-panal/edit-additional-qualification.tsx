@@ -222,14 +222,6 @@ const EditAdditionalQualificationRegistration = () => {
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                            const doctorMobileno = LocalStorageManager.getDoctorMobileno();
-                            if (doctorMobileno) {
-                                await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Additional Qualification Registration to Telangana State Medical Council is under Process.').then((response) => {
-
-                                }).catch(() => {
-
-                                });
-                            }
                             navigate(routes.userpanal);
                         }
                     });

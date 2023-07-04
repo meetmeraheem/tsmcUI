@@ -88,10 +88,10 @@ const AdditionalRegView = () => {
                 let smsmsg="";
                 if(status !== 'rej' ){
                     msg="Additional Details successfully approved";
-                    smsmsg="Your Additional Application has been Approved from Telangana State Medical Council.";
+                    smsmsg="Approved";
                 }else{
                     msg="Additional Details Application Rejected";
-                    smsmsg="Your Additional Application has been Rejected from Telangana State Medical Council.";
+                    smsmsg="Rejected";
                 }
                     Swal.fire({
                         title: "",
@@ -102,14 +102,14 @@ const AdditionalRegView = () => {
                         let userType= LocalStorageManager.getUserType();
                         if (result.isConfirmed) {
                             if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
+                                await authService.sendApproval(doctor?.mobileno, smsmsg).then((response) => {
                                     
                                 }).catch(() => {
 
                                 });
                             }
                             if (userType === 'a') {
-                                navigate(routes.admin_final_registrations);
+                                navigate(routes.admin_dashboard);
                             }
                             if (userType === 'u') {
                                 navigate(routes.admin_dashboard);
@@ -125,18 +125,11 @@ const AdditionalRegView = () => {
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                            if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
-                                    
-                                }).catch(() => {
-
-                                });
-                            }
                             if (userType === 'a') {
-                                navigate(routes.admin_final_registrations);
+                                navigate(routes.admin_dashboard);
                             }
                             if (userType === 'u') {
-                                navigate(routes.admin_my_work_items);
+                                navigate(routes.admin_dashboard);
                             }
                         }
                     });
@@ -156,7 +149,7 @@ const AdditionalRegView = () => {
             navigate(routes.admin_dashboard);
         }
         if (userType === 'u') {
-            navigate(routes.admin_my_work_items);
+            navigate(routes.admin_dashboard);
         }
     },[userType]);
     useEffect(() => {

@@ -37,8 +37,13 @@ export const authService = {
         const data = await axiosInstance.get(`sms/sendotp?mobile=${mobileNumber}&message=${message}`);
         return data;
     },
-    async sendSMS(mobileNumber: string, message: string) {
-        const data = await axiosInstance.get(`sms/sendsms/${mobileNumber}/${message}`);
+    async sendConfirmation(mobileNumber: string, message: string) {
+        const data = await axiosInstance.get(`sms/sendconfirmation?mobile=${mobileNumber}&message=${message}`);
+        return data;
+    },
+
+    async sendApproval(mobileNumber: string, message: string) {
+        const data = await axiosInstance.get(`sms/sendapproval?mobile=${mobileNumber}&message=${message}`);
         return data;
     },
    

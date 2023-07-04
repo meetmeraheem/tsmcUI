@@ -81,10 +81,10 @@ const ProvRevalidationRegView = () => {
                 let smsmsg = "";
                 if (status !== 'rej') {
                     msg = "Revalidation Details successfully approved";
-                    smsmsg = "Your Revalidation Application has been Approved from Telangana State Medical Council.";
+                    smsmsg = "Approved";
                 } else {
                     msg = "Revalidation Details Application Rejected";
-                    smsmsg = "Your Revalidation Application has been Rejected from Telangana State Medical Council.";
+                    smsmsg = "Rejected";
                 }
                 Swal.fire({
                     title: "",
@@ -95,14 +95,14 @@ const ProvRevalidationRegView = () => {
                     let userType = LocalStorageManager.getUserType();
                     if (result.isConfirmed) {
                         if (doctor?.mobileno) {
-                            await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
+                            await authService.sendApproval(doctor?.mobileno, smsmsg).then((response) => {
 
                             }).catch(() => {
 
                             });
                         }
                         if (userType === 'a') {
-                            navigate(routes.admin_final_registrations);
+                            navigate(routes.admin_dashboard);
                         }
                         if (userType === 'u') {
                             navigate(routes.admin_dashboard);
@@ -118,15 +118,8 @@ const ProvRevalidationRegView = () => {
                     confirmButtonText: "OK",
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        if (doctor?.mobileno) {
-                            await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
-
-                            }).catch(() => {
-
-                            });
-                        }
                         if (userType === 'a') {
-                            navigate(routes.admin_final_registrations);
+                            navigate(routes.admin_dashboard);
                         }
                         if (userType === 'u') {
                             navigate(routes.admin_dashboard);
@@ -149,7 +142,7 @@ const ProvRevalidationRegView = () => {
             navigate(routes.admin_dashboard);
         }
         if (userType === 'u') {
-            navigate(routes.admin_my_work_items);
+            navigate(routes.admin_dashboard);
         }
     }, [userType]);
     useEffect(() => {

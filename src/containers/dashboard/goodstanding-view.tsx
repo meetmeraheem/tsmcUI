@@ -69,7 +69,7 @@ const GoodStandingRegView = () => {
             navigate(routes.admin_dashboard);
         }
         if (userType === 'u') {
-            navigate(routes.admin_my_work_items);
+            navigate(routes.admin_dashboard);
         }
     },[userType]);
 
@@ -86,10 +86,10 @@ const GoodStandingRegView = () => {
                 let smsmsg="";
                 if(status !== 'rej' ){
                     msg="Good Standing successfully approved";
-                    smsmsg="Your Good Standing  Application has been Approved from Telangana State Medical Council.";
+                    smsmsg="Approved";
                 }else{
                     msg="Good Standing Application Rejected";
-                    smsmsg="Your Good Standing Application has been Rejected from Telangana State Medical Council.";
+                    smsmsg="Rejected";
                 }
                     Swal.fire({
                         title: "",
@@ -100,7 +100,7 @@ const GoodStandingRegView = () => {
                              let userType= LocalStorageManager.getUserType();
                             if (result.isConfirmed) {
                             if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, smsmsg).then((response) => {
+                                await authService.sendApproval(doctor?.mobileno, smsmsg).then((response) => {
                                     
                                 }).catch(() => {
 
@@ -110,7 +110,7 @@ const GoodStandingRegView = () => {
                                 navigate(routes.admin_dashboard);
                             }
                             if (userType === 'u') {
-                                navigate(routes.admin_my_work_items);
+                                navigate(routes.admin_dashboard);
                             }
                         }
                     });
@@ -123,18 +123,12 @@ const GoodStandingRegView = () => {
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                            if (doctor?.mobileno) {
-                                await authService.sendSMS(doctor?.mobileno, 'Your Application has been Approved from Telangana State Medical Council.').then((response) => {
-                                    
-                                }).catch(() => {
-
-                                });
-                            }
+                            
                             if (userType === 'a') {
                                 navigate(routes.admin_dashboard);
                             }
                             if (userType === 'u') {
-                                navigate(routes.admin_my_work_items);
+                                navigate(routes.admin_dashboard);
                             }
                         }
                     });

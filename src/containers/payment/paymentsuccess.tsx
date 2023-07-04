@@ -100,7 +100,7 @@ const PaymentSuccess = () => {
 
 
                         if (doctorMobileno) {
-                            await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Provisional  Registration to Telangana State Medical Council is under Process.').then((response) => {
+                            await authService.sendConfirmation(doctorMobileno, 'ProvisionalRegistration').then((response) => {
                             }).catch(() => {
                             });
                         }
@@ -214,7 +214,7 @@ const PaymentSuccess = () => {
                             if (result.isConfirmed) {
                                 const doctorMobileno = LocalStorageManager.getDoctorMobileno();
                                 if (doctorMobileno) {
-                                    await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Final Registration to Telangana State Medical Council is under Process.').then((response) => {
+                                    await authService.sendConfirmation(doctorMobileno, 'FinalRegistration').then((response) => {
                                     }).catch(() => {
                                     });
                                 }
@@ -261,7 +261,7 @@ const PaymentSuccess = () => {
                             if (result.isConfirmed) {
                                 const doctorMobileno = LocalStorageManager.getDoctorMobileno();
                                 if (doctorMobileno) {
-                                    await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Additional Medical Registration to Telangana State Medical Council is under Process.').then((response) => {
+                                    await authService.sendConfirmation(doctorMobileno, 'AdditionalQualification').then((response) => {
                                     }).catch(() => {
 
                                     });
@@ -300,7 +300,7 @@ const PaymentSuccess = () => {
                             if (result.isConfirmed) {
                                 const doctorMobileno = LocalStorageManager.getDoctorMobileno();
                                 if (doctorMobileno) {
-                                    await authService.sendSMS(doctorMobileno, 'Your Application Submitted for NOC Registration to Telangana State Medical Council is under Process.').then((response) => {
+                                    await authService.sendConfirmation(doctorMobileno, 'NOCRegistration').then((response) => {
                                     }).catch(() => {
                                     });
                                 }
@@ -337,7 +337,7 @@ const PaymentSuccess = () => {
                             if (result.isConfirmed) {
                                 const doctorMobileno = LocalStorageManager.getDoctorMobileno();
                                 if (doctorMobileno) {
-                                    await authService.sendSMS(doctorMobileno, 'Your Application Submitted for GoodStanding Registration to Telangana State Medical Council is under Process.').then((response) => {
+                                    await authService.sendConfirmation(doctorMobileno, 'GoodStanding').then((response) => {
                                     }).catch(() => {
                                     });
                                 }
@@ -391,7 +391,7 @@ const PaymentSuccess = () => {
                             if (result.isConfirmed) {
                                 const doctorMobileno = LocalStorageManager.getDoctorMobileno();
                                 if (doctorMobileno) {
-                                    await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Final Renewal Registration to Telangana State Medical Council is under Process.').then((response) => {
+                                    await authService.sendConfirmation(doctorMobileno, 'FinalRenewal').then((response) => {
                                     }).catch(() => {
                                     });
                                 }
@@ -435,7 +435,7 @@ const PaymentSuccess = () => {
                             if (result.isConfirmed) {
                                 const doctorMobileno = LocalStorageManager.getDoctorMobileno();
                                 if (doctorMobileno) {
-                                    await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Name Change Registration to Telangana State Medical Council is under Process.').then((response) => {
+                                    await authService.sendConfirmation(doctorMobileno, 'NameChangeRegistration').then((response) => {
                                     }).catch(() => {
                                     });
                                 }
@@ -485,7 +485,7 @@ const PaymentSuccess = () => {
                             if (result.isConfirmed) {
                                 const doctorMobileno = LocalStorageManager.getDoctorMobileno();
                                 if (doctorMobileno) {
-                                    await authService.sendSMS(doctorMobileno, 'Your Application Submitted for Provisional Revalidation  Registration to Telangana State Medical Council is under Process.').then((response) => {
+                                    await authService.sendConfirmation(doctorMobileno, 'ProvisionalRevalidation').then((response) => {
                                     }).catch(() => {
                                     });
                                 }
