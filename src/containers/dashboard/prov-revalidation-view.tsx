@@ -79,17 +79,20 @@ const ProvRevalidationRegView = () => {
             if (success) {
                 let msg = "";
                 let smsmsg = "";
-                if (status !== 'rej') {
-                    msg = "Revalidation Details successfully approved";
-                    smsmsg = "Approved";
-                } else {
-                    msg = "Revalidation Details Application Rejected";
-                    smsmsg = "Rejected";
+                if(status === 'rej' ){
+                    msg="Revalidation Details Application Rejected";
+                    smsmsg="Rejected";
+                }else if(status === 'apr') {
+                    msg="Revalidation Details successfully approved";
+                    smsmsg="Approved";
+                }else{
+                    msg="Revalidation Details successfully Verified";
+                    smsmsg="Verified";
                 }
                 Swal.fire({
                     title: "",
                     text: msg,
-                    icon: status !== 'rej' ? "success" : "error",
+                    icon: status === 'rej' ?"error":"success",
                     confirmButtonText: "OK",
                 }).then(async (result) => {
                     let userType = LocalStorageManager.getUserType();
@@ -297,6 +300,27 @@ const ProvRevalidationRegView = () => {
                         </div>
                     </div>
                     {userType === 'u' && revalidations?.approval_status === 'pen' &&
+                        <div className="card-footer">
+                            <div className="mb-3">
+                                <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
+                                <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
+                            </div>
+                            <div className='d-flex'>
+                                <div className="col">
+                                    <button type="submit" onClick={() => {
+                                        submit('rej');
+                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                                </div>
+                                <div className="col text-end">
+                                    <button type="submit"
+                                        onClick={() => {
+                                            submit('ver');
+                                        }} className='btn btn-success'><i className="bi-check-circle"></i> Verified</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    {userType === 'a' && revalidations?.approval_status === 'ver' &&
                         <div className="card-footer">
                             <div className="mb-3">
                                 <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>

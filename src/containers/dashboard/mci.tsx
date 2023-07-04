@@ -38,7 +38,8 @@ const Mci = () => {
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
         { id: 2, name: 'Completed', value: 'apr', isChecked: false },
         { id: 3, name: 'Rejected', value: 'rej', isChecked: false },
-        { id: 4, name: 'Tatkal', value: 'tat', isChecked: false }
+        { id: 4, name: 'Tatkal', value: 'tat', isChecked: false },
+        { id: 5, name: 'Verified', value: 'ver', isChecked: false }
     ]);
 
     const columns = [

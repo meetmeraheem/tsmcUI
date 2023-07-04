@@ -121,17 +121,21 @@ const RenewalsViews = () => {
                 if (success) {
                     let msg="";
                     let smsmsg="";
-                    if(status !== 'rej' ){
-                        msg="Renewal successfully approved";
+
+                    if(status === 'rej' ){
+                        msg="Renewal Details Application Rejected";
+                        smsmsg="Rejected";
+                    }else if(status === 'apr') {
+                        msg="Renewal Details successfully approved";
                         smsmsg="Approved";
                     }else{
-                        msg="Renewal Application Rejected";
-                        smsmsg="Rejected";
+                        msg="Renewal Details successfully Verified";
+                        smsmsg="Verified";
                     }
                     Swal.fire({
                         title: "Success",
                         text: msg,
-                        icon: "success",
+                        icon: status === 'rej' ?"error":"success",
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
@@ -334,12 +338,33 @@ const RenewalsViews = () => {
                                 <div className="col text-end">
                                     <button type="submit"
                                         onClick={() => {
+                                            submit('ver');
+                                        }} className='btn btn-success'><i className="bi-check-circle"></i> Verified</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                     {userType === 'a' && renewalsData?.status === 'ver' &&
+                        <div className="card-footer">
+                            <div className="mb-3">
+                                <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
+                                <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
+                            </div>
+                            <div className='d-flex'>
+                                <div className="col">
+                                    <button type="submit" onClick={() => {
+                                        submit('rej');
+                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                                </div>
+                                <div className="col text-end">
+                                    <button type="submit"
+                                        onClick={() => {
                                             submit('apr');
                                         }} className='btn btn-success'><i className="bi-check-circle"></i> Approve</button>
                                 </div>
                             </div>
                         </div>
-                    }
+                    }             
                                         <>
 
                                             <Lightbox

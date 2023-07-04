@@ -37,7 +37,8 @@ const ProvRevalidationReg = () => {
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
         { id: 2, name: 'Completed', value: 'apr', isChecked: false },
         { id: 3, name: 'Rejected', value: 'rej', isChecked: false },
-        { id: 4, name: 'Tatkal', value: 'tat', isChecked: false }
+        { id: 4, name: 'Tatkal', value: 'tat', isChecked: false },
+        { id: 5, name: 'Verified', value: 'ver', isChecked: false }
     ]);
 
     const columns = [
@@ -96,6 +97,7 @@ const ProvRevalidationReg = () => {
             Cell: ({ cell: { value } }: any) => {
                 return (
                     <>
+                        {value == 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
                         {value == 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                         {value == 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
                         {value == 'rej' && <span className="alert alert-danger rounded-pill py-0 px-2 fs-12">Rejected</span>}
