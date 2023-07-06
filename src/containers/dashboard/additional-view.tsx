@@ -30,6 +30,7 @@ const AdditionalRegView = () => {
     const [isLightBoxOpen, setIsLightBoxOpen] = useState(false);
     const [lightBoxImagePath, setLightBoxImagePath] = useState('');
     const [userType, setUserType] = useState('');
+    const [disablebtn, setDisablebtn] = useState(false);
 
     const getDoctorDetails = async () => {
         try {
@@ -76,6 +77,7 @@ const AdditionalRegView = () => {
 
     const submit = useCallback(async (status: any) => {
         if (status) {
+            setDisablebtn(true);
             const additionalsInfo = {
                 approval_status: status,
                 remarks: remarks,
@@ -111,6 +113,7 @@ const AdditionalRegView = () => {
 
                                 });
                             }
+                            setDisablebtn(false);
                             if (userType === 'a') {
                                 navigate(routes.admin_dashboard);
                             }
@@ -335,12 +338,15 @@ const AdditionalRegView = () => {
                             </div>
                             <div className='d-flex'>
                                 <div className="col">
-                                    <button type="submit" onClick={() => {
+                                    <button type="submit" 
+                                    disabled={disablebtn}
+                                    onClick={() => {
                                         submit('rej');
                                     }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
                                 </div>
                                 <div className="col text-end">
                                     <button type="submit"
+                                    disabled={disablebtn}
                                         onClick={() => {
                                             submit('ver');
                                         }} className='btn btn-success'><i className="bi-check-circle"></i> Verified</button>
@@ -357,12 +363,13 @@ const AdditionalRegView = () => {
                             </div>
                             <div className='d-flex'>
                                 <div className="col">
-                                    <button type="submit" onClick={() => {
+                                    <button type="submit" disabled={disablebtn}  onClick={() => {
                                         submit('rej');
                                     }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
                                 </div>
                                 <div className="col text-end">
                                     <button type="submit"
+                                    disabled={disablebtn}
                                         onClick={() => {
                                             submit('apr');
                                         }} className='btn btn-success'><i className="bi-check-circle"></i> Approve</button>

@@ -361,9 +361,9 @@ const UserEditProfile = () => {
                                                                             }`}
                                                                     >
                                                                         <option value="">Select Gender</option>
-                                                                        <option value="m">MALE</option>
-                                                                        <option value="f">FEMALE</option>
-                                                                        <option value="o">OTHERS</option>
+                                                                        <option value="M">MALE</option>
+                                                                        <option value="F">FEMALE</option>
+                                                                        <option value="O">OTHERS</option>
                                                                     </select>
 
                                                                         {error && <small className="text-danger">{error.toString()}</small>}

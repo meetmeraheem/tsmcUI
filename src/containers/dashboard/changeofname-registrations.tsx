@@ -32,6 +32,7 @@ const ChangeofNameReg = () => {
 
     const [statusValue, setStatusValue] = useState('pen');
     const [statusName, setStatusName] = useState('Pending');
+    const [disablebtn, setDisablebtn] = useState(false);
 
     const [checkBoxData, setCheckBoxData] = useState([
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
@@ -177,6 +178,7 @@ const ChangeofNameReg = () => {
 
     const assign = useCallback(async () => {
         try {
+            setDisablebtn(true);
             const assignToUser = assignedList.map((obj: any) => {
                 return { ...obj, assignTo: assignedUser };
             })
@@ -192,6 +194,7 @@ const ChangeofNameReg = () => {
                     if (result.isConfirmed) {
                         setAssignedList([]);
                         setAssignedGridList([]);
+                        setDisablebtn(false);
                         navigate(routes.admin_dashboard);
                     }
                 });
@@ -386,7 +389,7 @@ const ChangeofNameReg = () => {
                                     getOptionLabel={(option) => option.username}
                                     getOptionValue={(option) => option.id.toString()}
                                 />
-                                <button type='button' onClick={async () => {
+                                <button type='button' disabled={disablebtn} onClick={async () => {
                                     assign()
                                 }} className='btn btn-primary me-3'>Assign </button>
                             </div>

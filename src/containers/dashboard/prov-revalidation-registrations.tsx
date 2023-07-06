@@ -32,7 +32,7 @@ const ProvRevalidationReg = () => {
 
     const [statusValue, setStatusValue] = useState('pen');
     const [statusName, setStatusName] = useState('Pending');
-
+    const [disablebtn, setDisablebtn] = useState(false);
     const [checkBoxData, setCheckBoxData] = useState([
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
         { id: 2, name: 'Completed', value: 'apr', isChecked: false },
@@ -178,6 +178,7 @@ const ProvRevalidationReg = () => {
 
     const assign = useCallback(async () => {
         try {
+            setDisablebtn(true);
             const assignToUser = assignedList.map((obj: any) => {
                 return { ...obj, assignTo: assignedUser };
             })
@@ -194,6 +195,7 @@ const ProvRevalidationReg = () => {
                     if (result.isConfirmed) {
                         setAssignedList([]);
                         setAssignedGridList([]);
+                        setDisablebtn(false);
                         navigate(routes.admin_dashboard);
                     }
                 });
@@ -388,7 +390,7 @@ const ProvRevalidationReg = () => {
                                     getOptionLabel={(option) => option.username}
                                     getOptionValue={(option) => option.id.toString()}
                                 />
-                                <button type='button' onClick={async () => {
+                                <button type='button' disabled={disablebtn} onClick={async () => {
                                     assign()
                                 }} className='btn btn-primary me-3'>Assign </button>
                             </div>

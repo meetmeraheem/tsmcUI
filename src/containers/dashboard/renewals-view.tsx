@@ -38,7 +38,7 @@ const RenewalsViews = () => {
     const { renewalPrimaryId, doctorPrimaryId, assignmentId } = location.state
     const [userType, setUserType] = useState('');
     const [remarks, setRemarks] = useState('');
-
+    const [disablebtn, setDisablebtn] = useState(false);
     const initialFormData = useMemo(
         () => ({
             councilname: '',
@@ -111,6 +111,7 @@ const RenewalsViews = () => {
 
     const submit = useCallback(async (status: any) => {
         if (status) {
+            setDisablebtn(true);
             const renewalInfo = {
                 approval_status: status,
                 remarks: remarks,
@@ -144,6 +145,7 @@ const RenewalsViews = () => {
                                 }).catch(() => {
                                 });
                             }
+                            setDisablebtn(false);
                             if (userType === 'a') {
                                 navigate(routes.admin_dashboard);
                             }
@@ -331,12 +333,15 @@ const RenewalsViews = () => {
                             </div>
                             <div className='d-flex'>
                                 <div className="col">
-                                    <button type="submit" onClick={() => {
+                                    <button type="submit"
+                                    disabled={disablebtn}
+                                    onClick={() => {
                                         submit('rej');
                                     }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
                                 </div>
                                 <div className="col text-end">
                                     <button type="submit"
+                                    disabled={disablebtn}
                                         onClick={() => {
                                             submit('ver');
                                         }} className='btn btn-success'><i className="bi-check-circle"></i> Verified</button>
@@ -352,12 +357,15 @@ const RenewalsViews = () => {
                             </div>
                             <div className='d-flex'>
                                 <div className="col">
-                                    <button type="submit" onClick={() => {
+                                    <button type="submit"
+                                    disabled={disablebtn}
+                                    onClick={() => {
                                         submit('rej');
                                     }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
                                 </div>
                                 <div className="col text-end">
                                     <button type="submit"
+                                    disabled={disablebtn}
                                         onClick={() => {
                                             submit('apr');
                                         }} className='btn btn-success'><i className="bi-check-circle"></i> Approve</button>

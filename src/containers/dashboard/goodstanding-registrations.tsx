@@ -19,9 +19,13 @@ import { provisionalService } from "../../lib/api/provisional";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { UserRole } from "../../types/common";
 import { Provisional_DoctorFormType } from "../../types/provisional";
+import { routes } from '../routes/routes-names';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 
 const GoodStanding = () => {
     const fetchIdRef = useRef(0);
+    const navigate = useNavigate();
     const [goodstanding, setGoodstanding] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
     let default7Days = moment().subtract(7,'d').format('YYYY-MM-DD');
@@ -33,7 +37,7 @@ const GoodStanding = () => {
     const [assignedGridList, setAssignedGridList] = useState<any>([]);
     const [users, setUsers] = useState<UserRole[]>([]);
     const [assignedUser, setAssignedUser] = useState(0);
-
+    const [disablebtn, setDisablebtn] = useState(false);
     const [statusValue, setStatusValue] = useState('pen');
     const [statusName, setStatusName] = useState('Pending');
 
@@ -178,6 +182,7 @@ const GoodStanding = () => {
 
     const assign = useCallback(async () => {
         try {
+            setDisablebtn(true);
             const assignToUser = assignedList.map((obj: any) => {
                 return { ...obj, assignTo: assignedUser };
             })
@@ -194,7 +199,8 @@ const GoodStanding = () => {
                     if (result.isConfirmed) {
                         setAssignedList([]);
                         setAssignedGridList([]);
-                       
+                        setDisablebtn(false);
+                        navigate(routes.admin_dashboard);
                     }
                 });
             }
@@ -387,7 +393,7 @@ const GoodStanding = () => {
                                     getOptionLabel={(option) => option.username}
                                     getOptionValue={(option) => option.id.toString()}
                                 />
-                                <button type='button' onClick={async () => {
+                                <button type='button' disabled={disablebtn} onClick={async () => {
                                     assign()
                                 }} className='btn btn-primary me-3'>Assign </button>
                             </div>

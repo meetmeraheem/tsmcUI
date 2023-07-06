@@ -34,8 +34,7 @@ const ProvisionalView = () => {
     const [isEduCert1, setIsEduCert1] = useState(false);
     const [isEduCert2, setIsEduCert2] = useState(false);
     const [isEduCert3, setIsEduCert3] = useState(false);
-    const [numPages, setNumPages] = useState(null);
-
+    const [disablebtn, setDisablebtn] = useState(false);
     const [userType, setUserType] = useState('');
 
     const getDoctorDetails = async () => {
@@ -94,6 +93,7 @@ const ProvisionalView = () => {
 
     const submit = useCallback(async (status: any) => {
         if (status) {
+            setDisablebtn(true);
             const provisionalInfo = {
                 approval_status: status,
                 remarks: remarks,
@@ -129,6 +129,7 @@ const ProvisionalView = () => {
 
                                 });
                             }
+                            setDisablebtn(false);
                             if (userType === 'a') {
                                 navigate(routes.admin_dashboard);
                             }
@@ -366,12 +367,15 @@ const ProvisionalView = () => {
                             </div>
                             <div className='d-flex'>
                                 <div className="col">
-                                    <button type="submit" onClick={() => {
+                                    <button type="submit"
+                                    disabled={disablebtn}
+                                    onClick={() => {
                                         submit('rej');
                                     }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
                                 </div>
                                 <div className="col text-end">
                                     <button type="submit"
+                                    disabled={disablebtn}
                                         onClick={() => {
                                             submit('ver');
                                         }} className='btn btn-success'><i className="bi-check-circle"></i> Verified</button>
@@ -387,12 +391,15 @@ const ProvisionalView = () => {
                             </div>
                             <div className='d-flex'>
                                 <div className="col">
-                                    <button type="submit" onClick={() => {
+                                    <button type="submit" 
+                                    disabled={disablebtn}
+                                    onClick={() => {
                                         submit('rej');
                                     }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
                                 </div>
                                 <div className="col text-end">
                                     <button type="submit"
+                                    disabled={disablebtn}
                                         onClick={() => {
                                             submit('apr');
                                         }} className='btn btn-success'><i className="bi-check-circle"></i> Approve</button>

@@ -20,9 +20,12 @@ import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { UserRole } from "../../types/common";
 import { Provisional_DoctorFormType } from "../../types/provisional";
 import FinalRegView from "../../containers/dashboard/final-reg-view";
+import { routes } from '../routes/routes-names';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const FinalRegistrations = () => {
     const fetchIdRef = useRef(0);
+    const navigate = useNavigate();
     const [finals, setFinals] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
     let default7Days = moment().subtract(7,'d').format('YYYY-MM-DD');
@@ -36,6 +39,7 @@ const FinalRegistrations = () => {
     const [assignedUser, setAssignedUser] = useState(0);
     const [statusValue, setStatusValue] = useState('pen');
     const [statusName, setStatusName] = useState('Pending');
+    const [disablebtn, setDisablebtn] = useState(false);
     const [checkBoxData, setCheckBoxData] = useState([
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
         { id: 2, name: 'Completed', value: 'apr', isChecked: false },
@@ -180,6 +184,7 @@ const FinalRegistrations = () => {
 
     const assign = useCallback(async () => {
         try {
+            setDisablebtn(true);
             const assignToUser = assignedList.map((obj: any) => {
                 return { ...obj, assignTo: assignedUser };
             })
@@ -196,7 +201,8 @@ const FinalRegistrations = () => {
                     if (result.isConfirmed) {
                         setAssignedList([]);
                         setAssignedGridList([]);
-                       
+                        setDisablebtn(false);
+                        navigate(routes.admin_dashboard);
                     }
                 });
             }
@@ -390,7 +396,7 @@ const FinalRegistrations = () => {
                                     getOptionLabel={(option) => option.username}
                                     getOptionValue={(option) => option.id.toString()}
                                 />
-                                <button type='button' onClick={async () => {
+                                <button type='button' disabled={disablebtn} onClick={async () => {
                                     assign()
                                 }} className='btn btn-primary me-3'>Assign </button>
                             </div>
@@ -403,29 +409,3 @@ const FinalRegistrations = () => {
 }
 
 export default FinalRegistrations;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const getFinalList = useCallback(async () => {
-    //     try {
-    //         var newdate = moment(date).format('YYYY-MM-DD');
-    //         const { data } = await finalService.getFinalsByFilter(newdate);
-    //         if (data.length > 0) {
-    //             setFinals(data);
-    //         }
-    //     } catch (err) {
-    //         console.log('error getProvisionalDetails', err);
-    //     }
-    // }, [date]);

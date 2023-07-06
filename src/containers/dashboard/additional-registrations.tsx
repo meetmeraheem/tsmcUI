@@ -37,7 +37,7 @@ const Additional = () => {
     const [assignedGridList, setAssignedGridList] = useState<any>([]);
     const [users, setUsers] = useState<UserRole[]>([]);
     const [assignedUser, setAssignedUser] = useState(0);
-
+    const [disablebtn, setDisablebtn] = useState(false);
     const [statusValue, setStatusValue] = useState('pen');
     const [statusName, setStatusName] = useState('Pending');
 
@@ -186,6 +186,7 @@ const Additional = () => {
 
     const assign = useCallback(async () => {
         try {
+            setDisablebtn(true);
             const assignToUser = assignedList.map((obj: any) => {
                 return { ...obj, assignTo: assignedUser };
             })
@@ -202,6 +203,7 @@ const Additional = () => {
                     if (result.isConfirmed) {
                         setAssignedList([]);
                         setAssignedGridList([]);
+                        setDisablebtn(false);
                         navigate(routes.admin_dashboard);
                     }
                 });
@@ -396,7 +398,7 @@ const Additional = () => {
                                     getOptionLabel={(option) => option.username}
                                     getOptionValue={(option) => option.id.toString()}
                                 />
-                                <button type='button' onClick={async () => {
+                                <button type='button' disabled={disablebtn} onClick={async () => {
                                     assign()
                                 }} className='btn btn-primary me-3'>Assign </button>
                             </div>

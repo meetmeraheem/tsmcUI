@@ -251,10 +251,10 @@ const Myprofile = () => {
                         <div className="col-10 m-auto">
                             <div className="card shadow border-0 mb-4">
                             
-                                {!doctor?.serial_id &&
+                                {(!doctor?.serial_id ||doctor?.adisnal3==='E') ? 
                                     <div className="card-header text-end">
                                         <Link to={'edit-profile'} className='btn btn-primary btn-sm'>Edit Profile</Link>
-                                    </div>
+                                    </div>:""
                                  } 
                                 <div className="card-body">
                                     <div className="tsmc-timeline-box">
@@ -340,6 +340,11 @@ const Myprofile = () => {
                                                     <div className="d-flex align-items-center justify-content-between mb-4">
                                                         <h1 className='fs-18 fw-700 mb-0'>Provisional Registration</h1>
                                                         <div>
+                                                        {provisional?.approval_status == 'ver' &&
+                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-check-circle'></i> Verified
+                                                                </span>
+                                                            }
                                                             {provisional?.approval_status == 'apr' &&
                                                                 <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
                                                                     <i className='bi-check-circle'></i> Approved
@@ -425,6 +430,11 @@ const Myprofile = () => {
                                                     <div className="d-flex align-items-center justify-content-between mb-4">
                                                         <h1 className='fs-18 fw-700 mb-0'>Final Registration</h1>
                                                         <div>
+                                                        {final?.approval_status == 'ver' &&
+                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-check-circle'></i> Verified
+                                                                </span>
+                                                            }
                                                             {final?.approval_status == 'apr' &&
                                                                 <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
                                                                     <i className='bi-check-circle'></i> Approved
@@ -544,6 +554,7 @@ const Myprofile = () => {
                                         <td>{moment(obj.reg_date).format('DD/MM/YYYY')}</td>
                                         
                                         <td>
+                                            {obj.approval_status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
                                             {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                                             {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
                                         </td>
@@ -638,6 +649,11 @@ const Myprofile = () => {
                                                     <h1 className='fs-18 fw-700 mb-0'>GoodStanding Details</h1>
                                                     <div>
                                                     <div>
+                                                    {GoodStanding?.status == 'ver' &&
+                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-check-circle'></i> Verified
+                                                                </span>
+                                                            }
                                                             {GoodStanding?.status == 'apr' &&
                                                                 <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
                                                                     <i className='bi-check-circle'></i> Approved
@@ -673,6 +689,11 @@ const Myprofile = () => {
                                                     <h1 className='fs-18 fw-700 mb-0'>Renewal Details</h1>
                                                     <div>
                                                     <div>
+                                                    {renewals?.status == 'ver' &&
+                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
+                                                                    <i className='bi-check-circle'></i> Verified
+                                                                </span>
+                                                            }
                                                             {renewals?.status == 'apr' &&
                                                                 <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
                                                                     <i className='bi-check-circle'></i> Approved
