@@ -562,7 +562,7 @@ const PaymentSuccess = () => {
                             </div>
                         ) :
                             <>
-                                {transactionMsg.includes("Failed") ?
+                                {(transactionMsg.includes("Failed") ||transactionMsg==="") ?
                                     <div className="card-body">
 
                                         <div className="w-100 text-center">

@@ -115,7 +115,7 @@ const FinalRegistrations = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/final_reg_view'} state={{ finalPrimaryId: cell.data[Number(cell.row.id)].finalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId }}>Proceed...</Link>
+                    <Link to={'/admin/final_reg_view'} state={{ finalPrimaryId: cell.data[Number(cell.row.id)].finalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[Number(cell.row.id)].assignmentId }}>Proceed...</Link>
                 </>
             )
         },

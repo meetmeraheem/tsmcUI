@@ -106,7 +106,7 @@ const ProvisionalRegistrations = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/provisional_view'} state={{ provisionalPrimaryId: cell.data[Number(cell.row.id)].provisionalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId }}>Proceed</Link>
+                    <Link to={'/admin/provisional_view'} state={{ provisionalPrimaryId: cell.data[Number(cell.row.id)].provisionalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[Number(cell.row.id)].assignmentId }}>Proceed</Link>
                 </>
             )
         },

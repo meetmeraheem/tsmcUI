@@ -117,7 +117,7 @@ const Additional = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/additional_reg_view'} state={{ additionalPrimaryId: cell.data[Number(cell.row.id)].additionalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId }}>Proceed</Link>
+                    <Link to={'/admin/additional_reg_view'} state={{ additionalPrimaryId: cell.data[Number(cell.row.id)].additionalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId ,assignmentId:cell.data[Number(cell.row.id)].assignmentId}}>Proceed</Link>
                 </>
             )
         },

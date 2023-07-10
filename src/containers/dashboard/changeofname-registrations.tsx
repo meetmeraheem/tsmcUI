@@ -109,7 +109,7 @@ const ChangeofNameReg = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/changeofname_reg_view'} state={{ nameChangeId: cell.data[Number(cell.row.id)].nameChangeId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId }}>Proceed</Link>
+                    <Link to={'/admin/changeofname_reg_view'} state={{ nameChangeId: cell.data[Number(cell.row.id)].nameChangeId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[Number(cell.row.id)].assignmentId }}>Proceed</Link>
                 </>
             )
         },

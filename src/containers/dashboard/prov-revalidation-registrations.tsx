@@ -109,7 +109,7 @@ const ProvRevalidationReg = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/revalidation_reg_view'} state={{ prvId: cell.data[Number(cell.row.id)].prvId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId }}>Proceed</Link>
+                    <Link to={'/admin/revalidation_reg_view'} state={{ prvId: cell.data[Number(cell.row.id)].prvId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[Number(cell.row.id)].assignmentId}}>Proceed</Link>
                 </>
             )
         },

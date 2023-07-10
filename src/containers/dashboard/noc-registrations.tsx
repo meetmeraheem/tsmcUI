@@ -111,7 +111,7 @@ const Noc = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/noc_reg_view'} state={{ nocPrimaryId: cell.data[Number(cell.row.id)].nocPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId }}>Proceed</Link>
+                    <Link to={'/admin/noc_reg_view'} state={{ nocPrimaryId: cell.data[Number(cell.row.id)].nocPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[Number(cell.row.id)].assignmentId }}>Proceed</Link>
                 </>
             )
         },
