@@ -122,7 +122,7 @@ const GoodStanding = () => {
             Cell: (cell: any) => (
                 <>
                     <i className="bi bi-plus-square" onClick={async () => {
-                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'final');
+                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'gs');
                         if (data && data.length > 0) {
                             const getUser = await adminService.getAdminById(data[0].AssignTo);
                             if (getUser.data.length > 0) {
@@ -199,6 +199,7 @@ const GoodStanding = () => {
                     if (result.isConfirmed) {
                         setAssignedList([]);
                         setAssignedGridList([]);
+                        fetchData(10);
                         setDisablebtn(false);
                         navigate(routes.admin_dashboard);
                     }

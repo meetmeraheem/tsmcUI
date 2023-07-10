@@ -47,6 +47,7 @@ export type DoctorFormType = {
   adisnal2: string,
   adisnal3: string,
   added_by: number,
+  filestatus:boolean
 }
 
 export type GetDoctorResponseType = Omit<ApiResponseType, 'list'> & {

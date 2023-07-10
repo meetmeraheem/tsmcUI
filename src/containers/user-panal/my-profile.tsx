@@ -19,6 +19,7 @@ import { goodStandingFormType } from "../../types/common";
 import { goodstandingService } from "../../lib/api/goodstanding";
 import { renewalService } from "../../lib/api/renewals";
 import { renewalsFormType } from "../../types/common";
+import axios from 'axios';
 
 
 const Myprofile = () => {
@@ -265,10 +266,25 @@ const Myprofile = () => {
                                                     <div className="flex-shrink-1 pe-3">
                                                         <div className="tsmc-doc-profile-box border-bottom-0">
                                                             <div className='tsmc-doc-img mb-3'>
-                                                                {doctor?.passphoto ? <img src={serverImgUrl + 'files/' + doctor?.passphoto} alt="" /> : <img src={DocDefultPic} alt="" />}
+                                                                {doctor?.passphoto ?
+                                                                <>
+                                                                {doctor?.filestatus === true ?
+                                                                <img src={serverImgUrl + 'files/' + doctor?.passphoto} alt="" /> :
+                                                                <img src={'http://admin.regonlinetsmc.in/forms/uploads/' + doctor?.passphoto} alt="" /> 
+                                                                }
+                                                                </>
+                                                                : <img src={DocDefultPic} alt="" />}
                                                             </div>
                                                             <div className="d-flex align-items-center justify-content-center border rounded p-1 signature">
-                                                                {doctor?.signature ? <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" /> :
+                                                                
+                                                                {doctor?.signature ? 
+                                                                 <>
+                                                                {doctor?.filestatus === true ?
+                                                                <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" /> :
+                                                                <img src={'http://admin.regonlinetsmc.in/forms/uploads/' + doctor?.signature} alt="" /> }
+                                                                </>   
+                                                                :
+                                                                
                                                                     <>
                                                                         <div><i className="bi-pencil-square fs-22 px-2"></i></div>
                                                                         <div><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
@@ -710,6 +726,7 @@ const Myprofile = () => {
                                                                 </span>
                                                             }
                                                         </div>
+                                                        
                                                     </div>
                                                     {renewals?.status === 'rej'?<div className="d-flex mb-2">
                                                            

@@ -64,6 +64,7 @@ const UserEditProfile = () => {
             passphoto: doctor?.passphoto || '',
             signature: doctor?.signature || '',
             fingerprint: doctor?.fingerprint || '',
+            
         }),
         [doctor]
     );

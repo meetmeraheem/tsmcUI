@@ -36,6 +36,14 @@ export const LocalStorageManager = {
     setDoctorFMRNo: function (FMRNo: string) {
         localStorage.setItem('doctorFMRNo', FMRNo);
     },
+    getDoctorPMRNo: function () {
+        const doctorFMRNo = localStorage.getItem('doctorPMRNo');
+        return doctorFMRNo || null;
+    },
+
+    setDoctorPMRNo: function (PMRNo: string) {
+        localStorage.setItem('doctorFMRNo', PMRNo);
+    },
 
     removeDoctorFMRNo: function () {
         if (this.getDoctorFMRNo()) {

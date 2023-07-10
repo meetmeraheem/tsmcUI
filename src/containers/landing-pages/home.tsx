@@ -197,6 +197,7 @@ const HomePage = () => {
                let depwd = '';
                LocalStorageManager.setDoctorSerialId('');
                LocalStorageManager.setDoctorFMRNo('');
+               LocalStorageManager.setDoctorPMRNo('');
                LocalStorageManager.setDoctorMobileno('');
                LocalStorageManager.setDoctorPrimaryId('');
                LocalStorageManager.setDoctorFMRStatus('');
@@ -221,6 +222,7 @@ const HomePage = () => {
                               data[0].mobileno && LocalStorageManager.setDoctorMobileno(data[0].mobileno);
                               data[0].serial_id && LocalStorageManager.setDoctorSerialId(data[0].serial_id.toString());
                               data[0].fmr_no && LocalStorageManager.setDoctorFMRNo(data[0].fmr_no.toString());
+                              data[0].pmr_no &&LocalStorageManager.setDoctorPMRNo(data[0].pmr_no.toString());
                               data[0].fmrstatus&&LocalStorageManager.setDoctorFMRStatus(data[0].fmrstatus);
                               dispatch(setDoctorInfo(data[0]));
                               setMobileError(false);

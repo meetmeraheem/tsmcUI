@@ -197,6 +197,7 @@ const Noc = () => {
                     if (result.isConfirmed) {
                         setAssignedList([]);
                         setAssignedGridList([]);
+                        fetchData(10);
                         setDisablebtn(false);
                         navigate(routes.admin_dashboard);
                     }

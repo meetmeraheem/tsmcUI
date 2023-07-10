@@ -122,7 +122,7 @@ const GoodStandingRegView = () => {
                 else {
                     Swal.fire({
                         title: "",
-                        text: "Final registration rejected",
+                        text: "Good Standing registration rejected",
                         icon: "error",
                         confirmButtonText: "OK",
                     }).then(async (result) => {

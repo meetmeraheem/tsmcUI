@@ -12,6 +12,7 @@ const Userheader = () => {
 	const dispatch = useDispatch();
 	const [isDoctorId, setISDoctorId] = useState(false);
 	const [isDoctorFMRNo, setISDoctorFMRNo] = useState(false);
+	const [isDoctorPMRNo, setISDoctorPMRNo] = useState(false);
 	const [isDoctorFMRapproved, setISDoctorFMRapproved] = useState(false);
 	const signOut = () => {
 		tokenManager.removeToken();
@@ -31,6 +32,10 @@ const Userheader = () => {
 		const doctorFMRNo = LocalStorageManager.getDoctorFMRNo();
 		if (doctorFMRNo) {
 			setISDoctorFMRNo(true);
+		}
+		const doctorPMRNo = LocalStorageManager.getDoctorPMRNo();
+		if (doctorPMRNo) {
+			setISDoctorPMRNo(true);
 		}
 		const doctorFMRstatus = LocalStorageManager.getDoctorFMRStatus();
 		if(doctorFMRstatus === 'apr'){
@@ -75,7 +80,7 @@ const Userheader = () => {
 													""
 														 : 
 														<ul className="dropdown-menu">
-													<li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>
+													{isDoctorPMRNo?"":<li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>}
 													
 													{/*<li><Link className="dropdown-item" to={isDoctorId ? '' : 'provisional-duplicate'}>Duplicate</Link></li>
 													 */}
@@ -87,7 +92,7 @@ const Userheader = () => {
 												<p className="dropdown-item">Final Registration</p>
 													{isDoctorFMRNo ? '' :
 													<ul className="dropdown-menu">
-													<li><Link className="dropdown-item" to={'final-registration'}>New Registration</Link></li>
+													{isDoctorFMRNo?"":<li><Link className="dropdown-item" to={'final-registration'}>New Registration</Link></li>}
 													{/*<li><Link className="dropdown-item" to={isDoctorFMRNo ? '' : 'final-duplicate'}>Duplicate</Link></li>*/}
 													</ul>
 													}
@@ -102,9 +107,9 @@ const Userheader = () => {
 											</ul>
 										</li>
 										<li><Link to='/my-panal/final-renewal' className="dropdown-item">Final Renewals </Link></li>
-										{/*<li><Link to='/my-panal/good-standing-registration' className="dropdown-item">Good Standing</Link></li>
+										<li><Link to='/my-panal/good-standing-registration' className="dropdown-item">Good Standing</Link></li>
 										<li><Link to='/my-panal/noc-registration' className="dropdown-item">NOC for Other State</Link></li>
-										<li><Link to='/my-panal/chnage-of-name' className="dropdown-item">Change of Name</Link></li>
+										{/*<li><Link to='/my-panal/chnage-of-name' className="dropdown-item">Change of Name</Link></li>
 										<li><Link to='/my-panal/revalidation' className="dropdown-item">Provisional Revalidation</Link></li>*/}
 										</div> :''}
 									
