@@ -28,9 +28,9 @@ const Myprofile = () => {
     const [provisional, setProvisional] = useState<ProvisionalMyProfileType>();
     const [final, setFinal] = useState<FinalMyProfileType>();
     const [additional, setadditional] = useState<AddQualDataFormType>();
-    const [Nocdata, setNocdata] = useState<nocUserFormType>();
-    const [GoodStanding, setGoodStanding] = useState<goodStandingFormType>();
-    const [renewals, setRenewals] = useState<renewalsFormType>();
+    const [NocdataList, setNocdataList] = useState<any>([]);
+    const [GoodStandingList, setGoodStandingList] = useState<any>([]);
+    const [renewalsList, setRenewalsList] = useState<any>([]);
     const [additionslGridList, setAdditionalGridList] = useState<any>([]);
     const [loading, setLoading] = useState(false)
 
@@ -55,7 +55,7 @@ const Myprofile = () => {
             if (doctorSerialId) {
                 const { data } = await provisionalService.getProvisionalByDoctorId(doctorSerialId);
                 if (data.length > 0) {
-                   // const qualification = await commonService.getQualificationById(Number(data[0].qualification));
+                    // const qualification = await commonService.getQualificationById(Number(data[0].qualification));
                     //const country = await commonService.getCountry(Number(data[0].country));
                     //const state = await commonService.getState(Number(data[0].state));
                     setProvisional({
@@ -74,7 +74,7 @@ const Myprofile = () => {
                         edu_cert1: data[0].edu_cert1,
                         edu_cert2: data[0].edu_cert2,
                         edu_cert3: data[0].edu_cert3,
-                        extra_col3:data[0].extra_col3,
+                        extra_col3: data[0].extra_col3,
                     });
                 }
             }
@@ -88,9 +88,9 @@ const Myprofile = () => {
             if (doctorSerialId) {
                 const { data } = await finalService.getFinal(doctorSerialId);
                 if (data.length > 0) {
-                  //  const qualification = await commonService.getQualificationById(Number(data[0].qualification));
-                  //  const country = await commonService.getCountry(Number(data[0].country));
-                   // const state = await commonService.getState(Number(data[0].state));
+                    //  const qualification = await commonService.getQualificationById(Number(data[0].qualification));
+                    //  const country = await commonService.getCountry(Number(data[0].country));
+                    // const state = await commonService.getState(Number(data[0].state));
                     setFinal({
                         serialno: data[0].serialno,
                         reg_date: data[0].reg_date,
@@ -104,7 +104,7 @@ const Myprofile = () => {
                         approval_status: data[0].approval_status,
                         createdon: data[0].createdon,
                         posttime: data[0].posttime,
-                        extra_col3:data[0].extra_col3,
+                        extra_col3: data[0].extra_col3,
                     });
                 }
             }
@@ -120,7 +120,7 @@ const Myprofile = () => {
                 if (data.length > 0) {
                     //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
                     setAdditionalGridList(data);
-                   {/* setadditional({
+                    {/* setadditional({
                         country: country.data[0].name,
                         state: state.data[0].name,
                         qualification: data[0].qualification,
@@ -147,22 +147,23 @@ const Myprofile = () => {
                     //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
                     //const country = await commonService.getCountry(Number(data[0].country));
                     //const state = await commonService.getState(Number(data[0].state));
-                    setNocdata({
+                    setNocdataList(data);
+                   {/* setNocdata({
                         country: data[0].countryName,
                         state: data[0].stateName,
                         councilname: data[0].councilname,
                         councilpincode: data[0].councilpincode,
                         approval_status: data[0].approval_status,
-                        address1:data[0].address1,
-                        address2:data[0].address2,
+                        address1: data[0].address1,
+                        address2: data[0].address2,
                         createdon: data[0].createdon,
                         posttime: data[0].posttime,
                         modifiedon: data[0].modifiedon,
-                        city:data[0].city,
+                        city: data[0].city,
                         status: data[0].status,
                         added_by: data[0].added_by,
-                        extra_col3:data[0].extra_col3,
-                    });
+                        extra_col3: data[0].extra_col3,
+                    });*/}
                 }
             }
         } catch (err) {
@@ -180,19 +181,20 @@ const Myprofile = () => {
                     //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
                     //const country = await commonService.getCountry(Number(data[0].country));
                     //const state = await commonService.getState(Number(data[0].state));
-                    setGoodStanding({
-                       
+                    setGoodStandingList(data);
+                    {/*setGoodStanding({
+
                         createdon: data[0].added_by,
                         posttime: data[0].posttime,
                         modifiedon: data[0].modifiedon,
                         status: data[0].status,
                         added_by: data[0].added_by,
-                        approval_status:data[0].status,
+                        approval_status: data[0].status,
                         doctor_id: data[0].doctor_id,
-                        doctorPrimaryId:doctorPrimaryId.toString(),
-                        extra_col3:data[0].extra_col3
-                     
-                    });
+                        doctorPrimaryId: doctorPrimaryId.toString(),
+                        extra_col3: data[0].extra_col3
+
+                    });*/}
                 }
             }
         } catch (err) {
@@ -209,7 +211,8 @@ const Myprofile = () => {
                     //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
                     //const country = await commonService.getCountry(Number(data[0].country));
                     //const state = await commonService.getState(Number(data[0].state));
-                    setRenewals({
+                    setRenewalsList(data);
+                    /*
                         oldRegDate: data[0].posttime,
                         posttime: data[0].posttime,
                         modifiedon: data[0].modifiedon,
@@ -219,7 +222,7 @@ const Myprofile = () => {
                         doctor_id: data[0].doctor_id,
                         doctorPrimaryId:doctorPrimaryId.toString(),
                         document10:data[0].document10
-                    });
+                    });*/
                 }
             }
         } catch (err) {
@@ -228,7 +231,7 @@ const Myprofile = () => {
     }, []);
 
 
-    
+
     useEffect(() => {
         //console.log('doctorProfile ' + JSON.stringify(doctorProfile));
         setLoading(true);
@@ -242,7 +245,7 @@ const Myprofile = () => {
         setLoading(false);
     }, []);
 
-   
+
 
     return (
         <>
@@ -251,12 +254,12 @@ const Myprofile = () => {
                     <div className="row">
                         <div className="col-10 m-auto">
                             <div className="card shadow border-0 mb-4">
-                            
-                                {(!doctor?.serial_id ||doctor?.adisnal3==='E') ? 
+
+                                {(!doctor?.serial_id || doctor?.adisnal3 === 'E') ?
                                     <div className="card-header text-end">
                                         <Link to={'edit-profile'} className='btn btn-primary btn-sm'>Edit Profile</Link>
-                                    </div>:""
-                                 } 
+                                    </div> : ""
+                                }
                                 <div className="card-body">
                                     <div className="tsmc-timeline-box">
                                         <div className="tsmc-timeline mb-5">
@@ -267,24 +270,24 @@ const Myprofile = () => {
                                                         <div className="tsmc-doc-profile-box border-bottom-0">
                                                             <div className='tsmc-doc-img mb-3'>
                                                                 {doctor?.passphoto ?
-                                                                <>
-                                                                {doctor?.filestatus === true ?
-                                                                <img src={serverImgUrl + 'files/' + doctor?.passphoto} alt="" /> :
-                                                                <img src={'http://admin.regonlinetsmc.in/forms/uploads/' + doctor?.passphoto} alt="" /> 
-                                                                }
-                                                                </>
-                                                                : <img src={DocDefultPic} alt="" />}
+                                                                    <>
+                                                                        {doctor?.filestatus === true ?
+                                                                            <img src={serverImgUrl + 'files/' + doctor?.passphoto} alt="" /> :
+                                                                            <img src={'http://admin.regonlinetsmc.in/forms/uploads/' + doctor?.passphoto} alt="" />
+                                                                        }
+                                                                    </>
+                                                                    : <img src={DocDefultPic} alt="" />}
                                                             </div>
                                                             <div className="d-flex align-items-center justify-content-center border rounded p-1 signature">
-                                                                
-                                                                {doctor?.signature ? 
-                                                                 <>
-                                                                {doctor?.filestatus === true ?
-                                                                <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" /> :
-                                                                <img src={'http://admin.regonlinetsmc.in/forms/uploads/' + doctor?.signature} alt="" /> }
-                                                                </>   
-                                                                :
-                                                                
+
+                                                                {doctor?.signature ?
+                                                                    <>
+                                                                        {doctor?.filestatus === true ?
+                                                                            <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" /> :
+                                                                            <img src={'http://admin.regonlinetsmc.in/forms/uploads/' + doctor?.signature} alt="" />}
+                                                                    </>
+                                                                    :
+
                                                                     <>
                                                                         <div><i className="bi-pencil-square fs-22 px-2"></i></div>
                                                                         <div><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
@@ -356,7 +359,7 @@ const Myprofile = () => {
                                                     <div className="d-flex align-items-center justify-content-between mb-4">
                                                         <h1 className='fs-18 fw-700 mb-0'>Provisional Registration</h1>
                                                         <div>
-                                                        {provisional?.approval_status == 'ver' &&
+                                                            {provisional?.approval_status == 'ver' &&
                                                                 <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
                                                                     <i className='bi-check-circle'></i> Verified
                                                                 </span>
@@ -376,7 +379,7 @@ const Myprofile = () => {
                                                                     <i className='bi-exclamation-circle'></i> Rejected
                                                                 </span>
                                                             }
-                                                            {(provisional?.approval_status == 'pen' ||provisional?.approval_status == 'rej')  && <Link to={'edit-provisional'} className='btn btn-primary btn-sm me-3'>Edit</Link>}
+                                                            {(provisional?.approval_status == 'pen' || provisional?.approval_status == 'rej') && <Link to={'edit-provisional'} className='btn btn-primary btn-sm me-3'>Edit</Link>}
                                                         </div>
                                                     </div>
                                                     <div className="w-100">
@@ -426,16 +429,16 @@ const Myprofile = () => {
                                                                 <div className="fs-14">{provisional?.college ? provisional?.college : 'NA'}</div>
                                                             </div>
                                                         </div>
-                                                            {provisional?.approval_status === 'rej'?<div className="d-flex mb-2">
-                                                           
+                                                        {provisional?.approval_status === 'rej' ? <div className="d-flex mb-2">
+
                                                             <div className='col-5 alert alert-danger  fs-14'>
                                                                 <label htmlFor="" className='fs-14 fw-600 me-2'>Reject Reason:</label>
-                                                               {provisional?.extra_col3 ? provisional?.extra_col3 : 'NA'}
-                                                                </div>
+                                                                {provisional?.extra_col3 ? provisional?.extra_col3 : 'NA'}
                                                             </div>
-                                                       :""}
+                                                        </div>
+                                                            : ""}
 
-                                                       
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -446,7 +449,7 @@ const Myprofile = () => {
                                                     <div className="d-flex align-items-center justify-content-between mb-4">
                                                         <h1 className='fs-18 fw-700 mb-0'>Final Registration</h1>
                                                         <div>
-                                                        {final?.approval_status == 'ver' &&
+                                                            {final?.approval_status == 'ver' &&
                                                                 <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
                                                                     <i className='bi-check-circle'></i> Verified
                                                                 </span>
@@ -516,231 +519,205 @@ const Myprofile = () => {
                                                                 <div className="fs-14">{final?.college ? final?.college : 'NA'}</div>
                                                             </div>
                                                         </div>
-                                                        {final?.approval_status === 'rej'?<div className="d-flex mb-2">
-                                                           
+                                                        {final?.approval_status === 'rej' ? <div className="d-flex mb-2">
+
                                                             <div className='col-5 alert alert-danger  fs-14'>
                                                                 <label htmlFor="" className='fs-14 fw-600 me-2'>Reject Reason:</label>
-                                                               {final?.extra_col3 ? final?.extra_col3 : 'NA'}
-                                                                </div>
+                                                                {final?.extra_col3 ? final?.extra_col3 : 'NA'}
                                                             </div>
-                                                       :""}
+                                                        </div>
+                                                            : ""}
                                                     </div>
                                                 </div>
                                             </div></>
                                         }
-                                      
-                    
-                    {additionslGridList.length > 0 &&
-                        <>
-                        <div className="tsmc-timeline mb-5">
-                          <div className="tsmc-text">
-                                                    <div className="d-flex align-items-center justify-content-between mb-4">
-                                                        <h1 className='fs-18 fw-700 mb-0'>Additional Qualification</h1>
-                                                        </div>
-                                                        </div>
-                                                       
-                        <table className="table table-hover fs-10 table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Qualification</th>
-                                    <th>Exam month</th>
-                                    <th>Exam year</th>
-                                    <th>Country</th>
-                                    <th>State</th>
-                                    <th>Applied For</th>
-                                    <th>University</th>
-                                    <th>college</th>
-                                    <th>Registration Date</th>
-                                    <th>Approval Status</th>
-                                    <th> </th>
-                                    <th> </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {additionslGridList?.map((obj: any) => {
-                                    return (<tr>
-                                        <td>{obj.qualification}</td>
-                                        <td>{obj.exam_month}</td>
-                                        <td>{obj.exam_year}</td>
-                                        <td>{obj.countryName}</td>
-                                        <td>{obj.stateName}</td>
-                                        <td>{obj.appliedFor}</td>
-                                        <td>{obj.university}</td>
-                                        <td>{obj.college}</td>
-                                        <td>{moment(obj.reg_date).format('DD/MM/YYYY')}</td>
-                                        
-                                        <td>
-                                            {obj.approval_status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
-                                            {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
-                                            {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
-                                        </td>
-                                        {(obj.approval_status == 'pen' ||obj.approval_status == 'rej')  ?<td> <Link to={'edit_additional-qualification-registration'} state={{ additionalPrimaryId: obj.id}}className='btn btn-primary btn-sm me-3'>Edit</Link></td>:<td></td>}
 
-                                        {obj.approval_status === 'rej'?  <td>{obj.extra_col3}</td>:<td></td>}  
 
-                                    </tr>);
-                                })}
-                            </tbody></table>
-                            </div>
-                            </>
-                                         
+                                        {additionslGridList.length > 0 &&
+                                            <>
+                                                <div className="tsmc-timeline mb-5">
+                                                    <div className="tsmc-text">
+                                                        <div className="d-flex align-items-center justify-content-between mb-4">
+                                                            <h1 className='fs-18 fw-700 mb-0'>Additional Qualification</h1>
+                                                        </div>
+                                                    </div>
+
+                                                    <table className="table table-hover fs-10 table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Qualification</th>
+                                                                <th>Exam month</th>
+                                                                <th>Exam year</th>
+                                                                <th>Country</th>
+                                                                <th>State</th>
+                                                                <th>Applied For</th>
+                                                                <th>University</th>
+                                                                <th>college</th>
+                                                                <th>Registration Date</th>
+                                                                <th>Approval Status</th>
+                                                                <th> </th>
+                                                                <th> </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {additionslGridList?.map((obj: any) => {
+                                                                return (<tr>
+                                                                    <td>{obj.qualification}</td>
+                                                                    <td>{obj.exam_month}</td>
+                                                                    <td>{obj.exam_year}</td>
+                                                                    <td>{obj.countryName}</td>
+                                                                    <td>{obj.stateName}</td>
+                                                                    <td>{obj.appliedFor}</td>
+                                                                    <td>{obj.university}</td>
+                                                                    <td>{obj.college}</td>
+                                                                    <td>{moment(obj.reg_date).format('DD/MM/YYYY')}</td>
+
+                                                                    <td>
+                                                                        {obj.approval_status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
+                                                                        {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
+                                                                        {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                                                                    </td>
+                                                                    {(obj.approval_status == 'pen' || obj.approval_status == 'rej') ? <td> <Link to={'edit_additional-qualification-registration'} state={{ additionalPrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
+
+                                                                    {obj.approval_status === 'rej' ? <td>{obj.extra_col3}</td> : <td></td>}
+
+                                                                </tr>);
+                                                            })}
+                                                        </tbody></table>
+                                                </div>
+                                            </>
+
+
+
                                         }
-                                        {Nocdata&&  <div className="tsmc-timeline mb-5">
-                                            <div className="tsmc-text">
-                                                <div className="d-flex align-items-center justify-content-between mb-4">
-                                                    <h1 className='fs-18 fw-700 mb-0'>NOC Details</h1>
-                                                    <div>
-                                                    <div>
-                                                            {Nocdata?.status == 'apr' &&
-                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-check-circle'></i> Approved
-                                                                </span>
-                                                            }
-                                                            {Nocdata?.status == 'pen' &&
-                                                                <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-exclamation-circle'></i> Pending
-                                                                </span>
-                                                            }
-                                                            {Nocdata?.status == 'rej' &&
-                                                                <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-exclamation-circle'></i> Rejected
-                                                                </span>
-                                                            }
-                                                            {Nocdata?.status == 'pen' && <Link to={''} className='btn btn-primary btn-sm me-3'>Edit</Link>}
+                                        
+
+
+                                        {renewalsList.length > 0 &&
+                                            <>
+                                                <div className="tsmc-timeline mb-5">
+                                                    <div className="tsmc-text">
+                                                        <div className="d-flex align-items-center justify-content-between mb-4">
+                                                            <h1 className='fs-18 fw-700 mb-0'>Renewal Details</h1>
                                                         </div>
                                                     </div>
+
+                                                    <table className="table table-hover fs-10 table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Registration Date</th>
+                                                                <th>Approval Status</th>
+                                                                <th> </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {renewalsList?.map((obj: any) => {
+                                                                return (<tr>
+                                                                    <td>{moment(obj.reg_date).format('DD/MM/YYYY')}</td>
+
+                                                                    <td>
+                                                                        {obj.status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
+                                                                        {obj.status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
+                                                                        {obj.status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                                                                    </td>
+
+
+                                                                    {obj.status === 'rej' ? <td>{obj.extra_col3}</td> : <td></td>}
+
+                                                                </tr>);
+                                                            })}
+                                                        </tbody></table>
                                                 </div>
-                                                <div className="w-100">
-                                               
-                                                        <div className="d-flex mb-2">
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Council Name:</label>
-                                                                <div className="fs-14">{Nocdata?.councilname ? Nocdata?.councilname : 'NA'}</div>
-                                                            </div>
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Council Address1</label>
-                                                                <div className="fs-14">{Nocdata?.address1 ? Nocdata?.address1 : 'NA'}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="d-flex mb-2">
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Council Address2</label>
-                                                                <div className="fs-14">{Nocdata?.address2 ? Nocdata?.address2 : 'NA'}</div>
-                                                            </div>
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Country:</label>
-                                                                <div className="fs-14">{Nocdata?.country ? Nocdata?.country : 'NA'}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="d-flex mb-2">
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
-                                                                <div className="fs-14">{Nocdata?.state ? Nocdata?.state : 'NA'}</div>
-                                                            </div>
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>city Name:</label>
-                                                                <div className="fs-14">{Nocdata?.city ? Nocdata?.city : 'NA'}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="d-flex mb-2">
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>council pincode :</label>
-                                                                <div className="fs-14">{Nocdata?.councilpincode ? Nocdata?.councilpincode : 'NA'}</div>
-                                                            </div>
-                                                        </div>
-                                                        {Nocdata?.approval_status === 'rej'?<div className="d-flex mb-2">
-                                                           
-                                                           <div className='col-5 alert alert-danger  fs-14'>
-                                                               <label htmlFor="" className='fs-14 fw-600 me-2'>Reject Reason:</label>
-                                                              {Nocdata?.extra_col3 ? Nocdata?.extra_col3 : 'NA'}
-                                                               </div>
-                                                           </div>
-                                                      :""}
-                                                </div>
-                                            </div>
-                                        </div>
-                                            }
-                                {GoodStanding&& <div className="tsmc-timeline mb-5"> <div className="tsmc-text">
-                                                <div className="d-flex align-items-center justify-content-between mb-4">
-                                                    <h1 className='fs-18 fw-700 mb-0'>GoodStanding Details</h1>
-                                                    <div>
-                                                    <div>
-                                                    {GoodStanding?.status == 'ver' &&
-                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-check-circle'></i> Verified
-                                                                </span>
-                                                            }
-                                                            {GoodStanding?.status == 'apr' &&
-                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-check-circle'></i> Approved
-                                                                </span>
-                                                            }
-                                                            {GoodStanding?.status == 'pen' &&
-                                                                <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-exclamation-circle'></i> Pending
-                                                                </span>
-                                                            }
-                                                            {GoodStanding?.status == 'rej' &&
-                                                                <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-exclamation-circle'></i> Rejected
-                                                                </span>
-                                                            }
-                                                            {/*GoodStanding?.status == 'pen' && <Link to={''} className='btn btn-primary btn-sm me-3'>Edit</Link>*/}
+                                            </>
+
+                                        }
+
+
+{GoodStandingList.length > 0 &&
+                                            <>
+                                                <div className="tsmc-timeline mb-5">
+                                                    <div className="tsmc-text">
+                                                        <div className="d-flex align-items-center justify-content-between mb-4">
+                                                            <h1 className='fs-18 fw-700 mb-0'>GoodStanding Details</h1>
                                                         </div>
                                                     </div>
-                                                    {GoodStanding?.approval_status === 'rej'?<div className="d-flex mb-2">
-                                                           
-                                                           <div className='col-5 alert alert-danger  fs-14'>
-                                                               <label htmlFor="" className='fs-14 fw-600 me-2'>Reject Reason:</label>
-                                                              {GoodStanding?.extra_col3 ? GoodStanding?.extra_col3 : 'NA'}
-                                                               </div>
-                                                           </div>
-                                                      :""}
+
+                                                    <table className="table table-hover fs-10 table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Registration Date</th>
+                                                                <th>Approval Status</th>
+                                                                <th> </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {GoodStandingList?.map((obj: any) => {
+                                                                return (<tr>
+                                                                    <td>{moment(obj.reg_date).format('DD/MM/YYYY')}</td>
+
+                                                                    <td>
+                                                                        {obj.status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
+                                                                        {obj.status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
+                                                                        {obj.status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                                                                    </td>
+                                                                    {obj.status === 'rej' ? <td>{obj.extra_col3}</td> : <td></td>}
+
+                                                                </tr>);
+                                                            })}
+                                                        </tbody></table>
                                                 </div>
-                                                </div>      
-                                                </div>
-                                            }
-                                             {renewals&& <div className="tsmc-timeline mb-5"> <div className="tsmc-text">
-                                                <div className="d-flex align-items-center justify-content-between mb-4">
-                                                    <h1 className='fs-18 fw-700 mb-0'>Renewal Details</h1>
-                                                    <div>
-                                                    <div>
-                                                    {renewals?.status == 'ver' &&
-                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-check-circle'></i> Verified
-                                                                </span>
-                                                            }
-                                                            {renewals?.status == 'apr' &&
-                                                                <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-check-circle'></i> Approved
-                                                                </span>
-                                                            }
-                                                            {renewals?.status == 'pen' &&
-                                                                <span className='alert alert-warning px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-exclamation-circle'></i> Pending
-                                                                </span>
-                                                            }
-                                                            {renewals?.status == 'rej' &&
-                                                                <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>
-                                                                    <i className='bi-exclamation-circle'></i> Rejected
-                                                                </span>
-                                                            }
+                                            </>
+
+                                        }
+
+                            {NocdataList.length > 0 &&
+                                            <>
+                                                <div className="tsmc-timeline mb-5">
+                                                    <div className="tsmc-text">
+                                                        <div className="d-flex align-items-center justify-content-between mb-4">
+                                                            <h1 className='fs-18 fw-700 mb-0'>Noc Details</h1>
                                                         </div>
-                                                        
                                                     </div>
-                                                    {renewals?.status === 'rej'?<div className="d-flex mb-2">
-                                                           
-                                                           <div className='col-5 alert alert-danger  fs-14'>
-                                                               <label htmlFor="" className='fs-14 fw-600 me-2'>Reject Reason:</label>
-                                                              {renewals?.document10 ? renewals?.document10 : 'NA'}
-                                                               </div>
-                                                           </div>
-                                                      :""}
+
+                                                    <table className="table table-hover fs-10 table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Council Name</th>
+                                                                <th>Council Address1</th>
+                                                                <th>Council Address2</th>
+                                                                <th>Country</th>
+                                                                <th>State</th>
+                                                                <th>city Name</th>
+                                                                <th>Registration Date</th>
+                                                                <th>Approval Status</th>
+                                                                <th> </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {NocdataList?.map((obj: any) => {
+                                                                return (<tr>
+                                                                    <td>{obj.councilname}</td>
+                                                                    <td>{obj.address1}</td>
+                                                                    <td>{obj.address2}</td>
+                                                                    <td>{obj.country}</td>
+                                                                    <td>{obj.state}</td>
+                                                                    <td>{obj.city}</td>
+                                                                    <td>
+                                                                        {obj.status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
+                                                                        {obj.status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
+                                                                        {obj.status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                                                                    </td>
+                                                                    {obj.status === 'rej' ? <td>{obj.extra_col3}</td> : <td></td>}
+
+                                                                </tr>);
+                                                            })}
+                                                        </tbody></table>
                                                 </div>
-                                                </div>      
-                                                </div>
-                                            }
-                                     </div>
+                                            </>
+
+                                        }
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
