@@ -18,9 +18,11 @@ const NocRegistration = () => {
     const navigate = useNavigate();
     const [next, setNext] = useState(false);
     const [countries, setCountries] = useState<Country[]>([]);
+    const [doctorId, setDoctorId] = useState(0);
     const [states, setStates] = useState<State[]>([]);
     const [cities, setCities] = useState<City[]>([]);
-    const [nocRequestType, setNocRequestType] = useState<string>('nor');
+    const [provisionalRequestType, setProvisionalRequestType] = useState<string>('nor');
+   
 
     const initialFormData = useMemo(
         () => ({
@@ -85,10 +87,10 @@ const NocRegistration = () => {
     }, []);
     const submitForm = useCallback(
         async (values: nocUserFormType) => {
-            console.log('submitForm' + JSON.stringify(values));
             const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
             const doctorId = Number(LocalStorageManager.getDoctorSerialId());
             try {
+               
                 const nocInfo = {
                     ...values,
                     modifiedon: moment().format('YYYY-MM-DD h:mm:ss'),
@@ -97,7 +99,7 @@ const NocRegistration = () => {
                     address1: values.address1.toUpperCase(),
                     address2: values.address2.toUpperCase(),
                     doctor_id: doctorId,
-                    extra_col1:nocRequestType,
+                    extra_col1:provisionalRequestType,
                     doctorPrimaryId:doctorPrimaryId
                 }
 
@@ -124,7 +126,7 @@ const NocRegistration = () => {
                 console.log('error candidateService update', err);
             }
         },
-        []
+        [doctorId,provisionalRequestType]
     );
     const getValidationSchema = () =>
         objectYup().shape({
@@ -189,12 +191,12 @@ const NocRegistration = () => {
 
                                                             <div className="px-3">
                                                             <div className="row mb-2">
-                                                          <div className="col-sm-auto">
-                                                            <label className="mb-2">Noc Request Type</label>
+                                                            <div className="col-sm-auto">
+                                                            <label className="mb-2"> Noc Request Type</label>
                                                             <select
-                                                                value={nocRequestType}
+                                                                value={provisionalRequestType}
                                                                 onChange={(ev) => {
-                                                                    setNocRequestType(ev.target.value);
+                                                                    setProvisionalRequestType(ev.target.value);
                                                                 }}
                                                                 className="form-select"
                                                             >
