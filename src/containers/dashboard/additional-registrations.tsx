@@ -1,27 +1,17 @@
 import moment from "moment";
-import { getgroups } from "process";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { PageItem } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Select from 'react-select';
-import {
-    useTable,
-    useSortBy,
-    useGlobalFilter,
-    usePagination
-} from "react-table";
 import Swal from "sweetalert2";
 import Table from "../../components/Table";
 import { adminService } from "../../lib/api/admin";
 import { assignmentService } from "../../lib/api/assignments";
-import { provisionalService } from "../../lib/api/provisional";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { UserRole } from "../../types/common";
-import { Provisional_DoctorFormType } from "../../types/provisional";
 import { additionalService } from "../../lib/api/additional";
 import { routes } from '../routes/routes-names';
-import { useLocation, useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import TatCheckbox from './../../components/TatCheckbox';
 
 const Additional = () => {
     const fetchIdRef = useRef(0);
@@ -40,15 +30,24 @@ const Additional = () => {
     const [disablebtn, setDisablebtn] = useState(false);
     const [statusValue, setStatusValue] = useState('pen');
     const [statusName, setStatusName] = useState('Pending');
+    const [istatkal, setIsTatkal] = useState('nor');
+    const [isCheckbox, setIsCheckbox] = useState(false);
 
     const [checkBoxData, setCheckBoxData] = useState([
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
         { id: 2, name: 'Completed', value: 'apr', isChecked: false },
         { id: 3, name: 'Rejected', value: 'rej', isChecked: false },
-        { id: 4, name: 'Tatkal', value: 'tat', isChecked: false },
         { id: 5, name: 'Verified', value: 'ver', isChecked: false }
     ]);
 
+    const handleChangeTatkal = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.checked){
+            setIsTatkal('tat');
+        }else{
+            setIsTatkal('nor');
+        }
+        setIsCheckbox(e.target.checked);
+      };
     const columns = [
         {
             Header: "Doctor Id",
@@ -232,7 +231,7 @@ const Additional = () => {
         let vfromdate = moment(fromdate).format('YYYY-MM-DD');
         let vtodate = moment(todate).format('YYYY-MM-DD');
 
-        const { data } = await additionalService.getaddlsByFilter(vfromdate,vtodate, statusValue);
+        const { data } = await additionalService.getaddlsByFilter(vfromdate,vtodate, statusValue,istatkal);
         // if (data.length > 0) {
         //     setProvisionals(data);
         // }
@@ -257,7 +256,7 @@ const Additional = () => {
                 setLoading(false)
             }
         }, 1000)
-    }, [fromdate,todate, statusValue]);
+    }, [fromdate,todate, statusValue,istatkal]);
 
     const handleChecked = (e: any) => {
         setStatusValue(e.target.value);
@@ -287,6 +286,20 @@ const Additional = () => {
                     <div className="p-2 w-100">
                         <h2 className="fs-22 fw-700 mb-0">Additional Qualification</h2>
                     </div>
+                    <span className="input-group-text p-0">
+                    <div className="btn-group">
+                        <label className="m-1">Tatkal</label>
+                        <span className="tsmc-filter-box  form-control">
+                                         <TatCheckbox
+                                                handleChange={handleChangeTatkal}
+                                                isChecked={isCheckbox}
+                                                label=""
+                                                
+                                                />
+                                            </span>
+                                            </div>
+                                            </span>
+                                            
                         <span className="input-group-text p-0" id="filterbox">
                         <div className="btn-group">
                         <button className="btn p-0" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">

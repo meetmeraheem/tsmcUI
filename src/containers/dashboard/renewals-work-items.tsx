@@ -1,14 +1,10 @@
 import moment from "moment";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import Select from 'react-select';
-import Swal from "sweetalert2";
 import Table from "../../components/Table";
-import { assignmentService } from "../../lib/api/assignments";
-import { provisionalService } from "../../lib/api/provisional";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
-import { UserRole } from "../../types/common";
 import { renewalService } from "../../lib/api/renewals";
+import TatCheckbox from './../../components/TatCheckbox';
 
 const MyWorkItems = () => {
     const fetchIdRef = useRef(0);
@@ -19,6 +15,16 @@ const MyWorkItems = () => {
     const [todate, setToDate] = useState(defaultDate);
     const [loading, setLoading] = useState(false)
     const [pageCount, setPageCount] = useState(0);
+    const [istatkal, setIsTatkal] = useState('nor');
+    const [isCheckbox, setIsCheckbox] = useState(false);
+    const handleChangeTatkal = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.checked){
+            setIsTatkal('tat');
+        }else{
+            setIsTatkal('nor');
+        }
+        setIsCheckbox(e.target.checked);
+      };
 
     const columns = [
         {
@@ -94,7 +100,7 @@ const MyWorkItems = () => {
         let vfromdate = moment(fromdate).format('YYYY-MM-DD');
         let vtodate = moment(todate).format('YYYY-MM-DD');
         const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
-        const { data } = await renewalService.getRenewalsByUserId(vfromdate, vtodate, adminPrimaryId, 'renewal');
+        const { data } = await renewalService.getRenewalsByUserId(vfromdate, vtodate, adminPrimaryId, 'renewal',istatkal);
         if (data.length > 0) {
             // We'll even set a delay to simulate a server here
             setTimeout(() => {
@@ -117,7 +123,7 @@ const MyWorkItems = () => {
             }, 1000)
         }
         setLoading(false);
-    }, [fromdate, todate]);
+    }, [fromdate, todate,istatkal]);
 
     return (
         <>
@@ -127,7 +133,19 @@ const MyWorkItems = () => {
                         <h2 className="fs-22 fw-700 mb-0">Renewal  Registrations</h2>
                     </div>
                     <div className="p-2 flex-shrink-1 input-group justify-content-end">
-
+                    <span className="input-group-text p-0">
+                    <div className="btn-group">
+                        <label className="m-1">Tatkal</label>
+                        <span className="tsmc-filter-box  form-control">
+                                         <TatCheckbox
+                                                handleChange={handleChangeTatkal}
+                                                isChecked={isCheckbox}
+                                                label=""
+                                                
+                                                />
+                                            </span>
+                                            </div>
+                                            </span>
                         <span className="input-group-text p-0">
                             <label>From Date </label>
                             <input type="date" name="" id=""

@@ -34,21 +34,22 @@ type TabsType = {
       Component: AdditionalRegList
     },
     {
-      label: "Noc",
+      label: "Finals Renewals",
       index: 4,
+      Component: RenewalRegList
+    },
+    {
+      label: "Noc",
+      index: 5,
       Component: NocRegList
     },
     {
       label: "Good Standing",
-      index: 5,
+      index: 6,
       Component: GoodStandingRegList
     },
-    {
-      label: "Finals Renewals",
-      index: 6,
-      Component: RenewalRegList
-    },
-    {
+    
+ /*   {
       label: "Change of Name",
       index: 7,
       Component: ChangeofNameReg
@@ -57,7 +58,7 @@ type TabsType = {
       label: "Provisional Revalidations",
       index: 8,
       Component: ProvRevalidationReg
-    },
+    },*/
   ];
 
 const AdminDashboardHome = () => {

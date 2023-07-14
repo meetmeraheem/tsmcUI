@@ -53,7 +53,7 @@ const GoodStandingRegView = () => {
                         approval_status: data[0].status,
                         receipt_no: data[0].receipt_no,
                         dd_amount:data[0].dd_amount,
-                        reg_date:data[0].reg_date
+                        reg_date:data[0].regDate
                     });
                 }
             }

@@ -36,18 +36,24 @@ export const LocalStorageManager = {
     setDoctorFMRNo: function (FMRNo: string) {
         localStorage.setItem('doctorFMRNo', FMRNo);
     },
+
+    removeDoctorFMRNo: function () {
+        if (this.getDoctorFMRNo()) {
+            localStorage.removeItem('doctorFMRNo');
+        }
+    },
     getDoctorPMRNo: function () {
         const doctorFMRNo = localStorage.getItem('doctorPMRNo');
         return doctorFMRNo || null;
     },
 
     setDoctorPMRNo: function (PMRNo: string) {
-        localStorage.setItem('doctorFMRNo', PMRNo);
+        localStorage.setItem('doctorPMRNo', PMRNo);
     },
 
-    removeDoctorFMRNo: function () {
+    removeDoctorPMRNo: function () {
         if (this.getDoctorFMRNo()) {
-            localStorage.removeItem('doctorFMRNo');
+            localStorage.removeItem('doctorPMRNo');
         }
     },
 

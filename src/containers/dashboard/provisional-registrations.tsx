@@ -10,8 +10,8 @@ import { provisionalService } from "../../lib/api/provisional";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { UserRole } from "../../types/common";
 import { routes } from '../routes/routes-names';
-import { useLocation, useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import TatCheckbox from './../../components/TatCheckbox';
 
 const ProvisionalRegistrations = () => {
     const fetchIdRef = useRef(0);
@@ -30,15 +30,26 @@ const ProvisionalRegistrations = () => {
     const [statusValue, setStatusValue] = useState('pen');
     const [statusName, setStatusName] = useState('Pending');
     const [disablebtn, setDisablebtn] = useState(false);
+    const [istatkal, setIsTatkal] = useState('nor');
+    const [isCheckbox, setIsCheckbox] = useState(false);
+
 
     const [checkBoxData, setCheckBoxData] = useState([
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
         { id: 2, name: 'Completed', value: 'apr', isChecked: false },
         { id: 3, name: 'Rejected', value: 'rej', isChecked: false },
-        { id: 4, name: 'Tatkal', value: 'tat', isChecked: false },
+        
         { id: 5, name: 'Verified', value: 'ver', isChecked: false }
     ]);
 
+    const handleChangeTatkal = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.checked){
+            setIsTatkal('tat');
+        }else{
+            setIsTatkal('nor');
+        }
+        setIsCheckbox(e.target.checked);
+      };
     const columns = [
         {
             Header: "Doctor Id",
@@ -186,7 +197,7 @@ const ProvisionalRegistrations = () => {
         let vfromdate = moment(fromdate).format('YYYY-MM-DD');
         let vtodate = moment(todate).format('YYYY-MM-DD');
 
-        const { data } = await provisionalService.getProvisionalsByFilter(vfromdate,vtodate,statusValue);
+        const { data } = await provisionalService.getProvisionalsByFilter(vfromdate,vtodate,statusValue,istatkal);
         // if (data.length > 0) {
         //     setProvisionals(data);
         // }
@@ -205,7 +216,7 @@ const ProvisionalRegistrations = () => {
                 setLoading(false)
             }
         }, 1000)
-    }, [fromdate,todate, statusValue]);
+    }, [fromdate,todate, statusValue,istatkal]);
 
     const assign = useCallback(async () => {
         try {
@@ -243,9 +254,7 @@ const ProvisionalRegistrations = () => {
         setStatusValue('pen');
     }, []);
 
-    // const handleChange = (e: any) => {
-    //     setStatusValue(e.target.value);
-    // };
+    
 
     const handleChecked = (e: any) => {
         setStatusValue(e.target.value);
@@ -275,7 +284,19 @@ const ProvisionalRegistrations = () => {
                     <div className="p-2 w-100">
                         <h2 className="fs-22 fw-700 mb-0">Provisional Registrations</h2>
                     </div>
-                   
+                    <span className="input-group-text p-0">
+                    <div className="btn-group">
+                        <label className="m-1">Tatkal</label>
+                        <span className="tsmc-filter-box  form-control">
+                                         <TatCheckbox
+                                                handleChange={handleChangeTatkal}
+                                                isChecked={isCheckbox}
+                                                label=""
+                                                
+                                                />
+                                            </span>
+                                            </div>
+                                            </span>
                         <span className="input-group-text p-0" id="filterbox">
                             <div className="btn-group">
                             <button className="btn p-0" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">

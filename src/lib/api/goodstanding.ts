@@ -4,8 +4,8 @@ import { axiosInstance } from './index';
 
 export const goodstandingService = {
    
-    async getGoodstandingByFilter( fromdate: any,todate:any,status: any) {
-        const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingsByFilter/${fromdate}/${todate}/${status}`);
+    async getGoodstandingByFilter( fromdate: any,todate:any,status: any,istatkal:any) {
+        const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingsByFilter/${fromdate}/${todate}/${status}/${istatkal}`);
         return responseData as ApiResponseType;
     },
 
@@ -27,8 +27,8 @@ export const goodstandingService = {
         return responseData as ApiResponseType;
     },
     
-    async getGoodStandingByUserId( fromdate: any,todate: any,userId:any,regType: any) {
-        const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingByUserId/${fromdate}/${todate}/${userId}/${regType}`);
+    async getGoodStandingByUserId( fromdate: any,todate: any,userId:any,regType: any,istatkal:any) {
+        const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingByUserId/${fromdate}/${todate}/${userId}/${regType}/${istatkal}`);
         return responseData as ApiResponseType;
     },
 

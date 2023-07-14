@@ -29,8 +29,8 @@ export const finalService = {
         const { data: responseData } = await axiosInstance.put(serverUrl+`finalreg/updateFinalData/${finalId}`, data);
         return responseData;
     },
-    async getFinalsByFilter( from_date: any,to_date:any,status: any) {
-        const { data: responseData } = await axiosInstance.get(`finalreg/getFinalsByFilter/${from_date}/${to_date}/${status}`);
+    async getFinalsByFilter( from_date: any,to_date:any,status: any,istatkal:any) {
+        const { data: responseData } = await axiosInstance.get(`finalreg/getFinalsByFilter/${from_date}/${to_date}/${status}/${istatkal}`);
         return responseData as ApiResponseType;
     },
     async getFinalRegFeeDetails(data: any) {
@@ -39,8 +39,8 @@ export const finalService = {
         return responseData;
     },
 
-    async getFinalsByUserId( fromdate: any,todate: any,user_id: number,regType:any) {
-        const { data: responseData } = await axiosInstance.get(`finalreg/getFinalsByUserId/${fromdate}/${todate}/${user_id}/${regType}`);
+    async getFinalsByUserId( fromdate: any,todate: any,user_id: number,regType:any,istatkal:any) {
+        const { data: responseData } = await axiosInstance.get(`finalreg/getFinalsByUserId/${fromdate}/${todate}/${user_id}/${regType}/${istatkal}`);
         return responseData as ApiResponseType;
     },
 };

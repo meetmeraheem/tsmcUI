@@ -13,8 +13,8 @@ export const nocService = {
         const { data: responseData } = await axiosInstance.get(`noc/getNocByDoctorId/${doctorId}`);
         return responseData;
     },
-    async getNocsByFilter(fromdate:any,toDate:any, statusValue:any){
-        const { data: responseData } = await axiosInstance.get(`noc/getNocsByFilter/${fromdate}/${toDate}/${statusValue}`);
+    async getNocsByFilter(fromdate:any,toDate:any, statusValue:any,istatkal:any){
+        const { data: responseData } = await axiosInstance.get(`noc/getNocsByFilter/${fromdate}/${toDate}/${statusValue}/${istatkal}`);
         return responseData;
 
     },
@@ -23,8 +23,8 @@ export const nocService = {
         return responseData;
 
     },
-    async getNocByUserId(fromdate: any,todate: any,user_id: number,regType:any){
-        const { data: responseData } = await axiosInstance.get(`noc/getNocByUserId/${fromdate}/${todate}/${user_id}/${regType}`);
+    async getNocByUserId(fromdate: any,todate: any,user_id: number,regType:any,istatkal:any){
+        const { data: responseData } = await axiosInstance.get(`noc/getNocByUserId/${fromdate}/${todate}/${user_id}/${regType}/${istatkal}`);
         return responseData;
     },
         async  getNocById(nocPrimaryId: any){

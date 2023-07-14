@@ -44,7 +44,7 @@ const Userheader = () => {
 		
 
 
-	}, [isDoctorId, isDoctorFMRNo]);
+	}, [isDoctorId, isDoctorFMRNo,isDoctorPMRNo]);
 
 	return (
 		<>

@@ -34,21 +34,22 @@ const tabs: TabsType = [
     Component: AdditionalWorkItems
   },
   {
-    label: "Noc",
+    label: "Finals Renewals",
     index: 4,
+    Component: FinalRenewalsWorkItems
+  },
+  {
+    label: "Noc",
+    index: 5,
     Component: NocWorkItems
   },
   {
     label: "Good Standing",
-    index: 5,
+    index: 6,
     Component: GoodStandingWorkItems
   },
-  {
-    label: "Finals Renewals",
-    index: 6,
-    Component: FinalRenewalsWorkItems
-  },
-  {
+ 
+ /* {
     label: "Change of Name ",
     index: 7,
     Component: ChangeofNameWorkItems
@@ -57,7 +58,7 @@ const tabs: TabsType = [
     label: "Provisional Revalidations",
     index: 8,
     Component: ProvRevalidationRegWorkItems
-  },
+  },*/
 ];
 
 export default function App() {

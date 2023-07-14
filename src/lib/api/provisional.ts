@@ -23,12 +23,12 @@ export const provisionalService = {
         const { data: responseData } = await axiosInstance.put(`provisional/updateProvisionalData/${provisionalId}`, data)
         return responseData;
     },
-    async getProvisionalsByFilter( from_date: any, to_Date:any,status: any) {
-        const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByFilter/${from_date}/${to_Date}/${status}`);
+    async getProvisionalsByFilter( from_date: any, to_Date:any,status: any,istatkal:any) {
+        const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByFilter/${from_date}/${to_Date}/${status}/${istatkal}`);
         return responseData as ApiResponseType;
     },
-    async getProvisionalsByUserId( fromdate: any,todate: any,user_id: number,regType:any) {
-        const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByUserId/${fromdate}/${todate}/${user_id}/${regType}`);
+    async getProvisionalsByUserId( fromdate: any,todate: any,user_id: number,regType:any,istatkal:any) {
+        const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByUserId/${fromdate}/${todate}/${user_id}/${regType}/${istatkal}`);
         return responseData as ApiResponseType;
     },
 

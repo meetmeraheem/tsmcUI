@@ -578,22 +578,6 @@ const PaymentSuccess = () => {
                                         </div>
                                         <div className="px-3 text-center">
                                             <p className="mb-3">Your application successfully submitted to <br /> Telangana State Medical Council</p>
-                                            <div>
-                                                <div >
-                                                    {pmrSerialNumber !== 0 ? <div className="col d-flex">
-                                                        <label htmlFor="" className='fs-14 fw-600 me-2'>PMR No:</label>
-                                                        <div className="fs-14">{pmrSerialNumber}</div>
-                                                    </div> : ""}
-                                                </div>
-                                                <div >
-                                                    {fmrSerialNumber !== 0 ? <div className="col d-flex">
-                                                        <label htmlFor="" className='fs-14 fw-600 me-2'>FMR No:</label>
-                                                        <div className="fs-14">{fmrSerialNumber}</div>
-                                                    </div> : ""}
-                                                    <div className="col d-flex" id="msgId">
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 }
@@ -602,7 +586,9 @@ const PaymentSuccess = () => {
                         }
                         <hr className="my-4" />
                         <div className="col d-flex" id="msgId"></div>
+                        {(secureLocalStorage.getItem("regType") === 'provisional' || secureLocalStorage.getItem("regType") === 'final')?
                         <button type="button" onClick={() => { navigate(routes.userpanal); }} className="btn btn-primary">Back to Profile</button>
+                        : <button type="button" onClick={() => { navigate(routes.logout); }} className="btn btn-primary">Back to Login</button>}
                     </div>
                 </div>
             </section>

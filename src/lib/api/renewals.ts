@@ -4,8 +4,8 @@ import { axiosInstance } from './index';
 
 export const renewalService = {
    
-    async getRenewalsByFilter( fromdate: any,todate:any,status: any) {
-        const { data: responseData } = await axiosInstance.get(`renewal/getRenewalsByFilter/${fromdate}/${todate}/${status}`);
+    async getRenewalsByFilter( fromdate: any,todate:any,status: any,istatkal:any) {
+        const { data: responseData } = await axiosInstance.get(`renewal/getRenewalsByFilter/${fromdate}/${todate}/${status}/${istatkal}`);
         return responseData as ApiResponseType;
     },
     async getRenewalRegFeeDetails( data: any) {
@@ -13,8 +13,8 @@ export const renewalService = {
         return responseData as ApiResponseType;
     },
 
-    async getRenewalsByUserId( fromdate: any,todate: any,userId: any,regType:any) {
-        const { data: responseData } = await axiosInstance.get(`renewal/getRenewalByUserId/${fromdate}/${todate}/${userId}/${regType}`);
+    async getRenewalsByUserId( fromdate: any,todate: any,userId: any,regType:any,istatkal:any) {
+        const { data: responseData } = await axiosInstance.get(`renewal/getRenewalByUserId/${fromdate}/${todate}/${userId}/${regType}/${istatkal}`);
         return responseData as ApiResponseType;
     },
 

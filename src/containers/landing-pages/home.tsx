@@ -19,6 +19,9 @@ import { tokenManager } from '../../lib/token-manager';
 import { Messages } from '../../lib/constants/messages';
 import { SMS } from '../../lib/utils/sms/sms';
 import moment from 'moment';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
 
 const cryptojs = require("../../assets/js/cryptojs");
 
@@ -63,6 +66,8 @@ const HomePage = () => {
      const [forgetPasswordErrorMessage, setForgetPasswordErrorMessage] = useState('');
      const [confirmPasswordError, setConfirmPasswordError] = useState(false);
      const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState('');
+     const [show, setShow] = useState(true);
+     
 
      const initialFormData = {
           fullname: '',
@@ -445,6 +450,7 @@ const HomePage = () => {
      }, [forgetPassword, confirmPassword, forgetPasswordMobileNumber]);
 
      const resetForgetPassword = useCallback(async () => {
+          
           setIsForgetPasswordOTP(true);
           setIsForgetPassword(false);
           setForgetPasswordMobileNumber('');
@@ -899,6 +905,32 @@ const HomePage = () => {
                          </div>
                     </div>
                </div>
+               
+               
+               
+      <Modal  size="lg" show={show} onHide={()=>{setShow(false)}} className="w-100 mt-5">
+        <Modal.Header className="text-info" >
+          <Modal.Title className="w-100 text-center mb-3 ">INSTRUCTIONS</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>1. The Services that you have applied before physically at TSMC Office, need not apply again in online application.</div>
+         <br/>
+          <div>2. Instructions to be followed,<b> “HELP” </b> link given at the top right of the application screen for smooth registrations.</div>
+          <br/>
+          <div>3. Read the instructions @<b> “Required Documents”</b> link for documents upload and its size limitations. Get ready with Legible Scanned documents before you start filling up the application.</div>
+          <br/>
+          <div>4. Any help, please contact TSMC Helpline numbers or eMail, mentioned in TSMC Website.</div>
+          <br/>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={()=>{setShow(false)}}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+              
+              
+
           </>
      )
 }

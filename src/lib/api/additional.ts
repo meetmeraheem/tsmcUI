@@ -21,8 +21,8 @@ export const additionalService = {
         const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByDoctorId/${doctorId}`);
         return responseData;
     },
-    async getaddlsByFilter(fromdate:any,todate:any, statusValue: any){
-        const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByFilter/${fromdate}/${todate}/${statusValue}`);
+    async getaddlsByFilter(fromdate:any,todate:any, statusValue: any,istatkal:any){
+        const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByFilter/${fromdate}/${todate}/${statusValue}/${istatkal}`);
         return responseData;
     },
 
@@ -31,8 +31,8 @@ export const additionalService = {
         return responseData;
     },
 
-    async getQualificationsByUserId(fromdate: any,todate: any,user_id: number,regType:any){
-        const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByUserId/${fromdate}/${todate}/${user_id}/${regType}`);
+    async getQualificationsByUserId(fromdate: any,todate: any,user_id: number,regType:any,istatkal:any){
+        const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByUserId/${fromdate}/${todate}/${user_id}/${regType}/${istatkal}`);
         return responseData;
     },
 
