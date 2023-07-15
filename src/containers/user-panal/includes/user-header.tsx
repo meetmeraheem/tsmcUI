@@ -20,6 +20,7 @@ const Userheader = () => {
 		LocalStorageManager.removeDoctorSerialId();
 		LocalStorageManager.removeAdminPrimaryId();
 		LocalStorageManager.removeDoctorFMRNo();
+		LocalStorageManager.removeDoctorPMRNo();
 		LocalStorageManager.removeOrderKeyId();
 		dispatch(deleteDoctorInfo);
 	};

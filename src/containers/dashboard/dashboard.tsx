@@ -6,6 +6,7 @@ import AdditionalRegList from '../dashboard/additional-registrations';
 import GoodStandingRegList from '../dashboard/goodstanding-registrations';
 import NocRegList from '../dashboard/noc-registrations';
 import RenewalRegList from '../dashboard/renewal-registrations';
+import AdminEditPage from '../dashboard/admin-edit-page';
 import ChangeofNameReg from '../dashboard/changeofname-registrations';
 import  ProvRevalidationReg  from '../dashboard/prov-revalidation-registrations';
 
@@ -49,6 +50,11 @@ type TabsType = {
       Component: GoodStandingRegList
     },
     
+    {
+      label: "Enable Edit for Doctor",
+      index: 7,
+      Component: AdminEditPage
+    },
  /*   {
       label: "Change of Name",
       index: 7,

@@ -59,7 +59,7 @@ import Refund from '../landing-pages/refund';
 import ChangeofNameRegistration from '../user-panal/change-of-name';
 import ProvisionalRevalidation from '../user-panal/provisional-revalidation';
 import MyDataEdit from '../user-panal/my-data-edit';
-
+import AdminEditPage from '../dashboard/admin-edit-page';
 	
 
 const MainRoute = () => {
@@ -110,6 +110,8 @@ const MainRoute = () => {
 					<Route path={routes.prov_revalidation} element={<ProvisionalRevalidation />} />
 				</Route>
 				<Route path={routes.admin_dashboard} element={<AdminDashboard />}>
+				
+				<Route path={routes.admin_enable_edit} element={<AdminEditPage/>} />
 					<Route path={routes.provisional_registrations} element={<ProvisionalRegistrations />} />
 					<Route path={routes.admin_final_registrations} element={<FinalRegistrations />} />
 					<Route path={routes.admin_provisional_view} element={<ProvisionalView />} />

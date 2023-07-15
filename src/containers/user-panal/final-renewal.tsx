@@ -152,7 +152,7 @@ const RenewalRegistration = () => {
                                                 <form onSubmit={handleSubmit}>
                                                     <div className="row mb-2">
                                                     <div className="col-sm-auto">
-                                                            <label className="mb-2">Provisional Request Type</label>
+                                                            <label className="mb-2">Request Type</label>
                                                             <select
                                                                 value={provisionalRequestType}
                                                                 onChange={(ev) => {
@@ -160,9 +160,9 @@ const RenewalRegistration = () => {
                                                                 }}
                                                                 className="form-select"
                                                             >
-                                                                <option value="">Select</option>
+                                                              {/*  <option value="">Select</option>*/}
                                                                 <option value="nor">Normal</option>
-                                                                <option value="tat">Tatkal</option>
+                                                               {/*<option value="tat">Tatkal</option>*/}
                                                             </select>
                                                         </div>
                                                         </div>

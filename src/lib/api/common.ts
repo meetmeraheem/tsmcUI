@@ -49,7 +49,7 @@ export const commonService = {
         return responseData as Serials;
     },
 
-    
+
     //Payment
     async createPayment(data: any) {
         const { data: responseData } = await axiosInstance.post(`payments/createPayment`, data);
@@ -61,11 +61,39 @@ export const commonService = {
         return responseData;
     },
     async payviaJavaPayG(paymentDetailsJava: any) {
-        const { data:  responseData } = await axiosInstance.post(`payment/getPaymentRedirectURL`,paymentDetailsJava);
+        const { data: responseData } = await axiosInstance.post(`payment/getPaymentRedirectURL`, paymentDetailsJava);
         return responseData;
     },
     async getJavaOrderDetails(orderKeyId: any) {
-        const { data:  responseData } = await axiosInstance.get(`payment/getOrderDetails/${orderKeyId}`);
+        const { data: responseData } = await axiosInstance.get(`payment/getOrderDetails/${orderKeyId}`);
+        return responseData;
+    },
+
+    async getDoctorInfoByMobile(mobileNo: any) {
+        const { data: responseData } = await axiosInstance.get(`common/getDoctorInfoByMobile/${mobileNo}`);
+        return responseData;
+    },
+    async getDoctorInfoByFmrNo(fmrNo: any) {
+        const { data: responseData } = await axiosInstance.get(`common/getDoctorInfoByFmrNo/${fmrNo}`);
+        return responseData;
+    },
+
+    async enableDoctorProfileEdit(docId: any) {
+        const { data: responseData } = await axiosInstance.put(`common/enableDoctorProfileEdit/${docId}`);
+        return responseData;
+    },
+
+    async enableDoctorPMREdit(docId: any) {
+        const { data: responseData } = await axiosInstance.put(`common/enableDoctorPMREdit/${docId}`);
+        return responseData;
+    },
+    async enableDoctorFMREdit(docId: any) {
+        const { data: responseData } = await axiosInstance.put(`common/enableDoctorFMREdit/${docId}`);
+        return responseData;
+    },
+
+    async enableDoctorQualificationEdit(docId: any) {
+        const { data: responseData } = await axiosInstance.put(`common/enableDoctorQualificationEdit/${docId}`);
         return responseData;
     },
 

@@ -466,9 +466,9 @@ const FinalRegistration = () => {
                                                                 }}
                                                                 className="form-select"
                                                             >
-                                                                <option value="">Select</option>
+                                                                {/*  <option value="">Select</option>*/}
                                                                 <option value="nor">Normal</option>
-                                                                <option value="tat">Tatkal</option>
+                                                                {/*<option value="tat">Tatkal</option>*/}
                                                             </select>
                                                         </div>
                                                         </div>

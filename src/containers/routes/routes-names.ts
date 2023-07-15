@@ -36,6 +36,7 @@ export const routes = {
     paymenterror: `${urlPrefix}paymentsuccess`,
 
     admin_dashboard: `${urlPrefix}admin`,
+    admin_enable_edit: `${urlPrefix}admin${urlPrefix}enableEdit`,
     admin_my_work_items: `${urlPrefix}admin${urlPrefix}my-work-items`,
     provisional_registrations: `${urlPrefix}admin${urlPrefix}provisional_registrations`,
     admin_final_registrations: `${urlPrefix}admin${urlPrefix}final_registrations`,
