@@ -77,23 +77,24 @@ const Userheader = () => {
 										<div className="dropdown-menu shadow">
 											<li className='dropdown-submenu'>
 												<p className="dropdown-item">Provisional</p>
-													{isDoctorId ? 
-													""
-														 : 
-														<ul className="dropdown-menu">
-													{isDoctorPMRNo?"":<li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>}
+													
+													{isDoctorPMRNo?"":
+													<ul className="dropdown-menu">
+													<li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>
+													</ul>
+													}
 													
 													{/*<li><Link className="dropdown-item" to={isDoctorId ? '' : 'provisional-duplicate'}>Duplicate</Link></li>
 													 */}
 													
-												</ul>
-													}
+												
+													
 											</li>
 											<li className='dropdown-submenu'>
 												<p className="dropdown-item">Final Registration</p>
 													{isDoctorFMRNo ? '' :
 													<ul className="dropdown-menu">
-													{isDoctorFMRNo?"":<li><Link className="dropdown-item" to={'final-registration'}>New Registration</Link></li>}
+													<li><Link className="dropdown-item" to={'final-registration'}>New Registration</Link></li>
 													{/*<li><Link className="dropdown-item" to={isDoctorFMRNo ? '' : 'final-duplicate'}>Duplicate</Link></li>*/}
 													</ul>
 													}

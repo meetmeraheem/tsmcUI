@@ -92,6 +92,7 @@ const PaymentSuccess = () => {
                         if (data && data.doctorId !== null) {
                             LocalStorageManager.setDoctorSerialId(data.doctorId.toString());
                         }
+                        secureLocalStorage.removeItem("provisionalInfo");
                         secureLocalStorage.removeItem("pcName");
                         secureLocalStorage.removeItem("afName");
                         secureLocalStorage.removeItem("nocName");
@@ -192,6 +193,7 @@ const PaymentSuccess = () => {
                         setTransactionMsg(message);
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
+                        secureLocalStorage.removeItem("finalInfo");
                         secureLocalStorage.removeItem("afName");
                         secureLocalStorage.removeItem("mbbsName");
                         secureLocalStorage.removeItem("nocName");
@@ -250,6 +252,7 @@ const PaymentSuccess = () => {
                         setTransactionMsg(message);
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
+                        secureLocalStorage.removeItem("additionalInfo");
                         secureLocalStorage.removeItem("additional_study_name");
                         secureLocalStorage.removeItem("additional_Degree_name");
                         Swal.fire({
@@ -328,6 +331,7 @@ const PaymentSuccess = () => {
                         setTransactionMsg(message);
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
+                        secureLocalStorage.removeItem("goodstandingInfo");
                         Swal.fire({
                             title: "Success",
                             text: "GoodStanding registration successfully completed",
@@ -378,6 +382,7 @@ const PaymentSuccess = () => {
                         setTransactionMsg(message);
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
+                        secureLocalStorage.removeItem("finalrenewalsInfo");
                         secureLocalStorage.removeItem("regCertificateName");
                         secureLocalStorage.removeItem("renewalafName");
                         secureLocalStorage.removeItem("renewalnocName");
@@ -425,6 +430,7 @@ const PaymentSuccess = () => {
                         setTransactionMsg(message);
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
+                        secureLocalStorage.removeItem("changeofNameInfo");
                         secureLocalStorage.removeItem("gazzetCertificateName");
                         Swal.fire({
                             title: "Success",
@@ -474,6 +480,7 @@ const PaymentSuccess = () => {
                         setTransactionMsg(message);
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
+                        secureLocalStorage.removeItem("provRevalidationInfo");
                         secureLocalStorage.removeItem("revalidationCertificateName");
                         secureLocalStorage.removeItem("supportCertificateName");
                         Swal.fire({
