@@ -231,6 +231,14 @@ const ProvisionalRevalidation = () => {
                                                       
                                                     </div>
                                                     <div className="row mb-2 mt-4">
+                                                    <div className='text-danger fs-10'>
+                                                                Please upload images (.jpeg,.png) only, with less than 200 KB size.  
+                                                            </div>
+                                                            <div className='text-danger fs-10'>
+                                                                File name should not contain any special charaters and should have less than 20 character length.
+                                                            </div>
+                                                        </div>
+                                                    <div className="row mb-2 mt-4">
                                                         <div className="col-4">
                                                             <div className="drag-img-box d-flex align-items-center justify-content-center">
                                                                 <Field name="edu_cert1">

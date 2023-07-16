@@ -283,7 +283,7 @@ const FinalRegistration = () => {
                 .required('Exam year is required.')
                 .min(4, 'Exam year must 4 numbers.'),
             edu_cert1: stringYup()
-                .required('Application form is required.'),
+                .required('Internship Certificate is required.'),
             edu_cert2: stringYup()
                 .required('MBBS certificate is required.'),
             edu_cert3: stringYup().when(['country', 'state'], {
@@ -782,6 +782,14 @@ const FinalRegistration = () => {
                                                             </div>
                                                         </div>
                                                         <div className="row mb-2 mt-4">
+                                                        <div className='text-danger fs-10'>
+                                                                Please upload images (.jpeg,.png) only, with less than 200 KB size.  
+                                                            </div>
+                                                            <div className='text-danger fs-10'>
+                                                                File name should not contain any special charaters and should have less than 20 character length.
+                                                            </div>
+                                                        </div>
+                                                        <div className="row mb-2 mt-4">
                                                             <div className="col-4 mt-3">
                                                                 <div className="drag-img-box d-flex align-items-center justify-content-center">
                                                                     <Field name="edu_cert1">
@@ -835,7 +843,7 @@ const FinalRegistration = () => {
                                                                                     >
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload Application Form</p>
+                                                                                            <p className='fs-13'>Upload Internship Certificate </p>
                                                                                         </div>
                                                                                     </Files>
                                                                                     <small className="text-danger mt-1">

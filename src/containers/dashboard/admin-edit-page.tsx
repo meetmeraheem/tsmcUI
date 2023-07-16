@@ -21,7 +21,7 @@ const AdminEditPage = () => {
 
     const getDoctorDetailsByMobile = async () => {
         try {
-
+            
             if (mobileNo.length === 10) {
                 const { data } = await commonService.getDoctorInfoByMobile(mobileNo);
                 if (data.serial_id) {
@@ -58,6 +58,7 @@ const AdminEditPage = () => {
         }
     };
 
+    
     const submit = useCallback(async (type: any) => {
 
         let msg = "";
@@ -151,7 +152,7 @@ const AdminEditPage = () => {
             <div className="card-body">
                 <div className="mb-3 row">
                 <div className="col">
-                    <label htmlFor="" className='mb-2'>Mobile No</label>
+                    <label htmlFor="" className='mb-2'>Mobile No : </label>
                     <input type="text" className='fs-14' id="mobileNo" onBlur={(e) => setMobileNo(e.target.value)} placeholder='Enter Mobile No' />
                     </div>
                     <div className="col-8">
@@ -164,8 +165,8 @@ const AdminEditPage = () => {
                    </div> 
                    <div className="mb-3 row"> 
                    <div className="col"> 
-                    <label htmlFor="" className='mb-2'>FMR No</label>
-                    <input type="text" className='fs-14' id="fmrNo" onBlur={(e) => setFmrNo(e.target.value)} placeholder='Enter FMR No' />
+                    <label htmlFor="" className='mb-2'>FMR No :   </label>
+                    <input type="text" className='fs-14 w-75' id="fmrNo" onBlur={(e) => setFmrNo(e.target.value)} placeholder='Enter FMR No as per Certificate' />
                    </div> 
                     <div className="col-8">
                         <button type="submit"
@@ -246,7 +247,7 @@ const AdminEditPage = () => {
                                     disabled={disablebtn}
                                     onClick={() => {
                                         submit('profile');
-                                    }} className='btn btn-outline-success'> Enable Edit Profile</button>
+                                    }} className='btn btn-outline-success'> Enable Personal Details </button>
                             </div>
 
                             <div className="col">

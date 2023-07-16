@@ -216,6 +216,14 @@ const RenewalRegistration = () => {
                                                     
                                                     </div>
                                                     <div className="row mb-2 mt-4">
+                                                            <div className='text-danger fs-10'>
+                                                                Please upload images (.jpeg,.png) only, with less than 200 KB size.  
+                                                            </div>
+                                                            <div className='text-danger fs-10'>
+                                                                File name should not contain any special charaters and should have less than 20 character length.
+                                                            </div>
+                                                        </div>
+                                                    <div className="row mb-2 mt-4">
                                                         <div className="col">
                                                             <div className="drag-img-box d-flex align-items-center justify-content-center">
                                                                 <Field name="edu_cert1">
@@ -339,7 +347,7 @@ const RenewalRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload Application Form</p>
+                                                                                            <p className='fs-13'>Upload MBBS Certificate </p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>
@@ -458,9 +466,9 @@ const getValidationSchema = () =>
         edu_cert1: stringYup()
             .required('Last Renewal certificate is required.'),
          edu_cert2: stringYup()
-            .required('Application Form is required.'),
-        edu_cert3: stringYup()
-            .required('Other/previous renewal documents is required.'),
+            .required('MBBS Certificate is required.'),
+       /* edu_cert3: stringYup()
+            .required('Other/previous renewal documents is required.')*/
       
     });
 

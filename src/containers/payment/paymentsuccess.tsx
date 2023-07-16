@@ -594,8 +594,9 @@ const PaymentSuccess = () => {
                         <hr className="my-4" />
                         <div className="col d-flex" id="msgId"></div>
                         {(secureLocalStorage.getItem("regType") === 'provisional' || secureLocalStorage.getItem("regType") === 'final')?
-                        <button type="button" onClick={() => { navigate(routes.userpanal); }} className="btn btn-primary">Back to Profile</button>
-                        : <button type="button" onClick={() => { navigate(routes.logout); }} className="btn btn-primary">Back to Login</button>}
+                        <button type="button" onClick={() => { navigate(routes.main); }} className="btn btn-primary">Back to Login</button>
+                        
+                        : <button type="button" onClick={() => { navigate(routes.userpanal); }} className="btn btn-primary">Back to Profile</button>}
                     </div>
                 </div>
             </section>

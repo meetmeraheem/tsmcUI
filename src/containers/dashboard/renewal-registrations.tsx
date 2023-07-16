@@ -20,7 +20,7 @@ const Renewal = () => {
     const navigate = useNavigate();
     const [renewals, setRenewals] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
-    let default7Days = moment().subtract(7,'d').format('YYYY-MM-DD');
+    let default7Days = moment().subtract(3,'d').format('YYYY-MM-DD');
     const [fromdate, setFromDate] = useState(default7Days);
     const [todate, setToDate] = useState(defaultDate);
     const [loading, setLoading] = useState(false)

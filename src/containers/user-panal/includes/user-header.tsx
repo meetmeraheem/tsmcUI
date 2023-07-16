@@ -75,21 +75,19 @@ const Userheader = () => {
 									<li className="nav-item dropdown">
 										<Link to='' className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">New Registrations <i className='bi-chevron-down'></i></Link>
 										<div className="dropdown-menu shadow">
-											<li className='dropdown-submenu'>
+										{/*	<li className='dropdown-submenu'>
 												<p className="dropdown-item">Provisional</p>
-													
-													{isDoctorPMRNo?"":
+												{isDoctorId ? ""
+													 : 
 													<ul className="dropdown-menu">
-													<li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>
-													</ul>
-													}
+													{isDoctorPMRNo?"":<li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>}
 													
 													{/*<li><Link className="dropdown-item" to={isDoctorId ? '' : 'provisional-duplicate'}>Duplicate</Link></li>
 													 */}
-													
-												
-													
-											</li>
+												{/*</ul>
+													}
+											</li> */}
+
 											<li className='dropdown-submenu'>
 												<p className="dropdown-item">Final Registration</p>
 													{isDoctorFMRNo ? '' :
@@ -109,9 +107,9 @@ const Userheader = () => {
 											</ul>
 										</li>
 										<li><Link to='/my-panal/final-renewal' className="dropdown-item">Final Renewals </Link></li>
-										<li><Link to='/my-panal/good-standing-registration' className="dropdown-item">Good Standing</Link></li>
+										{/*<li><Link to='/my-panal/good-standing-registration' className="dropdown-item">Good Standing</Link></li>
 										<li><Link to='/my-panal/noc-registration' className="dropdown-item">NOC for Other State</Link></li>
-										{/*<li><Link to='/my-panal/chnage-of-name' className="dropdown-item">Change of Name</Link></li>
+										<li><Link to='/my-panal/chnage-of-name' className="dropdown-item">Change of Name</Link></li>
 										<li><Link to='/my-panal/revalidation' className="dropdown-item">Provisional Revalidation</Link></li>*/}
 										</div> :''}
 									

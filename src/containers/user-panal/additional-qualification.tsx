@@ -634,6 +634,14 @@ const AdditionalQualificationRegistration = () => {
                                                             </div >
                                                         </div>
                                                         <div className="row mb-2 mt-4">
+                                                        <div className='text-danger fs-10'>
+                                                                Please upload images (.jpeg,.png) only, with less than 200 KB size.  
+                                                            </div>
+                                                            <div className='text-danger fs-10'>
+                                                                File name should not contain any special charaters and should have less than 20 character length.
+                                                            </div>
+                                                        </div>
+                                                        <div className="row mb-2 mt-4">
                                                         <div className="d-flex justify-content-center my-5">    
                                                         <div className="col-3 ps-3">
                                                         <Field name="edu_cert1">
