@@ -200,19 +200,28 @@ const RenewalsViews = () => {
                                </div> 
                         <div className="row mb-3">
                             <div className="col-3">
-                                <div className="tsmc-doc-profile-box border-bottom-0">
-                                    <div className='tsmc-doc-img mb-3'>
-                                        {doctor?.passphoto ? <img src={serverImgUrl + 'files/' + doctor?.passphoto} alt="" /> : <img src={DocDefultPic} alt="" />}
-                                    </div>
-                                    <div className="d-flex align-items-center justify-content-center border rounded p-1">
-                                        {doctor?.signature ? <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" width="100%" /> :
-                                            <>
-                                                <div><i className="bi-pencil-square fs-22 px-2"></i></div>
-                                                <div><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
-                                            </>
-                                        }
-                                    </div>
-                                </div>
+                            <div className="tsmc-doc-profile-box border-bottom-0">
+                                                            <div className='tsmc-doc-img mb-3'>
+                                                                {doctor?.passphoto ? <>
+                                                                        {doctor?.filestatus === true ?
+                                                                            <img src={serverImgUrl + 'files/' + doctor?.passphoto} alt="" /> :
+                                                                            <img src={'http://admin.regonlinetsmc.in/forms/uploads/' + doctor?.passphoto} alt="" />
+                                                                        }
+                                                                    </> : <img src={DocDefultPic} alt="" />}
+                                                            </div>
+                                                            <div className="d-flex align-items-center justify-content-center border rounded p-1 signature">
+                                                                {doctor?.signature ? <>
+                                                                        {doctor?.filestatus === true ?
+                                                                            <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" /> :
+                                                                            <img src={'http://admin.regonlinetsmc.in/forms/uploads/' + doctor?.signature} alt="" />}
+                                                                    </> :
+                                                                    <>
+                                                                        <div><i className="bi-pencil-square fs-22 px-2"></i></div>
+                                                                        <div><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
+                                                                    </>
+                                                                }
+                                                            </div>
+                                                        </div>
                             </div>
                             <div className="col">
                                 {/* <h2 className='fs-16 fw-600 mb-3'>{doctor?.fullname}</h2> */}
@@ -236,7 +245,8 @@ const RenewalsViews = () => {
                                         </div>
                                         <div className="d-flex mb-2">
                                             <label htmlFor="" className='fs-14 fw-700 me-2'>Gender:</label>
-                                            <div className="col fs-14">{doctor?.gender == 'm' ? 'Male' : doctor?.gender == 'f' ? 'FeMale' : ''}</div>
+                                            <div className="col fs-14">{doctor?.gender == 'M' ? 'Male' : doctor?.gender == 'F' ? 'FeMale' : ''}</div>
+                                            
                                         </div>
                                         <div className="d-flex mb-2">
                                             <label htmlFor="" className='fs-14 fw-700 me-2'>Mobile No:</label>

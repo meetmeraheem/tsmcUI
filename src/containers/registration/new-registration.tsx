@@ -56,7 +56,8 @@ const Newregistration = () => {
         adisnal2: '',
         adisnal3: '',
         added_by: 0,
-        filestatus:false
+        filestatus:false,
+        original_fmr_no:'',
         
     }
     const getCountries = useCallback(async () => {

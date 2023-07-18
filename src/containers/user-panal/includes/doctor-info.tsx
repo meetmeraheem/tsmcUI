@@ -123,11 +123,15 @@ const DoctorInfoCard = () => {
                                                                 <div className="fs-14">{doctor?.address1} {doctor?.address2}</div>
                                                             </div>
                                                         </div>
+                                                        <div className="col d-flex">
+                                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Registration No:</label>
+                                                            <div className="fs-14">{doctor?.original_fmr_no}</div>
+                                                        </div>
                                                     </div>
                 
-                </div>
-                </div>
-            </div>
+                                                      </div>
+                                                    </div>
+                                                 </div>
         </>
     )
 };

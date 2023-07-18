@@ -207,32 +207,10 @@ const UserEditProfile = () => {
                                                 <div className="row mb-3">
                                                     <label className="col-sm-2 col-form-label">Full Name <p className="fs-10 text-secondary" >(As per MBBS certificate)</p></label>
                                                     <div className="col-sm-4">
-                                                        <Field name="fullname">
-                                                            {(fieldProps: FieldProps) => {
-                                                                const { field, form } = fieldProps;
-                                                                const error =
-                                                                    getValue(form.touched, field.name) &&
-                                                                    getValue(form.errors, field.name);
-                                                                return (
-                                                                    <>
-                                                                        <input
-                                                                            type="text"
-                                                                            value={field.value}
-                                                                            onChange={(ev) => {
-                                                                                setFieldTouched(field.name);
-                                                                                setFieldValue(field.name, ev.target.value);
-                                                                            }}
-                                                                            className={`form-control ${error ? 'is-invalid' : ''
-                                                                                }`}
-                                                                            placeholder="Enter full name"
-                                                                            tabIndex={1}
-                                                                        />
-
-                                                                        {error && <small className="text-danger">{error.toString()}</small>}
-                                                                    </>
-                                                                );
-                                                            }}
-                                                        </Field>
+                                                    <div className="col-sm-4">
+                                                        <div className="form-control mb-3">{doctor?.fullname}</div>
+                                                    </div>
+                                                        
                                                     </div>
                                                     <label className="col-sm-2 col-form-label">Father Name<p className="fs-10 text-secondary" >(As per SSC certificate/passport)</p></label>
                                                     <div className="col-sm-4">

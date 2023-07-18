@@ -476,7 +476,7 @@ const Myprofile = () => {
                                                         <div className="d-flex mb-2">
                                                             <div className="col d-flex">
                                                                 <label htmlFor="" className='fs-14 fw-600 me-2'>Registration No:</label>
-                                                                <div className="fs-14">TSMC/FMR/{doctor?.fmr_no}</div>
+                                                                <div className="fs-14">{doctor?.original_fmr_no}</div>
                                                             </div>
                                                             <div className="col d-flex">
                                                                 <label htmlFor="" className='fs-14 fw-600 me-2'>Registration Date:</label>
