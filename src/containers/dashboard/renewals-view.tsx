@@ -18,7 +18,7 @@ import { DoctorFormType } from '../../types/doctor';
 import { serverUrl, serverImgUrl } from '../../config/constants';
 import DocDefultPic from '../../assets/images/doc-default-img.jpg';
 import { renewalService } from "../../lib/api/renewals";
-import { renewalsType } from "../../types/common";
+import { AdminrenewalsType } from "../../types/common";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
@@ -33,12 +33,13 @@ const RenewalsViews = () => {
     const [isEduCert1, setIsEduCert1] = useState(false);
     const [isEduCert2, setIsEduCert2] = useState(false);
     const [isEduCert3, setIsEduCert3] = useState(false);
-    const [renewalsData, setRenewalsData] = useState<renewalsType>();
+    const [renewalsData, setRenewalsData] = useState<AdminrenewalsType>();
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const { renewalPrimaryId, doctorPrimaryId, assignmentId } = location.state
     const [userType, setUserType] = useState('');
     const [remarks, setRemarks] = useState('');
     const [disablebtn, setDisablebtn] = useState(false);
+
     const initialFormData = useMemo(
         () => ({
             councilname: '',
@@ -86,6 +87,9 @@ const RenewalsViews = () => {
                         edu_cert1: data.document1,
                         edu_cert2: data.document2,
                         edu_cert3: data.document3,
+                        dd_amount:data.dd_amount,
+                        receipt_no: data.receipt_no,
+                        transanctionId:data.transanctionId,
                     });
                 }
             }
@@ -276,7 +280,8 @@ const RenewalsViews = () => {
                                         </div>
                                         <div className="mb-2">
                                             <label htmlFor="" className='fs-14 fw-00 me-2'>Address:</label>
-                                            <div className="col fs-14">{doctor?.address1} {doctor?.address2}</div>
+                                            <div className="col fs-14">{doctor?.address1} {doctor?.address2}
+                                                                {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -287,8 +292,8 @@ const RenewalsViews = () => {
                             {renewalsData && 
                                         <div className="row tsmc-timeline mb-5">
                                           <h1 className='col fs-18 fw-700 mb-0'>Renwal Details</h1>
-                                      
-                                            <div className="col text-end">
+                                   
+                                            <div className="col   mb-5">
                                                 {renewalsData?.status == 'apr' &&
                                                     <span className='alert alert-success px-2 py-1 fs-12 rounded-pill me-3'>
                                                         <i className='bi-check-circle'></i> Approved
@@ -306,6 +311,22 @@ const RenewalsViews = () => {
                                                 }
                                             
                                         </div>
+                                 <div className="d-flex row">
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'> Payment Recieved</label>
+                                    <div className="fs-14">{renewalsData?.dd_amount ? renewalsData?.dd_amount : 'NA'}</div>
+                                </div>
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Payment Reciept No:</label>
+                                    <div className="fs-14">{renewalsData?.receipt_no ? renewalsData?.receipt_no : 'NA'}</div>
+                                </div>
+
+                                <div className="col d-flex ml-3">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Id:</label>
+                                    <div className="fs-14">{renewalsData?.transanctionId ? renewalsData?.transanctionId : 'NA'}</div>
+                                </div>
+                                
+                            </div>
                                    
                                    <div>
                                         <div className="row mt-3">
@@ -347,7 +368,7 @@ const RenewalsViews = () => {
                                     disabled={disablebtn}
                                     onClick={() => {
                                         submit('rej');
-                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Not Accepted</button>
                                 </div>
                                 <div className="col text-end">
                                     <button type="submit"
@@ -371,7 +392,7 @@ const RenewalsViews = () => {
                                     disabled={disablebtn}
                                     onClick={() => {
                                         submit('rej');
-                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Not Accepted</button>
                                 </div>
                                 <div className="col text-end">
                                     <button type="submit"

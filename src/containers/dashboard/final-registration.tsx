@@ -183,6 +183,7 @@ const FinalRegistrations = () => {
 
     const assign = useCallback(async () => {
         try {
+        if(assignedUser!=0){
             setDisablebtn(true);
             const assignToUser = assignedList.map((obj: any) => {
                 return { ...obj, assignTo: assignedUser };
@@ -202,8 +203,16 @@ const FinalRegistrations = () => {
                         setAssignedGridList([]);
                         fetchData(10);
                         setDisablebtn(false);
+                        setAssignedUser(0);
                         navigate(routes.admin_dashboard);
                     }
+                });
+            }}else{
+                Swal.fire({
+                    title: "Error",
+                    text: "Please select a User to Assign",
+                    icon: "error",
+                    confirmButtonText: "OK",
                 });
             }
         } catch (err) {

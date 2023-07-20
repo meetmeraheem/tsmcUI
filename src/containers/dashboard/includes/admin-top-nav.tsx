@@ -29,7 +29,7 @@ const tabs: TabsType = [
     Component: FinalWorkItems
   },
   {
-    label: "Additonals",
+    label: "Additionals",
     index: 3,
     Component: AdditionalWorkItems
   },

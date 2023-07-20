@@ -260,7 +260,8 @@ const ProvisionalView = () => {
                                         </div>
                                         <div className="mb-2">
                                             <label htmlFor="" className='fs-14 fw-00 me-2'>Address:</label>
-                                            <div className="col fs-14">{doctor?.address1} {doctor?.address2}</div>
+                                            <div className="col fs-14">{doctor?.address1} {doctor?.address2}
+                                                                {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}</div>
                                         </div>
                                     </div>
                                 </div>

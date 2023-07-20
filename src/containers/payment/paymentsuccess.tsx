@@ -566,6 +566,10 @@ const PaymentSuccess = () => {
                                 <div className="spinner-border text-success mt-5" role="status">
                                     <span className="visually-hidden">Loading...</span>
                                 </div>
+                                <div className='text-danger fs-11'>
+                                please do not press back button or refresh
+                                </div>
+                               
                             </div>
                         ) :
                             <>

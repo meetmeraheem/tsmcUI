@@ -51,4 +51,5 @@ export type AddQualFormType = {
     reg_date:Date,
     edu_cert1:string,
     edu_cert2:string,
+    transanctionId:string,
   }

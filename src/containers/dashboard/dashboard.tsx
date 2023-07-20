@@ -30,7 +30,7 @@ type TabsType = {
       Component: FinalRegistrations
     },
     {
-      label: "Additonals",
+      label: "Additionals",
       index: 3,
       Component: AdditionalRegList
     },
@@ -50,12 +50,12 @@ type TabsType = {
       Component: GoodStandingRegList
     },
     
-    {
+      {
       label: "Enable Edit for Doctor",
       index: 7,
       Component: AdminEditPage
     },
- /*   {
+  /*{
       label: "Change of Name",
       index: 7,
       Component: ChangeofNameReg

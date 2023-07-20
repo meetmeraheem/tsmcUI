@@ -27,6 +27,7 @@ export const routes = {
     noc_registration_edit:`${urlPrefix}my-panal${urlPrefix}edit-noc-registration`,
     temporary_registration: `${urlPrefix}my-panal${urlPrefix}temporary-registration`,
     final_renewal: `${urlPrefix}my-panal${urlPrefix}final-renewal`,
+    edit_final_renewal: `${urlPrefix}my-panal${urlPrefix}edit-final-renewal`,
     change_of_name: `${urlPrefix}my-panal${urlPrefix}chnage-of-name`,
     prov_revalidation: `${urlPrefix}my-panal${urlPrefix}revalidation`,
     newregistration: `${urlPrefix}new-registration`,

@@ -49,6 +49,9 @@ export type DoctorFormType = {
   added_by: number,
   filestatus:boolean,
   original_fmr_no:string,
+  cityName:string,
+  stateName:string,
+  countryName:string,
 }
 
 export type GetDoctorResponseType = Omit<ApiResponseType, 'list'> & {

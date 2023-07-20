@@ -58,6 +58,9 @@ const Newregistration = () => {
         added_by: 0,
         filestatus:false,
         original_fmr_no:'',
+        cityName:'',
+        stateName:'',
+        countryName:'',
         
     }
     const getCountries = useCallback(async () => {

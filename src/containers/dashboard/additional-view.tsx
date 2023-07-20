@@ -66,7 +66,8 @@ const AdditionalRegView = () => {
                         dd_amount:data[0].dd_amount,
                         reg_date:data[0].reg_date,
                         edu_cert1:data[0].edu_cert1,
-                        edu_cert2:data[0].edu_cert2
+                        edu_cert2:data[0].edu_cert2,
+                        transanctionId:data[0].transanctionId
                     });
                 }
             }
@@ -149,7 +150,8 @@ const AdditionalRegView = () => {
                 confirmButtonText: "OK",
             });
         }
-    }, [remarks]);
+    }, [remarks,additionalPrimaryId]);
+
     const closewindow = useCallback(async () => {
         if (userType === 'a') {
             navigate(routes.admin_dashboard);
@@ -256,7 +258,8 @@ const AdditionalRegView = () => {
                                         </div>
                                         <div className="mb-2">
                                             <label htmlFor="" className='fs-14 fw-00 me-2'>Address:</label>
-                                            <div className="col fs-14">{doctor?.address1} {doctor?.address2}</div>
+                                            <div className="col fs-14">{doctor?.address1} {doctor?.address2}
+                                                                {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -309,8 +312,12 @@ const AdditionalRegView = () => {
                                     <div className="fs-14">{additionals?.dd_amount ? additionals?.dd_amount : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Reciept No:</label>
+                                <label htmlFor="" className='fs-14 fw-600 me-2'>Payment Reciept No:</label>
                                     <div className="fs-14">{additionals?.receipt_no ? additionals?.receipt_no : 'NA'}</div>
+                                </div>
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Id:</label>
+                                    <div className="fs-14">{additionals?.transanctionId ? additionals?.transanctionId : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">
@@ -352,7 +359,7 @@ const AdditionalRegView = () => {
                                     disabled={disablebtn}
                                     onClick={() => {
                                         submit('rej');
-                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Not Accepted</button>
                                 </div>
                                 <div className="col text-end">
                                     <button type="submit"
@@ -375,7 +382,7 @@ const AdditionalRegView = () => {
                                 <div className="col">
                                     <button type="submit" disabled={disablebtn}  onClick={() => {
                                         submit('rej');
-                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Not Accepted</button>
                                 </div>
                                 <div className="col text-end">
                                     <button type="submit"

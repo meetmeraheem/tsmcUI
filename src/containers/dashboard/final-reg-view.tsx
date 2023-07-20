@@ -77,7 +77,8 @@ const FinalRegView = () => {
                         mci_reg: data[0].mci_reg,
                         imr_certificate: data[0].imr_certificate,
                         receipt_no: data[0].receipt_no,
-                        dd_amount:data[0].dd_amount
+                        dd_amount:data[0].dd_amount,
+                        transanctionId:data[0].transanctionId,
                     });
                 }
             }
@@ -170,7 +171,7 @@ const FinalRegView = () => {
                 confirmButtonText: "OK",
             });
         }
-    }, [remarks]);
+    }, [remarks,finalPrimaryId]);
 
     useEffect(() => {
         const userTypeValue = LocalStorageManager.getUserType();
@@ -269,7 +270,8 @@ const FinalRegView = () => {
                                         </div>
                                         <div className="mb-2">
                                             <label htmlFor="" className='fs-14 fw-00 me-2'>Address:</label>
-                                            <div className="col fs-14">{doctor?.address1} {doctor?.address2}</div>
+                                            <div className="col fs-14">{doctor?.address1} {doctor?.address2}
+                                                                {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -311,27 +313,34 @@ const FinalRegView = () => {
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>State:</label>
                                     <div className="fs-14">{final?.state ? final?.state : 'NA'}</div>
                                 </div>
+                                
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>College Name:</label>
+                                    <div className="fs-14">{final?.college ? final?.college : 'NA'}</div>
+                                </div>
+                            </div>
+                            <div className="d-flex mb-2">
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>University Name:</label>
                                     <div className="fs-14">{final?.university ? final?.university : 'NA'}</div>
                                 </div>
                             </div>
+                            
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'> Payment Recieved</label>
                                     <div className="fs-14">{final?.dd_amount ? final?.dd_amount : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Reciept No:</label>
+                                <label htmlFor="" className='fs-14 fw-600 me-2'>Payment Reciept No:</label>
                                     <div className="fs-14">{final?.receipt_no ? final?.receipt_no : 'NA'}</div>
                                 </div>
-                            </div>
-                            <div className="d-flex mb-2">
                                 <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>College Name:</label>
-                                    <div className="fs-14">{final?.college ? final?.college : 'NA'}</div>
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Id:</label>
+                                    <div className="fs-14">{final?.transanctionId ? final?.transanctionId : 'NA'}</div>
                                 </div>
                             </div>
+                           
                             <div className="row mt-3">
                                 {final?.edu_cert1 &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.edu_cert1) }}>
@@ -454,7 +463,7 @@ const FinalRegView = () => {
                                     disabled={disablebtn}
                                     onClick={() => {
                                         submit('rej');
-                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Not Accepted</button>
                                 </div>
                                 <div className="col text-end">
                                     <button type="submit"
@@ -479,7 +488,7 @@ const FinalRegView = () => {
                                     disabled={disablebtn}
                                     onClick={() => {
                                         submit('rej');
-                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Reject</button>
+                                    }} className='btn btn-danger'><i className="bi-x-circle"></i> Not Accepted</button>
                                 </div>
                                 <div className="col text-end">
                                     <button type="submit"

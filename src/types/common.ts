@@ -128,13 +128,27 @@ export type goodStandingFormType = {
 
   }
   export type renewalsType = {
-         status: string,
+        status: string,
         reg_date: string,
         doctor_id: number,
         edu_cert1: string,
         edu_cert2: string,
         edu_cert3: string,
   };
+
+  export type AdminrenewalsType = {
+    status: string,
+    reg_date: string,
+    doctor_id: number,
+    edu_cert1: string,
+    edu_cert2: string,
+    edu_cert3: string,
+    dd_amount:string,
+    receipt_no:string,
+    transanctionId:string,
+    
+
+};
 
   export type changeOfNameType = {
    status: string,

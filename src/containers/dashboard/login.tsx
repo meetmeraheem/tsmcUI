@@ -35,7 +35,6 @@ const AdminLogin = () => {
                         password: password,
                     });
                     if (success) {
-                        console.log('token ' + JSON.stringify(token));
                         tokenManager.setToken(token);
                         LocalStorageManager.setAdminPrimaryId(data[0].id.toString());
                         LocalStorageManager.setUserType(data[0].user_type);

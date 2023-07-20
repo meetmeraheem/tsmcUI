@@ -1,44 +1,35 @@
 import { Field, FieldProps, Formik, FormikProps } from "formik";
 import { object as objectYup, string as stringYup, number as numberYup } from 'yup';
 import getValue from 'lodash/get';
-import Select from 'react-select';
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 //@ts-ignore
 import Files from 'react-files';
 import secureLocalStorage from "react-secure-storage";
 import Swal from "sweetalert2";
 import moment from "moment";
 import { renewalsType } from "../../types/common";
-import DoctorInfoCard from "./includes/doctor-info";
 import { ReactFilesError, ReactFilesFile } from "../../types/files";
-import { useCallback, useEffect, useState } from "react";
-import { commonService } from "../../lib/api/common";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { College, Country, Qualification, Serials, State, University } from "../../types/common";
-import { provisionalService } from "../../lib/api/provisional";
-import { doctorService } from "../../lib/api/doctot";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux";
 import { routes } from "../routes/routes-names";
 import { isLessThanTheMB } from "../../lib/utils/lessthan-max-filesize";
 import { Messages } from "../../lib/constants/messages";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
-import { authService } from "../../lib/api/auth";
+import { renewalService } from "../../lib/api/renewals";
+
 import DatePicker from 'react-date-picker';
 
 
-const RenewalRegistration = () => {
+const EditRenewalRegistration = () => {
     const navigate = useNavigate();
-    const doctorReduxProfile = useSelector((state: RootState) => state.doctor.profile);
-    const [next, setNext] = useState(false);
+    
+    const location = useLocation();
+    const { renwalPrimaryId} = location.state
     const [doctorId, setDoctorId] = useState(0);
-    const [pmrNo, setPMRNo] = useState(0);
     const [serial, setserial] = useState<Serials>();
-    const [provisionalSerial, setProvisionalSerial] = useState<Serials>();
-    const [qualifications, setQualifications] = useState<Qualification[]>([]);
-    const [countries, setCountries] = useState<Country[]>([]);
-    const [states, setStates] = useState<State[]>([]);
-    const [universities, setUniversities] = useState<University[]>([]);
-    const [colleges, setColleges] = useState<College[]>([]);
+    const [renewals, setRenewals] = useState<renewalsType>();
     const [provisionalCertificate, setProvisionalCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [applicationForm, setApplicationForm] = useState<{ file?: File; error?: string } | null>(null);
     const [nocCertificate, setNOCCertificate] = useState<{ file?: File; error?: string } | null>(null);
@@ -46,20 +37,36 @@ const RenewalRegistration = () => {
     const [reg_date, setReg_date] = useState(new Date());
 
 
-    const initialFormData = {
+    const initialFormData =  useMemo(
+        () => ({
         doctor_id: 0,
-        edu_cert1: '',
-        edu_cert2: '',
-        edu_cert3: '',
+        edu_cert1: renewals?.edu_cert1 || '',
+        edu_cert2: renewals?.edu_cert2 || '',
+        edu_cert3: renewals?.edu_cert3 || '',
         reg_date:'',
         status:'',
-        
-        
-    }
-    useEffect(() => {
-        
+    }),
+    [renewals]
+);
+    const getRenewalDetails = useCallback(async () => {
+        try {
+            if (renwalPrimaryId) {
+                const { data } = await renewalService.getRenewalById(renwalPrimaryId);
+                if (data.status != null) {
+                    setRenewals({
+                        status: data.status,
+                        reg_date: data.createdon,
+                        doctor_id: data.doctorId,
+                        edu_cert1: data.document1,
+                        edu_cert2: data.document2,
+                        edu_cert3: data.document3,
+                    });
+                }
+            }
+        } catch (err) {
+            console.log('error getAdditionalDetails', err);
+        }
     }, []);
-
     
 
     const submitForm = useCallback(
@@ -76,66 +83,66 @@ const RenewalRegistration = () => {
                     prefix: 'TSMC',
                     approval_status: 'pen',
                     row_type: 'on',
-                    reg_date: moment(values.reg_date).format('YYYY-MM-DD'),
                     extra_col1:provisionalRequestType,
                     doctorPrimaryId:doctorPrimaryId,
                 }
                
                 secureLocalStorage.setItem("regType", 'finalrenewalsInfo');
                 secureLocalStorage.setItem("finalrenewalsInfo", renewalInfo);
+                
+                const formData = new FormData();
+                formData.append("finalrenewalsInfo", JSON.stringify(renewalInfo));
                 if (provisionalCertificate?.file) {
-                    secureLocalStorage.setItem("regCertificate", provisionalCertificate?.file);
+                    formData.append("regCertificate", provisionalCertificate?.file);
                 }
                 if (applicationForm?.file) {
-                    secureLocalStorage.setItem("renewal_af", applicationForm?.file);
+                    formData.append("renewal_af", applicationForm?.file);
                 }
                 if (nocCertificate?.file) {
-                    secureLocalStorage.setItem("renewal_noc", nocCertificate?.file);
+                    formData.append("renewal_noc", nocCertificate?.file);
                 }
                
-                navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'finalrenewalsInfo'}});
-                
+               
+                const { success } = await renewalService.editRenewal(renwalPrimaryId,formData);
+                if (success) {
+                 
+                    Swal.fire({
+                        title: "Success",
+                        text: "Final Renewal updated successfully",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            navigate(routes.userpanal);
+                        }
+                    });
+                } 
             } catch (err) {
                 Swal.fire({
                     //title: "Error",
-                    text: "final renewal registered failed",
+                    text: "final renewal updation failed",
                     icon: "error",
                     confirmButtonText: "OK",
                 })
-                console.log('error in provisional registeration update', err);
+                console.log('error in final renewal update', err);
             }
         },
         [doctorId, serial, provisionalCertificate, applicationForm, nocCertificate]
     );
 
+    useEffect(() => {
+        getRenewalDetails();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return (
         <>
             <section className='gray-banner'>
                 <div className="container mt-4">
-                    {!next &&
-                        <div className="col-9 m-auto">
-                            <div className="card shadow border-0 mb-4">
-                                <div className="card-body">
-                                    <div className="d-flex align-items-center">
-                                        <h1 className='fs-22 fw-700 me-2 mb-0'>Final Renewals Registration</h1>
-                                        <p className='mb-0 fs-13'>(Please check your personal details and click on next)</p>
-                                    </div>
-                                    <hr />
-                                    <DoctorInfoCard />
-                                </div>
-                                <div className="card-footer text-end">
-
-                                    <button type='button' onClick={() => setNext(true)} className='btn btn-primary'>Next <i className="bi-chevron-right"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    {next &&
                         <div className="col-9 m-auto">
                             <div className="card shadow border-0 mb-4">
                                 <div className="card-body">
                                     <div className="d-flex align-items-center justify-content-between">
-                                        <h1 className='fs-22 fw-700 text-nowrap'>Final Renewals Registration</h1>
+                                        <h1 className='fs-22 fw-700 text-nowrap'>Edit Final Renewals </h1>
                                         <div>
                                             
                                         </div>
@@ -153,69 +160,8 @@ const RenewalRegistration = () => {
                                             return (
                                                 <form onSubmit={handleSubmit}>
                                                     <div className="row mb-2">
-                                                    <div className="col-sm-auto">
-                                                            <label className="mb-2">Request Type</label>
-                                                            <select
-                                                                value={provisionalRequestType}
-                                                                onChange={(ev) => {
-                                                                    setProvisionalRequestType(ev.target.value);
-                                                                }}
-                                                                className="form-select"
-                                                            >
-                                                              {/*  <option value="">Select</option>*/}
-                                                                <option value="nor">Normal</option>
-                                                               {/*<option value="tat">Tatkal</option>*/}
-                                                            </select>
-                                                        </div>
-                                                        </div>
-                                                        <div className="row mb-2">
-                                                       
-                                                        
-
-                                                    </div>
-                                                    <div className="row mb-2">
                                                        
 
-                                                    </div>
-                                                    <div className="row mb-2">
-                                                      
-
-                                                    </div>
-                                                    <div className="row mb-2">
-                                                        <div className="col-sm-auto">
-                                                        <label htmlFor="Dateofbirth">Enter Last registration Date</label>
-                                                        <Field name="reg_date">
-                                                                    {(fieldProps: FieldProps) => {
-                                                                        const { field, form } = fieldProps;
-                                                                        const error =
-                                                                            getValue(form.touched, field.name) &&
-                                                                            getValue(form.errors, field.name);
-                                                                        return (
-                                                                            <>
-                                                                                <DatePicker
-                                                                                    format='dd-MM-yyyy'
-                                                                                    onChange={(date: any) => {
-                                                                                        setFieldTouched(field.name);
-                                                                                        setFieldValue(field.name, date);
-                                                                                        setReg_date(date);
-                                                                                    }}
-
-
-                                                                                    maxDate={moment().add('years', -5).toDate()}
-                                                                                    clearIcon={null}
-                                                                                    value={reg_date}
-                                                                                    className={`form-control ${error ? 'is-invalid' : ''}`}
-                                                                                />
-
-
-                                                                                {error && <small className="text-danger">{error.toString()}</small>}
-                                                                            </>
-                                                                        );
-                                                                    }}
-                                                                </Field>
-                                                                
-                                                        </div>
-                                                    
                                                     </div>
                                                     <div className="row mb-2 mt-4">
                                                             <div className='text-danger fs-10'>
@@ -417,7 +363,7 @@ const RenewalRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'> Other relavant documents</p>
+                                                                                            <p className='fs-13'>Other relavant documents</p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>
@@ -438,7 +384,6 @@ const RenewalRegistration = () => {
                                                     </div>
                                                     <div className="w-100 text-end mt-3">
                                                         {/* isValid? setNext(false):setNext(true) */}
-                                                        <button type='button' onClick={() => { setNext(false) }} className='btn btn-primary me-3'><i className="bi-chevron-left"></i>Back </button>
                                                         <button type="submit" disabled={isSubmitting} className="btn btn-primary">
                                                             {isSubmitting && <span className="spinner-border spinner-border-sm" />} Submit
                                                         </button>
@@ -450,21 +395,17 @@ const RenewalRegistration = () => {
                                 </div>
                             </div>
                         </div>
-                    }
+                    
                 </div>
             </section>
         </>
     )
 };
 
-export default RenewalRegistration;
+export default EditRenewalRegistration;
 
 const getValidationSchema = () =>
     objectYup().shape({
-     
-        reg_date: stringYup()
-            .required('old reg date is required.'),
-            
         edu_cert1: stringYup()
             .required('Last Renewal certificate is required.'),
          edu_cert2: stringYup()
@@ -473,96 +414,3 @@ const getValidationSchema = () =>
             .required('Other/previous renewal documents is required.')*/
       
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* <select
-    value={field.value}
-    onChange={(ev) => {
-        setFieldTouched(field.name);
-        setFieldValue(
-            field.name,
-            ev.target.value
-        );
-    }}
-    className={`form-select ${error ? 'is-invalid' : ''
-        } form-select-sm`}
->
-    <option value="">Select</option>
-    {examYears.map(
-        (item) => (
-            <option key={item} value={item}>
-                {item}
-            </option>
-        )
-    )}
-</select> */}

@@ -38,4 +38,9 @@ export const renewalService = {
         const { data: responseData } = await axiosInstance.put(`renewal/updateRenewal/${renewalId}`, data);
         return responseData;
     },
+
+    async editRenewal(renewalId: number, data: any) {
+        const { data: responseData } = await axiosInstance.put(`renewal/editRenewal/${renewalId}`, data);
+        return responseData;
+    },
 };

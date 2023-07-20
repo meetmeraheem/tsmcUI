@@ -139,7 +139,8 @@ export type AdminFinalProfileType = {
   posttime: string,
   approval_status: string,
   receipt_no:String,
-  dd_amount:String
+  dd_amount:String,
+  transanctionId:string
 }
 
 

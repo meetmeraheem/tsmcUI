@@ -346,7 +346,10 @@ const Myprofile = () => {
                                                         <div className="d-flex mb-2">
                                                             <div className="col d-flex">
                                                                 <label htmlFor="" className='fs-14 fw-600 me-2'>Address:</label>
-                                                                <div className="fs-14">{doctor?.address1} {doctor?.address2}</div>
+                                                                <div className="fs-14">{doctor?.address1} {doctor?.address2}
+                                                                {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}
+
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -555,7 +558,7 @@ const Myprofile = () => {
                                                                 <th>college</th>
                                                                 <th>Registration Date</th>
                                                                 <th>Approval Status</th>
-                                                                <th> </th>
+                                                                <th>Reason </th>
                                                                 <th> </th>
                                                             </tr>
                                                         </thead>
@@ -576,6 +579,8 @@ const Myprofile = () => {
                                                                         {obj.approval_status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
                                                                         {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                                                                         {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                                                                        {obj.approval_status === 'rej' &&<span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>Rejected</span>}
+                                                                
                                                                     </td>
                                                                     {(obj.approval_status == 'pen' || obj.approval_status == 'rej') ? <td> <Link to={'edit_additional-qualification-registration'} state={{ additionalPrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
 
@@ -602,11 +607,12 @@ const Myprofile = () => {
                                                         </div>
                                                     </div>
 
-                                                    <table className="table table-hover fs-10 table-bordered">
+                                                    <table className="table table-hover fs-11 table-bordered">
                                                         <thead>
                                                             <tr>
                                                                 <th>Registration Date</th>
                                                                 <th>Approval Status</th>
+                                                                <th>Reason </th>
                                                                 <th> </th>
                                                             </tr>
                                                         </thead>
@@ -619,10 +625,13 @@ const Myprofile = () => {
                                                                         {obj.status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
                                                                         {obj.status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                                                                         {obj.status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                                                                        {obj.status === 'rej' &&<span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>Rejected</span>}
                                                                     </td>
 
 
-                                                                    {obj.status === 'rej' ? <td>{obj.extra_col3}</td> : <td></td>}
+                                                                    {obj.status === 'rej' ? <td>{obj.document10}</td> : <td></td>}
+                                                                    {(obj.status == 'pen' || obj.status == 'rej') ? <td> <Link to={'edit-final-renewal'} state={{ renwalPrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
+
 
                                                                 </tr>);
                                                             })}
