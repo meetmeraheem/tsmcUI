@@ -112,8 +112,21 @@ export type goodStandingFormType = {
     doctor_id: string,
     doctorPrimaryId:string,
     extra_col3:string;
-    
+  }
 
+  export type goodStandingUserType = {
+    createdon: string,
+    posttime: string,
+    modifiedon: string,
+    status: string,
+    added_by: number,
+    approval_status:string
+    doctor_id: string,
+    doctorPrimaryId:string,
+    extra_col3:string,
+    edu_cert1: string,
+    edu_cert2: string,
+    edu_cert3: string,
   }
   export type renewalsFormType = {
     oldRegDate: string,
