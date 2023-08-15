@@ -96,6 +96,7 @@ const Userheader = () => {
 													{/*<li><Link className="dropdown-item" to={isDoctorFMRNo ? '' : 'final-duplicate'}>Duplicate</Link></li>*/}
 													</ul>
 													}
+													
 											</li>
 											{isDoctorFMRapproved ?
 											<div>

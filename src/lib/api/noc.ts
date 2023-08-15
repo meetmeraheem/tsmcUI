@@ -8,6 +8,12 @@ export const nocService = {
         const { data: responseData } = await axiosInstance.post(`noc/createNoc`, data);
         return responseData;
     },
+
+     
+    async nocEditRegistration(nocPrimaryId: any,data: any) {
+        const { data: responseData } = await axiosInstance.put(`noc/editnoc/${nocPrimaryId}`, data);
+        return responseData;
+    },
    
     async nocDataByDoctorId(doctorId: any) {
         const { data: responseData } = await axiosInstance.get(`noc/getNocByDoctorId/${doctorId}`);

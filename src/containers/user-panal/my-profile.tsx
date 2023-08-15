@@ -148,7 +148,7 @@ const Myprofile = () => {
                     //const country = await commonService.getCountry(Number(data[0].country));
                     //const state = await commonService.getState(Number(data[0].state));
                     setNocdataList(data);
-                   {/* setNocdata({
+                    {/* setNocdata({
                         country: data[0].countryName,
                         state: data[0].stateName,
                         councilname: data[0].councilname,
@@ -347,7 +347,7 @@ const Myprofile = () => {
                                                             <div className="col d-flex">
                                                                 <label htmlFor="" className='fs-14 fw-600 me-2'>Address:</label>
                                                                 <div className="fs-14">{doctor?.address1} {doctor?.address2}
-                                                                {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}
+                                                                    {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}
 
                                                                 </div>
                                                             </div>
@@ -579,8 +579,8 @@ const Myprofile = () => {
                                                                         {obj.approval_status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
                                                                         {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                                                                         {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
-                                                                        {obj.approval_status === 'rej' &&<span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>Rejected</span>}
-                                                                
+                                                                        {obj.approval_status === 'rej' && <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>Rejected</span>}
+
                                                                     </td>
                                                                     {(obj.approval_status == 'pen' || obj.approval_status == 'rej') ? <td> <Link to={'edit_additional-qualification-registration'} state={{ additionalPrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
 
@@ -591,13 +591,7 @@ const Myprofile = () => {
                                                         </tbody></table>
                                                 </div>
                                             </>
-
-
-
                                         }
-                                        
-
-
                                         {renewalsList.length > 0 &&
                                             <>
                                                 <div className="tsmc-timeline mb-5">
@@ -625,7 +619,7 @@ const Myprofile = () => {
                                                                         {obj.status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
                                                                         {obj.status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                                                                         {obj.status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
-                                                                        {obj.status === 'rej' &&<span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>Rejected</span>}
+                                                                        {obj.status === 'rej' && <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>Rejected</span>}
                                                                     </td>
 
 
@@ -638,11 +632,8 @@ const Myprofile = () => {
                                                         </tbody></table>
                                                 </div>
                                             </>
-
                                         }
-
-
-{GoodStandingList.length > 0 &&
+                                        {GoodStandingList.length > 0 &&
                                             <>
                                                 <div className="tsmc-timeline mb-5">
                                                     <div className="tsmc-text">
@@ -651,11 +642,12 @@ const Myprofile = () => {
                                                         </div>
                                                     </div>
 
-                                                    <table className="table table-hover fs-10 table-bordered">
+                                                    <table className="table table-hover fs-11 table-bordered">
                                                         <thead>
                                                             <tr>
                                                                 <th>Registration Date</th>
                                                                 <th>Approval Status</th>
+                                                                <th>Reason </th>
                                                                 <th> </th>
                                                             </tr>
                                                         </thead>
@@ -668,8 +660,11 @@ const Myprofile = () => {
                                                                         {obj.status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
                                                                         {obj.status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                                                                         {obj.status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                                                                        {obj.status === 'rej' && <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>Rejected</span>}
                                                                     </td>
-                                                                    {obj.status === 'rej' ? <td>{obj.extra_col3}</td> : <td></td>}
+                                                                    {obj.status === 'rej' ? <td>{obj.extra3}</td> : <td></td>}
+                                                                    {(obj.status == 'pen' || obj.status == 'rej') ? <td> <Link to={'good-standing-edit'} state={{ gsPrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
+
 
                                                                 </tr>);
                                                             })}
@@ -679,7 +674,7 @@ const Myprofile = () => {
 
                                         }
 
-                            {NocdataList.length > 0 &&
+                                        {NocdataList.length > 0 &&
                                             <>
                                                 <div className="tsmc-timeline mb-5">
                                                     <div className="tsmc-text">
@@ -688,36 +683,39 @@ const Myprofile = () => {
                                                         </div>
                                                     </div>
 
-                                                    <table className="table table-hover fs-10 table-bordered">
+                                                    <table className="table table-hover fs-11 table-bordered">
                                                         <thead>
                                                             <tr>
                                                                 <th>Council Name</th>
-                                                                <th>Council Address1</th>
-                                                                <th>Council Address2</th>
-                                                                <th>Country</th>
-                                                                <th>State</th>
-                                                                <th>city Name</th>
+                                                                <th>Council Address</th>
                                                                 <th>Registration Date</th>
                                                                 <th>Approval Status</th>
-                                                                <th> </th>
+                                                                <th>Reason </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             {NocdataList?.map((obj: any) => {
                                                                 return (<tr>
                                                                     <td>{obj.councilname}</td>
-                                                                    <td>{obj.address1}</td>
-                                                                    <td>{obj.address2}</td>
-                                                                    <td>{obj.country}</td>
-                                                                    <td>{obj.state}</td>
-                                                                    <td>{obj.city}</td>
+                                                                    <td>{obj.address1},{obj.address2}
+                                                                    <br/>
+                                                                   <b> City:</b>{obj.city},
+                                                                    <br/>
+                                                                    <b>State:</b>{obj.stateName},
+                                                                    <br/>
+                                                                    <b>Country:</b>{obj.countryName}
+                                                                    <br/>
+                                                                    </td>
+                                                                    
+                                                                    <td>{moment(obj.reg_date).format('DD/MM/YYYY')}</td>
                                                                     <td>
                                                                         {obj.status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
                                                                         {obj.status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                                                                         {obj.status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                                                                        {obj.status === 'rej' && <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>Rejected</span>}
                                                                     </td>
-                                                                    {obj.status === 'rej' ? <td>{obj.extra_col3}</td> : <td></td>}
-
+                                                                    {obj.status === 'rej' ? <td>{obj.extracol_3}</td> : <td></td>}
+                                                                    {(obj.status == 'pen' || obj.status == 'rej') ? <td> <Link to={'edit-noc-registration'} state={{ nocPrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
                                                                 </tr>);
                                                             })}
                                                         </tbody></table>

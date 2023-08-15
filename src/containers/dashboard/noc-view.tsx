@@ -30,6 +30,8 @@ const FinalRegView = () => {
     const [remarks, setRemarks] = useState('');
     const [userType, setUserType] = useState('');
     const [disablebtn, setDisablebtn] = useState(false);
+    const [isEduCert1, setIsEduCert1] = useState(false);
+    const [isEduCert2, setIsEduCert2] = useState(false);
     const getDoctorDetails = async () => {
         try {
             if (doctorPrimaryId) {
@@ -43,7 +45,7 @@ const FinalRegView = () => {
         }
     };
 
-    const getFinalDetails = useCallback(async () => {
+    const getNocDetails = useCallback(async () => {
         try {
             if (nocPrimaryId) {
                 const { data } = await nocService.getNocById(nocPrimaryId);
@@ -57,11 +59,14 @@ const FinalRegView = () => {
                         country: country.data[0].name,
                         councilpincode:data[0].councilpincode,
                         state: state.data[0].name,
-                        city: data[0].city,
+                        city: data[0].cityName,
                         approval_status: data[0].status,
                         receipt_no: data[0].receipt_no,
                         dd_amount:data[0].dd_amount,
-                        reg_date:data[0].reg_date
+                        reg_date:data[0].reg_date,
+                        edu_cert1: data[0].edu_cert1,
+                        edu_cert2: data[0].edu_cert2,
+                        transanctionId:data[0].transanctionId
                     });
                 }
             }
@@ -159,7 +164,7 @@ const FinalRegView = () => {
         const userTypeValue = LocalStorageManager.getUserType();
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
-        getFinalDetails();
+        getNocDetails();
     }, [nocPrimaryId, doctorPrimaryId]);
     return (
         <>
@@ -213,7 +218,7 @@ const FinalRegView = () => {
                                         </div>
                                         <div className="d-flex mb-2">
                                             <label htmlFor="" className='fs-14 fw-700 me-2'>Gender:</label>
-                                            <div className="col fs-14">{doctor?.gender == 'm' ? 'Male' : doctor?.gender == 'f' ? 'FeMale' : ''}</div>
+                                            <div className="col fs-14">{doctor?.gender == 'M' ? 'Male' : doctor?.gender == 'F' ? 'FeMale' : ''}</div>
                                         </div>
                                         <div className="d-flex mb-2">
                                             <label htmlFor="" className='fs-14 fw-700 me-2'>Mobile No:</label>
@@ -243,7 +248,8 @@ const FinalRegView = () => {
                                         </div>
                                         <div className="mb-2">
                                             <label htmlFor="" className='fs-14 fw-00 me-2'>Address:</label>
-                                            <div className="col fs-14">{doctor?.address1} {doctor?.address2}</div>
+                                            <div className="col fs-14">{doctor?.address1},{doctor?.address2},
+                                                                {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -267,7 +273,8 @@ const FinalRegView = () => {
                                 </div>
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Council  Address:</label>
-                                    <div className="fs-14">{noc?.address1 ? noc?.address1 + noc?.address2 : 'NA'}</div>
+                                    <div className="fs-14">  <div className="col fs-14">{noc?.address1},{noc?.address2}
+                                                               </div></div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">
@@ -296,8 +303,30 @@ const FinalRegView = () => {
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Reciept No:</label>
                                     <div className="fs-14">{noc?.receipt_no ? noc?.receipt_no : 'NA'}</div>
                                 </div>
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Id:</label>
+                                    <div className="fs-14">{noc?.transanctionId ? noc?.transanctionId : 'NA'}</div>
+                                </div>
                             </div>
                         </div>
+                        <div className="row mt-3">
+                                <div className="col">
+                                    <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                        <p className="d-flex align-items-center" onClick={() => setIsEduCert1(!isEduCert1)}>
+                                            {noc?.edu_cert1 ? <img src={serverImgUrl + 'noc/' + noc?.edu_cert1} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                        </p>
+                                    </div>
+                                </div>
+                                </div>
+                                <div className="row mt-3">
+                                <div className="col">
+                                    <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                        <p className="d-flex align-items-center" onClick={() => setIsEduCert2(!isEduCert2)}>
+                                            {noc?.edu_cert2 ? <img src={serverImgUrl + 'noc/' + noc?.edu_cert2} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                        </p>
+                                    </div>
+                                </div>
+                                </div>
                     </div>
                     {userType === 'u' && noc?.approval_status === 'pen' &&
                         <div className="card-footer">
@@ -350,6 +379,41 @@ const FinalRegView = () => {
                 </div>
             </div>
             <div>
+            <>
+
+<Lightbox
+    open={isEduCert1}
+    plugins={[Zoom]}
+    close={() => setIsEduCert1(false)}
+    slides={[
+        {
+            src: serverImgUrl + 'noc/' + noc?.edu_cert1,
+            alt: "edu_cert1",
+            width: 3840,
+            height: 2560,
+            srcSet: [
+                { src: serverImgUrl + 'noc/' + noc?.edu_cert1, width: 100, height: 100 },
+            ]
+        }
+    ]}
+/>
+<Lightbox
+    open={isEduCert2}
+    plugins={[Zoom]}
+    close={() => setIsEduCert2(false)}
+    slides={[
+        {
+            src: serverImgUrl + 'noc/' + noc?.edu_cert2,
+            alt: "edu_cert2",
+            width: 3840,
+            height: 2560,
+            srcSet: [
+                { src: serverImgUrl + 'noc/' + noc?.edu_cert2, width: 100, height: 100 },
+            ]
+        }
+    ]}
+/>
+</>
                 
             </div>
         </>

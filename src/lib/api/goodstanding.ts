@@ -18,6 +18,11 @@ export const goodstandingService = {
         return responseData as ApiResponseType;
     },
 
+    async editGoodStanding( gsPrimaryId:any,data: any) {
+     const { data: responseData } = await axiosInstance.put(`goodstanding/editgoodstanding/${gsPrimaryId}`,data);
+    return responseData as ApiResponseType;
+    },
+
     async getGoodstandingByDoctorId( doctor_id: any) {
         const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingByDoctorId/${doctor_id}`);
         return responseData as ApiResponseType;

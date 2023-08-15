@@ -23,6 +23,7 @@ import { provisionalService } from '../../lib/api/provisional';
 import moment from 'moment';
 import { authService } from '../../lib/api/auth';
 import secureLocalStorage from 'react-secure-storage';
+import DatePicker from 'react-date-picker';
 
 
 
@@ -44,6 +45,7 @@ const AdditionalQualificationRegistration = () => {
     const [isPMRDateAbove18M, setIsPMRDateAbove18M] = useState(false);
     const [isTelangana, setIsTelangana] = useState(false);
     const [additionalRequestType, setAdditionalRequestType] = useState<string>('nor');
+    const [calc_date, setCalc_date] = useState(new Date());
 
 
     const initialFormData = {
@@ -68,7 +70,8 @@ const AdditionalQualificationRegistration = () => {
         inter_verif_cert: '',
         mci_reg: '',
         imr_certificate: '',
-        approval_status:''
+        approval_status:'',
+        calc_date:''
     }
 
     const getProvisionalDetails = useCallback(async () => {
@@ -196,6 +199,7 @@ const AdditionalQualificationRegistration = () => {
                     approval_status: 'pen',
                     row_type: 'on',
                     reg_date: moment().format('YYYY-MM-DD'),
+                    calc_date: moment(values.calc_date).format('YYYY-MM-DD'),
                     extra_col1:additionalRequestType,
                     doctorPrimaryId:doctorPrimaryId,
                 }
@@ -263,6 +267,8 @@ const AdditionalQualificationRegistration = () => {
                 .required('Qualification is required.'),
             exam_month: stringYup()
                 .required('Exam Month is required.'),
+            calc_date: stringYup()
+                .required('Date of Issue of Degree is required.'),      
             exam_year: stringYup()
                 .required('Exam year is required.')
                 .min(4, 'Exam year must 4 numbers.'),
@@ -630,8 +636,40 @@ const AdditionalQualificationRegistration = () => {
                                                                     }}
                                                                 </Field>
                                                             </div>
-                                                            
-                                                            </div >
+                                                        <div className="row mb-2">
+                                                        <div className="col-sm-auto">
+                                                            <label htmlFor="CalcDate">Enter Date of Issue of Degree</label>
+                                                                  <Field name="calc_date">
+                                                                    {(fieldProps: FieldProps) => {
+                                                                        const { field, form } = fieldProps;
+                                                                        const error =
+                                                                            getValue(form.touched, field.name) &&
+                                                                            getValue(form.errors, field.name);
+                                                                        return (
+                                                                            <>
+                                                                                <DatePicker
+                                                                                    format='dd-MM-yyyy'
+                                                                                    onChange={(date: any) => {
+                                                                                        setFieldTouched(field.name);
+                                                                                        setFieldValue(field.name, date);
+                                                                                        setCalc_date(date);
+                                                                                    }}
+
+                                                                                    maxDate={new Date()}
+                                                                                    clearIcon={null}
+                                                                                    value={calc_date}
+                                                                                    className={`form-control ${error ? 'is-invalid' : ''}`}
+                                                                                />
+
+
+                                                                                {error && <small className="text-danger">{error.toString()}</small>}
+                                                                            </>
+                                                                        );
+                                                                    }}
+                                                                </Field>
+                                                                </div>
+                                                                </div>
+                                                        </div>
                                                         </div>
                                                         <div className="row mb-2 mt-4">
                                                         <div className='text-danger fs-10'>

@@ -35,7 +35,7 @@ const NocRegistration = () => {
             councilname: '',
             address1: '',
             address2: '',
-            country: '',
+            country:'',
             state: '',
             city: '',
             councilpincode: '',
@@ -46,6 +46,8 @@ const NocRegistration = () => {
             added_by: 0,
             approval_status:'',
             extra_col3:'',
+            edu_cert1: '',
+            edu_cert2: '',
         }),
         []
     );
@@ -112,33 +114,18 @@ const NocRegistration = () => {
                 secureLocalStorage.setItem("regType", 'nocInfo');
                 secureLocalStorage.setItem("nocInfo", nocInfo);
                 if (provisionalCertificate?.file) {
-                    secureLocalStorage.setItem("gsRegCertificate", provisionalCertificate?.file);
+                    secureLocalStorage.setItem("nocRegCertificate", provisionalCertificate?.file);
                 }
                 if (applicationForm?.file) {
-                    secureLocalStorage.setItem("gs_af", applicationForm?.file);
+                    secureLocalStorage.setItem("noc_af", applicationForm?.file);
                 }
                 navigate(routes.payment, { state: { doctor_id: Number(doctorId), regType: 'nocInfo' } });
-                {/*
-                const { success } = await nocService.nocRegistration(formData);
-                if (success) {
-                  
-                    Swal.fire({
-                        title: "Success",
-                        text: "Successfully Updated",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                          //  navigate(routes.userpanal);
-                        }
-                    });
-                }
-            */}
+                
             } catch (err) {
                 console.log('error candidateService update', err);
             }
         },
-        [doctorId,provisionalRequestType]
+        [doctorId,provisionalRequestType,provisionalCertificate,applicationForm]
     );
     const getValidationSchema = () =>
         objectYup().shape({
@@ -157,6 +144,10 @@ const NocRegistration = () => {
             councilpincode: stringYup()
                 .required('councilpincode is required.')
                 .min(6, 'councilpincode 6 numbers'),
+            edu_cert1: stringYup()
+                .required('Degree certificate is required.'),
+             edu_cert2: stringYup()
+                .required('Other Qualification/Renewal documents is required.'),
         });
     return (
         <>
@@ -186,7 +177,7 @@ const NocRegistration = () => {
                             <div className="card-body">
                             <div className="col-9 m-auto">
                                 <div className="card shadow border-0 mb-4">
-                                <h1 className='fs-22 fw-700'>Council  Details</h1>
+                                <h1 className='fs-22 fw-700 m-3'>Council  Details</h1>
                                 <hr />
                                 <Formik
                                     onSubmit={submitForm}
@@ -322,7 +313,7 @@ const NocRegistration = () => {
                                                                                 return (
                                                                                     <>
                                                                                         <Select
-                                                                                            name="country"
+                                                                                            name="Country"
                                                                                             className="react-select"
                                                                                             classNamePrefix="react-select"
                                                                                             isSearchable
@@ -515,7 +506,7 @@ const NocRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload Certificate</p>
+                                                                                            <p className='fs-13'>Upload Degree Certificate</p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>
@@ -584,7 +575,7 @@ const NocRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload  Certificate </p>
+                                                                                            <p className='fs-13'>Other Supporting documents</p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>

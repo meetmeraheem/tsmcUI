@@ -29,7 +29,6 @@ const GoodStandingRegistration = () => {
         doctor_id: '',
         edu_cert1: '',
         edu_cert2: '',
-        edu_cert3: '',
         status:'',
         createdon:'',
         posttime:'',
@@ -62,10 +61,10 @@ const GoodStandingRegistration = () => {
                 secureLocalStorage.setItem("regType", 'goodstandingInfo');
                 secureLocalStorage.setItem("goodstandingInfo", goodstandingInfo);
                 if (provisionalCertificate?.file) {
-                    secureLocalStorage.setItem("nocRegCertificate", provisionalCertificate?.file);
+                    secureLocalStorage.setItem("gsRegCertificate", provisionalCertificate?.file);
                 }
                 if (applicationForm?.file) {
-                    secureLocalStorage.setItem("noc_af", applicationForm?.file);
+                    secureLocalStorage.setItem("gs_af", applicationForm?.file);
                 }
                 
             navigate(routes.payment, { state: { doctor_id: Number(doctorId), regType: 'goodstandingInfo' } });
@@ -223,7 +222,7 @@ const GoodStandingRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload Certificate</p>
+                                                                                            <p className='fs-13'>Upload Degree Certificate</p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>
@@ -292,7 +291,7 @@ const GoodStandingRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload  Certificate </p>
+                                                                                            <p className='fs-13'>Other Supporting documents </p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>
@@ -340,13 +339,8 @@ export default GoodStandingRegistration;
 
 const getValidationSchema = () =>
     objectYup().shape({
-     
-    
-            
         edu_cert1: stringYup()
-            .required('Last Renewal certificate is required.'),
+            .required('Degree certificate is required.'),
          edu_cert2: stringYup()
-            .required('MBBS Certificate is required.'),
-       
-      
+            .required('Other Qualification/Renewal documents is required.'),
     });

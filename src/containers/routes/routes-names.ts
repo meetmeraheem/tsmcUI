@@ -22,6 +22,7 @@ export const routes = {
     edit_additional_qualification_registration: `${urlPrefix}my-panal${urlPrefix}edit_additional-qualification-registration`,
     additional_duplicate: `${urlPrefix}my-panal${urlPrefix}additional-duplicate`,
     good_standing_registration: `${urlPrefix}my-panal${urlPrefix}good-standing-registration`,
+    good_standing_edit:`${urlPrefix}my-panal${urlPrefix}good-standing-edit`,
     good_standing_mci_registration: `${urlPrefix}my-panal${urlPrefix}good-standing-mci-registration`,
     noc_registration: `${urlPrefix}my-panal${urlPrefix}noc-registration`,
     noc_registration_edit:`${urlPrefix}my-panal${urlPrefix}edit-noc-registration`,

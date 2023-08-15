@@ -22,7 +22,8 @@ export type AddQualFormType = {
     inter_verif_cert: string,
     mci_reg: string,
     imr_certificate: string,
-    approval_status:string
+    approval_status:string,
+    calc_date:string
   }
   export type AddQualDataFormType = {
     country: string,
@@ -52,4 +53,5 @@ export type AddQualFormType = {
     edu_cert1:string,
     edu_cert2:string,
     transanctionId:string,
+    calc_date:string,
   }

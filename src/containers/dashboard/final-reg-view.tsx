@@ -79,6 +79,7 @@ const FinalRegView = () => {
                         receipt_no: data[0].receipt_no,
                         dd_amount:data[0].dd_amount,
                         transanctionId:data[0].transanctionId,
+                        calc_date:data[0].calc_date,
                     });
                 }
             }
@@ -270,7 +271,7 @@ const FinalRegView = () => {
                                         </div>
                                         <div className="mb-2">
                                             <label htmlFor="" className='fs-14 fw-00 me-2'>Address:</label>
-                                            <div className="col fs-14">{doctor?.address1} {doctor?.address2}
+                                            <div className="col fs-14">{doctor?.address1}, {doctor?.address2},
                                                                 {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}</div>
                                         </div>
                                     </div>
@@ -326,6 +327,14 @@ const FinalRegView = () => {
                                 </div>
                             </div>
                             
+                            <div className="d-flex mb-2">
+                                <div className="col d-flex">
+                                <label htmlFor="" className='fs-14 fw-600 me-2'> Internship Completion/NOC  Date : </label>
+                                    <div className="fs-14">{final?.calc_date? moment(final?.calc_date).format('DD/MM/YYYY')  : 'NA'}</div>
+                                </div>
+                               </div> 
+
+
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'> Payment Recieved</label>

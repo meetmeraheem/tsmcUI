@@ -286,6 +286,15 @@ const Payment = () => {
             }
             const formData = new FormData();
             formData.append("nocInfo", JSON.stringify(nocDataPaymentInfo));
+            const nocRegCertificate = secureLocalStorage.getItem("nocRegCertificate");
+            const noc_af = secureLocalStorage.getItem("noc_af");
+
+            if (nocRegCertificate) {
+                formData.append("nocRegCertificate", nocRegCertificate as File);
+            }
+            if (noc_af) {
+                formData.append("noc_af", noc_af as File);
+            }
 
             const nocData = await nocService.getNocRegDetails(formData);
             if (nocData.data) {
@@ -306,6 +315,13 @@ const Payment = () => {
                 });
                 setPayUrl(nocData.data.redirectUrl);
                 setPayOrderId(nocData.data.orderKeyId);
+                if (nocData.data.nocData.edu_cert1 != null) {
+                    secureLocalStorage.setItem("nocRegCertificateName", nocData.data.nocData.edu_cert1 );
+                }
+
+                if (nocData.data.nocData.edu_cert2 != null) {
+                    secureLocalStorage.setItem("noc_af_Name", nocData.data.nocData.edu_cert2);
+                }
                 if (nocData.data.regType != null && nocData.data.regType === "tat") {
                     setIsNormalReg(false);
                 } else {
@@ -395,7 +411,15 @@ const Payment = () => {
             }
             const formData = new FormData();
             formData.append("goodstandingInfo", JSON.stringify(goodstandingInfoDataPaymentInfo));
+            const gsRegCertificate = secureLocalStorage.getItem("gsRegCertificate");
+            const gs_af = secureLocalStorage.getItem("gs_af");
 
+            if (gsRegCertificate) {
+                formData.append("gsRegCertificate", gsRegCertificate as File);
+            }
+            if (gs_af) {
+                formData.append("gs_af", gs_af as File);
+            }
             const gsData = await goodstandingService.getGoodstandingInfoRegDetails(formData);
             if (gsData.data) {
                 setRegPayDetails({
@@ -415,6 +439,12 @@ const Payment = () => {
                 });
                 setPayUrl(gsData.data.redirectUrl);
                 setPayOrderId(gsData.data.orderKeyId);
+                if (gsData.data.gsData.edu_cert1 != null) {
+                    secureLocalStorage.setItem("gsRegCertificateName", gsData.data.gsData.edu_cert1 );
+                }
+                if (gsData.data.gsData.edu_cert2 != null) {
+                    secureLocalStorage.setItem("gs_af_Name", gsData.data.gsData.edu_cert2);
+                }
                 if (gsData.data.regType != null && gsData.data.regType === "tat") {
                     setIsNormalReg(false);
                 } else {

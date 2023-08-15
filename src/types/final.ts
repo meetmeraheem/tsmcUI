@@ -23,6 +23,7 @@ export type FinalFormType = {
   mci_reg: string,
   imr_certificate: string,
   telanganapmrNo:string,
+  calc_date:string
 }
 
 export type FinalEditFormType = {
@@ -140,7 +141,8 @@ export type AdminFinalProfileType = {
   approval_status: string,
   receipt_no:String,
   dd_amount:String,
-  transanctionId:string
+  transanctionId:string,
+  calc_date:string,
 }
 
 

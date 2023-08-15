@@ -63,7 +63,8 @@ const EditAdditionalQualificationRegistration = () => {
         inter_verif_cert: '',
         mci_reg: '',
         imr_certificate: '',
-        approval_status:''
+        approval_status:'',
+        calc_date:''
 
     }),
     [additionals]
@@ -167,7 +168,8 @@ const EditAdditionalQualificationRegistration = () => {
                         inter_verif_cert: '',
                         mci_reg: '',
                         imr_certificate: '',
-                        approval_status:''
+                        approval_status:'',
+                        calc_date:'',
                        
                     });
                     setDuration(data[0]?.duration);

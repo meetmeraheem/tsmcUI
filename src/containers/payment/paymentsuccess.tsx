@@ -287,6 +287,10 @@ const PaymentSuccess = () => {
                     }
                     const formData = new FormData();
                     formData.append("nocInfo", JSON.stringify(nocDataPaymentInfo));
+                    const nocRegCertificateName = secureLocalStorage.getItem("nocRegCertificateName");
+                    const nocafName = secureLocalStorage.getItem("noc_af_Name");
+                    formData.append("nocRegCertificateName", nocRegCertificateName as string);
+                    formData.append("nocafName", nocafName as string);
                     const { success, message } = await nocService.nocRegistration(formData);
                     if (success) {
                         setIsLoader(false);
@@ -324,7 +328,10 @@ const PaymentSuccess = () => {
                     }
                     const formData = new FormData();
                     formData.append("goodstandingInfo", JSON.stringify(goodstandingInfoDataPaymentInfo));
-
+                    const gsRegCertificateName = secureLocalStorage.getItem("gsRegCertificateName");
+                    const gsafName = secureLocalStorage.getItem("gs_af_Name");
+                    formData.append("gsRegCertificateName", gsRegCertificateName as string);
+                    formData.append("gs_af_Name", gsafName as string);
                     const { success, message } = await goodstandingService.createGoodstandingDetails(formData);
                     if (success) {
                         setIsLoader(false);

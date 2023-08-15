@@ -22,6 +22,7 @@ import GoodStandingMciRegistration from '../user-panal/good-standing-mci';
 import FinalRenewals from '../user-panal/final-renewal';
 import EditRenewalRegistration from '../user-panal/edit-final-renewal';
 import GoodStandingRegistration from '../user-panal/good-standing';
+import EditGoodStanding from '../user-panal/edit-goodstanding';
 import FinalDuplicate from '../user-panal/duplicates/final-duplicate';
 import AdditionalDuplicate from '../user-panal/duplicates/additional-duplicate';
 import AdminDashboard from '../dashboard';
@@ -61,9 +62,13 @@ import ChangeofNameRegistration from '../user-panal/change-of-name';
 import ProvisionalRevalidation from '../user-panal/provisional-revalidation';
 import MyDataEdit from '../user-panal/my-data-edit';
 import AdminEditPage from '../dashboard/admin-edit-page';
+import axios from 'axios';
+import { apiHealthUrl } from './../../config/constants';
+import { useCallback, useEffect, useState } from 'react';
 	
 
 const MainRoute = () => {
+
 	return (
 		
 
@@ -105,6 +110,7 @@ const MainRoute = () => {
 					<Route path={routes.noc_registration_edit} element={<EditNocView />} />
 					<Route path={routes.good_standing_registration} element={<GoodStandingRegistration />} />
 					<Route path={routes.good_standing_mci_registration} element={<GoodStandingMciRegistration />} />
+					<Route path={routes.good_standing_edit} element={<EditGoodStanding />} />
 					<Route path={routes.final_registration} element={<FinalRegistration />} />
 					<Route path={routes.final_renewal} element={<FinalRenewals />} />
 					<Route path={routes.edit_final_renewal} element={<EditRenewalRegistration />} />

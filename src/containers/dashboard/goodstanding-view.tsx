@@ -29,6 +29,8 @@ const GoodStandingRegView = () => {
     const [goodStanding, setGoodStanding] = useState<any>();
     const [remarks, setRemarks] = useState('');
     const [userType, setUserType] = useState('');
+    const [isEduCert1, setIsEduCert1] = useState(false);
+    const [isEduCert2, setIsEduCert2] = useState(false);
     const [disablebtn, setDisablebtn] = useState(false);
     const getDoctorDetails = async () => {
         try {
@@ -53,7 +55,10 @@ const GoodStandingRegView = () => {
                         approval_status: data[0].status,
                         receipt_no: data[0].receipt_no,
                         dd_amount:data[0].dd_amount,
-                        reg_date:data[0].regDate
+                        reg_date:data[0].regDate,
+                        edu_cert1: data[0].edu_cert1,
+                        edu_cert2: data[0].edu_cert2,
+                        transanctionId:data[0].transanctionId
                     });
                 }
             }
@@ -206,7 +211,7 @@ const GoodStandingRegView = () => {
                                         </div>
                                         <div className="d-flex mb-2">
                                             <label htmlFor="" className='fs-14 fw-700 me-2'>Gender:</label>
-                                            <div className="col fs-14">{doctor?.gender == 'm' ? 'Male' : doctor?.gender == 'f' ? 'FeMale' : ''}</div>
+                                            <div className="col fs-14">{doctor?.gender == 'M' ? 'Male' : doctor?.gender == 'F' ? 'FeMale' : ''}</div>
                                         </div>
                                         <div className="d-flex mb-2">
                                             <label htmlFor="" className='fs-14 fw-700 me-2'>Mobile No:</label>
@@ -236,7 +241,8 @@ const GoodStandingRegView = () => {
                                         </div>
                                         <div className="mb-2">
                                             <label htmlFor="" className='fs-14 fw-00 me-2'>Address:</label>
-                                            <div className="col fs-14">{doctor?.address1} {doctor?.address2}</div>
+                                            <div className="col fs-14">  <div className="col fs-14">{doctor?.address1},{doctor?.address2},
+                                                                {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}</div></div>
                                         </div>
                                     </div>
                                 </div>
@@ -262,7 +268,29 @@ const GoodStandingRegView = () => {
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Reciept No:</label>
                                     <div className="fs-14">{goodStanding?.receipt_no ? goodStanding?.receipt_no : 'NA'}</div>
                                 </div>
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Id:</label>
+                                    <div className="fs-14">{goodStanding?.transanctionId ? goodStanding?.transanctionId : 'NA'}</div>
+                                </div>
                             </div>
+                            <div className="row mt-3">
+                                <div className="col">
+                                    <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                        <p className="d-flex align-items-center" onClick={() => setIsEduCert1(!isEduCert1)}>
+                                            {goodStanding?.edu_cert1 ? <img src={serverImgUrl + 'gs/' + goodStanding?.edu_cert1} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                        </p>
+                                    </div>
+                                </div>
+                                </div>
+                                <div className="row mt-3">
+                                <div className="col">
+                                    <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                        <p className="d-flex align-items-center" onClick={() => setIsEduCert2(!isEduCert2)}>
+                                            {goodStanding?.edu_cert2 ? <img src={serverImgUrl + 'gs/' + goodStanding?.edu_cert2} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                        </p>
+                                    </div>
+                                </div>
+                                </div>
                         </div>
                     </div>
                     {userType === 'u' && goodStanding?.approval_status === 'pen' &&
@@ -314,6 +342,41 @@ const GoodStandingRegView = () => {
                         </div>
                     }
                 </div>
+                <>
+
+                                            <Lightbox
+                                                open={isEduCert1}
+                                                plugins={[Zoom]}
+                                                close={() => setIsEduCert1(false)}
+                                                slides={[
+                                                    {
+                                                        src: serverImgUrl + 'gs/' + goodStanding?.edu_cert1,
+                                                        alt: "edu_cert1",
+                                                        width: 3840,
+                                                        height: 2560,
+                                                        srcSet: [
+                                                            { src: serverImgUrl + 'gs/' + goodStanding?.edu_cert1, width: 100, height: 100 },
+                                                        ]
+                                                    }
+                                                ]}
+                                            />
+                                            <Lightbox
+                                                open={isEduCert2}
+                                                plugins={[Zoom]}
+                                                close={() => setIsEduCert2(false)}
+                                                slides={[
+                                                    {
+                                                        src: serverImgUrl + 'gs/' + goodStanding?.edu_cert2,
+                                                        alt: "edu_cert2",
+                                                        width: 3840,
+                                                        height: 2560,
+                                                        srcSet: [
+                                                            { src: serverImgUrl + 'gs/' + goodStanding?.edu_cert2, width: 100, height: 100 },
+                                                        ]
+                                                    }
+                                                ]}
+                                            />
+                                            </>
             </div>
            
         </>
