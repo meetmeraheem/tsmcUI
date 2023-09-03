@@ -8,6 +8,11 @@ export const renewalService = {
         const { data: responseData } = await axiosInstance.get(`renewal/getRenewalsByFilter/${fromdate}/${todate}/${status}/${istatkal}`);
         return responseData as ApiResponseType;
     },
+
+    async getRenewalsByMobileNo( formData: any) {
+        const { data: responseData } = await axiosInstance.post(`renewal/getRenewalsByMobileNo`,formData);
+        return responseData as ApiResponseType;
+    },
     async getRenewalRegFeeDetails( data: any) {
         const { data: responseData } = await axiosInstance.post(`renewal/getRenewalRegFeeDetails`,data);
         return responseData as ApiResponseType;

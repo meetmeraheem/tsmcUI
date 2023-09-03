@@ -25,6 +25,10 @@ export const additionalService = {
         const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByFilter/${fromdate}/${todate}/${statusValue}/${istatkal}`);
         return responseData;
     },
+    async getAddlQualifByMobileNo( data: any) {
+        const { data: responseData } = await axiosInstance.post(`additionalQualification/getAddlQualifByMobileNo`,data);
+        return responseData as ApiResponseType;
+    },
 
     async  getAdditionalRegFeeDetails(data: any) {
         const { data: responseData } = await axiosInstance.post(`additionalQualification/getQualificationRegFeeDetails`, data);

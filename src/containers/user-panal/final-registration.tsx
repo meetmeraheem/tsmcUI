@@ -675,7 +675,7 @@ const FinalRegistration = () => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                                                <label className="mb-2">Exam Month</label>
+                                                                                <label className="mb-2">InternShip Exam Month</label>
                                                                                 <select
                                                                                     value={field.value}
                                                                                     onChange={(ev) => {
@@ -726,7 +726,7 @@ const FinalRegistration = () => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                                                <label className="mb-2">Exam Year</label>
+                                                                                <label className="mb-2"> InternShip Exam Year</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     value={field.value}
@@ -880,6 +880,7 @@ const FinalRegistration = () => {
                                                                                             if (error.code === 1) {
                                                                                             }
                                                                                         }}
+                                                                                        accepts={['.jpeg', '.jpg','.png']}
                                                                                         clickable
                                                                                     >
                                                                                         <div className="text-center">
@@ -946,6 +947,7 @@ const FinalRegistration = () => {
                                                                                             if (error.code === 1) {
                                                                                             }
                                                                                         }}
+                                                                                        accepts={['.jpeg', '.jpg','.png']}
                                                                                         clickable
                                                                                     >
                                                                                         <div className="text-center">
@@ -1013,6 +1015,7 @@ const FinalRegistration = () => {
                                                                                                 if (error.code === 1) {
                                                                                                 }
                                                                                             }}
+                                                                                            accepts={['.jpeg', '.jpg','.png']}
                                                                                             clickable
                                                                                         >
                                                                                             <div className="text-center">
@@ -1081,6 +1084,7 @@ const FinalRegistration = () => {
                                                                                                 if (error.code === 1) {
                                                                                                 }
                                                                                             }}
+                                                                                            accepts={['.jpeg', '.jpg','.png']}
                                                                                             clickable
                                                                                         >
                                                                                             <div className="text-center">
@@ -1148,6 +1152,7 @@ const FinalRegistration = () => {
                                                                                                 if (error.code === 1) {
                                                                                                 }
                                                                                             }}
+                                                                                            accepts={['.jpeg', '.jpg','.png']}
                                                                                             clickable
                                                                                         >
                                                                                             <div className="text-center">
@@ -1212,6 +1217,7 @@ const FinalRegistration = () => {
                                                                                                     if (error.code === 1) {
                                                                                                     }
                                                                                                 }}
+                                                                                                accepts={['.jpeg', '.jpg','.png']}
                                                                                                 clickable
                                                                                             >
                                                                                                 <div className="text-center">
@@ -1280,6 +1286,7 @@ const FinalRegistration = () => {
                                                                                                 if (error.code === 1) {
                                                                                                 }
                                                                                             }}
+                                                                                            accepts={['.jpeg', '.jpg','.png']}
                                                                                             clickable
                                                                                         >
                                                                                             <div className="text-center">
@@ -1347,6 +1354,7 @@ const FinalRegistration = () => {
                                                                                                 if (error.code === 1) {
                                                                                                 }
                                                                                             }}
+                                                                                            accepts={['.jpeg', '.jpg','.png']}
                                                                                             clickable
                                                                                         >
                                                                                             <div className="text-center">
@@ -1411,6 +1419,7 @@ const FinalRegistration = () => {
                                                                                                     if (error.code === 1) {
                                                                                                     }
                                                                                                 }}
+                                                                                                accepts={['.jpeg', '.jpg','.png']}
                                                                                                 clickable
                                                                                             >
                                                                                                 <div className="text-center">
@@ -1475,6 +1484,7 @@ const FinalRegistration = () => {
                                                                                                     if (error.code === 1) {
                                                                                                     }
                                                                                                 }}
+                                                                                                accepts={['.jpeg', '.jpg','.png']}
                                                                                                 clickable
                                                                                             >
                                                                                                 <div className="text-center">
@@ -1540,6 +1550,7 @@ const FinalRegistration = () => {
                                                                                                     if (error.code === 1) {
                                                                                                     }
                                                                                                 }}
+                                                                                                accepts={['.jpeg', '.jpg','.png']}
                                                                                                 clickable
                                                                                             >
                                                                                                 <div className="text-center">
@@ -1605,6 +1616,7 @@ const FinalRegistration = () => {
                                                                                                     if (error.code === 1) {
                                                                                                     }
                                                                                                 }}
+                                                                                                accepts={['.jpeg', '.jpg','.png']}
                                                                                                 clickable
                                                                                             >
                                                                                                 <div className="text-center">
@@ -1669,6 +1681,7 @@ const FinalRegistration = () => {
                                                                                                     if (error.code === 1) {
                                                                                                     }
                                                                                                 }}
+                                                                                                accepts={['.jpeg', '.jpg','.png']}
                                                                                                 clickable
                                                                                             >
                                                                                                 <div className="text-center">

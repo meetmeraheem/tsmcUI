@@ -764,7 +764,7 @@ const UserEditProfile = () => {
                                                                                 if (error.code === 1) {
                                                                                 }
                                                                             }}
-                                                                            //accepts={['.jpeg', '.jpg', '.png']}
+                                                                            accepts={['.jpeg', '.jpg', '.png']}
                                                                             clickable
                                                                         >
                                                                             <div className="file-upload-box">
@@ -835,7 +835,7 @@ const UserEditProfile = () => {
                                                                                 if (error.code === 1) {
                                                                                 }
                                                                             }}
-                                                                            //accepts={['.jpeg', '.jpg','.png']}
+                                                                            accepts={['.jpeg', '.jpg','.png']}
                                                                             clickable
                                                                         >
                                                                             <div className="file-upload-box">

@@ -20,7 +20,7 @@ const Renewal = () => {
     const navigate = useNavigate();
     const [renewals, setRenewals] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
-    let default7Days = moment().subtract(3,'d').format('YYYY-MM-DD');
+    let default7Days = moment().subtract(3, 'd').format('YYYY-MM-DD');
     const [fromdate, setFromDate] = useState(default7Days);
     const [todate, setToDate] = useState(defaultDate);
     const [loading, setLoading] = useState(false)
@@ -34,7 +34,10 @@ const Renewal = () => {
     const [disablebtn, setDisablebtn] = useState(false);
     const [istatkal, setIsTatkal] = useState('nor');
     const [isCheckbox, setIsCheckbox] = useState(false);
-    
+    const [selected, setSelected] = useState<any>({});
+    const [mobileNo, setMobileNo] = useState('');
+    const [docName, setdocName] = useState('');
+
 
     const [checkBoxData, setCheckBoxData] = useState([
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
@@ -42,15 +45,26 @@ const Renewal = () => {
         { id: 3, name: 'Rejected', value: 'rej', isChecked: false },
         { id: 5, name: 'Verified', value: 'ver', isChecked: false }
     ]);
+
+    const toggleSelected = (id: any, e: any) => {
+        setSelected((selected: any) => ({
+            ...selected,
+            [id]: !selected[id]
+        }));
+    };
     const handleChangeTatkal = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.checked){
+        if (e.target.checked) {
             setIsTatkal('tat');
-        }else{
+        } else {
             setIsTatkal('nor');
         }
         setIsCheckbox(e.target.checked);
-      };
+    };
+
+
+
     const columns = [
+
         {
             Header: "Doctor Id",
             accessor: "doctor_id"
@@ -91,7 +105,7 @@ const Renewal = () => {
             Cell: ({ cell: { value } }: any) => {
                 return (
                     <>
-                        {value!=='tat'?"Normal":"Tatkal"}
+                        {value !== 'tat' ? "Normal" : "Tatkal"}
                     </>
                 );
             }
@@ -113,29 +127,33 @@ const Renewal = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/renewals_reg_view'} state={{ renewalPrimaryId: cell.data[Number(cell.row.id)].renewalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[Number(cell.row.id)].assignmentId }}>Proceed</Link>
+                    <Link to={'/admin/renewals_reg_view'} state={{ renewalPrimaryId: cell.data[Number(cell.row.id)].renewalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId, assignmentId: cell.data[Number(cell.row.id)].assignmentId }}>Proceed</Link>
                 </>
             )
         },
+
         {
             Header: "Assign",
+            id: "check",
             Cell: (cell: any) => (
                 <>
-                    <i className="bi bi-plus-square" onClick={async () => {
-                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'renewal');
-                        if (data && data.length > 0) {
-                            const getUser = await adminService.getAdminById(data[0].AssignTo);
-                            if (getUser.data.length > 0) {
-                                Swal.fire({
-                                    text: "Already Assigned to " + getUser.data[0].username,
-                                    icon: "warning",
-                                    confirmButtonText: "OK",
-                                });
+                    {cell.data[Number(cell.row.id)].assignedUserName === null && cell.data[Number(cell.row.id)].status === 'pen' ?
+                        <input type="checkbox" id={cell.row.id} checked={selected[cell.row.id]} onChange={async (e: any) => {
+                            toggleSelected(cell.row.id, e);
+                            const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'renewal');
+                            if (data && data.length > 0) {
+                                const getUser = await adminService.getAdminById(data[0].AssignTo);
+                                if (getUser.data.length > 0) {
+                                    Swal.fire({
+                                        text: "Already Assigned to " + getUser.data[0].username,
+                                        icon: "warning",
+                                        confirmButtonText: "OK",
+                                    });
+                                }
                             }
-                        }
-                        else {
-                            const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
-                            if (!isDuplicate(assignedGridList, cell.data[Number(cell.row.id)])) {
+                            else {
+                                const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
+                                //  if (!isDuplicate(assignedGridList, cell.data[Number(cell.row.id)])) {
                                 const doctorInfo = {
                                     assignBy: adminPrimaryId,
                                     assignCreated: moment().format('YYYY-MM-DD'),
@@ -143,21 +161,28 @@ const Renewal = () => {
                                     assignReason: '',
                                     doctor_id: cell.data[Number(cell.row.id)].doctor_id,
                                     assignRegType: 'renewal',
-                                    regTypeId:cell.data[Number(cell.row.id)].renewalPrimaryId
+                                    regTypeId: cell.data[Number(cell.row.id)].renewalPrimaryId
                                 }
-                                setAssignedList([...assignedList, doctorInfo]);
-                                setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
-                            }
-                            else {
-                                Swal.fire({
-                                    text: "Already Added",
-                                    icon: "warning",
-                                    confirmButtonText: "OK",
-                                })
-                            }
-                        }
+                                if (e.target.checked) {
+                                    setAssignedList([...assignedList, doctorInfo]);
+                                    setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
+                                } else {
+                                    const id = e.target.getAttribute("id")
+                                    setAssignedList(assignedList.filter((item: any) => item.doctor_id !== cell.data[Number(cell.row.id)].doctor_id));
+                                    setAssignedGridList(assignedGridList.filter((item: any) => item.doctor_id !== cell.data[Number(cell.row.id)].doctor_id));
 
-                    }}></i>
+                                }
+                                /*  }
+                                  else {
+                                      Swal.fire({
+                                          text: "Already Added",
+                                          icon: "warning",
+                                          confirmButtonText: "OK",
+                                      })
+                                  }*/
+                            }
+
+                        }} /> : cell.data[Number(cell.row.id)].assignedUserName}
                 </>
             )
         }
@@ -181,33 +206,33 @@ const Renewal = () => {
     }, []);
 
     const assign = useCallback(async () => {
-    try {
-        if(assignedUser!=0){
-            
-            setDisablebtn(true);
-            const assignToUser = assignedList.map((obj: any) => {
-                return { ...obj, assignTo: assignedUser };
-            })
-            const formData = new FormData();
-            formData.append("assignmentData", JSON.stringify(assignToUser));
-            const { success } = await assignmentService.assignToUser(formData);           
-             if (success) {
-                Swal.fire({
-                    //title: "Error",
-                    text: "Assigned",
-                    icon: "success",
-                    confirmButtonText: "OK",
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        setAssignedList([]);
-                        setAssignedGridList([]);
-                        fetchData(10);
-                        setDisablebtn(false);
-                        setAssignedUser(0);
-                        navigate(routes.admin_dashboard);
-                    }
-                });
-            }}else{
+        try {
+            if (assignedUser != 0) {
+
+                setDisablebtn(true);
+                const assignToUser = assignedList.map((obj: any) => {
+                    return { ...obj, assignTo: assignedUser };
+                })
+                const formData = new FormData();
+                formData.append("assignmentData", JSON.stringify(assignToUser));
+                const { success } = await assignmentService.assignToUser(formData);
+                if (success) {
+                    Swal.fire({
+                        //title: "Error",
+                        text: "Assigned",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            setAssignedList([]);
+                            setAssignedGridList([]);
+                            fetchData(0);
+                            setDisablebtn(false);
+                            setAssignedUser(0);
+                        }
+                    });
+                }
+            } else {
                 Swal.fire({
                     title: "Error",
                     text: "Please select a User to Assign",
@@ -237,32 +262,38 @@ const Renewal = () => {
 
         let vfromdate = moment(fromdate).format('YYYY-MM-DD');
         let vtodate = moment(todate).format('YYYY-MM-DD');
-        const { data } = await renewalService.getRenewalsByFilter(vfromdate,vtodate,statusValue,istatkal);
+        const { data } = await renewalService.getRenewalsByFilter(vfromdate, vtodate, statusValue, istatkal);
         // if (data.length > 0) {
         //     setProvisionals(data);
         // }
         // We'll even set a delay to simulate a server here
         setTimeout(() => {
             // Only update the data if this is the latest fetch
+            if (pageSize === undefined) {
+                pageSize = 10;
+            }
+            if (pageIndex === undefined) {
+                pageIndex = 0
+            }
             if (fetchId === fetchIdRef.current) {
                 const startRow = pageSize * pageIndex
                 const endRow = startRow + pageSize
-               if(data!=undefined){
-                setRenewals(data.slice(startRow, endRow))
+                if (data != undefined) {
+                    setRenewals(data.slice(startRow, endRow))
 
-                // Your server could send back total page count.
-                // For now we'll just fake it, too
-                setPageCount(Math.ceil(data.length / pageSize));
-                setLoading(false);
-               }else{
-                   setRenewals([]);
-                   setLoading(false);
+                    // Your server could send back total page count.
+                    // For now we'll just fake it, too
+                    setPageCount(Math.ceil(data.length / pageSize));
+                    setLoading(false);
+                } else {
+                    setRenewals([]);
+                    setLoading(false);
                 }
 
                 setLoading(false)
             }
         }, 1000)
-    }, [fromdate,todate,statusValue,istatkal]);
+    }, [fromdate, todate, statusValue, istatkal]);
 
     const handleChecked = (e: any) => {
         setStatusValue(e.target.value);
@@ -279,82 +310,169 @@ const Renewal = () => {
             return d.isChecked === true
         });
         if (eamtyArray.length === 0) {
-            setStatusValue('');
-            setStatusName('');
+            setStatusValue('pen');
+            setStatusName('Pending');
         }
         setCheckBoxData(res);
+    };
+    const getDoctorDetailsByMobile = async () => {
+        try {
+            const fetchId = ++fetchIdRef.current
+            const pageSize = 10;
+            const pageIndex = 0
+            if (mobileNo.length === 10) {
+                const formData = new FormData();
+                formData.append("mobileNo", mobileNo);
+                formData.append("docName", "");
+                const { data } = await renewalService.getRenewalsByMobileNo(formData);
+                if (fetchId === fetchIdRef.current) {
+                    const startRow = pageSize * pageIndex
+                    const endRow = startRow + pageSize
+                    if (data != undefined) {
+                        setMobileNo('');
+                        setRenewals(data.slice(startRow, endRow))
+                        setPageCount(Math.ceil(data.length / pageSize));
+                        setLoading(false);
+                    } else {
+                        setRenewals([]);
+                        setLoading(false);
+                    }
+
+                    
+                }
+            } else {
+                alert("Please  enter 10 digit  Mobile No ");
+            }
+
+
+        } catch (err) {
+            console.log('error getDoctorDetails ', err);
+        }
+    };
+
+    const getDoctorDetailsBydocName = async () => {
+        try {
+            const fetchId = ++fetchIdRef.current
+            const pageSize = 10;
+            const pageIndex = 0
+            if (docName.length > 3) {
+                const formData = new FormData();
+                formData.append("mobileNo", "");
+                formData.append("docName", docName);
+                const { data } = await renewalService.getRenewalsByMobileNo(formData);
+                if (fetchId === fetchIdRef.current) {
+                    const startRow = pageSize * pageIndex
+                    const endRow = startRow + pageSize
+                    if (data != undefined) {
+                        setdocName('');
+                        setRenewals(data.slice(startRow, endRow))
+                        setPageCount(Math.ceil(data.length / pageSize));
+                        setLoading(false);
+                    } else {
+                        setRenewals([]);
+                        setLoading(false);
+                    }
+                }
+               
+            } else {
+                alert("Please enter at least 4 characters of  doctor Name");
+            }
+
+
+        } catch (err) {
+            console.log('error getDoctorDetails ', err);
+        }
     };
 
     return (
         <>
             <div className="container-fluid">
-                <div className="tsmc-filter-box d-flex align-items-center">
+                <div>
                     <div className="p-2 w-100">
                         <h2 className="fs-22 fw-700 mb-0">Renewals</h2>
                     </div>
-                    <span className="input-group-text p-0">
-                    <div className="btn-group">
-                        <label className="m-1">Tatkal</label>
-                        <span className="tsmc-filter-box  form-control">
-                                         <TatCheckbox
-                                                handleChange={handleChangeTatkal}
-                                                isChecked={isCheckbox}
-                                                label=""
-                                                
-                                                />
-                                            </span>
-                                            </div>
-                                            </span>
-                        <span className="input-group-text p-0" id="filterbox">
+                </div>
+
+                <div className="tsmc-filter-box d-flex align-items-center">
+                    <div className="input-group-text p-0">
+                        <label htmlFor="" className='mb-2'>Mobile No : </label>
+                        <input type="text" className='fs-14' id="mobileNo" onBlur={(e) => setMobileNo(e.target.value)} placeholder='Enter Mobile No' />
+                        <button type="submit"
+                            disabled={disablebtn}
+                            onClick={
+                                getDoctorDetailsByMobile
+                            } className='btn bi-search btn-outline-success'> </button>
+                        <label htmlFor="" className='mb-2'>Doctor Name  : </label>
+                        <input type="text" className='fs-14' id="name" onBlur={(e) => setdocName(e.target.value)} placeholder='Enter Name' />
+                        <button type="submit"
+                            disabled={disablebtn}
+                            onClick={
+                                getDoctorDetailsBydocName
+                            } className='btn bi-search btn-outline-success'> </button>
+                    </div>
+                    <span className="input-group-text p-0" style={{ marginLeft: "30px" }}>
+
                         <div className="btn-group">
+                            <label className="m-1">Tatkal</label>
+                            <span className="tsmc-filter-box  form-control">
+                                <TatCheckbox
+                                    handleChange={handleChangeTatkal}
+                                    isChecked={isCheckbox}
+                                    label=""
+
+                                />
+                            </span>
+                        </div>
+                    </span>
+                    <span className="input-group-text p-0" id="filterbox">
                         <button className="btn p-0" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                             <div className="input-group-text p-0">
                                 <label className="m-1">Status</label>
                                 <span className="form-control">
                                     {statusName} <i className="bi-chevron-down"></i>
-                                    </span>
-                                </div>   
-                                   </button> 
-                                <ul className="dropdown-menu shadow-sm rounded-0">
-                                    {checkBoxData.map((d: any) => (
-                                        <div className="p-2">
-                                            <label>
-                                            <input
-                                                    className="form-check-input"
-                                                    id={d.id}
-                                                    type="checkbox"
-                                                    checked={d.isChecked}
-                                                    name={d.name}
-                                                    value={d.value}
-                                                    onChange={handleChecked}
-                                                    key={d.id}
-                                                />
-                                                <label className="form-check-label ms-2 fw-600">{d.name}</label>
-                                            </label>
-                                        </div>
-                                    ))}
-                                </ul>
+                                </span>
                             </div>
-                        </span>
-                        <span className="input-group-text p-0">
+                        </button>
+                        <ul className="dropdown-menu shadow-sm rounded-0">
+                            {checkBoxData.map((d: any) => (
+                                <div className="p-2">
+                                    <label>
+                                        <input
+                                            className="form-check-input"
+                                            id={d.id}
+                                            type="checkbox"
+                                            checked={d.isChecked}
+                                            name={d.name}
+                                            value={d.value}
+                                            onChange={handleChecked}
+                                            key={d.id}
+                                        />
+                                        <label className="form-check-label ms-2 fw-600">{d.name}</label>
+                                    </label>
+                                </div>
+                            ))}
+                        </ul>
+
+                    </span>
+                    <span className="input-group-text p-0">
                         <label>From Date </label>
-                            <input type="date" name="" id=""
-                                value={fromdate}
-                                onChange={(ev) => {
-                                    setRenewals([]);
-                                    setFromDate(ev.target.value)
-                                }} className="form-control" />
-                        </span>
-                        <span className="input-group-text p-0">
+                        <input type="date" name="" id=""
+                            value={fromdate}
+                            onChange={(ev) => {
+                                setRenewals([]);
+                                setFromDate(ev.target.value)
+                            }} className="form-control" />
+                    </span>
+                    <span className="input-group-text p-0">
                         <label>To Date </label>
-                            <input type="date" name="" id=""
-                                value={todate}
-                                onChange={(ev) => {
-                                    setRenewals([]);
-                                    setToDate(ev.target.value)
-                                }} className="form-control" />
-                        </span>
-                    
+                        <input type="date" name="" id=""
+                            value={todate}
+                            onChange={(ev) => {
+                                setRenewals([]);
+                                setToDate(ev.target.value)
+                            }} className="form-control" />
+                    </span>
+
                 </div>
                 <div className="mt-3">
                     <div className="card">

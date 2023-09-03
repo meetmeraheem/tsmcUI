@@ -288,6 +288,7 @@ const ProvisionalRevalidation = () => {
                                                                                         if (error.code === 1) {
                                                                                         }
                                                                                     }}
+                                                                                    accepts={['.jpeg', '.jpg','.png']}
                                                                                     clickable
                                                                                 >
                                                                                     <div className="drag-drop-box mt-3">
@@ -359,6 +360,7 @@ const ProvisionalRevalidation = () => {
                                                                                         if (error.code === 1) {
                                                                                         }
                                                                                     }}
+                                                                                    accepts={['.jpeg', '.jpg','.png']}
                                                                                     clickable
                                                                                 >
                                                                                     <div className="drag-drop-box mt-3">

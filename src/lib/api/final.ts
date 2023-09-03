@@ -34,11 +34,13 @@ export const finalService = {
         return responseData as ApiResponseType;
     },
     async getFinalRegFeeDetails(data: any) {
-        const token = tokenManager.getToken();
         const { data: responseData } = await axiosInstance.post(serverUrl+`finalreg/getFinalRegFeeDetails`, data);
         return responseData;
     },
-
+    async getFinalsByMobileNo( data: any) {
+        const { data: responseData } = await axiosInstance.post(`finalreg/getFinalsByMobileNo`,data);
+        return responseData as ApiResponseType;
+    },
     async getFinalsByUserId( fromdate: any,todate: any,user_id: number,regType:any,istatkal:any) {
         const { data: responseData } = await axiosInstance.get(`finalreg/getFinalsByUserId/${fromdate}/${todate}/${user_id}/${regType}/${istatkal}`);
         return responseData as ApiResponseType;

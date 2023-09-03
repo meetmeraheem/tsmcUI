@@ -110,7 +110,8 @@ export type FinalMyProfileType = {
   approval_status: string;
   createdon: string,
   posttime: string,
-  extra_col3:string;
+  extra_col3:string,
+  row_type:string
 }
 
 export type AdminFinalProfileType = {

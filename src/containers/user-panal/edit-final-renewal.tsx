@@ -221,6 +221,7 @@ const EditRenewalRegistration = () => {
                                                                                         if (error.code === 1) {
                                                                                         }
                                                                                     }}
+                                                                                    accepts={['.jpeg', '.jpg','.png']}
                                                                                     clickable
                                                                                 >
                                                                                     <div className="drag-drop-box mt-3">
@@ -290,6 +291,7 @@ const EditRenewalRegistration = () => {
                                                                                         if (error.code === 1) {
                                                                                         }
                                                                                     }}
+                                                                                    accepts={['.jpeg', '.jpg','.png']}
                                                                                     clickable
                                                                                 >
                                                                                     <div className="drag-drop-box mt-3">
@@ -358,6 +360,7 @@ const EditRenewalRegistration = () => {
                                                                                         if (error.code === 1) {
                                                                                         }
                                                                                     }}
+                                                                                    accepts={['.jpeg', '.jpg','.png']}
                                                                                     clickable
                                                                                 >
                                                                                     <div className="drag-drop-box mt-3">

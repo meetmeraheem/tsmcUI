@@ -8,7 +8,10 @@ export const goodstandingService = {
         const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingsByFilter/${fromdate}/${todate}/${status}/${istatkal}`);
         return responseData as ApiResponseType;
     },
-
+    async getGoodStandingByMobileNo( data: any) {
+        const { data: responseData } = await axiosInstance.post(`goodstanding/getGoodStandingByMobileNo`,data);
+        return responseData as ApiResponseType;
+    },
     async getGoodstandingInfoRegDetails( data: any) {
         const { data: responseData } = await axiosInstance.post(`goodstanding/getGoodStandingRegFeeDetails`,data);
         return responseData as ApiResponseType;

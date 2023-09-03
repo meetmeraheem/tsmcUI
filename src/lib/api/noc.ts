@@ -24,6 +24,10 @@ export const nocService = {
         return responseData;
 
     },
+    async getNocsByMobileNo( data: any) {
+        const { data: responseData } = await axiosInstance.post(`noc/getNocsByMobileNo`,data);
+        return responseData;
+    },
     async getNocRegDetails(nocdata:any){
         const { data: responseData } = await axiosInstance.post(`noc/getNocRegFeeDetails`,nocdata);
         return responseData;

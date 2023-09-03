@@ -6,9 +6,8 @@ import { authService } from '../../lib/api/auth';
 import { Messages } from '../../lib/constants/messages';
 import Swal from "sweetalert2";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
-import ProfileDataEdit from '../editdata/profile-data-edit';
-import ProvisionalDataEdit from '../editdata/provisional-data-edit';
-import FinalDataEdit from '../editdata/final-data-edit';
+import ProfileDataEdit from '../dashboard/adminEdits/profile-data-edit'
+import FinalDataEdit from '../dashboard/adminEdits/final-data-edit';
 
 const MyDataEdit= () => {
 
@@ -125,7 +124,6 @@ const MyDataEdit= () => {
                                         </div>}
                                     {isDataEditOTP? <div>
                                        <ProfileDataEdit ></ProfileDataEdit>
-                                        <ProvisionalDataEdit></ProvisionalDataEdit>
                                         <FinalDataEdit></FinalDataEdit>
                             {additionslGridList.length > 0 &&
                                 <>

@@ -33,13 +33,22 @@ const GoodStanding = () => {
     const [statusName, setStatusName] = useState('Pending');
     const [istatkal, setIsTatkal] = useState('nor');
     const [isCheckbox, setIsCheckbox] = useState(false);
-
+    const [selected, setSelected] = useState<any>({});
+    const [mobileNo, setMobileNo] = useState('');
+    const [docName, setdocName] = useState('');
     const [checkBoxData, setCheckBoxData] = useState([
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
         { id: 2, name: 'Completed', value: 'apr', isChecked: false },
         { id: 3, name: 'Rejected', value: 'rej', isChecked: false },
         { id: 5, name: 'Verified', value: 'ver', isChecked: false }
     ]);
+
+    const toggleSelected = (id:any,e:any) => {
+        setSelected((selected:any) => ({
+            ...selected,
+            [id]: !selected[id]
+        }));
+  };
 
     const handleChangeTatkal = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.checked){
@@ -121,7 +130,9 @@ const GoodStanding = () => {
             Header: "Assign",
             Cell: (cell: any) => (
                 <>
-                    <i className="bi bi-plus-square" onClick={async () => {
+                    {cell.data[Number(cell.row.id)].assignedUserName ===null && cell.data[Number(cell.row.id)].status ==='pen' ? 
+                    <input  type="checkbox" id={cell.row.id} checked={selected[cell.row.id]} onClick={async (e:any) => {
+                        toggleSelected(cell.row.id,e);
                         const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'gs');
                         if (data && data.length > 0) {
                             const getUser = await adminService.getAdminById(data[0].AssignTo);
@@ -135,7 +146,7 @@ const GoodStanding = () => {
                         }
                         else {
                             const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
-                            if (!isDuplicate(assignedGridList, cell.data[Number(cell.row.id)])) {
+                           // if (!isDuplicate(assignedGridList, cell.data[Number(cell.row.id)])) {
                                 const doctorInfo = {
                                     assignBy: adminPrimaryId,
                                     assignCreated: moment().format('YYYY-MM-DD'),
@@ -145,19 +156,26 @@ const GoodStanding = () => {
                                     assignRegType: 'gs',
                                     regTypeId:cell.data[Number(cell.row.id)].gsPrimaryId
                                 }
-                                setAssignedList([...assignedList, doctorInfo]);
-                                setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
-                            }
+                                if(e.target.checked){
+                                    setAssignedList([...assignedList, doctorInfo]);
+                                    setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
+                                    }else{
+                                           const id = e.target.getAttribute("id")
+                                           setAssignedList(assignedList.filter((item:any) => item.doctor_id !== cell.data[Number(cell.row.id)].doctor_id));
+                                           setAssignedGridList(assignedGridList.filter((item:any) => item.doctor_id !== cell.data[Number(cell.row.id)].doctor_id));
+    
+                                    }
+                          /*  }
                             else {
                                 Swal.fire({
                                     text: "Already Added",
                                     icon: "warning",
                                     confirmButtonText: "OK",
                                 })
-                            }
+                            }*/
                         }
 
-                    }}></i>
+                    }} />:cell.data[Number(cell.row.id)].assignedUserName}
                 </>
             )
         }
@@ -233,6 +251,12 @@ const GoodStanding = () => {
         // We'll even set a delay to simulate a server here
         setTimeout(() => {
             // Only update the data if this is the latest fetch
+            if(pageSize===undefined){
+                pageSize=10;
+             }
+            if(pageIndex===undefined){
+                 pageIndex=0
+            }
             if (fetchId === fetchIdRef.current) {
                 const startRow = pageSize * pageIndex
                 const endRow = startRow + pageSize
@@ -268,20 +292,103 @@ const GoodStanding = () => {
             return d.isChecked === true
         });
         if (eamtyArray.length === 0) {
-            setStatusValue('');
-            setStatusName('');
+            setStatusValue('pen');
+            setStatusName('Pending');
         }
         setCheckBoxData(res);
+    };
+
+    const getDoctorDetailsByMobile = async () => {
+        try {
+                const fetchId = ++fetchIdRef.current
+                const pageSize=10;
+                const pageIndex=0
+            if (mobileNo.length === 10) {
+                const formData = new FormData();
+                formData.append("mobileNo", mobileNo);
+                formData.append("docName", "");
+               const { data } = await goodstandingService.getGoodStandingByMobileNo(formData);
+               if (fetchId === fetchIdRef.current) {
+                const startRow = pageSize * pageIndex
+                const endRow = startRow + pageSize
+               if(data!=undefined){
+                setGoodstanding(data.slice(startRow, endRow))
+                setPageCount(Math.ceil(data.length / pageSize));
+                setLoading(false);
+               }else{
+                setGoodstanding([]);
+                   setLoading(false);
+                }
+            }
+                }else{
+                    alert("Please  enter 10 digit  Mobile No ");    
+                }
+            
+
+        } catch (err) {
+            console.log('error getDoctorDetails ', err);
+        }
+    };
+
+    const getDoctorDetailsBydocName = async () => {
+        try {
+                const fetchId = ++fetchIdRef.current
+                const pageSize=10;
+                const pageIndex=0
+            if (docName.length > 3) {
+                const formData = new FormData();
+                formData.append("mobileNo", "");
+                formData.append("docName",docName) ;
+               const { data } = await goodstandingService.getGoodStandingByMobileNo(formData);
+               if (fetchId === fetchIdRef.current) {
+                const startRow = pageSize * pageIndex
+                const endRow = startRow + pageSize
+               if(data!=undefined){
+                setGoodstanding(data.slice(startRow, endRow))
+                setPageCount(Math.ceil(data.length / pageSize));
+                setLoading(false);
+               }else{
+                  setGoodstanding([]);
+                   setLoading(false);
+                }
+            }
+                }else{
+                    alert("Please enter at least 4 characters of  doctor Name");    
+                }
+            
+
+        } catch (err) {
+            console.log('error getDoctorDetails ', err);
+        }
     };
 
     return (
         <>
             <div className="container-fluid">
-                <div className="tsmc-filter-box d-flex align-items-center">
+                <div >
                     <div className="p-2 w-100">
                         <h2 className="fs-22 fw-700 mb-0">Good Standing</h2>
                     </div>
-                    <span className="input-group-text p-0">
+                    </div>
+
+            <div className="tsmc-filter-box d-flex align-items-center">                    
+                <div className="input-group-text p-0">
+                    <label htmlFor="" className='mb-2'>Mobile No : </label>
+                    <input type="text" className='fs-14' id="mobileNo" onBlur={(e) => setMobileNo(e.target.value)} placeholder='Enter Mobile No' />
+                        <button type="submit"
+                            disabled={disablebtn}
+                            onClick={
+                                getDoctorDetailsByMobile
+                            } className='btn bi-search btn-outline-success'> </button>
+                    <label htmlFor="" className='mb-2'>Doctor Name  : </label>
+                    <input type="text" className='fs-14' id="name" onBlur={(e) => setdocName(e.target.value)} placeholder='Enter Name' />
+                        <button type="submit"
+                            disabled={disablebtn}
+                            onClick={
+                                getDoctorDetailsBydocName
+                            } className='btn bi-search btn-outline-success'> </button>
+                    </div>        
+                    <span className="input-group-text p-0" style={{marginLeft:"30px"}}>
                     <div className="btn-group">
                         <label className="m-1">Tatkal</label>
                         <span className="tsmc-filter-box  form-control">

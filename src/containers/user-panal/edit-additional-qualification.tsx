@@ -654,6 +654,7 @@ const EditAdditionalQualificationRegistration = () => {
                                                                                             if (error.code === 1) {
                                                                                             }
                                                                                         }}
+                                                                                        accepts={['.jpeg', '.jpg','.png']}
                                                                                         clickable
                                                                                     >
                                                                                         <div className="text-center">
@@ -722,6 +723,7 @@ const EditAdditionalQualificationRegistration = () => {
                                                                                                 if (error.code === 1) {
                                                                                                 }
                                                                                             }}
+                                                                                            accepts={['.jpeg', '.jpg','.png']}
                                                                                             clickable
                                                                                         >
                                                                                             <div className="text-center">

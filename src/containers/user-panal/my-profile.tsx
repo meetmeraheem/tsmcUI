@@ -105,6 +105,7 @@ const Myprofile = () => {
                         createdon: data[0].createdon,
                         posttime: data[0].posttime,
                         extra_col3: data[0].extra_col3,
+                        row_type:''
                     });
                 }
             }

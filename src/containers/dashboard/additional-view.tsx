@@ -12,12 +12,11 @@ import { DoctorFormType } from '../../types/doctor';
 import { routes } from '../routes/routes-names';
 import { serverUrl, serverImgUrl } from '../../config/constants';
 import moment from 'moment';
-import { assignmentService } from '../../lib/api/assignments';
 import { LocalStorageManager } from '../../lib/localStorage-manager';
 import { additionalService } from '../../lib/api/additional';
 import { AdminAddQualDataFormType} from '../../types/additionalQuali';
 import { authService } from '../../lib/api/auth';
-
+import AdminDoctorInfoCard from './../dashboard/includes/admin-doctor-info';
 
 const AdditionalRegView = () => {
     const location = useLocation();
@@ -32,18 +31,18 @@ const AdditionalRegView = () => {
     const [userType, setUserType] = useState('');
     const [disablebtn, setDisablebtn] = useState(false);
 
-    const getDoctorDetails = async () => {
-        try {
-            if (doctorPrimaryId) {
-                const { data } = await doctorService.getDoctorById(doctorPrimaryId);
-                if (data.length > 0) {
-                    setDoctor(data[0]);
+       const getDoctorDetails = async () => {
+            try {
+                if (doctorPrimaryId) {
+                        const { data } = await doctorService.getDoctorById(doctorPrimaryId);
+                        if (data.length > 0) {
+                            setDoctor(data[0]);
+                        }
+                    }
+                } catch (err) {
+                    console.log('error countries getList', err);
                 }
-            }
-        } catch (err) {
-            console.log('error countries getList', err);
-        }
-    };
+            };
 
     const getAdditionalDetails = useCallback(async () => {
         try {
@@ -181,91 +180,12 @@ const AdditionalRegView = () => {
                                         }} className='btn btn-outline-dark'><i className="bi-x-circle-fill"></i> Close</button>
                                 </div>
                             </div> 
-                                <div className="row mb-3">   
-                            <div className="col-3">
-                            <div className="tsmc-doc-profile-box border-bottom-0">
-                                                            <div className='tsmc-doc-img mb-3'>
-                                                                {doctor?.passphoto ? <>
-                                                                        {doctor?.filestatus === true ?
-                                                                            <img src={serverImgUrl + 'files/' + doctor?.passphoto} alt="" /> :
-                                                                            <img src={'http://admin.regonlinetsmc.in/forms/uploads/' + doctor?.passphoto} alt="" />
-                                                                        }
-                                                                    </> : <img src={DocDefultPic} alt="" />}
-                                                            </div>
-                                                            <div className="d-flex align-items-center justify-content-center border rounded p-1 signature">
-                                                                {doctor?.signature ? <>
-                                                                        {doctor?.filestatus === true ?
-                                                                            <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" /> :
-                                                                            <img src={'http://admin.regonlinetsmc.in/forms/uploads/' + doctor?.signature} alt="" />}
-                                                                    </> :
-                                                                    <>
-                                                                        <div><i className="bi-pencil-square fs-22 px-2"></i></div>
-                                                                        <div><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
-                                                                    </>
-                                                                }
-                                                            </div>
-                                                        
+                              
+                                <div className="row mb-3">
+                                    <AdminDoctorInfoCard doctorId={doctorPrimaryId} additionalView="NO"></AdminDoctorInfoCard>
                                 </div>
-                            </div>
-                            <div className="col">
-                                {/* <h2 className='fs-16 fw-600 mb-3'>{doctor?.fullname}</h2> */}
-                                <div className="d-flex">
-                                    <div className="col">
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Full Name:</label>
-                                            <div className="col fs-14">{doctor?.fullname}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Father Name:</label>
-                                            <div className="col fs-14">{doctor?.fathername}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Mother Name:</label>
-                                            <div className="col fs-14">{doctor?.mothername}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Date of Birth:</label>
-                                            <div className="col fs-14">{doctor?.dateofbirth}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Gender:</label>
-                                            <div className="col fs-14">{doctor?.gender == 'M' ? 'Male' : doctor?.gender == 'F' ? 'FeMale' : ''}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Mobile No:</label>
-                                            <div className="col fs-14">{doctor?.mobileno}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>EmailId:</label>
-                                            <div className="col fs-14">{doctor?.emailid}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Blood Group:</label>
-                                            <div className="col fs-14">{doctor?.bloodgroup}</div>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-00 me-2'>Doctor Id:</label>
-                                            <div className="col fs-14">{doctor?.serial_id}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-00 me-2'>Landline:</label>
-                                            <div className="col fs-14">{doctor?.phoneno}</div>
-                                        </div>
-                                        <div className="d-flex mb-1">
-                                            <label htmlFor="" className='fs-14 fw-00 me-2'>Aadhar No:</label>
-                                            <div className="col fs-14">{doctor?.aadharcard}</div>
-                                        </div>
-                                        <div className="mb-2">
-                                            <label htmlFor="" className='fs-14 fw-00 me-2'>Address:</label>
-                                            <div className="col fs-14">{doctor?.address1}, {doctor?.address2},
-                                                                {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            
+                        
                         <div className="w-100">
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">

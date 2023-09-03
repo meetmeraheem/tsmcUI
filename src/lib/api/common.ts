@@ -73,6 +73,11 @@ export const commonService = {
         const { data: responseData } = await axiosInstance.get(`common/getDoctorInfoByMobile/${mobileNo}`);
         return responseData;
     },
+
+    async getDoctorDetailsById(doctorId: any) {
+        const { data: responseData } = await axiosInstance.get(`common/getDoctorDetailsById/${doctorId}`);
+        return responseData;
+    },
     async getDoctorInfoByFmrNo(fmrNo: any) {
         const { data: responseData } = await axiosInstance.get(`common/getDoctorInfoByFmrNo/${fmrNo}`);
         return responseData;
