@@ -413,9 +413,9 @@ const AdditionalDataEdit = (props:any) => {
                                                                                         }`}
                                                                                 >
                                                                     <option value="">Select </option>
-                                                                    <option value="DIPLOMA">Diploma</option>
-                                                                    <option value="POST GRADUATION">Post Graduation</option>
-                                                                    <option value="SUPER SPECIALITY">Super Speciality</option>
+                                                                    <option value="DIPLOMA">DIPLOMA</option>
+                                                                    <option value="POST GRADUATION">POST GRADUATION</option>
+                                                                    <option value="SUPER SPECIALITY">SUPER SPECIALITY</option>
                                                                 </select>
                                                                 {error && <small className="text-danger">{error.toString()}</small>}
                                                                             </>

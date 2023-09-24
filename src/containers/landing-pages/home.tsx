@@ -542,7 +542,12 @@ const HomePage = () => {
                                                        <button className="nav-link active" id="LoginPageTab" data-bs-toggle="tab" data-bs-target="#LoginPage" type="button" role="tab" aria-controls="LoginPage" aria-selected="true">Registered User Sign In</button>
                                                   </li>
                                                   <li className="nav-item" role="presentation">
-                                                       <button className="nav-link" id="NewRegPageTab" data-bs-toggle="tab" data-bs-target="#NewRegPage" type="button" role="tab" aria-controls="NewRegPage" aria-selected="false">New User Sign Up</button>
+                                                       <button className="nav-link" id="NewRegPageTab" data-bs-toggle="tab" data-bs-target="#NewRegPage" type="button" role="tab" aria-controls="NewRegPage" 
+                                                       onClick= {() => {Swal.fire({
+                         text: "Doctors who have not enrolled for any certificate services with TSMC previously should Sign Up here",
+                         icon: "warning",
+                         confirmButtonText: Messages.OKText,
+                    }); }}  aria-selected="false">New User Sign Up</button>
                                                   </li>
                                              </ul>
                                              <div className="tab-content" id="myTabContent">
@@ -915,7 +920,7 @@ const HomePage = () => {
         <Modal.Body>
           <div>1. The Services that you have applied before physically at TSMC Office, need not apply again in online application.</div>
          <br/>
-          <div>2. Instructions to be followed,<b> “HELP” </b> link given at the top right of the application screen for smooth registrations.</div>
+          <div>2. Instructions to be followed,<b> “INSTRUCTIONS” </b> link given at the top right of the application screen for smooth registrations.</div>
           <br/>
           <div>3. Read the instructions @<b> “Required Documents”</b> link for documents upload and its size limitations. Get ready with Legible Scanned documents before you start filling up the application.</div>
           <br/>

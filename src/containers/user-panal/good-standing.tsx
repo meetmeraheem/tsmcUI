@@ -9,6 +9,7 @@ import moment from 'moment';
 //@ts-ignore
 import Files from 'react-files';
 import DoctorInfoCard from "./includes/doctor-info";
+
 import secureLocalStorage from 'react-secure-storage';
 import { Field, FieldProps, Formik, FormikProps } from "formik";
 import { object as objectYup, string as stringYup, number as numberYup } from 'yup';

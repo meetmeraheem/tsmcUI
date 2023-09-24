@@ -1,7 +1,7 @@
 import { Field, FieldProps, Formik, FormikProps } from "formik";
 import { object as objectYup, string as stringYup, number as numberYup } from 'yup';
 import getValue from 'lodash/get';
-import Select from 'react-select';
+
 import { useNavigate } from "react-router-dom";
 //@ts-ignore
 import Files from 'react-files';
@@ -12,38 +12,26 @@ import { renewalsType } from "../../types/common";
 import DoctorInfoCard from "./includes/doctor-info";
 import { ReactFilesError, ReactFilesFile } from "../../types/files";
 import { useCallback, useEffect, useState } from "react";
-import { commonService } from "../../lib/api/common";
 import { College, Country, Qualification, Serials, State, University } from "../../types/common";
-import { provisionalService } from "../../lib/api/provisional";
-import { doctorService } from "../../lib/api/doctot";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux";
 import { routes } from "../routes/routes-names";
 import { isLessThanTheMB } from "../../lib/utils/lessthan-max-filesize";
 import { Messages } from "../../lib/constants/messages";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
-import { authService } from "../../lib/api/auth";
 import DatePicker from 'react-date-picker';
 
 
 const RenewalRegistration = () => {
     const navigate = useNavigate();
-    const doctorReduxProfile = useSelector((state: RootState) => state.doctor.profile);
     const [next, setNext] = useState(false);
-    const [doctorId, setDoctorId] = useState(0);
-    const [pmrNo, setPMRNo] = useState(0);
-    const [serial, setserial] = useState<Serials>();
-    const [provisionalSerial, setProvisionalSerial] = useState<Serials>();
-    const [qualifications, setQualifications] = useState<Qualification[]>([]);
-    const [countries, setCountries] = useState<Country[]>([]);
-    const [states, setStates] = useState<State[]>([]);
-    const [universities, setUniversities] = useState<University[]>([]);
-    const [colleges, setColleges] = useState<College[]>([]);
     const [provisionalCertificate, setProvisionalCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [applicationForm, setApplicationForm] = useState<{ file?: File; error?: string } | null>(null);
     const [nocCertificate, setNOCCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [provisionalRequestType, setProvisionalRequestType] = useState<string>('nor');
+     const [renewalRequestType, setRenewalRequestType] = useState<string>('');
     const [reg_date, setReg_date] = useState(new Date());
+    const [showmaxdate, setShowmaxdate] = useState(new Date());
 
 
     const initialFormData = {
@@ -53,7 +41,7 @@ const RenewalRegistration = () => {
         edu_cert3: '',
         reg_date:'',
         status:'',
-        
+        renewal_date_type:'',
         
     }
     useEffect(() => {
@@ -78,6 +66,7 @@ const RenewalRegistration = () => {
                     row_type: 'on',
                     reg_date: moment(values.reg_date).format('YYYY-MM-DD'),
                     extra_col1:provisionalRequestType,
+                    renewal_date_type:renewalRequestType,
                     doctorPrimaryId:doctorPrimaryId,
                 }
                
@@ -105,7 +94,7 @@ const RenewalRegistration = () => {
                 console.log('error in provisional registeration update', err);
             }
         },
-        [doctorId, serial, provisionalCertificate, applicationForm, nocCertificate]
+        [provisionalCertificate, applicationForm, nocCertificate]
     );
 
     return (
@@ -154,17 +143,25 @@ const RenewalRegistration = () => {
                                                 <form onSubmit={handleSubmit}>
                                                     <div className="row mb-2">
                                                     <div className="col-sm-auto">
-                                                            <label className="mb-2">Request Type</label>
+                                                            <label className="mb-2">Request Type (Normal or Tatkal)</label>
                                                             <select
                                                                 value={provisionalRequestType}
                                                                 onChange={(ev) => {
                                                                     setProvisionalRequestType(ev.target.value);
+                                                                    if(ev.target.value === 'tat'){
+                                                                    Swal.fire({
+                                                                        text: "You have selected Tatkal Service ,Additional charges applicable",
+                                                                        icon: "warning",
+                                                                        confirmButtonText: "OK",
+                                                                    });               
+                                                                    }                                                     
+
                                                                 }}
                                                                 className="form-select"
                                                             >
                                                               {/*  <option value="">Select</option>*/}
                                                                 <option value="nor">Normal</option>
-                                                               {/*<option value="tat">Tatkal</option>*/}
+                                                               <option value="tat">Tatkal</option>
                                                             </select>
                                                         </div>
                                                         </div>
@@ -178,12 +175,32 @@ const RenewalRegistration = () => {
 
                                                     </div>
                                                     <div className="row mb-2">
-                                                      
-
+                                                      <div className="col-sm-auto">
+                                                            <label className="mb-2"> Last Renewal Date / Noc Date </label>
+                                                            <select
+                                                                value={renewalRequestType}
+                                                                onChange={(ev) => {
+                                                                   setRenewalRequestType(ev.target.value);
+                                                                   setShowmaxdate(new Date());
+                                                                   if(ev.target.value !=='nocd'){
+                                                                        setShowmaxdate(moment().add('years', -5).toDate());
+                                                                   }else{
+                                                                        setShowmaxdate(new Date());
+                                                                   }
+                                                                }}
+                                                                className="form-select"
+                                                                required={true}
+                                                            >
+                                                                <option value="">Select</option>
+                                                                <option value="lrd">Last Registration Date</option>
+                                                                <option value="nocd">Noc Date</option>
+                                                                
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                     <div className="row mb-2">
                                                         <div className="col-sm-auto">
-                                                        <label htmlFor="Dateofbirth">Enter Last registration Date</label>
+                                                        <label htmlFor="Dateofbirth">Enter last Registration/Renewal Date or Noc Date is required</label>
                                                         <Field name="reg_date">
                                                                     {(fieldProps: FieldProps) => {
                                                                         const { field, form } = fieldProps;
@@ -199,15 +216,11 @@ const RenewalRegistration = () => {
                                                                                         setFieldValue(field.name, date);
                                                                                         setReg_date(date);
                                                                                     }}
-
-
-                                                                                    maxDate={moment().add('years', -5).toDate()}
+                                                                                    maxDate={showmaxdate}
                                                                                     clearIcon={null}
                                                                                     value={reg_date}
                                                                                     className={`form-control ${error ? 'is-invalid' : ''}`}
                                                                                 />
-
-
                                                                                 {error && <small className="text-danger">{error.toString()}</small>}
                                                                             </>
                                                                         );
@@ -293,8 +306,6 @@ const RenewalRegistration = () => {
                                                                         );
                                                                     }}
                                                                 </Field>
-
-
                                                             </div>
                                                             <div className="col">
                                                             <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -466,7 +477,7 @@ const getValidationSchema = () =>
     objectYup().shape({
      
         reg_date: stringYup()
-            .required('old reg date is required.'),
+            .required('Last registration/Renewal Date or Noc Date is required.'),
             
         edu_cert1: stringYup()
             .required('Last Renewal certificate is required.'),

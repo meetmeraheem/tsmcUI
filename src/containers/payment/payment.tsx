@@ -744,8 +744,8 @@ const Payment = () => {
                                         {regType === 'final' && <div className="col fs-14">Final (FMR)</div>}
                                         {regType === 'additionalInfo' && <div className="col fs-14">Additional Registration</div>}
                                         {regType === 'nocInfo' && <div className="col fs-14">NOC</div>}
-                                        {regType === 'goodstandingInfo' && <div className="col fs-14">Good standing </div>}
-                                        {regType === 'finalrenewalsInfo' && <div className="col fs-14">Final renewals</div>}
+                                        {regType === 'goodstandingInfo' && <div className="col fs-14">Good Standing </div>}
+                                        {regType === 'finalrenewalsInfo' && <div className="col fs-14">Final Renewals</div>}
                                         {regType === 'changeofNameInfo' && <div className="col fs-14">Change of Name</div>}
                                         {regType === 'provRevalidationInfo' && <div className="col fs-14">Provisional Revalidation </div>}
                                     </div>
@@ -790,7 +790,9 @@ const Payment = () => {
                                     <div>
                                         <div className="d-flex align-items-center justify-content-between mb-3">
                                             <label htmlFor="">Registration Type: </label>
-                                            <div className="fs-14">{isNormalReg === true ? 'Normal' : 'Tatkal'}</div>
+                                            <div className="fs-14  fw-700">
+                                                {isNormalReg === true ? <span className="text-primary" > Normal </span> : <span className="text-primary" >Tatkal</span>} 
+                                               </div> 
                                         </div>
                                         <div className="d-flex align-items-center justify-content-between mb-3">
                                             <label htmlFor="">Registration Fee</label>

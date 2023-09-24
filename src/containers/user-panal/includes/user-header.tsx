@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import SiteLogo from '../../../assets/images/logo.png'
 import SiteSubLogo from '../../../assets/images/tsgovt-logo.png'
 import { LocalStorageManager } from '../../../lib/localStorage-manager';
 import { tokenManager } from '../../../lib/token-manager';
-import { RootState } from '../../../redux';
 import { deleteDoctorInfo } from '../../../redux/doctor';
 
 const Userheader = () => {
@@ -75,19 +74,16 @@ const Userheader = () => {
 									<li className="nav-item dropdown">
 										<Link to='' className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">New Registrations <i className='bi-chevron-down'></i></Link>
 										<div className="dropdown-menu shadow">
-										{/*	<li className='dropdown-submenu'>
+											<li className='dropdown-submenu'>
 												<p className="dropdown-item">Provisional</p>
-												{isDoctorId ? ""
-													 : 
-													<ul className="dropdown-menu">
-													{isDoctorPMRNo?"":<li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>}
 													
+													{isDoctorPMRNo? '':
+													<ul className="dropdown-menu">
+													<li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>
 													{/*<li><Link className="dropdown-item" to={isDoctorId ? '' : 'provisional-duplicate'}>Duplicate</Link></li>
 													 */}
-												{/*</ul>
-													}
-											</li> */}
-
+												</ul>}
+											</li> 
 											<li className='dropdown-submenu'>
 												<p className="dropdown-item">Final Registration</p>
 													{isDoctorFMRNo ? '' :
@@ -96,7 +92,6 @@ const Userheader = () => {
 													{/*<li><Link className="dropdown-item" to={isDoctorFMRNo ? '' : 'final-duplicate'}>Duplicate</Link></li>*/}
 													</ul>
 													}
-													
 											</li>
 											{isDoctorFMRapproved ?
 											<div>

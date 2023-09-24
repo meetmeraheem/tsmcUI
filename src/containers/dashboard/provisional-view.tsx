@@ -18,15 +18,14 @@ import { routes } from '../routes/routes-names';
 import { serverUrl, serverImgUrl } from '../../config/constants';
 import moment from 'moment';
 import { assignmentService } from '../../lib/api/assignments';
+import AdminDoctorInfoCard from './../dashboard/includes/admin-doctor-info';
 
 
 //type Props = OutletProps<{ id: string }>;
 //const ProvisionalView: React.FC<Props> = ({match}: any) => {
 
-const ProvisionalView = () => {
-    const location = useLocation();
+const ProvisionalView = (props:any) => {
     const navigate = useNavigate();
-    const { provisionalPrimaryId, doctorPrimaryId,assignmentId } = location.state
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [provisional, setProvisional] = useState<AdminProvisionalProfileType>();
@@ -39,8 +38,8 @@ const ProvisionalView = () => {
 
     const getDoctorDetails = async () => {
         try {
-            if (doctorPrimaryId) {
-                const { data } = await doctorService.getDoctorById(doctorPrimaryId);
+            if (props.state.doctorPrimaryId) {
+                const { data } = await doctorService.getDoctorById(props.state.doctorPrimaryId);
                 if (data.length > 0) {
                     setDoctor(data[0]);
                     dispatch(setDoctorInfo(data[0]));
@@ -53,8 +52,8 @@ const ProvisionalView = () => {
 
     const getProvisionalDetails = useCallback(async () => {
         try {
-            if (provisionalPrimaryId) {
-                const { data } = await provisionalService.getProvisionalById(Number(provisionalPrimaryId));
+            if (props.state.provisionalPrimaryId) {
+                const { data } = await provisionalService.getProvisionalById(Number(props.state.provisionalPrimaryId));
                 if (data.length > 0) {
                     const country = await commonService.getCountry(Number(data[0].country));
                     const state = await commonService.getState(Number(data[0].state));
@@ -73,7 +72,9 @@ const ProvisionalView = () => {
                         edu_cert2: data[0].edu_cert2,
                         edu_cert3: data[0].edu_cert3,
                         dd_amount:data[0].dd_amount,
-                        receipt_no: data[0].receipt_no
+                        receipt_no: data[0].receipt_no,
+                        transanctionId:data[0].transanctionId,
+                        calc_date:data[0].calc_date,
                     });
                 }
             }
@@ -83,13 +84,8 @@ const ProvisionalView = () => {
     }, []);
 
     const closewindow = useCallback(async () => {
-        if (userType === 'a') {
-            navigate(routes.admin_dashboard);
-        }
-        if (userType === 'u') {
-            navigate(routes.admin_dashboard);
-        }
-    },[userType]);
+        props.greet();
+    }, []);
 
     const submit = useCallback(async (status: any) => {
         if (status) {
@@ -97,10 +93,10 @@ const ProvisionalView = () => {
             const provisionalInfo = {
                 approval_status: status,
                 remarks: remarks,
-                assignmnetId:assignmentId
+                assignmnetId:props.state.assignmentId
             }
 
-            const { success } = await provisionalService.updateProvisional(provisionalPrimaryId, provisionalInfo);
+            const { success,message} = await provisionalService.updateProvisional(props.state.provisionalPrimaryId, provisionalInfo);
                 if (success) {
                     let msg="";
                     let smsmsg="";
@@ -108,7 +104,7 @@ const ProvisionalView = () => {
                         msg="Provisional Details Application Rejected";
                         smsmsg="Rejected";
                     }else if(status === 'apr') {
-                        msg="Provisional Details successfully approved";
+                        msg="Provisional Details successfully approved and PMR No is ::"+message;
                         smsmsg="Approved";
                     }else{
                         msg="Provisional Details successfully Verified";
@@ -130,12 +126,7 @@ const ProvisionalView = () => {
                                 });
                             }
                             setDisablebtn(false);
-                            if (userType === 'a') {
-                                navigate(routes.admin_dashboard);
-                            }
-                            if (userType === 'u') {
-                                navigate(routes.admin_dashboard);
-                            }
+                            props.greet();
                         }
                     });
                 }
@@ -147,12 +138,7 @@ const ProvisionalView = () => {
                         confirmButtonText: "OK",
                     }).then(async (result:any) => {
                         if (result.isConfirmed) {
-                            if (userType === 'a') {
-                                navigate(routes.admin_dashboard);
-                            }
-                            if (userType === 'u') {
-                                navigate(routes.admin_dashboard);
-                            }
+                            props.greet();
                         }
                     });
                 }
@@ -173,7 +159,7 @@ const ProvisionalView = () => {
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getProvisionalDetails();
-    }, [provisionalPrimaryId, doctorPrimaryId]);
+    }, [props.state.provisionalPrimaryId, props.state.doctorPrimaryId]);
 
   
 
@@ -193,79 +179,9 @@ const ProvisionalView = () => {
                                 </div>
                           </div>  
                         <div className="row mb-3"> 
-                            <div className="col-3">
-                                <div className="tsmc-doc-profile-box border-bottom-0">
-                                    <div className='tsmc-doc-img mb-3'>
-                                        {doctor?.passphoto ? <img src={serverImgUrl + 'files/' + doctor?.passphoto} alt="" /> : <img src={DocDefultPic} alt="" />}
-                                    </div>
-                                    <div className="d-flex align-items-center justify-content-center border rounded p-1">
-                                        {doctor?.signature ? <img src={serverImgUrl + 'files/' + doctor?.signature} alt="" width="100%" /> :
-                                            <>
-                                                <div><i className="bi-pencil-square fs-22 px-2"></i></div>
-                                                <div><h2 className="fs-18 fw-700 mb-0 pe-2">Signature</h2></div>
-                                            </>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                {/* <h2 className='fs-16 fw-600 mb-3'>{doctor?.fullname}</h2> */}
-                                <div className="d-flex">
-                                    <div className="col">
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Full Name:</label>
-                                            <div className="col fs-14">{doctor?.fullname}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Father Name:</label>
-                                            <div className="col fs-14">{doctor?.fathername}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Mother Name:</label>
-                                            <div className="col fs-14">{doctor?.mothername}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Date of Birth:</label>
-                                            <div className="col fs-14">{doctor?.dateofbirth}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Gender:</label>
-                                            <div className="col fs-14">{doctor?.gender == 'm' ? 'Male' : doctor?.gender == 'f' ? 'FeMale' : ''}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Mobile No:</label>
-                                            <div className="col fs-14">{doctor?.mobileno}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>EmailId:</label>
-                                            <div className="col fs-14">{doctor?.emailid}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-700 me-2'>Blood Group:</label>
-                                            <div className="col fs-14">{doctor?.bloodgroup}</div>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-00 me-2'>Doctor Id:</label>
-                                            <div className="col fs-14">{doctor?.serial_id}</div>
-                                        </div>
-                                        <div className="d-flex mb-2">
-                                            <label htmlFor="" className='fs-14 fw-00 me-2'>Landline:</label>
-                                            <div className="col fs-14">{doctor?.phoneno}</div>
-                                        </div>
-                                        <div className="d-flex mb-1">
-                                            <label htmlFor="" className='fs-14 fw-00 me-2'>Aadhar No:</label>
-                                            <div className="col fs-14">{doctor?.aadharcard}</div>
-                                        </div>
-                                        <div className="mb-2">
-                                            <label htmlFor="" className='fs-14 fw-00 me-2'>Address:</label>
-                                            <div className="col fs-14">{doctor?.address1} ,{doctor?.address2},
-                                                                {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="row mb-3">
+                            <AdminDoctorInfoCard doctorId={props.state.doctorPrimaryId} fmrView="NO" additionalView="NO" ></AdminDoctorInfoCard>
+                        </div>
                         </div>
                         <div className="w-100">
                             <div className="d-flex mb-2">
@@ -310,6 +226,18 @@ const ProvisionalView = () => {
                             </div>
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>College Name:</label>
+                                    <div className="fs-14">{provisional?.college ? provisional?.college : 'NA'}</div>
+                                </div>
+                            </div>
+                            <div className="d-flex mb-2">
+                                <div className="col d-flex">
+                                <label htmlFor="" className='fs-14 fw-600 me-2'> Provisional Certificate Issue Date  : </label>
+                                    <div className="fs-14">{provisional?.calc_date? moment(provisional?.calc_date).format('DD/MM/YYYY')  : 'NA'}</div>
+                                </div>
+                               </div> 
+                            <div className="d-flex mb-2">
+                                <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'> Payment Recieved</label>
                                     <div className="fs-14">{provisional?.dd_amount ? provisional?.dd_amount : 'NA'}</div>
                                 </div>
@@ -317,13 +245,12 @@ const ProvisionalView = () => {
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Reciept No:</label>
                                     <div className="fs-14">{provisional?.receipt_no ? provisional?.receipt_no : 'NA'}</div>
                                 </div>
-                            </div>
-                            <div className="d-flex mb-2">
                                 <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>College Name:</label>
-                                    <div className="fs-14">{provisional?.college ? provisional?.college : 'NA'}</div>
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Id:</label>
+                                    <div className="fs-14">{provisional?.transanctionId ? provisional?.transanctionId : 'NA'}</div>
                                 </div>
                             </div>
+                            
                             <div className="row mt-3">
                                 <div className="col">
                                     <div className="drag-img-box d-flex align-items-center justify-content-center">

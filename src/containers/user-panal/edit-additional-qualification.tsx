@@ -52,7 +52,7 @@ const EditAdditionalQualificationRegistration = () => {
         duration: additionals?.duration || '',
         edu_cert1: additionals?.edu_cert1 || '',
         edu_cert2: additionals?.edu_cert2 || '',
-        appliedFor: additionals?.appliedFor || '',
+        appliedFor: additionals?.appliedFor.toUpperCase() || '',
         affidivit: '',
         testimonal1: '',
         testimonal2: '',
@@ -157,7 +157,7 @@ const EditAdditionalQualificationRegistration = () => {
                         duration:data[0].duration,
                         edu_cert1:data[0].edu_cert1,
                         edu_cert2:data[0].edu_cert2,
-                        appliedFor: data[0].appliedFor,
+                        appliedFor: data[0].appliedFor.toUpperCase(),
                         affidivit: '',
                         testimonal1: '',
                         testimonal2: '',
@@ -477,10 +477,10 @@ const EditAdditionalQualificationRegistration = () => {
                                                                                 className={`form-select ${error ? 'is-invalid' : ''
                                                                                         }`}
                                                                                 >
-                                                                    <option value="">Select </option>
-                                                                    <option value="Diploma">Diploma</option>
-                                                                    <option value="Post Graduation">Post Graduation</option>
-                                                                    <option value="Super Speciality">Super Speciality</option>
+                                                                   <option value="">Select </option>
+                                                                    <option value="DIPLOMA">DIPLOMA</option>
+                                                                    <option value="POST GRADUATION">POST GRADUATION</option>
+                                                                    <option value="SUPER SPECIALITY">SUPER SPECIALITY</option>
                                                                 </select>
                                                                 {error && <small className="text-danger">{error.toString()}</small>}
                                                                             </>

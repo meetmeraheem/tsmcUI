@@ -12,6 +12,7 @@ import { additionalService } from "../../lib/api/additional";
 import { routes } from '../routes/routes-names';
 import { useNavigate } from 'react-router-dom';
 import TatCheckbox from './../../components/TatCheckbox';
+import AdditionalRegView from './additional-view';
 
 const Additional = () => {
     const fetchIdRef = useRef(0);
@@ -42,6 +43,28 @@ const Additional = () => {
         { id: 3, name: 'Rejected', value: 'rej', isChecked: false },
         { id: 5, name: 'Verified', value: 'ver', isChecked: false }
     ]);
+
+    const [showComponent, setShowComponent] = useState(false);
+    const [viewadditionalid, setViewadditionalId] = useState('');
+    const [viewDocid, setViewDocId] = useState('');
+    const [viewAssignid, setViewAssignid] = useState('');
+
+  const toggleComponent = useCallback(async (additionalId:any,docId:any,assignId:any) => {
+    try {
+            let newValue = additionalId  ? additionalId  : viewadditionalid;
+            setViewadditionalId(newValue);
+            setViewDocId(docId);
+            setViewAssignid(assignId);
+    } catch (err) {
+        console.log('error get users by role', err);
+    }
+}, [showComponent]);
+
+const greet=()=> {
+    setShowComponent(false);
+    setViewadditionalId('');
+    fetchData(0);
+   }
 
     const toggleSelected = (id:any,e:any) => {
         setSelected((selected:any) => ({
@@ -125,7 +148,11 @@ const Additional = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/additional_reg_view'} state={{ additionalPrimaryId: cell.data[Number(cell.row.id)].additionalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId ,assignmentId:cell.data[Number(cell.row.id)].assignmentId}}>Proceed</Link>
+                    <a href="javascript:void(0);" onClick={() =>
+                        {
+                        setShowComponent(false);  
+                        toggleComponent(cell.data[Number(cell.row.id)].additionalPrimaryId,cell.data[Number(cell.row.id)].doctorPrimaryId, cell.data[Number(cell.row.id)].assignmentId);
+                        }}>Proceed</a>
                 </>
             )
         },
@@ -136,7 +163,7 @@ const Additional = () => {
                 {cell.data[Number(cell.row.id)].assignedUserName ===null && cell.data[Number(cell.row.id)].status ==='pen' ? 
                     <input  type="checkbox" id={cell.row.id} checked={selected[cell.row.id]} onClick={async (e:any) => {
                         toggleSelected(cell.row.id,e);
-                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'additional');
+                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'additional',cell.data[Number(cell.row.id)].additionalPrimaryId);
                         if (data && data.length > 0) {
                             const getUser = await adminService.getAdminById(data[0].assignTo);
                             if (getUser.data.length > 0) {
@@ -243,8 +270,13 @@ const Additional = () => {
 
     useEffect(() => {
         getUsersByRole();
-        setStatusValue('pen');
-    }, []);
+        if (viewadditionalid) {
+            setShowComponent(true); // Show the child component when propValue is not empty
+          } else {
+            setShowComponent(false); // Hide the child component when propValue is empty
+          }
+
+    }, [showComponent,viewadditionalid]);
 
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
         // This will get called when the table needs new data
@@ -266,7 +298,7 @@ const Additional = () => {
         // We'll even set a delay to simulate a server here
         setTimeout(() => {
             // Only update the data if this is the latest fetch
-            if(pageSize===undefined){
+         if(pageSize===undefined){
                 pageSize=10;
          }
          if(pageIndex===undefined){
@@ -537,6 +569,7 @@ const Additional = () => {
                     }
                 </div>
             </div>
+            {showComponent === true?<AdditionalRegView state={{ additionalPrimaryId:viewadditionalid , doctorPrimaryId: viewDocid, assignmentId:viewAssignid  }} greet={greet}></AdditionalRegView>:""}
         </>
     )
 }

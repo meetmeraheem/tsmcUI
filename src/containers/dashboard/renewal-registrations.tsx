@@ -1,6 +1,5 @@
 import moment from "moment";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import Select from 'react-select';
 import Swal from "sweetalert2";
 import Table from "../../components/Table";
@@ -9,15 +8,12 @@ import { assignmentService } from "../../lib/api/assignments";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { UserRole } from "../../types/common";
 import { renewalService } from "../../lib/api/renewals";
-import { routes } from '../routes/routes-names';
-import { useNavigate } from 'react-router-dom';
 import TatCheckbox from './../../components/TatCheckbox';
-
+import RenewalsViews from './renewals-view'
 
 
 const Renewal = () => {
     const fetchIdRef = useRef(0);
-    const navigate = useNavigate();
     const [renewals, setRenewals] = useState([]);
     let defaultDate = moment().format('YYYY-MM-DD');
     let default7Days = moment().subtract(3, 'd').format('YYYY-MM-DD');
@@ -46,6 +42,29 @@ const Renewal = () => {
         { id: 5, name: 'Verified', value: 'ver', isChecked: false }
     ]);
 
+    const [showComponent, setShowComponent] = useState(false);
+    const [viewRenwalid, setViewRenewalId] = useState('');
+    const [viewDocid, setViewDocId] = useState('');
+    const [viewAssignid, setViewAssignid] = useState('');
+
+  const toggleComponent = useCallback(async (renwalId:any,docId:any,assignId:any) => {
+    try {
+            let newValue = renwalId  ? renwalId  : viewRenwalid;
+            setViewRenewalId(newValue);
+            setViewDocId(docId);
+            setViewAssignid(assignId);
+    } catch (err) {
+        console.log('error get users by role', err);
+    }
+}, [showComponent]);
+
+const greet=()=> {
+    setShowComponent(false);
+    setViewRenewalId('');
+    fetchData(0);
+   }
+
+
     const toggleSelected = (id: any, e: any) => {
         setSelected((selected: any) => ({
             ...selected,
@@ -60,8 +79,6 @@ const Renewal = () => {
         }
         setIsCheckbox(e.target.checked);
     };
-
-
 
     const columns = [
 
@@ -115,11 +132,11 @@ const Renewal = () => {
             accessor: "status",
             Cell: ({ cell: { value } }: any) => {
                 return (
-                    <>{value == 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
-                        {value == 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
-                        {value == 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
-                        {value == 'rej' && <span className="alert alert-danger rounded-pill py-0 px-2 fs-12">Rejected</span>}
-                    </>
+                <>{value === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
+                    {value === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
+                    {value === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                    {value === 'rej' && <span className="alert alert-danger rounded-pill py-0 px-2 fs-12">Rejected</span>}
+                </>
                 );
             }
         },
@@ -127,7 +144,11 @@ const Renewal = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/renewals_reg_view'} state={{ renewalPrimaryId: cell.data[Number(cell.row.id)].renewalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId, assignmentId: cell.data[Number(cell.row.id)].assignmentId }}>Proceed</Link>
+                    <a href="javascript:void(0);" onClick={() =>
+                        {
+                        setShowComponent(false);  
+                        toggleComponent(cell.data[Number(cell.row.id)].renewalPrimaryId,cell.data[Number(cell.row.id)].doctorPrimaryId, cell.data[Number(cell.row.id)].assignmentId);
+                        }}>Proceed</a>
                 </>
             )
         },
@@ -140,9 +161,9 @@ const Renewal = () => {
                     {cell.data[Number(cell.row.id)].assignedUserName === null && cell.data[Number(cell.row.id)].status === 'pen' ?
                         <input type="checkbox" id={cell.row.id} checked={selected[cell.row.id]} onChange={async (e: any) => {
                             toggleSelected(cell.row.id, e);
-                            const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'renewal');
+                            const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'renewal',cell.data[Number(cell.row.id)].renewalPrimaryId);
                             if (data && data.length > 0) {
-                                const getUser = await adminService.getAdminById(data[0].AssignTo);
+                                const getUser = await adminService.getAdminById(data[0].assignTo);
                                 if (getUser.data.length > 0) {
                                     Swal.fire({
                                         text: "Already Assigned to " + getUser.data[0].username,
@@ -167,7 +188,6 @@ const Renewal = () => {
                                     setAssignedList([...assignedList, doctorInfo]);
                                     setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
                                 } else {
-                                    const id = e.target.getAttribute("id")
                                     setAssignedList(assignedList.filter((item: any) => item.doctor_id !== cell.data[Number(cell.row.id)].doctor_id));
                                     setAssignedGridList(assignedGridList.filter((item: any) => item.doctor_id !== cell.data[Number(cell.row.id)].doctor_id));
 
@@ -247,8 +267,13 @@ const Renewal = () => {
 
     useEffect(() => {
         getUsersByRole();
-        setStatusValue('pen');
-    }, []);
+        if (viewRenwalid) {
+            setShowComponent(true); // Show the child component when propValue is not empty
+          } else {
+            setShowComponent(false); // Hide the child component when propValue is empty
+          }
+
+    }, [showComponent,viewRenwalid]);
 
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
         // This will get called when the table needs new data
@@ -349,6 +374,8 @@ const Renewal = () => {
             console.log('error getDoctorDetails ', err);
         }
     };
+
+ 
 
     const getDoctorDetailsBydocName = async () => {
         try {
@@ -543,6 +570,8 @@ const Renewal = () => {
                     }
                 </div>
             </div>
+
+            {showComponent === true?<RenewalsViews state={{ renewalPrimaryId:viewRenwalid , doctorPrimaryId: viewDocid, assignmentId:viewAssignid  }} greet={greet}></RenewalsViews>:""}
         </>
     )
 }

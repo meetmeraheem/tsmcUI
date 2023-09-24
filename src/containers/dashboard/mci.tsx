@@ -102,7 +102,7 @@ const Mci = () => {
             Cell: (cell: any) => (
                 <>
                     <i className="bi-person" onClick={async () => {
-                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'final');
+                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'final',cell.data[0].finalPrimaryId);
                         if (data && data.length > 0) {
                             const getUser = await adminService.getAdminById(data[0].AssignTo);
                             if (getUser.data.length > 0) {

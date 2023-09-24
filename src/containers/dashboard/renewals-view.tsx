@@ -27,7 +27,7 @@ import AdminDoctorInfoCard from './../dashboard/includes/admin-doctor-info';
 
 
 
-const RenewalsViews = () => {
+const RenewalsViews = (props:any) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [next, setNext] = useState(false);
@@ -36,7 +36,7 @@ const RenewalsViews = () => {
     const [isEduCert3, setIsEduCert3] = useState(false);
     const [renewalsData, setRenewalsData] = useState<AdminrenewalsType>();
     const [doctor, setDoctor] = useState<DoctorFormType>();
-    const { renewalPrimaryId, doctorPrimaryId, assignmentId } = location.state
+    
     const [userType, setUserType] = useState('');
     const [remarks, setRemarks] = useState('');
     const [disablebtn, setDisablebtn] = useState(false);
@@ -62,8 +62,9 @@ const RenewalsViews = () => {
 
     const getDoctorDetails = async () => {
                 try {
-                    if (doctorPrimaryId) {
-                        const { data } = await doctorService.getDoctorById(doctorPrimaryId);
+                    
+                    if (props.state.doctorPrimaryId) {
+                        const { data } = await doctorService.getDoctorById(props.state.doctorPrimaryId);
                         if (data.length > 0) {
                             setDoctor(data[0]);
                         }
@@ -74,8 +75,8 @@ const RenewalsViews = () => {
             };
     const getRenewalDetails = useCallback(async () => {
         try {
-            if (renewalPrimaryId) {
-                const { data } = await renewalService.getRenewalById(renewalPrimaryId);
+            if (props.state.renewalPrimaryId) {
+                const { data } = await renewalService.getRenewalById(props.state.renewalPrimaryId);
                 if (data.status != null) {
 
                     setRenewalsData({
@@ -100,16 +101,11 @@ const RenewalsViews = () => {
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getRenewalDetails();
-    }, [renewalPrimaryId, doctorPrimaryId]);
+    }, [props.state.renewalPrimaryId, props.state.doctorPrimaryId]);
 
     const closewindow = useCallback(async () => {
-        if (userType === 'a') {
-            navigate(routes.admin_dashboard);
-        }
-        if (userType === 'u') {
-            navigate(routes.admin_dashboard);
-        }
-    }, [userType]);
+        props.greet();
+    }, []);
 
     const submit = useCallback(async (status: any) => {
         if (status) {
@@ -117,10 +113,10 @@ const RenewalsViews = () => {
             const renewalInfo = {
                 approval_status: status,
                 remarks: remarks,
-                assignmnetId: assignmentId
+                assignmnetId: props.state.assignmentId
             }
 
-            const { success } = await renewalService.updateRenewal(renewalPrimaryId, renewalInfo);
+            const { success } = await renewalService.updateRenewal(props.state.renewalPrimaryId, renewalInfo);
             if (success) {
                 let msg = "";
                 let smsmsg = "";
@@ -147,13 +143,7 @@ const RenewalsViews = () => {
                             }).catch(() => {
                             });
                         }
-                        setDisablebtn(false);
-                        if (userType === 'a') {
-                            navigate(routes.admin_dashboard);
-                        }
-                        if (userType === 'u') {
-                            navigate(routes.admin_dashboard);
-                        }
+                        props.greet();
                     }
                 });
             }
@@ -165,12 +155,7 @@ const RenewalsViews = () => {
                     confirmButtonText: "OK",
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        if (userType === 'a') {
-                            navigate(routes.admin_dashboard);
-                        }
-                        if (userType === 'u') {
-                            navigate(routes.admin_dashboard);
-                        }
+                        props.greet();
                     }
                 });
             }
@@ -201,7 +186,7 @@ const RenewalsViews = () => {
                             </div>
                         </div>
                         <div className="row mb-3">
-                            <AdminDoctorInfoCard doctorId={doctorPrimaryId}></AdminDoctorInfoCard>
+                            <AdminDoctorInfoCard doctorId={props.state.doctorPrimaryId}></AdminDoctorInfoCard>
                         </div>
 
                         <div className="container mt-4">

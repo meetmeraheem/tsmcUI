@@ -21,10 +21,9 @@ import { goodstandingService } from "../../lib/api/goodstanding";
 import { authService } from '../../lib/api/auth';
 import AdminDoctorInfoCard from './../dashboard/includes/admin-doctor-info';
 
-const GoodStandingRegView = () => {
+const GoodStandingRegView =   (props:any) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { gsPrimaryId, doctorPrimaryId,assignmentId } = location.state
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [goodStanding, setGoodStanding] = useState<any>();
@@ -35,8 +34,8 @@ const GoodStandingRegView = () => {
     const [disablebtn, setDisablebtn] = useState(false);
     const getDoctorDetails = async () => {
         try {
-            if (doctorPrimaryId) {
-                const { data } = await doctorService.getDoctorById(doctorPrimaryId);
+            if (props.state.doctorPrimaryId) {
+                const { data } = await doctorService.getDoctorById(props.state.doctorPrimaryId);
                 if (data.length > 0) {
                     setDoctor(data[0]);
                 }
@@ -48,8 +47,8 @@ const GoodStandingRegView = () => {
 
     const getGSDetails = useCallback(async () => {
         try {
-            if (gsPrimaryId) {
-                const { data } = await goodstandingService.getGoodstandingById(gsPrimaryId);
+            if (props.state.gsPrimaryId) {
+                const { data } = await goodstandingService.getGoodstandingById(props.state.gsPrimaryId);
                 if (data.length > 0) {
                    
                     setGoodStanding({
@@ -69,13 +68,8 @@ const GoodStandingRegView = () => {
     }, []);
 
     const closewindow = useCallback(async () => {
-        if (userType === 'a') {
-            navigate(routes.admin_dashboard);
-        }
-        if (userType === 'u') {
-            navigate(routes.admin_dashboard);
-        }
-    },[userType]);
+        props.greet();
+    }, []);
 
     const submit = useCallback(async (status: any) => {
         if (status) {
@@ -83,9 +77,9 @@ const GoodStandingRegView = () => {
             const gsInfo = {
                 approval_status: status,
                 remarks: remarks,
-                assignmnetId:assignmentId
+                assignmnetId:props.state.assignmentId
             }
-            const { success } = await goodstandingService.updateGoodStanding(gsPrimaryId, gsInfo);
+            const { success } = await goodstandingService.updateGoodStanding(props.state.gsPrimaryId, gsInfo);
             if (success) {
                 let msg="";
                 let smsmsg="";
@@ -116,12 +110,7 @@ const GoodStandingRegView = () => {
                                 });
                             }
                             setDisablebtn(false);
-                            if (userType === 'a') {
-                                navigate(routes.admin_dashboard);
-                            }
-                            if (userType === 'u') {
-                                navigate(routes.admin_dashboard);
-                            }
+                            props.greet();
                         }
                     });
                 }
@@ -133,13 +122,7 @@ const GoodStandingRegView = () => {
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                            
-                            if (userType === 'a') {
-                                navigate(routes.admin_dashboard);
-                            }
-                            if (userType === 'u') {
-                                navigate(routes.admin_dashboard);
-                            }
+                            props.greet();
                         }
                     });
                 }
@@ -159,7 +142,7 @@ const GoodStandingRegView = () => {
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getGSDetails();
-    }, [gsPrimaryId, doctorPrimaryId]);
+    }, [props.state.gsPrimaryId, props.state.doctorPrimaryId]);
     return (
         <>
             <div className="col-8 m-auto mb-4">
@@ -176,7 +159,7 @@ const GoodStandingRegView = () => {
                                </div>             
                         
                         <div className="row mb-3">
-                            <AdminDoctorInfoCard doctorId={doctorPrimaryId}></AdminDoctorInfoCard>
+                            <AdminDoctorInfoCard doctorId={props.state.doctorPrimaryId}></AdminDoctorInfoCard>
                         </div>
                         
                         <div className="w-100">

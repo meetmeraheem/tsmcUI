@@ -6,6 +6,12 @@ export const provisionalService = {
         const { data: responseData } = await axiosInstance.post(`provisional/createProvisional`, data);
         return responseData;
     },
+
+    async getProvisionalsByMobileNo( data: any) {
+        const { data: responseData } = await axiosInstance.post(`provisional/getProvisionalsByMobileNo`,data);
+        return responseData as ApiResponseType;
+    },
+
     async getProvisionalById(provisionalId: number) {
         const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalById/${provisionalId}`);
         return responseData as ApiResponseType;

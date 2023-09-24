@@ -18,10 +18,9 @@ import { AdminAddQualDataFormType} from '../../types/additionalQuali';
 import { authService } from '../../lib/api/auth';
 import AdminDoctorInfoCard from './../dashboard/includes/admin-doctor-info';
 
-const AdditionalRegView = () => {
+const AdditionalRegView = (props:any) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { additionalPrimaryId, doctorPrimaryId ,assignmentId} = location.state
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [additionals, setAdditionals] = useState<AdminAddQualDataFormType>();
@@ -33,8 +32,8 @@ const AdditionalRegView = () => {
 
        const getDoctorDetails = async () => {
             try {
-                if (doctorPrimaryId) {
-                        const { data } = await doctorService.getDoctorById(doctorPrimaryId);
+                if (props.state.doctorPrimaryId) {
+                        const { data } = await doctorService.getDoctorById(props.state.doctorPrimaryId);
                         if (data.length > 0) {
                             setDoctor(data[0]);
                         }
@@ -46,8 +45,8 @@ const AdditionalRegView = () => {
 
     const getAdditionalDetails = useCallback(async () => {
         try {
-            if (additionalPrimaryId) {
-                const { data } = await additionalService.getQualificationById(additionalPrimaryId);
+            if (props.state.additionalPrimaryId) {
+                const { data } = await additionalService.getQualificationById(props.state.additionalPrimaryId);
                 if (data.length > 0) {
                     const country = await commonService.getCountry(Number(data[0].country));
                     const state = await commonService.getState(Number(data[0].state));
@@ -82,10 +81,10 @@ const AdditionalRegView = () => {
             const additionalsInfo = {
                 approval_status: status,
                 remarks: remarks,
-                assignmnetId:assignmentId
+                assignmnetId:props.state.assignmentId
 
             }
-            const { success } = await additionalService.updateQualification(additionalPrimaryId, additionalsInfo);
+            const { success } = await additionalService.updateQualification(props.state.additionalPrimaryId, additionalsInfo);
             if (success) {
                 let msg="";
                 let smsmsg="";
@@ -115,12 +114,7 @@ const AdditionalRegView = () => {
                                 });
                             }
                             setDisablebtn(false);
-                            if (userType === 'a') {
-                                navigate(routes.admin_dashboard);
-                            }
-                            if (userType === 'u') {
-                                navigate(routes.admin_dashboard);
-                            }
+                            props.greet();
                         }
                     });
                 }
@@ -132,12 +126,7 @@ const AdditionalRegView = () => {
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                            if (userType === 'a') {
-                                navigate(routes.admin_dashboard);
-                            }
-                            if (userType === 'u') {
-                                navigate(routes.admin_dashboard);
-                            }
+                            props.greet();
                         }
                     });
                 }
@@ -150,22 +139,18 @@ const AdditionalRegView = () => {
                 confirmButtonText: "OK",
             });
         }
-    }, [remarks,additionalPrimaryId]);
+    }, [remarks,props.state.additionalPrimaryId]);
 
     const closewindow = useCallback(async () => {
-        if (userType === 'a') {
-            navigate(routes.admin_dashboard);
-        }
-        if (userType === 'u') {
-            navigate(routes.admin_dashboard);
-        }
-    },[userType]);
+        props.greet();
+    }, []);
+
     useEffect(() => {
         const userTypeValue = LocalStorageManager.getUserType();
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getAdditionalDetails();
-    }, [additionalPrimaryId, doctorPrimaryId]);
+    }, [props.state.additionalPrimaryId, props.state.doctorPrimaryId]);
     return (
         <>
             <div className="col-8 m-auto mb-4">
@@ -182,7 +167,7 @@ const AdditionalRegView = () => {
                             </div> 
                               
                                 <div className="row mb-3">
-                                    <AdminDoctorInfoCard doctorId={doctorPrimaryId} additionalView="NO"></AdminDoctorInfoCard>
+                                    <AdminDoctorInfoCard doctorId={props.state.doctorPrimaryId} ></AdminDoctorInfoCard>
                                 </div>
                             
                         

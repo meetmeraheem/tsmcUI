@@ -1,17 +1,18 @@
 import { ApiResponseType } from "./api";
 
 export type ProvisionalFormType = {
-    doctor_id: number;
-    qualification: string;
-    exam_month: string;
-    exam_year: string;
-    country: string;
-    state: string;
-    university: string;
-    college: string;
-    edu_cert1: string;
-    edu_cert2: string;
-    edu_cert3: string;
+    doctor_id: number,
+    qualification: string,
+    exam_month: string,
+    exam_year: string,
+    country: string,
+    state: string,
+    university: string,
+    college: string,
+    edu_cert1: string,
+    edu_cert2: string,
+    edu_cert3: string,
+    calc_date:string
 };
 
 export type GetProvisionalResponse = Omit<ApiResponseType, 'data'> & {
@@ -97,7 +98,9 @@ export type AdminProvisionalProfileType = {
     edu_cert2: string,
     edu_cert3: string,
     receipt_no:String,
-    dd_amount:String
+    dd_amount:String,
+    transanctionId:String,
+    calc_date:Date
 };
 
 export type ProvisionalPaymentProfileType = {

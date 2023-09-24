@@ -642,7 +642,7 @@ const FinalRegistration = () => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                                                <label className="mb-2">Qualification</label>
+                                                                                <label className="mb-2">Qualification (as per UG Certificate)</label>
                                                                                 <Select
                                                                                 name="qualification"
                                                                                 className="react-select"
@@ -675,7 +675,7 @@ const FinalRegistration = () => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                                                <label className="mb-2">InternShip Exam Month</label>
+                                                                                <label className="mb-2">InternShip  Month</label>
                                                                                 <select
                                                                                     value={field.value}
                                                                                     onChange={(ev) => {
@@ -726,7 +726,7 @@ const FinalRegistration = () => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                                                <label className="mb-2"> InternShip Exam Year</label>
+                                                                                <label className="mb-2"> InternShip  Year</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     value={field.value}

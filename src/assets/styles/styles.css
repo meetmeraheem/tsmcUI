@@ -902,4 +902,8 @@ aside>ul>li>a:hover {
   .tabs-component.vertical [role="tablist"] button:hover {
 	border-color: #e9ecef transparent #e9ecef #b41c1c;
   }
-  
+  @media print {
+	#printPageButton {
+		display: none;
+	  }
+}

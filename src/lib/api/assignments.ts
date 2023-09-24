@@ -20,8 +20,8 @@ export const assignmentService = {
         const { data: responseData } = await axiosInstance.put(`assignments/updateAssignMent/${assignmnetId}`, data);
         return responseData;
     },
-    async getAssignMentBydoctorIdAssignType(doctor_id: number, assign_type: string) {
-        const { data: responseData } = await axiosInstance.get(`assignments/getAssignMentBydoctorIdAssignType/${doctor_id}/${assign_type}`);
+    async getAssignMentBydoctorIdAssignType(doctor_id: number, assign_type: string,assign_id: string) {
+        const { data: responseData } = await axiosInstance.get(`assignments/getAssignMentBydoctorIdAssignType/${doctor_id}/${assign_type}/${assign_id}`);
         return responseData as ApiResponseType;
     },
 };

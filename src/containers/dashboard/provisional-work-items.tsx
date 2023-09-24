@@ -1,10 +1,11 @@
 import moment from "moment";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import Table from "../../components/Table";
 import { provisionalService } from "../../lib/api/provisional";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import TatCheckbox from './../../components/TatCheckbox';
+import ProvisionalView from'./provisional-view';
 
 const ProvsionalWorkItems = () => {
     const fetchIdRef = useRef(0);
@@ -17,6 +18,29 @@ const ProvsionalWorkItems = () => {
     const [pageCount, setPageCount] = useState(0);
     const [istatkal, setIsTatkal] = useState('nor');
     const [isCheckbox, setIsCheckbox] = useState(false);
+
+    const [showComponent, setShowComponent] = useState(false);
+    const [viewProvisionalid, setViewProvisionalId] = useState('');
+    const [viewDocid, setViewDocId] = useState('');
+    const [viewAssignid, setViewAssignid] = useState('');
+
+  const toggleComponent = useCallback(async (provId:any,docId:any,assignId:any) => {
+    try {
+            let newValue = provId  ? provId  : viewProvisionalid;
+            setViewProvisionalId(newValue);
+            setViewDocId(docId);
+            setViewAssignid(assignId);
+    } catch (err) {
+        console.log('error get users by role', err);
+    }
+}, [showComponent]);
+
+const greet=()=> {
+    setShowComponent(false);
+    setViewProvisionalId('');
+    fetchData(0);
+   }
+
 
     const handleChangeTatkal = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.checked){
@@ -83,11 +107,25 @@ const ProvsionalWorkItems = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/provisional_view'} state={{ provisionalPrimaryId: cell.data[Number(cell.row.id)].provisionalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[Number(cell.row.id)].assignmentId }}>Proceed</Link>
+                    <a href="javascript:void(0);" onClick={() =>
+                        {
+                        setShowComponent(false);  
+                        toggleComponent(cell.data[Number(cell.row.id)].provisionalPrimaryId,cell.data[Number(cell.row.id)].doctorPrimaryId, cell.data[Number(cell.row.id)].assignmentId);
+                        }}>Proceed</a>
                 </>
             )
         }
     ];
+
+    useEffect(() => {
+        
+        if (viewProvisionalid) {
+            setShowComponent(true); // Show the child component when propValue is not empty
+          } else {
+            setShowComponent(false); // Hide the child component when propValue is empty
+          }
+
+    }, [showComponent,viewProvisionalid]);
 
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
         // This will get called when the table needs new data
@@ -105,6 +143,12 @@ const ProvsionalWorkItems = () => {
         const { data } = await provisionalService.getProvisionalsByUserId(vfromdate,vtodate, adminPrimaryId,'provisional',istatkal);
         if (data.length > 0) {
             // We'll even set a delay to simulate a server here
+            if(pageSize===undefined){
+                pageSize=10;
+            }
+            if(pageIndex===undefined){
+              pageIndex=0
+            }
             setTimeout(() => {
                 // Only update the data if this is the latest fetch
                 if (fetchId === fetchIdRef.current) {
@@ -182,6 +226,7 @@ const ProvsionalWorkItems = () => {
                     </div>
                 </div>
             </div>
+            {showComponent === true?<ProvisionalView state={{ provisionalPrimaryId:viewProvisionalid , doctorPrimaryId: viewDocid, assignmentId:viewAssignid  }} greet={greet}></ProvisionalView>:""}
         </>
     )
 }

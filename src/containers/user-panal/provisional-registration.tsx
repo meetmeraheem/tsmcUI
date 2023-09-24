@@ -14,24 +14,15 @@ import { ReactFilesError, ReactFilesFile } from "../../types/files";
 import { useCallback, useEffect, useState } from "react";
 import { commonService } from "../../lib/api/common";
 import { College, Country, Qualification, Serials, State, University } from "../../types/common";
-import { provisionalService } from "../../lib/api/provisional";
-import { doctorService } from "../../lib/api/doctot";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux";
 import { routes } from "../routes/routes-names";
 import { isLessThanTheMB } from "../../lib/utils/lessthan-max-filesize";
 import { Messages } from "../../lib/constants/messages";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
-import { authService } from "../../lib/api/auth";
+import DatePicker from 'react-date-picker';
 
 const ProvisionalRegistration = () => {
     const navigate = useNavigate();
-    const doctorReduxProfile = useSelector((state: RootState) => state.doctor.profile);
     const [next, setNext] = useState(false);
-    const [doctorId, setDoctorId] = useState(0);
-    const [pmrNo, setPMRNo] = useState(0);
-    const [serial, setserial] = useState<Serials>();
-    const [provisionalSerial, setProvisionalSerial] = useState<Serials>();
     const [qualifications, setQualifications] = useState<Qualification[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
     const [states, setStates] = useState<State[]>([]);
@@ -42,6 +33,7 @@ const ProvisionalRegistration = () => {
     const [nocCertificate, setNOCCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [provisionalRequestType, setProvisionalRequestType] = useState<string>('nor');
     const [localRequestType, setLocalRequestType] = useState<string>('telangana');
+    const [calc_date, setCalc_date] = useState(new Date());
 
     const initialFormData = {
         doctor_id: 0,
@@ -54,35 +46,9 @@ const ProvisionalRegistration = () => {
         college: '',
         edu_cert1: '',
         edu_cert2: '',
-        edu_cert3: ''
+        edu_cert3: '',
+        calc_date:''
     }
-
-    const getMtSerials = useCallback(async () => {
-        try {
-            const { data } = await commonService.getMtSerials('DPD');
-            const { data: pr } = await commonService.getMtSerials('PR');
-            if (data) {
-                setserial({
-                    ...data,
-                    created_date: moment(data.created_date).format('YYYY-MM-DD h:mm:ss'),
-                    serial_starts: Number(data.serial_starts) + 1
-                })
-                setDoctorId(Number(data.serial_starts) + 1);
-            }
-            if (pr) {
-                setProvisionalSerial({
-                    ...pr,
-                    created_date: moment(pr.created_date).format('YYYY-MM-DD h:mm:ss'),
-                    serial_starts: Number(pr.serial_starts) + 1
-                })
-                setPMRNo(Number(pr.serial_starts) + 1);
-            }
-        } catch (err) {
-            console.log('error getMtSerials', err);
-        } finally {
-            //setLoading(false);
-        }
-    }, [doctorId, pmrNo]);
 
     const getQualifications = useCallback(async () => {
         try {
@@ -112,8 +78,11 @@ const ProvisionalRegistration = () => {
     }, []);
 
     useEffect(() => {
-        //getDoctorDetails();
-        getMtSerials();
+        Swal.fire({
+            text: "Doctors who completed the degree and about to start their internship should register for provisional.",
+            icon: "warning",
+            confirmButtonText: "OK",
+        })
         getQualifications();
         getCountries();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -156,17 +125,18 @@ const ProvisionalRegistration = () => {
     const submitForm = useCallback(
         async (values: ProvisionalFormType) => {
             try {
-                const doctorPrimaryId = LocalStorageManager.getDoctorPrimaryId()
-
+                const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
+                const doctorId = Number(LocalStorageManager.getDoctorSerialId());
                 const provisionalInfo = {
                     ...values,
                     createdon: moment().format('YYYY-MM-DD'),
                     posttime: moment().format('h:mm:ss'),
-                    doctor_id: Number(doctorId),
+                    doctor_id: doctorId && Number(doctorId),
                     prefix: 'TSMC',
                     approval_status: 'pen',
                     row_type: 'on',
                     reg_date: moment().format('YYYY-MM-DD'),
+                    calc_date: moment(values.calc_date).format('YYYY-MM-DD'),
                     extra_col1:provisionalRequestType,
                     doctorPrimaryId:doctorPrimaryId,
                 }
@@ -194,7 +164,7 @@ const ProvisionalRegistration = () => {
                 console.log('error in provisional registeration update', err);
             }
         },
-        [doctorId, serial, provisionalCertificate, applicationForm, nocCertificate]
+        [ provisionalCertificate, applicationForm]
     );
 
     return (
@@ -287,39 +257,6 @@ const ProvisionalRegistration = () => {
                                                         </div>
                                                         <div className="row mb-2">
                                                         <div className="col">
-                                                            <Field name="qualification">
-                                                                {(fieldProps: FieldProps) => {
-                                                                    const { field, form } = fieldProps;
-                                                                    const error =
-                                                                        getValue(form.touched, field.name) &&
-                                                                        getValue(form.errors, field.name);
-                                                                    return (
-                                                                        <>
-                                                                            <label className="mb-2">Qualification</label>
-                                                                            <Select
-                                                                                name="qualification"
-                                                                                className="react-select"
-                                                                                classNamePrefix="react-select"
-                                                                                isSearchable
-                                                                                options={qualifications}
-                                                                                placeholder="Select Qualification"
-                                                                                onChange={(selectedOption) => {
-                                                                                    const { id, name } =
-                                                                                        selectedOption as Qualification;
-                                                                                    setFieldTouched(field.name);
-                                                                                    setFieldValue(field.name, id);
-                                                                                   
-                                                                                }}
-                                                                                getOptionLabel={(option) => option.name}
-                                                                                getOptionValue={(option) => option.id.toString()}
-                                                                            />
-                                                                            {error && <small className="text-danger">{error.toString()}</small>}
-                                                                        </>
-                                                                    );
-                                                                }}
-                                                            </Field>
-                                                        </div>
-                                                        <div className="col">
                                                             <Field name="exam_month">
                                                                 {(fieldProps: FieldProps) => {
                                                                     const { field, form } = fieldProps;
@@ -362,8 +299,7 @@ const ProvisionalRegistration = () => {
                                                             </Field>
                                                         </div>
 
-                                                    </div>
-                                                    <div className="row mb-2">
+                                                    
                                                         <div className="col">
                                                             <Field name="exam_year">
                                                                 {(fieldProps: FieldProps) => {
@@ -395,6 +331,8 @@ const ProvisionalRegistration = () => {
                                                                 }}
                                                             </Field>
                                                         </div>
+                                                        
+                                                        <div className="row mb-2">
                                                         <div className="col">
                                                             <Field name="country">
                                                                 {(fieldProps: FieldProps) => {
@@ -429,8 +367,8 @@ const ProvisionalRegistration = () => {
                                                             </Field>
                                                         </div>
 
-                                                    </div>
-                                                    <div className="row mb-2">
+                                                    
+                                                    
                                                         <div className="col">
                                                             <Field name="state">
                                                                 {(fieldProps: FieldProps) => {
@@ -466,6 +404,8 @@ const ProvisionalRegistration = () => {
                                                                 }}
                                                             </Field>
                                                         </div>
+                                                       </div> 
+                                                        <div className="row mb-2">
                                                         <div className="col">
                                                             <Field name="university">
                                                                 {(fieldProps: FieldProps) => {
@@ -500,9 +440,7 @@ const ProvisionalRegistration = () => {
                                                             </Field>
                                                         </div>
 
-                                                    </div>
-                                                    <div className="row mb-2">
-                                                        <div className="col-6">
+                                                        <div className="col">
                                                             <Field name="college">
                                                                 {(fieldProps: FieldProps) => {
                                                                     const { field, form } = fieldProps;
@@ -534,8 +472,78 @@ const ProvisionalRegistration = () => {
                                                                 }}
                                                             </Field>
                                                         </div>
+                                                       </div> 
+                                                        <div className="row mb-2">
+                                                        <div className="col">
+                                                            <Field name="qualification">
+                                                                {(fieldProps: FieldProps) => {
+                                                                    const { field, form } = fieldProps;
+                                                                    const error =
+                                                                        getValue(form.touched, field.name) &&
+                                                                        getValue(form.errors, field.name);
+                                                                    return (
+                                                                        <>
+                                                                            <label className="mb-2">Qualification</label>
+                                                                            <Select
+                                                                                name="qualification"
+                                                                                className="react-select"
+                                                                                classNamePrefix="react-select"
+                                                                                isSearchable
+                                                                                options={qualifications}
+                                                                                placeholder="Select Qualification"
+                                                                                onChange={(selectedOption) => {
+                                                                                    const { id, name } =
+                                                                                        selectedOption as Qualification;
+                                                                                    setFieldTouched(field.name);
+                                                                                    setFieldValue(field.name, id);
+                                                                                   
+                                                                                }}
+                                                                                getOptionLabel={(option) => option.name}
+                                                                                getOptionValue={(option) => option.id.toString()}
+                                                                            />
+                                                                            {error && <small className="text-danger">{error.toString()}</small>}
+                                                                        </>
+                                                                    );
+                                                                }}
+                                                            </Field>
+                                                        </div>
+                                                       
+                                                        <div className="col">
+                                                        <label htmlFor="CalcDate">Enter Provisional Certificate Issue Date</label>
+                                                        <Field name="calc_date">
+                                                                    {(fieldProps: FieldProps) => {
+                                                                        const { field, form } = fieldProps;
+                                                                        const error =
+                                                                            getValue(form.touched, field.name) &&
+                                                                            getValue(form.errors, field.name);
+                                                                        return (
+                                                                            <>
+                                                                                <DatePicker
+                                                                                    format='dd-MM-yyyy'
+                                                                                    onChange={(date: any) => {
+                                                                                        setFieldTouched(field.name);
+                                                                                        setFieldValue(field.name, date);
+                                                                                        setCalc_date(date);
+                                                                                    }}
+                                                                                    maxDate={new Date()}
+                                                                                    clearIcon={null}
+                                                                                    value={calc_date}
+                                                                                    className={`form-control ${error ? 'is-invalid' : ''}`}
+                                                                                />
+
+
+                                                                                {error && <small className="text-danger">{error.toString()}</small>}
+                                                                            </>
+                                                                        );
+                                                                    }}
+                                                                </Field>
+                                                                </div>
+                                                        </div>
                                                     
                                                     </div>
+                                                        
+                                                    
+                                                    
                                                     <div className="row mb-2 mt-4">
                                                             <div className='text-danger fs-10'>
                                                                 Please upload images (.jpeg,.png) only, with less than 200 KB size.  
@@ -803,11 +811,13 @@ const getValidationSchema = () =>
             .required('University Name is required.'),
         college: stringYup()
             .required('College Name is required.'),
+        calc_date: stringYup()
+            .required('Provisional Certifiate Issue Date is required.'),     
         edu_cert1: stringYup()
             .required('Provisional certificate is required.'),
         edu_cert2: stringYup()
             .required('Date of Birth proof is required.'),
-        edu_cert3: stringYup()
-            .required('NOC is required.'),
+       /* edu_cert3: stringYup()
+            .required('NOC is required.')*/
     });
 

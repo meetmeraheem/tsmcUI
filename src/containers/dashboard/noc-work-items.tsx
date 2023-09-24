@@ -5,6 +5,7 @@ import Table from "../../components/Table";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { nocService } from "../../lib/api/noc";
 import TatCheckbox from './../../components/TatCheckbox';
+import NocRegView from './noc-view';
 
 const MyWorkItems = () => {
     const fetchIdRef = useRef(0);
@@ -17,6 +18,29 @@ const MyWorkItems = () => {
     const [pageCount, setPageCount] = useState(0);
     const [istatkal, setIsTatkal] = useState('nor');
     const [isCheckbox, setIsCheckbox] = useState(false);
+
+    const [showComponent, setShowComponent] = useState(false);
+    const [viewNocid, setViewNocId] = useState('');
+    const [viewDocid, setViewDocId] = useState('');
+    const [viewAssignid, setViewAssignid] = useState('');
+
+  const toggleComponent = useCallback(async (nocId:any,docId:any,assignId:any) => {
+    try {
+            let newValue = nocId  ? nocId  : viewNocid;
+            setViewNocId(newValue);
+            setViewDocId(docId);
+            setViewAssignid(assignId);
+    } catch (err) {
+        console.log('error get users by role', err);
+    }
+}, [showComponent]);
+
+    const greet=()=> {
+        setShowComponent(false);
+        setViewNocId('');
+        fetchData(0);
+   }
+
 
     const handleChangeTatkal = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.checked){
@@ -82,12 +106,24 @@ const MyWorkItems = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/noc_reg_view'} state={{ nocPrimaryId: cell.data[Number(cell.row.id)].nocPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[Number(cell.row.id)].assignmentId }}>Proceed</Link>
+                   <a href="javascript:void(0);" onClick={() =>
+                        {
+                        setShowComponent(false);  
+                        toggleComponent(cell.data[Number(cell.row.id)].nocPrimaryId,cell.data[Number(cell.row.id)].doctorPrimaryId, cell.data[Number(cell.row.id)].assignmentId);
+                        }}>Proceed</a>
                 </>
             )
         }
     ];
 
+    useEffect(() => {
+        if (viewNocid) {
+            setShowComponent(true); // Show the child component when propValue is not empty
+          } else {
+            setShowComponent(false); // Hide the child component when propValue is empty
+          }
+
+    }, [showComponent,viewNocid]);
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
         // This will get called when the table needs new data
         // You could fetch your data from literally anywhere,
@@ -105,6 +141,12 @@ const MyWorkItems = () => {
         if (data.length > 0) {
             // We'll even set a delay to simulate a server here
             setTimeout(() => {
+                if(pageSize===undefined){
+                    pageSize=10;
+                    }
+                    if(pageIndex===undefined){
+                        pageIndex=0
+                    }
                 // Only update the data if this is the latest fetch
                 if (fetchId === fetchIdRef.current) {
                     const startRow = pageSize * pageIndex
@@ -181,6 +223,7 @@ const MyWorkItems = () => {
                     </div>
                 </div>
             </div>
+            {showComponent === true?<NocRegView state={{ nocPrimaryId:viewNocid , doctorPrimaryId: viewDocid, assignmentId:viewAssignid  }} greet={greet}></NocRegView>:""}
         </>
     )
 }

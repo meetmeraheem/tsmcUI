@@ -5,6 +5,7 @@ import Table from "../../components/Table";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { additionalService } from "../../lib/api/additional";
 import TatCheckbox from './../../components/TatCheckbox';
+import AdditionalRegView from './additional-view';
 
 const AdditionalWorkItems = () => {
     const fetchIdRef = useRef(0);
@@ -17,6 +18,28 @@ const AdditionalWorkItems = () => {
     const [pageCount, setPageCount] = useState(0);
     const [istatkal, setIsTatkal] = useState('nor');
     const [isCheckbox, setIsCheckbox] = useState(false);
+
+    const [showComponent, setShowComponent] = useState(false);
+    const [viewadditionalid, setViewadditionalId] = useState('');
+    const [viewDocid, setViewDocId] = useState('');
+    const [viewAssignid, setViewAssignid] = useState('');
+
+  const toggleComponent = useCallback(async (additionalId:any,docId:any,assignId:any) => {
+    try {
+            let newValue = additionalId  ? additionalId  : viewadditionalid;
+            setViewadditionalId(newValue);
+            setViewDocId(docId);
+            setViewAssignid(assignId);
+    } catch (err) {
+        console.log('error get users by role', err);
+    }
+}, [showComponent]);
+
+const greet=()=> {
+    setShowComponent(false);
+    setViewadditionalId('');
+    fetchData(0);
+   }
 
     const handleChangeTatkal = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.checked){
@@ -82,11 +105,25 @@ const AdditionalWorkItems = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/additional_reg_view'} state={{ additionalPrimaryId: cell.data[Number(cell.row.id)].additionalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId ,assignmentId:cell.data[Number(cell.row.id)].assignmentId}}>Proceed</Link>
+                    <a href="javascript:void(0);" onClick={() =>
+                        {
+                        setShowComponent(false);  
+                        toggleComponent(cell.data[Number(cell.row.id)].additionalPrimaryId,cell.data[Number(cell.row.id)].doctorPrimaryId, cell.data[Number(cell.row.id)].assignmentId);
+                        }}>Proceed</a>
                 </>
             )
         }
     ];
+
+    useEffect(() => {
+        
+        if (viewadditionalid) {
+            setShowComponent(true); // Show the child component when propValue is not empty
+          } else {
+            setShowComponent(false); // Hide the child component when propValue is empty
+          }
+
+    }, [showComponent,viewadditionalid]);
 
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
         // This will get called when the table needs new data
@@ -104,6 +141,12 @@ const AdditionalWorkItems = () => {
         const { data } = await additionalService.getQualificationsByUserId(vfromdate,vtodate,adminPrimaryId,'additional',istatkal);
         if (data.length > 0) {
             // We'll even set a delay to simulate a server here
+            if(pageSize===undefined){
+                pageSize=10;
+          }
+          if(pageIndex===undefined){
+              pageIndex=0
+          }
             setTimeout(() => {
                 // Only update the data if this is the latest fetch
                 if (fetchId === fetchIdRef.current) {
@@ -118,13 +161,14 @@ const AdditionalWorkItems = () => {
 
                 }else{
                     setAdditional([]);
-                                            setLoading(false);
-                                        }
+                    setLoading(false);
+                    }
                 }
             }, 1000)
         }
         setLoading(false);
     }, [fromdate,todate,istatkal]);
+
 
     return (
         <>
@@ -184,6 +228,7 @@ const AdditionalWorkItems = () => {
                     </div>
                 </div>
             </div>
+            {showComponent === true?<AdditionalRegView state={{ additionalPrimaryId:viewadditionalid , doctorPrimaryId: viewDocid, assignmentId:viewAssignid  }} greet={greet}></AdditionalRegView>:""}
         </>
     )
 }

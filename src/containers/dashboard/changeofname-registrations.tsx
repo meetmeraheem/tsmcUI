@@ -118,7 +118,7 @@ const ChangeofNameReg = () => {
             Cell: (cell: any) => (
                 <>
                     <i className="bi bi-plus-square" onClick={async () => {
-                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'changeofname');
+                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'changeofname',cell.data[Number(cell.row.id)].nameChangeId);
                         if (data && data.length > 0) {
                             const getUser = await adminService.getAdminById(data[0].assignTo);
                             if (getUser.data.length > 0) {

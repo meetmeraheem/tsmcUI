@@ -12,6 +12,7 @@ import { UserRole } from "../../types/common";
 import { routes } from '../routes/routes-names';
 import { useNavigate } from 'react-router-dom';
 import TatCheckbox from './../../components/TatCheckbox';
+import ProvisionalView from'./provisional-view';
 
 const ProvisionalRegistrations = () => {
     const fetchIdRef = useRef(0);
@@ -32,15 +33,40 @@ const ProvisionalRegistrations = () => {
     const [disablebtn, setDisablebtn] = useState(false);
     const [istatkal, setIsTatkal] = useState('nor');
     const [isCheckbox, setIsCheckbox] = useState(false);
+    const [selected, setSelected] = useState<any>({});
+    const [mobileNo, setMobileNo] = useState('');
+    const [docName, setdocName] = useState('');
 
 
     const [checkBoxData, setCheckBoxData] = useState([
         { id: 1, name: 'Pending', value: 'pen', isChecked: false },
         { id: 2, name: 'Completed', value: 'apr', isChecked: false },
         { id: 3, name: 'Rejected', value: 'rej', isChecked: false },
-        
         { id: 5, name: 'Verified', value: 'ver', isChecked: false }
     ]);
+
+    const [showComponent, setShowComponent] = useState(false);
+    const [viewProvisionalid, setViewProvisionalId] = useState('');
+    const [viewDocid, setViewDocId] = useState('');
+    const [viewAssignid, setViewAssignid] = useState('');
+
+  const toggleComponent = useCallback(async (provId:any,docId:any,assignId:any) => {
+    try {
+            let newValue = provId  ? provId  : viewProvisionalid;
+            setViewProvisionalId(newValue);
+            setViewDocId(docId);
+            setViewAssignid(assignId);
+    } catch (err) {
+        console.log('error get users by role', err);
+    }
+}, [showComponent]);
+
+const greet=()=> {
+    setShowComponent(false);
+    setViewProvisionalId('');
+    fetchData(0);
+   }
+
 
     const handleChangeTatkal = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.checked){
@@ -50,6 +76,14 @@ const ProvisionalRegistrations = () => {
         }
         setIsCheckbox(e.target.checked);
       };
+
+      const toggleSelected = (id:any,e:any) => {
+        setSelected((selected:any) => ({
+            ...selected,
+            [id]: !selected[id]
+        }));
+        };
+
     const columns = [
         {
             Header: "Doctor Id",
@@ -117,7 +151,11 @@ const ProvisionalRegistrations = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/provisional_view'} state={{ provisionalPrimaryId: cell.data[Number(cell.row.id)].provisionalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[Number(cell.row.id)].assignmentId }}>Proceed</Link>
+                    <a href="javascript:void(0);" onClick={() =>
+                        {
+                        setShowComponent(false);  
+                        toggleComponent(cell.data[Number(cell.row.id)].provisionalPrimaryId,cell.data[Number(cell.row.id)].doctorPrimaryId, cell.data[Number(cell.row.id)].assignmentId);
+                        }}>Proceed</a>
                 </>
             )
         },
@@ -125,8 +163,10 @@ const ProvisionalRegistrations = () => {
             Header: "Assign",
             Cell: (cell: any) => (
                 <>
-                    <i className="bi bi-plus-square" onClick={async () => {
-                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'provisional');
+                     {cell.data[Number(cell.row.id)].assignedUserName === null && cell.data[Number(cell.row.id)].approval_status ==='pen' ? 
+                    <input  type="checkbox" id={cell.row.id} checked={selected[cell.row.id]} onClick={async (e:any) => {
+                        toggleSelected(cell.row.id,e);
+                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'provisional',cell.data[Number(cell.row.id)].provisionalPrimaryId,);
                         if (data && data.length > 0) {
                             const getUser = await adminService.getAdminById(data[0].assignTo);
                             if (getUser.data.length > 0) {
@@ -139,7 +179,7 @@ const ProvisionalRegistrations = () => {
                         }
                         else {
                             const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
-                            if (!isDuplicate(assignedGridList, cell.data[Number(cell.row.id)])) {
+                            //if (!isDuplicate(assignedGridList, cell.data[Number(cell.row.id)])) {
                                 const doctorInfo = {
                                     assignBy: adminPrimaryId,
                                     assignCreated: moment().format('YYYY-MM-DD'),
@@ -150,9 +190,16 @@ const ProvisionalRegistrations = () => {
                                     regTypeId:cell.data[Number(cell.row.id)].provisionalPrimaryId
 
                                 }
-                                setAssignedList([...assignedList, doctorInfo]);
-                                setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
-                            }
+                                if(e.target.checked){
+                                    setAssignedList([...assignedList, doctorInfo]);
+                                    setAssignedGridList([...assignedGridList, cell.data[Number(cell.row.id)]]);
+                                    }else{
+                                           const id = e.target.getAttribute("id")
+                                           setAssignedList(assignedList.filter((item:any) => item.doctor_id !== cell.data[Number(cell.row.id)].doctor_id));
+                                           setAssignedGridList(assignedGridList.filter((item:any) => item.doctor_id !== cell.data[Number(cell.row.id)].doctor_id));
+    
+                                    }
+                           /* }
                             else {
                                 Swal.fire({
                                     text: "Already Added",
@@ -160,9 +207,9 @@ const ProvisionalRegistrations = () => {
                                     confirmButtonText: "OK",
                                 })
                             }
-                        }
-
-                    }}></i>
+                        }*/
+                    }
+                    }} />:cell.data[Number(cell.row.id)].assignedUserName}
                 </>
             )
         }
@@ -202,6 +249,12 @@ const ProvisionalRegistrations = () => {
         //     setProvisionals(data);
         // }
         // We'll even set a delay to simulate a server here
+            if(pageSize===undefined){
+                  pageSize=10;
+            }
+            if(pageIndex===undefined){
+                pageIndex=0
+            }
         setTimeout(() => {
             // Only update the data if this is the latest fetch
             if (fetchId === fetchIdRef.current) {
@@ -240,6 +293,7 @@ const ProvisionalRegistrations = () => {
                         setAssignedGridList([]);
                         fetchData(10);
                         setDisablebtn(false);
+                        setAssignedUser(0);
                         navigate(routes.admin_dashboard);
                     }
                 });
@@ -251,8 +305,14 @@ const ProvisionalRegistrations = () => {
 
     useEffect(() => {
         getUsersByRole();
-        setStatusValue('pen');
-    }, []);
+        if (viewProvisionalid) {
+            setShowComponent(true); // Show the child component when propValue is not empty
+          } else {
+            setShowComponent(false); // Hide the child component when propValue is empty
+          }
+
+    }, [showComponent,viewProvisionalid]);
+    
 
     
 
@@ -271,20 +331,104 @@ const ProvisionalRegistrations = () => {
             return d.isChecked === true
         });
         if (eamtyArray.length === 0) {
-            setStatusValue('');
-            setStatusName('');
+            setStatusValue('pen');
+            setStatusName('Pending');
         }
         setCheckBoxData(res);
+    };
+
+    const getDoctorDetailsByMobile = async () => {
+        try {
+                const fetchId = ++fetchIdRef.current
+                const pageSize=10;
+                const pageIndex=0
+            if (mobileNo.length === 10) {
+                const formData = new FormData();
+                formData.append("mobileNo", mobileNo);
+                formData.append("docName", "");
+               const { data } = await provisionalService.getProvisionalsByMobileNo(formData);
+               if (fetchId === fetchIdRef.current) {
+                const startRow = pageSize * pageIndex
+                const endRow = startRow + pageSize
+               if(data!=undefined){
+                setMobileNo('');
+                setProvisionals(data.slice(startRow, endRow))
+                setPageCount(Math.ceil(data.length / pageSize));
+                setLoading(false);
+               }else{
+                setProvisionals([]);
+                setLoading(false);
+                }
+            }
+                }else{
+                    alert("Please  enter 10 digit  Mobile No ");    
+                }
+            
+
+        } catch (err) {
+            console.log('error getDoctorDetails ', err);
+        }
+    };
+
+    const getDoctorDetailsBydocName = async () => {
+        try {
+                const fetchId = ++fetchIdRef.current
+                const pageSize=10;
+                const pageIndex=0
+            if (docName.length > 3) {
+                const formData = new FormData();
+                formData.append("mobileNo", "");
+                formData.append("docName",docName) ;
+               const { data } = await provisionalService.getProvisionalsByMobileNo(formData);
+               if (fetchId === fetchIdRef.current) {
+                const startRow = pageSize * pageIndex
+                const endRow = startRow + pageSize
+               if(data!=undefined){
+                setProvisionals(data.slice(startRow, endRow))
+                setPageCount(Math.ceil(data.length / pageSize));
+                setLoading(false);
+               }else{
+                   setProvisionals([]);
+                   setLoading(false);
+                }
+            }
+                }else{
+                    alert("Please enter at least 4 characters of  doctor Name");    
+                }
+            
+
+        } catch (err) {
+            console.log('error getDoctorDetails ', err);
+        }
     };
 
     return (
         <>
             <div className="container-fluid">
-                <div className="tsmc-filter-box d-flex align-items-center">
+                <div>
                     <div className="p-2 w-100">
                         <h2 className="fs-22 fw-700 mb-0">Provisional Registrations</h2>
                     </div>
-                    <span className="input-group-text p-0">
+                </div>    
+                <div className="tsmc-filter-box d-flex align-items-center">
+                <div className="input-group-text p-0">
+                        <label htmlFor="" className='mb-2'>Mobile No : </label>
+                        <input type="text" defaultValue={mobileNo} className='fs-14' id="mobileNo" onBlur={(e) => setMobileNo(e.target.value)} placeholder='Enter Mobile No' />
+                        <button type="submit"
+                            disabled={disablebtn}
+                            onClick={
+                                getDoctorDetailsByMobile
+                            } className='btn bi-search btn-outline-success'> </button>
+                    
+                        <label htmlFor="" className='mb-2'>Doctor Name  : </label>
+                        <input type="text" className='fs-14' id="name" onBlur={(e) => setdocName(e.target.value)} placeholder='Enter Name' />
+                        <button type="submit"
+                            disabled={disablebtn}
+                            onClick={
+                                getDoctorDetailsBydocName
+                            } className='btn bi-search btn-outline-success'> </button>
+                    </div>
+                    <span className="input-group-text p-0" style={{marginLeft:"30px"}}>
                     <div className="btn-group">
                         <label className="m-1">Tatkal</label>
                         <span className="tsmc-filter-box  form-control">
@@ -418,7 +562,9 @@ const ProvisionalRegistrations = () => {
                     }
                 </div>
             </div>
+            {showComponent === true?<ProvisionalView state={{ provisionalPrimaryId:viewProvisionalid , doctorPrimaryId: viewDocid, assignmentId:viewAssignid  }} greet={greet}></ProvisionalView>:""}
         </>
+        
     )
 }
 

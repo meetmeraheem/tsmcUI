@@ -12,7 +12,7 @@ import { UserRole } from "../../types/common";
 import { routes } from '../routes/routes-names';
 import {useNavigate } from 'react-router-dom';
 import TatCheckbox from './../../components/TatCheckbox';
-
+import GoodStandingRegView from './goodstanding-view';
 
 const GoodStanding = () => {
     const fetchIdRef = useRef(0);
@@ -43,12 +43,34 @@ const GoodStanding = () => {
         { id: 5, name: 'Verified', value: 'ver', isChecked: false }
     ]);
 
+    const [showComponent, setShowComponent] = useState(false);
+    const [viewagoodstandingid, setViewgoodstandingId] = useState('');
+    const [viewDocid, setViewDocId] = useState('');
+    const [viewAssignid, setViewAssignid] = useState('');
+
+  const toggleComponent = useCallback(async (gsId:any,docId:any,assignId:any) => {
+    try {
+            let newValue = gsId  ? gsId  : viewagoodstandingid;
+            setViewgoodstandingId(newValue);
+            setViewDocId(docId);
+            setViewAssignid(assignId);
+    } catch (err) {
+        console.log('error get users by role', err);
+    }
+}, [showComponent]);
+
+const greet=()=> {
+    setShowComponent(false);
+    setViewgoodstandingId('');
+    fetchData(0);
+   };
+
     const toggleSelected = (id:any,e:any) => {
         setSelected((selected:any) => ({
             ...selected,
             [id]: !selected[id]
         }));
-  };
+        };
 
     const handleChangeTatkal = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.checked){
@@ -122,7 +144,11 @@ const GoodStanding = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/admin_goodstanding_view'} state={{ gsPrimaryId: cell.data[Number(cell.row.id)].gsPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId,assignmentId:cell.data[Number(cell.row.id)].assignmentId }}>Proceed</Link>
+                    <a href="javascript:void(0);" onClick={() =>
+                        {
+                        setShowComponent(false);  
+                        toggleComponent(cell.data[Number(cell.row.id)].gsPrimaryId,cell.data[Number(cell.row.id)].doctorPrimaryId, cell.data[Number(cell.row.id)].assignmentId);
+                        }}>Proceed</a>
                 </>
             )
         },
@@ -133,7 +159,7 @@ const GoodStanding = () => {
                     {cell.data[Number(cell.row.id)].assignedUserName ===null && cell.data[Number(cell.row.id)].status ==='pen' ? 
                     <input  type="checkbox" id={cell.row.id} checked={selected[cell.row.id]} onClick={async (e:any) => {
                         toggleSelected(cell.row.id,e);
-                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'gs');
+                        const { data } = await assignmentService.getAssignMentBydoctorIdAssignType(cell.data[Number(cell.row.id)].doctor_id, 'gs',cell.data[Number(cell.row.id)].gsPrimaryId,);
                         if (data && data.length > 0) {
                             const getUser = await adminService.getAdminById(data[0].AssignTo);
                             if (getUser.data.length > 0) {
@@ -227,11 +253,15 @@ const GoodStanding = () => {
             console.log('error get users by role', err);
         }
     }, [assignedList, assignedUser]);
-
     useEffect(() => {
-        getUsersByRole();
-        setStatusValue('pen');
-    }, []);
+            getUsersByRole();
+            if (viewagoodstandingid) {
+                setShowComponent(true); // Show the child component when propValue is not empty
+              } else {
+                setShowComponent(false); // Hide the child component when propValue is empty
+              }
+    
+        }, [showComponent,viewagoodstandingid]);
 
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
         // This will get called when the table needs new data
@@ -521,6 +551,7 @@ const GoodStanding = () => {
                     }
                 </div>
             </div>
+            {showComponent === true?<GoodStandingRegView state={{ gsPrimaryId:viewagoodstandingid , doctorPrimaryId: viewDocid, assignmentId:viewAssignid  }} greet={greet}></GoodStandingRegView>:""}
         </>
     )
 }

@@ -20,10 +20,10 @@ import { adminNocFormType } from "../../types/noc";
 import AdminDoctorInfoCard from './../dashboard/includes/admin-doctor-info';
 import { authService } from '../../lib/api/auth';
 
-const FinalRegView = () => {
+const NocRegView =  (props:any) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { nocPrimaryId, doctorPrimaryId,assignmentId } = location.state
+    
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [noc, setNoc] = useState<adminNocFormType>();
@@ -34,8 +34,8 @@ const FinalRegView = () => {
     const [isEduCert2, setIsEduCert2] = useState(false);
     const getDoctorDetails = async () => {
         try {
-            if (doctorPrimaryId) {
-                const { data } = await doctorService.getDoctorById(doctorPrimaryId);
+            if (props.state.doctorPrimaryId) {
+                const { data } = await doctorService.getDoctorById(props.state.doctorPrimaryId);
                 if (data.length > 0) {
                     setDoctor(data[0]);
                 }
@@ -47,8 +47,8 @@ const FinalRegView = () => {
 
     const getNocDetails = useCallback(async () => {
         try {
-            if (nocPrimaryId) {
-                const { data } = await nocService.getNocById(nocPrimaryId);
+            if (props.state.nocPrimaryId) {
+                const { data } = await nocService.getNocById(props.state.nocPrimaryId);
                 if (data.length > 0) {
                     const country = await commonService.getCountry(Number(data[0].country));
                     const state = await commonService.getState(Number(data[0].state));
@@ -76,13 +76,8 @@ const FinalRegView = () => {
     }, []);
 
     const closewindow = useCallback(async () => {
-        if (userType === 'a') {
-            navigate(routes.admin_dashboard);
-        }
-        if (userType === 'u') {
-            navigate(routes.admin_dashboard);
-        }
-    },[userType]);
+        props.greet();
+    }, []);
 
     const submit = useCallback(async (status: any) => {
         if (status) {
@@ -90,9 +85,9 @@ const FinalRegView = () => {
             const nocInfo = {
                 approval_status: status,
                 remarks: remarks,
-                assignmnetId:assignmentId
+                assignmnetId:props.state.assignmentId
             }
-            const { success } = await nocService.updateNoc(nocPrimaryId, nocInfo);
+            const { success } = await nocService.updateNoc(props.state.nocPrimaryId, nocInfo);
             if (success) {
                 let msg="";
                 let smsmsg="";
@@ -122,12 +117,7 @@ const FinalRegView = () => {
                                 });
                             }
                             setDisablebtn(false);
-                            if (userType === 'a') {
-                                navigate(routes.admin_dashboard);
-                            }
-                            if (userType === 'u') {
-                                navigate(routes.admin_dashboard);
-                            }
+                            props.greet();
                         }
                     });
                 }
@@ -139,13 +129,7 @@ const FinalRegView = () => {
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                          
-                            if (userType === 'a') {
-                                navigate(routes.admin_dashboard);
-                            }
-                            if (userType === 'u') {
-                                navigate(routes.admin_dashboard);
-                            }
+                            props.greet();
                         }
                     });
                 }
@@ -165,7 +149,7 @@ const FinalRegView = () => {
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getNocDetails();
-    }, [nocPrimaryId, doctorPrimaryId]);
+    }, [props.state.nocPrimaryId, props.state.doctorPrimaryId]);
     return (
         <>
             <div className="col-8 m-auto mb-4">
@@ -181,7 +165,7 @@ const FinalRegView = () => {
                                 </div>
                                </div> 
                         <div className="row mb-3">
-                            <AdminDoctorInfoCard doctorId={doctorPrimaryId}></AdminDoctorInfoCard>
+                            <AdminDoctorInfoCard doctorId={props.state.doctorPrimaryId}></AdminDoctorInfoCard>
                         </div>
                             
                         
@@ -350,4 +334,4 @@ const FinalRegView = () => {
     )
 }
 
-export default FinalRegView;
+export default NocRegView;

@@ -333,7 +333,7 @@ const AdditionalQualificationRegistration = () => {
                                                             >
                                                                 {/*  <option value="">Select</option>*/}
                                                                 <option value="nor">Normal</option>
-                                                               {/* <option value="tat">Tatkal</option>*/}
+                                                                {/*<option value="tat">Tatkal</option>*/}
                                                             </select>
                                                         </div>
                                                         </div>
@@ -514,9 +514,9 @@ const AdditionalQualificationRegistration = () => {
                                                                                         }`}
                                                                                 >
                                                                     <option value="">Select </option>
-                                                                    <option value="Diploma">Diploma</option>
-                                                                    <option value="Post Graduation">Post Graduation</option>
-                                                                    <option value="Super Speciality">Super Speciality</option>
+                                                                    <option value="DIPLOMA">DIPLOMA</option>
+                                                                    <option value="POST GRADUATION">POST GRADUATION</option>
+                                                                    <option value="SUPER SPECIALITY">SUPER SPECIALITY</option>
                                                                 </select>
                                                                 {error && <small className="text-danger">{error.toString()}</small>}
                                                                             </>

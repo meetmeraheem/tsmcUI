@@ -19,11 +19,8 @@ import { LocalStorageManager } from '../../lib/localStorage-manager';
 import { authService } from '../../lib/api/auth';
 import AdminDoctorInfoCard from './../dashboard/includes/admin-doctor-info';
 
-const FinalRegView = () => {
+const FinalRegView = (props:any) => {
     const location = useLocation();
-    const navigate = useNavigate();
-    const { finalPrimaryId, doctorPrimaryId,assignmentId } = location.state
-    const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [final, setFinal] = useState<AdminFinalProfileType>();
     const [remarks, setRemarks] = useState('');
@@ -33,8 +30,8 @@ const FinalRegView = () => {
     const [disablebtn, setDisablebtn] = useState(false);
     const getDoctorDetails = async () => {
         try {
-            if (doctorPrimaryId) {
-                const { data } = await doctorService.getDoctorById(doctorPrimaryId);
+            if (props.state.doctorPrimaryId) {
+                const { data } = await doctorService.getDoctorById(props.state.doctorPrimaryId);
                 if (data.length > 0) {
                     setDoctor(data[0]);
                 }
@@ -46,8 +43,8 @@ const FinalRegView = () => {
 
     const getFinalDetails = useCallback(async () => {
         try {
-            if (finalPrimaryId) {
-                const { data } = await finalService.getFinalById(finalPrimaryId);
+            if (props.state.finalPrimaryId) {
+                const { data } = await finalService.getFinalById(props.state.finalPrimaryId);
                 if (data.length > 0) {
                     const country = await commonService.getCountry(Number(data[0].country));
                     const state = await commonService.getState(Number(data[0].state));
@@ -90,13 +87,8 @@ const FinalRegView = () => {
     }, []);
 
     const closewindow = useCallback(async () => {
-        if (userType === 'a') {
-            navigate(routes.admin_dashboard);
-        }
-        if (userType === 'u') {
-            navigate(routes.admin_dashboard);
-        }
-    },[userType]);
+        props.greet();
+    }, []);
 
     const submit = useCallback(async (status: any) => {
         if (status) {
@@ -104,9 +96,9 @@ const FinalRegView = () => {
             const finalInfo = {
                 approval_status: status,
                 remarks: remarks,
-                assignmnetId:assignmentId
+                assignmnetId:props.state.assignmentId
             }
-            const { success } = await finalService.updateFinal(finalPrimaryId, finalInfo);
+            const { success,message} = await finalService.updateFinal(props.state.finalPrimaryId, finalInfo);
             if (success) {
                 let msg="";
                 let smsmsg="";
@@ -114,7 +106,7 @@ const FinalRegView = () => {
                     msg="Final Details Application Rejected";
                     smsmsg="Rejected";
                 }else if(status === 'apr') {
-                    msg="Final Details successfully approved";
+                    msg="Final Details successfully approved and FMR No is ::"+message;
                     smsmsg="Approved";
                 }else{
                     msg="Final Details successfully Verified";
@@ -137,12 +129,7 @@ const FinalRegView = () => {
                                 });
                             }
                             setDisablebtn(false);
-                            if (userType === 'a') {
-                                navigate(routes.admin_dashboard);
-                            }
-                            if (userType === 'u') {
-                                navigate(routes.admin_dashboard);
-                            }
+                            props.greet();
                         }
                     });
                 }
@@ -154,13 +141,7 @@ const FinalRegView = () => {
                         confirmButtonText: "OK",
                     }).then(async (result) => {
                         if (result.isConfirmed) {
-                            
-                            if (userType === 'a') {
-                                navigate(routes.admin_dashboard);
-                            }
-                            if (userType === 'u') {
-                                navigate(routes.admin_dashboard);
-                            }
+                            props.greet();
                         }
                     });
                 }
@@ -173,14 +154,14 @@ const FinalRegView = () => {
                 confirmButtonText: "OK",
             });
         }
-    }, [remarks,finalPrimaryId]);
+    }, [remarks,props.state.finalPrimaryId]);
 
     useEffect(() => {
         const userTypeValue = LocalStorageManager.getUserType();
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getFinalDetails();
-    }, [finalPrimaryId, doctorPrimaryId]);
+    }, [props.state.finalPrimaryId, props.state.doctorPrimaryId]);
     return (
         <>
             <div className="col-8 m-auto mb-4">
@@ -196,7 +177,7 @@ const FinalRegView = () => {
                                 </div>
                             </div>                
                         <div className="row mb-3">
-                            <AdminDoctorInfoCard doctorId={doctorPrimaryId} fmrView="NO" additionalView="NO" ></AdminDoctorInfoCard>
+                            <AdminDoctorInfoCard doctorId={props.state.doctorPrimaryId} fmrView="NO" additionalView="NO" ></AdminDoctorInfoCard>
                         </div>
                         
                         <div className="w-100">

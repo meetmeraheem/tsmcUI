@@ -31,7 +31,7 @@ const LandingHeader = () => {
 								<ul className="navbar-nav justify-content-center flex-grow-1 pe-3 tsmc-nav-items">
 									<li className="nav-item"><Link to="/" className="nav-link" aria-current="page">Home</Link></li>
 									{/*<li className="nav-item"><Link to="/contact-us" className="nav-link">Contact Us</Link></li>*/}
-									<li className="nav-item"><a href={serverImgUrl + 'userdocs/userInstructions.pdf'} className="nav-link"  target="_blank">Help </a></li>
+									<li className="nav-item"><a href={serverImgUrl + 'userdocs/userInstructions.pdf'} className="nav-link"  target="_blank">INSTRUCTIONS	</a></li>
 									<li className="nav-item"><a href={serverImgUrl + 'userdocs/tsmcdocuments.pdf'} className="nav-link"  target="_blank">Required Documents</a></li>
 								</ul>
 							</div>

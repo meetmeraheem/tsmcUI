@@ -27,6 +27,8 @@ const AdminLogin = () => {
     const signIn = async (e: any) => {
         e.preventDefault();
         try {
+            LocalStorageManager.setAdminPrimaryId('');
+            LocalStorageManager.setUserType('');
             if (username && password) {
                 if (!usernameError && !passwordError) {
                     setIsSubmitting(true);

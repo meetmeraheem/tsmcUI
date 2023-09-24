@@ -24,7 +24,7 @@ import { renewalService } from "../../lib/api/renewals";
 import { changeofnameService } from "../../lib/api/changeofname";
 import { changeOfNameType } from "../../types/common";
 import { revalidationService } from "../../lib/api/revalidation";
-
+import DoctorInfoPrintCard from '../../containers/user-panal/includes/doctor-info-print';
 import SiteLogo from '../../assets/images/logo.png'
 import SiteSubLogo from '../../assets/images/tsgovt-logo.png'
 import { Link } from 'react-router-dom';
@@ -42,6 +42,7 @@ const PaymentSuccess = () => {
     const [pmrSerialNumber, setPMRSerialNumber] = useState(0);
     const [fmrSerialNumber, setFMRSerialNumber] = useState(0);
     const [transactionMsg, setTransactionMsg] = useState('');
+    const [isPrinting, setIsPrinting] = useState(false);
 
 
     useEffect(() => {
@@ -96,7 +97,6 @@ const PaymentSuccess = () => {
                         secureLocalStorage.removeItem("pcName");
                         secureLocalStorage.removeItem("afName");
                         secureLocalStorage.removeItem("nocName");
-                        secureLocalStorage.removeItem("regType");
                         const doctorMobileno = LocalStorageManager.getDoctorMobileno();
 
 
@@ -298,6 +298,8 @@ const PaymentSuccess = () => {
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
                         secureLocalStorage.removeItem("nocInfo");
+                        secureLocalStorage.removeItem("nocRegCertificateName");
+                        secureLocalStorage.removeItem("noc_af_Name");
                         Swal.fire({
                             title: "Success",
                             text: "Noc registration successfully completed",
@@ -339,6 +341,8 @@ const PaymentSuccess = () => {
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
                         secureLocalStorage.removeItem("goodstandingInfo");
+                        secureLocalStorage.removeItem("gsRegCertificateName");
+                        secureLocalStorage.removeItem("gs_af_Name");
                         Swal.fire({
                             title: "Success",
                             text: "GoodStanding registration successfully completed",
@@ -521,25 +525,23 @@ const PaymentSuccess = () => {
         })();
     }, []);
 
-
-
-
     const printwindow = useCallback(async () => {
         window.print();
-    }
-        , []);
+    }, []);
+
+
     return (
 
         <>
             <header>
                 <nav className="navbar navbar-expand-lg  tsmc-header">
                     <div className="container">
-                        <div className='col-1'>
+                        <div className='col-1' id="printPageButton">
                             <Link to="" className="navbar-brand tsmc-site-logo">
                                 <img src={SiteLogo} alt="Site Logo" className='mt-3' />
                             </Link>
                         </div>
-                        <div>
+                        <div className="row mr-3">
                             <h1 className="fs-22 fw-700 mb-0 text-light">Telangana State Medical Council</h1>
                         </div>
                         <div>
@@ -551,7 +553,7 @@ const PaymentSuccess = () => {
                             <i className="bi bi-list"></i>
                         </button>
                     </div>
-                    <Link to="" className="navbar-brand tsmc-site-logo tsmc-site-sub-logo">
+                    <Link to="" id="printPageButton" className="navbar-brand tsmc-site-logo tsmc-site-sub-logo">
                         <img src={SiteSubLogo} alt="Site Logo" />
                     </Link>
                 </nav>
@@ -560,8 +562,11 @@ const PaymentSuccess = () => {
                 <div className="card shadow border-0 p-4">
                     <div className="card-body">
                         <div className="row mb-3">
-                            <div className="col-8 align-items-end justify-content-end">
-                                <button type="button"
+                            <div className="col"></div>
+                            <div className="col"></div>
+                            
+                            <div className="col align-items-center justify-content-center">
+                                <button type="button" id="printPageButton"
                                     onClick={() => {
                                         printwindow();
                                     }} className='btn btn-outline-primary'><i className="bi-printer-fill"></i> Print</button>
@@ -595,7 +600,9 @@ const PaymentSuccess = () => {
                                             <h1 className='fs-22 fw-700'>Payment Success</h1>
                                         </div>
                                         <div className="px-3 text-center">
-                                            <p className="mb-3">Your application successfully submitted to <br /> Telangana State Medical Council</p>
+                                            <p className="mb-3" id="printPageButton">Your application successfully submitted to <br /> Telangana State Medical Council</p>
+                                            <hr />
+                                            <DoctorInfoPrintCard />  
                                         </div>
                                     </div>
                                 }
@@ -603,11 +610,13 @@ const PaymentSuccess = () => {
 
                         }
                         <hr className="my-4" />
+                        <div className="align-items-center  mb-3">
                         <div className="col d-flex" id="msgId"></div>
-                        {(secureLocalStorage.getItem("regType") === 'provisional' || secureLocalStorage.getItem("regType") === 'final')?
-                        <button type="button" onClick={() => { navigate(routes.main); }} className="btn btn-primary">Back to Login</button>
+                        </div>
+                        {(secureLocalStorage.getItem("regType") === 'provisional') || (secureLocalStorage.getItem("regType") === 'final')?
+                        <button type="button" id="printPageButton"  onClick={() => { navigate(routes.main); }} className="btn btn-primary">Back to Login</button>
                         
-                        : <button type="button" onClick={() => { navigate(routes.userpanal); }} className="btn btn-primary">Back to Profile</button>}
+                        : <button type="button" id="printPageButton" onClick={() => { navigate(routes.userpanal); }} className="btn btn-primary">Back to Profile</button>}
                     </div>
                 </div>
             </section>

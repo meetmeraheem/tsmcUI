@@ -45,6 +45,8 @@ const EditRenewalRegistration = () => {
         edu_cert3: renewals?.edu_cert3 || '',
         reg_date:'',
         status:'',
+        renewal_date_type:'',
+        
     }),
     [renewals]
 );
@@ -60,6 +62,7 @@ const EditRenewalRegistration = () => {
                         edu_cert1: data.document1,
                         edu_cert2: data.document2,
                         edu_cert3: data.document3,
+                        renewal_date_type:'',
                     });
                 }
             }

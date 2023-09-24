@@ -1,10 +1,11 @@
 import moment from "moment";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+
 import Table from "../../components/Table";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { renewalService } from "../../lib/api/renewals";
 import TatCheckbox from './../../components/TatCheckbox';
+import RenewalsViews from './renewals-view'
 
 const MyWorkItems = () => {
     const fetchIdRef = useRef(0);
@@ -17,6 +18,30 @@ const MyWorkItems = () => {
     const [pageCount, setPageCount] = useState(0);
     const [istatkal, setIsTatkal] = useState('nor');
     const [isCheckbox, setIsCheckbox] = useState(false);
+
+
+    const [showComponent, setShowComponent] = useState(false);
+    const [viewRenwalid, setViewRenewalId] = useState('');
+    const [viewDocid, setViewDocId] = useState('');
+    const [viewAssignid, setViewAssignid] = useState('');
+
+  const toggleComponent = useCallback(async (renwalId:any,docId:any,assignId:any) => {
+    try {
+            let newValue = renwalId  ? renwalId  : viewRenwalid;
+            setViewRenewalId(newValue);
+            setViewDocId(docId);
+            setViewAssignid(assignId);
+    } catch (err) {
+        console.log('error get users by role', err);
+    }
+}, [viewRenwalid]);
+
+const greet=()=> {
+    setShowComponent(false);
+    setViewRenewalId('');
+    fetchData(0);
+   }
+
     const handleChangeTatkal = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.checked){
             setIsTatkal('tat');
@@ -69,10 +94,10 @@ const MyWorkItems = () => {
             accessor: "status",
             Cell: ({ cell: { value } }: any) => {
                 return (
-                    <>{value == 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
-                        {value == 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
-                        {value == 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
-                        {value == 'rej' && <span className="alert alert-danger rounded-pill py-0 px-2 fs-12">Rejected</span>}
+                    <>  {value === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
+                        {value === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
+                        {value === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                        {value === 'rej' && <span className="alert alert-danger rounded-pill py-0 px-2 fs-12">Rejected</span>}
                     </>
                 );
             }
@@ -81,11 +106,24 @@ const MyWorkItems = () => {
             Header: "Action",
             Cell: (cell: any) => (
                 <>
-                    <Link to={'/admin/renewals_reg_view'} state={{ renewalPrimaryId: cell.data[Number(cell.row.id)].renewalPrimaryId, doctorPrimaryId: cell.data[Number(cell.row.id)].doctorPrimaryId, assignmentId: cell.data[Number(cell.row.id)].assignmentId }}>Proceed</Link>
+                    <a href="javascript:void(0);" onClick={() =>
+                        {
+                        setShowComponent(false);  
+                        toggleComponent(cell.data[Number(cell.row.id)].renewalPrimaryId,cell.data[Number(cell.row.id)].doctorPrimaryId, cell.data[Number(cell.row.id)].assignmentId);
+                        }}>Proceed</a>
                 </>
             )
         }
     ];
+
+    useEffect(() => {
+        if (viewRenwalid) {
+            setShowComponent(true); // Show the child component when propValue is not empty
+          } else {
+            setShowComponent(false); // Hide the child component when propValue is empty
+          }
+
+    }, [showComponent,viewRenwalid]);
 
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
         // This will get called when the table needs new data
@@ -103,12 +141,18 @@ const MyWorkItems = () => {
         const { data } = await renewalService.getRenewalsByUserId(vfromdate, vtodate, adminPrimaryId, 'renewal',istatkal);
         if (data.length > 0) {
             // We'll even set a delay to simulate a server here
+            if(pageSize===undefined){
+                pageSize=10;
+            }
+            if(pageIndex===undefined){
+              pageIndex=0
+            }
             setTimeout(() => {
                 // Only update the data if this is the latest fetch
                 if (fetchId === fetchIdRef.current) {
                     const startRow = pageSize * pageIndex
                     const endRow = startRow + pageSize
-                    if (data != undefined) {
+                    if (data !== undefined) {
                         setRenewals(data.slice(startRow, endRow))
 
                         // Your server could send back total page count.
@@ -180,6 +224,7 @@ const MyWorkItems = () => {
                     </div>
                 </div>
             </div>
+            {showComponent === true?<RenewalsViews state={{ renewalPrimaryId:viewRenwalid , doctorPrimaryId: viewDocid, assignmentId:viewAssignid  }} greet={greet}></RenewalsViews>:""}
         </>
     )
 }
