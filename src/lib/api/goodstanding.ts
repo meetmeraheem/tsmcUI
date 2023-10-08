@@ -8,6 +8,10 @@ export const goodstandingService = {
         const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingsByFilter/${fromdate}/${todate}/${status}/${istatkal}`);
         return responseData as ApiResponseType;
     },
+    async getGoodStandingByMobileNoByUserId( data: any) {
+        const { data: responseData } = await axiosInstance.post(`goodstanding/getGoodStandingByMobileNoByUserId`,data);
+        return responseData as ApiResponseType;
+    },
     async getGoodStandingByMobileNo( data: any) {
         const { data: responseData } = await axiosInstance.post(`goodstanding/getGoodStandingByMobileNo`,data);
         return responseData as ApiResponseType;
@@ -35,8 +39,8 @@ export const goodstandingService = {
         return responseData as ApiResponseType;
     },
     
-    async getGoodStandingByUserId( fromdate: any,todate: any,userId:any,regType: any,istatkal:any) {
-        const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingByUserId/${fromdate}/${todate}/${userId}/${regType}/${istatkal}`);
+    async getGoodStandingByUserId( fromdate: any,todate: any,userId:any,regType: any,statusValue:any,istatkal:any) {
+        const { data: responseData } = await axiosInstance.get(`goodstanding/getGoodStandingByUserId/${fromdate}/${todate}/${userId}/${regType}/${statusValue}/${istatkal}`);
         return responseData as ApiResponseType;
     },
 

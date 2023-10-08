@@ -655,7 +655,7 @@ const Myprofile = () => {
                                                         <tbody>
                                                             {GoodStandingList?.map((obj: any) => {
                                                                 return (<tr>
-                                                                    <td>{moment(obj.reg_date).format('DD/MM/YYYY')}</td>
+                                                                    <td>{moment(obj.regDate).format('DD/MM/YYYY')}</td>
 
                                                                     <td>
                                                                         {obj.status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}

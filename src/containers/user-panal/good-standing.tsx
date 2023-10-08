@@ -141,7 +141,14 @@ const GoodStandingRegistration = () => {
                                                                 value={provisionalRequestType}
                                                                 onChange={(ev) => {
                                                                     setProvisionalRequestType(ev.target.value);
-                                                                }}
+                                                                    if(ev.target.value === 'tat'){
+                                                                        Swal.fire({
+                                                                            text: "You have selected Tatkal Service ,Additional charges applicable",
+                                                                            icon: "warning",
+                                                                            confirmButtonText: "OK",
+                                                                        });               
+                                                                       }                                                     
+                                                                    }}
                                                                 className="form-select"
                                                             >
                                                               {/*  <option value="">Select</option>*/}

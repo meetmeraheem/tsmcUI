@@ -17,6 +17,7 @@ import secureLocalStorage from 'react-secure-storage';
 import { ReactFilesError, ReactFilesFile } from "../../types/files";
 import { Messages } from "../../lib/constants/messages";
 import { isLessThanTheMB } from "../../lib/utils/lessthan-max-filesize";
+import Swal from "sweetalert2";
 
 const NocRegistration = () => {
     const navigate = useNavigate();
@@ -200,6 +201,13 @@ const NocRegistration = () => {
                                                                 value={provisionalRequestType}
                                                                 onChange={(ev) => {
                                                                     setProvisionalRequestType(ev.target.value);
+                                                                    if(ev.target.value === 'tat'){
+                                                                        Swal.fire({
+                                                                            text: "You have selected Tatkal Service ,Additional charges applicable",
+                                                                            icon: "warning",
+                                                                            confirmButtonText: "OK",
+                                                                        });               
+                                                                       }   
                                                                 }}
                                                                 className="form-select"
                                                             >

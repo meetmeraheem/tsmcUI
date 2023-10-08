@@ -24,6 +24,11 @@ export const nocService = {
         return responseData;
 
     },
+
+    async getNocsByMobileNoByUserId( data: any) {
+        const { data: responseData } = await axiosInstance.post(`noc/getNocsByMobileNoByUserId`,data);
+        return responseData;
+    },
     async getNocsByMobileNo( data: any) {
         const { data: responseData } = await axiosInstance.post(`noc/getNocsByMobileNo`,data);
         return responseData;
@@ -33,8 +38,8 @@ export const nocService = {
         return responseData;
 
     },
-    async getNocByUserId(fromdate: any,todate: any,user_id: number,regType:any,istatkal:any){
-        const { data: responseData } = await axiosInstance.get(`noc/getNocByUserId/${fromdate}/${todate}/${user_id}/${regType}/${istatkal}`);
+    async getNocByUserId(fromdate: any,todate: any,user_id: number,regType:any,statusValue:any,istatkal:any){
+        const { data: responseData } = await axiosInstance.get(`noc/getNocByUserId/${fromdate}/${todate}/${user_id}/${regType}/${statusValue}/${istatkal}`);
         return responseData;
     },
         async  getNocById(nocPrimaryId: any){

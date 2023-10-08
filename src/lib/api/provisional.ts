@@ -6,7 +6,10 @@ export const provisionalService = {
         const { data: responseData } = await axiosInstance.post(`provisional/createProvisional`, data);
         return responseData;
     },
-
+    async getProvisionalsByMobileNoByUserId( data: any) {
+        const { data: responseData } = await axiosInstance.post(`provisional/getProvisionalsByMobileNoByUserId`,data);
+        return responseData as ApiResponseType;
+    },
     async getProvisionalsByMobileNo( data: any) {
         const { data: responseData } = await axiosInstance.post(`provisional/getProvisionalsByMobileNo`,data);
         return responseData as ApiResponseType;
@@ -33,8 +36,8 @@ export const provisionalService = {
         const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByFilter/${from_date}/${to_Date}/${status}/${istatkal}`);
         return responseData as ApiResponseType;
     },
-    async getProvisionalsByUserId( fromdate: any,todate: any,user_id: number,regType:any,istatkal:any) {
-        const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByUserId/${fromdate}/${todate}/${user_id}/${regType}/${istatkal}`);
+    async getProvisionalsByUserId( fromdate: any,todate: any,user_id: number,regType:any,statusValue:any,istatkal:any) {
+        const { data: responseData } = await axiosInstance.get(`provisional/getProvisionalsByUserId/${fromdate}/${todate}/${user_id}/${regType}/${statusValue}/${istatkal}`);
         return responseData as ApiResponseType;
     },
 

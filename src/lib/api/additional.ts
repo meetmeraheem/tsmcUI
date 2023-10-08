@@ -25,6 +25,11 @@ export const additionalService = {
         const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByFilter/${fromdate}/${todate}/${statusValue}/${istatkal}`);
         return responseData;
     },
+
+    async getAddlQualifByMobileNoByUserId( data: any) {
+        const { data: responseData } = await axiosInstance.post(`additionalQualification/getAddlQualifByMobileNoByUserId`,data);
+        return responseData as ApiResponseType;
+    },
     async getAddlQualifByMobileNo( data: any) {
         const { data: responseData } = await axiosInstance.post(`additionalQualification/getAddlQualifByMobileNo`,data);
         return responseData as ApiResponseType;
@@ -35,8 +40,8 @@ export const additionalService = {
         return responseData;
     },
 
-    async getQualificationsByUserId(fromdate: any,todate: any,user_id: number,regType:any,istatkal:any){
-        const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByUserId/${fromdate}/${todate}/${user_id}/${regType}/${istatkal}`);
+    async getQualificationsByUserId(fromdate: any,todate: any,user_id: number,regType:any,statusValue:any,istatkal:any){
+        const { data: responseData } = await axiosInstance.get(`additionalQualification/getQualificationByUserId/${fromdate}/${todate}/${user_id}/${regType}/${statusValue}/${istatkal}`);
         return responseData;
     },
 
