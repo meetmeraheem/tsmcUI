@@ -8,6 +8,7 @@ import DatePicker from 'react-date-picker';
 import { routes } from '../routes/routes-names';
 import healthminister from '../../assets/images/health-minister.jpg';
 import chiefminister from '../../assets/images/chiefminister.jpg';
+import DocDefultPic from '../../assets/images/doc-default-img.jpg';
 import { DoctorFormType, DoctorSignUpFormType } from '../../types/doctor';
 import { doctorService } from '../../lib/api/doctot';
 import { getUser, setDoctorInfo } from '../../redux/doctor';
@@ -475,20 +476,20 @@ const HomePage = () => {
                               <div className='col-2'>
                                    <div className="card shadow-sm rounded border-0 mb-4">
                                         <div className="card-body tsmc-health-pic">
-                                             <img src={chiefminister} alt="" />
+                                             <img src={DocDefultPic} alt="" />
                                         </div>
                                         <div className="card-footer text-center border-top-0">
-                                             <h2 className='fs-14 fw-700 mb-0'>Sri K Chandrashekar Rao</h2>
-                                             <p className='fs-10 fw-600'>Hon'ble Chief Minister</p>
+                                            {/* <h2 className='fs-14 fw-700 mb-0'>Sri K Chandrashekar Rao</h2>
+                                             <p className='fs-10 fw-600'>Hon'ble Chief Minister</p>*/}
                                         </div>
                                    </div>
                                    <div className="card shadow-sm rounded border-0">
                                         <div className="card-body tsmc-health-pic">
-                                             <img src={healthminister} alt="" />
+                                             <img src={DocDefultPic} alt="" />
                                         </div>
                                         <div className="card-footer text-center border-top-0">
-                                             <h2 className='fs-14 fw-700 mb-0'>Sri T Harish Rao</h2>
-                                             <p className='fs-10 fw-600'>Hon'ble Minister for Finance, Health, Medical & Famiily Welfare</p>
+                                             {/*<h2 className='fs-14 fw-700 mb-0'>Sri T Harish Rao</h2>
+                                             <p className='fs-10 fw-600'>Hon'ble Minister for Finance, Health, Medical & Famiily Welfare</p>*/}
                                         </div>
                                    </div>
                               </div>
@@ -539,7 +540,7 @@ const HomePage = () => {
                                         <div className="card-body py-3">
                                              <ul className="nav nav-tabs nav-fill mb-4" id="myTab" role="tablist">
                                                   <li className="nav-item" role="presentation">
-                                                       <button className="nav-link active" id="LoginPageTab" data-bs-toggle="tab" data-bs-target="#LoginPage" type="button" role="tab" aria-controls="LoginPage" aria-selected="true">Registered User Sign In</button>
+                                                       <button className="nav-link active" id="LoginPageTab" data-bs-toggle="tab" data-bs-target="#LoginPage" type="button" role="tab" aria-controls="LoginPage" aria-selected="true">TSMC Registered Doctor Sign In</button>
                                                   </li>
                                                   <li className="nav-item" role="presentation">
                                                        <button className="nav-link" id="NewRegPageTab" data-bs-toggle="tab" data-bs-target="#NewRegPage" type="button" role="tab" aria-controls="NewRegPage" 
@@ -547,7 +548,7 @@ const HomePage = () => {
                          text: "Doctors who have not enrolled for any certificate services with TSMC previously should Sign Up here",
                          icon: "warning",
                          confirmButtonText: Messages.OKText,
-                    }); }}  aria-selected="false">New User Sign Up</button>
+                    }); }}  aria-selected="false">New Doctor Sign Up</button>
                                                   </li>
                                              </ul>
                                              <div className="tab-content" id="myTabContent">

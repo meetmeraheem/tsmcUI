@@ -197,13 +197,13 @@ const FinalRegView = (props:any) => {
                                     <div className="fs-14">{final?.qualification ? final?.qualification : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Month:</label>
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>InternShip Completion Month:</label>
                                     <div className="fs-14">{final?.exam_month ? final?.exam_month : 'NA'}</div>
                                 </div>
                             </div>
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Exam Year:</label>
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>InternShip Completion Year :</label>
                                     <div className="fs-14">{final?.exam_year ? final?.exam_year : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
@@ -243,7 +243,7 @@ const FinalRegView = (props:any) => {
                                     <div className="fs-14">{final?.dd_amount ? final?.dd_amount : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
-                                <label htmlFor="" className='fs-14 fw-600 me-2'>Payment Reciept No:</label>
+                                <label htmlFor="" className='fs-14 fw-600 me-2'>Payment Receipt No:</label>
                                     <div className="fs-14">{final?.receipt_no ? final?.receipt_no : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">

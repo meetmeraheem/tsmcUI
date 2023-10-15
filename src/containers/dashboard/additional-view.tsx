@@ -225,7 +225,7 @@ const AdditionalRegView = (props:any) => {
                                     <div className="fs-14">{additionals?.dd_amount ? additionals?.dd_amount : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
-                                <label htmlFor="" className='fs-14 fw-600 me-2'>Payment Reciept No:</label>
+                                <label htmlFor="" className='fs-14 fw-600 me-2'>Payment Receipt No:</label>
                                     <div className="fs-14">{additionals?.receipt_no ? additionals?.receipt_no : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">

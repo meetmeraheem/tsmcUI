@@ -214,7 +214,7 @@ const NocRegView =  (props:any) => {
                                     <div className="fs-14">{noc?.dd_amount ? noc?.dd_amount : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Reciept No:</label>
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Pyament Receipt No:</label>
                                     <div className="fs-14">{noc?.receipt_no ? noc?.receipt_no : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">

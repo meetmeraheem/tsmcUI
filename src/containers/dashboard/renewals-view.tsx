@@ -218,7 +218,7 @@ const RenewalsViews = (props:any) => {
                                             <div className="fs-14">{renewalsData?.dd_amount ? renewalsData?.dd_amount : 'NA'}</div>
                                         </div>
                                         <div className="col d-flex">
-                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Payment Reciept No:</label>
+                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Payment Receipt No:</label>
                                             <div className="fs-14">{renewalsData?.receipt_no ? renewalsData?.receipt_no : 'NA'}</div>
                                         </div>
 

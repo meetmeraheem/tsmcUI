@@ -675,7 +675,7 @@ const FinalRegistration = () => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                                                <label className="mb-2">InternShip  Month</label>
+                                                                                <label className="mb-2">InternShip Completion Month</label>
                                                                                 <select
                                                                                     value={field.value}
                                                                                     onChange={(ev) => {
@@ -726,7 +726,7 @@ const FinalRegistration = () => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                                                <label className="mb-2"> InternShip  Year</label>
+                                                                                <label className="mb-2"> InternShip Completion Year</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     value={field.value}
@@ -789,7 +789,7 @@ const FinalRegistration = () => {
                                                             </div>
                                                             <div className="row mb-2">
                                                         <div className="col-sm-auto">
-                                                        <label htmlFor="CalcDate">Enter Internship Completion/NOC  Date</label>
+                                                        <label htmlFor="CalcDate">Enter Internship Completion/NOC Date(for other states)</label>
                                                         <Field name="calc_date">
                                                                     {(fieldProps: FieldProps) => {
                                                                         const { field, form } = fieldProps;
