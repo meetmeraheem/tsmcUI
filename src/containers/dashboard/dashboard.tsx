@@ -7,7 +7,7 @@ import GoodStandingRegList from '../dashboard/goodstanding-registrations';
 import NocRegList from '../dashboard/noc-registrations';
 import RenewalRegList from '../dashboard/renewal-registrations';
 import AdminEditPage from '../dashboard/admin-edit-page';
-import ChangeofNameReg from '../dashboard/changeofname-registrations';
+import TatKalDateUpdate from '../dashboard/adminEdits/TatKalDateUpdate';
 import  ProvRevalidationReg  from '../dashboard/prov-revalidation-registrations';
 
 
@@ -54,6 +54,12 @@ type TabsType = {
       label: "Enable Edit for Doctor",
       index: 7,
       Component: AdminEditPage
+    },
+
+    {
+      label: "TatKal Update",
+      index: 8,
+      Component: TatKalDateUpdate
     },
   /*{
       label: "Change of Name",

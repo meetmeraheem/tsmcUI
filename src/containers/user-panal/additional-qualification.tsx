@@ -281,6 +281,33 @@ const AdditionalQualificationRegistration = () => {
            
         });
 
+        const getTatkalUpdate = useCallback(async (value:any) => {
+            try {
+                if(value !== 'nor'){
+                    const { success, data, message } = await commonService.getTatkalCurrentStatus();
+                        if (data === "YES") {
+                            Swal.fire({
+                                text: "You have selected Tatkal Service ,Additional charges applicable",
+                                icon: "warning",
+                                confirmButtonText: "OK",
+                            })
+                            setAdditionalRequestType('tat');
+                            }else{
+                                Swal.fire({
+                                    text: "TatKal Not allowed for Today (or) Day limit Reached",
+                                    icon: "warning",
+                                    confirmButtonText: "OK",
+                                })
+                                setAdditionalRequestType('nor');
+                            }
+                        }else{
+                            setAdditionalRequestType('nor');
+                        }
+            } catch (err) {
+                console.log('error countries getList', err);
+            }
+        }, []);
+
     return (
         <>
             <section className='gray-banner'>
@@ -327,13 +354,13 @@ const AdditionalQualificationRegistration = () => {
                                                             <select
                                                                 value={additionalRequestType}
                                                                 onChange={(ev) => {
-                                                                    setAdditionalRequestType(ev.target.value);
+                                                                    getTatkalUpdate(ev.target.value);
                                                                 }}
                                                                 className="form-select"
                                                             >
                                                                 {/*  <option value="">Select</option>*/}
                                                                 <option value="nor">Normal</option>
-                                                                {/*<option value="tat">Tatkal</option>*/}
+                                                                <option value="tat">Tatkal</option>
                                                             </select>
                                                         </div>
                                                         </div>

@@ -16,6 +16,7 @@ import { object as objectYup, string as stringYup, number as numberYup } from 'y
 import { ReactFilesError, ReactFilesFile } from "../../types/files";
 import { Messages } from "../../lib/constants/messages";
 import { isLessThanTheMB } from "../../lib/utils/lessthan-max-filesize";
+import { commonService } from "../../lib/api/common";
 
 const GoodStandingRegistration = () => {
     const navigate = useNavigate();
@@ -85,6 +86,33 @@ const GoodStandingRegistration = () => {
         [doctorId, provisionalRequestType, provisionalCertificate, applicationForm]
     );
 
+    const getTatkalUpdate = useCallback(async (value:any) => {
+        try {
+            if(value !== 'nor'){
+                const { success, data, message } = await commonService.getTatkalCurrentStatus();
+                    if (data === "YES") {
+                        Swal.fire({
+                            text: "You have selected Tatkal Service ,Additional charges applicable",
+                            icon: "warning",
+                            confirmButtonText: "OK",
+                        })
+                        setProvisionalRequestType('tat');
+                        }else{
+                            Swal.fire({
+                                text: "TatKal Not allowed for Today (or) Day limit Reached",
+                                icon: "warning",
+                                confirmButtonText: "OK",
+                            })
+                            setProvisionalRequestType('nor');
+                        }
+                    }else{
+                        setProvisionalRequestType('nor');
+                    }
+        } catch (err) {
+            console.log('error countries getList', err);
+        }
+    }, []);
+
     return (
         <>
             <section className='gray-banner'>
@@ -140,20 +168,13 @@ const GoodStandingRegistration = () => {
                                                             <select
                                                                 value={provisionalRequestType}
                                                                 onChange={(ev) => {
-                                                                    setProvisionalRequestType(ev.target.value);
-                                                                    if(ev.target.value === 'tat'){
-                                                                        Swal.fire({
-                                                                            text: "You have selected Tatkal Service ,Additional charges applicable",
-                                                                            icon: "warning",
-                                                                            confirmButtonText: "OK",
-                                                                        });               
-                                                                       }                                                     
-                                                                    }}
+                                                                    getTatkalUpdate(ev.target.value);
+                                                                }}
                                                                 className="form-select"
                                                             >
                                                               {/*  <option value="">Select</option>*/}
                                                                 <option value="nor">Normal</option>
-                                                               {/*<option value="tat">Tatkal</option>*/}
+                                                               <option value="tat">Tatkal</option>
                                                             </select>
                                                         </div>
                                                         </div>
@@ -231,7 +252,7 @@ const GoodStandingRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload Degree Certificate</p>
+                                                                                            <p className='fs-13'>Upload TSMC Final Registration Certificate</p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>
@@ -301,7 +322,7 @@ const GoodStandingRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Other Supporting documents </p>
+                                                                                            <p className='fs-13'>Upload TSMC Additional/Renewal Registration Certificate </p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>
@@ -350,7 +371,7 @@ export default GoodStandingRegistration;
 const getValidationSchema = () =>
     objectYup().shape({
         edu_cert1: stringYup()
-            .required('Degree certificate is required.'),
-         edu_cert2: stringYup()
-            .required('Other Qualification/Renewal documents is required.'),
+                .required('TSMC Final Registration  is required.'),
+             edu_cert2: stringYup()
+                .required('TSMC Addl Qualification/Renewal documents is required.'),
     });

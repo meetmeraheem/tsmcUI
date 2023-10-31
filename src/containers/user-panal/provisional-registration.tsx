@@ -77,6 +77,35 @@ const ProvisionalRegistration = () => {
         }
     }, []);
 
+
+    const getTatkalUpdate = useCallback(async (value:any) => {
+        try {
+            if(value !== 'nor'){
+                const { success, data, message } = await commonService.getTatkalCurrentStatus();
+                    if (data === "YES") {
+                        Swal.fire({
+                            text: "You have selected Tatkal Service ,Additional charges applicable",
+                            icon: "warning",
+                            confirmButtonText: "OK",
+                        })
+                        setProvisionalRequestType('tat');
+                        }else{
+                            Swal.fire({
+                                text: "TatKal Not allowed for Today (or) Day limit Reached",
+                                icon: "warning",
+                                confirmButtonText: "OK",
+                            })
+                            setProvisionalRequestType('nor');
+                        }
+                    }else{
+                        setProvisionalRequestType('nor');
+                    }
+        } catch (err) {
+            console.log('error countries getList', err);
+        }
+    }, []);
+
+
     useEffect(() => {
         Swal.fire({
             text: "Doctors who completed the degree and about to start their internship should register for provisional.",
@@ -245,13 +274,13 @@ const ProvisionalRegistration = () => {
                                                             <select
                                                                 value={provisionalRequestType}
                                                                 onChange={(ev) => {
-                                                                    setProvisionalRequestType(ev.target.value);
+                                                                    getTatkalUpdate(ev.target.value);
                                                                 }}
                                                                 className="form-select"
                                                             >
                                                                 {/*  <option value="">Select</option>*/}
                                                                 <option value="nor">Normal</option>
-                                                               {/*<option value="tat">Tatkal</option>*/}
+                                                               <option value="tat">Tatkal</option>
                                                             </select>
                                                         </div>
                                                         </div>

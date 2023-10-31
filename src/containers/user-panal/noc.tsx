@@ -2,7 +2,7 @@ import DoctorInfoCard from './includes/doctor-info';
 import { Field, FieldProps, Formik, FormikProps } from 'formik';
 import getValue from 'lodash/get';
 import { nocUserFormType } from '../../types/noc';
-import { date as dateYup, object as objectYup, string as stringYup, number as numberYup } from 'yup';
+import { object as objectYup, string as stringYup } from 'yup';
 import Select from 'react-select';
 import { City, Country, State } from "../../types/common";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -18,6 +18,7 @@ import { ReactFilesError, ReactFilesFile } from "../../types/files";
 import { Messages } from "../../lib/constants/messages";
 import { isLessThanTheMB } from "../../lib/utils/lessthan-max-filesize";
 import Swal from "sweetalert2";
+
 
 const NocRegistration = () => {
     const navigate = useNavigate();
@@ -146,10 +147,38 @@ const NocRegistration = () => {
                 .required('councilpincode is required.')
                 .min(6, 'councilpincode 6 numbers'),
             edu_cert1: stringYup()
-                .required('Degree certificate is required.'),
+                .required('TSMC Final Registration  is required.'),
              edu_cert2: stringYup()
-                .required('Other Qualification/Renewal documents is required.'),
+                .required('TSMC Addl Qualification/Renewal documents is required.'),
         });
+
+        const getTatkalUpdate = useCallback(async (value:any) => {
+            try {
+                if(value !== 'nor'){
+                    const {data} = await commonService.getTatkalCurrentStatus();
+                        if (data === "YES") {
+                            Swal.fire({
+                                text: "You have selected Tatkal Service ,Additional charges applicable",
+                                icon: "warning",
+                                confirmButtonText: "OK",
+                            })
+                            setProvisionalRequestType('tat');
+                            }else{
+                                Swal.fire({
+                                    text: "TatKal Not allowed for the day (or) Day limit Reached",
+                                    icon: "warning",
+                                    confirmButtonText: "OK",
+                                })
+                                setProvisionalRequestType('nor');
+                            }
+                        }else{
+                            setProvisionalRequestType('nor');
+                        }
+            } catch (err) {
+                console.log('error countries getList', err);
+            }
+        }, []);
+
     return (
         <>
             <section className='gray-banner'>
@@ -200,20 +229,13 @@ const NocRegistration = () => {
                                                             <select
                                                                 value={provisionalRequestType}
                                                                 onChange={(ev) => {
-                                                                    setProvisionalRequestType(ev.target.value);
-                                                                    if(ev.target.value === 'tat'){
-                                                                        Swal.fire({
-                                                                            text: "You have selected Tatkal Service ,Additional charges applicable",
-                                                                            icon: "warning",
-                                                                            confirmButtonText: "OK",
-                                                                        });               
-                                                                       }   
+                                                                    getTatkalUpdate(ev.target.value);
                                                                 }}
                                                                 className="form-select"
                                                             >
                                                                 {/*  <option value="">Select</option>*/}
                                                                 <option value="nor">Normal</option>
-                                                                {/*<option value="tat">Tatkal</option>*/}
+                                                                <option value="tat">Tatkal</option>
                                                             </select>
                                                         </div>
                                                         </div>
@@ -367,7 +389,7 @@ const NocRegistration = () => {
                                                                                             placeholder="Select state"
                                                                                            
                                                                                             onChange={(selectedOption) => {
-                                                                                                const { id, name } =
+                                                                                                const { id } =
                                                                                                     selectedOption as State;
                                                                                                 setFieldTouched(field.name);
                                                                                                 setFieldValue(field.name, id);
@@ -403,7 +425,7 @@ const NocRegistration = () => {
                                                                                             placeholder="Select city"
                                                                                            
                                                                                             onChange={(selectedOption) => {
-                                                                                                const { id, name } =
+                                                                                                const { id } =
                                                                                                     selectedOption as City;
                                                                                                 setFieldTouched(field.name);
                                                                                                 setFieldValue(field.name, id);
@@ -515,7 +537,7 @@ const NocRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload Degree Certificate</p>
+                                                                                            <p className='fs-13'>Upload TSMC Final Registration Certificate</p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>
@@ -585,7 +607,7 @@ const NocRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Other Supporting documents</p>
+                                                                                            <p className='fs-13'>Upload TSMC Additional/Renewal Registration Certificate</p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>

@@ -12,9 +12,8 @@ import { renewalsType } from "../../types/common";
 import DoctorInfoCard from "./includes/doctor-info";
 import { ReactFilesError, ReactFilesFile } from "../../types/files";
 import { useCallback, useEffect, useState } from "react";
-import { College, Country, Qualification, Serials, State, University } from "../../types/common";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux";
+
+import { commonService } from "../../lib/api/common";
 import { routes } from "../routes/routes-names";
 import { isLessThanTheMB } from "../../lib/utils/lessthan-max-filesize";
 import { Messages } from "../../lib/constants/messages";
@@ -97,6 +96,35 @@ const RenewalRegistration = () => {
         [provisionalCertificate, applicationForm, nocCertificate]
     );
 
+    const getTatkalUpdate = useCallback(async (value:any) => {
+        try {
+            if(value !== 'nor'){
+                const { success, data, message } = await commonService.getTatkalCurrentStatus();
+                    if (data === "YES") {
+                        Swal.fire({
+                            text: "You have selected Tatkal Service ,Additional charges applicable",
+                            icon: "warning",
+                            confirmButtonText: "OK",
+                        })
+                        setProvisionalRequestType('tat');
+                        }else{
+                            Swal.fire({
+                                text: "TatKal Not allowed for Today (or) Day limit Reached",
+                                icon: "warning",
+                                confirmButtonText: "OK",
+                            })
+                            setProvisionalRequestType('nor');
+                        }
+                    }else{
+                        setProvisionalRequestType('nor');
+                    }
+        } catch (err) {
+            console.log('error countries getList', err);
+        }
+    }, []);
+   
+
+
     return (
         <>
             <section className='gray-banner'>
@@ -147,15 +175,7 @@ const RenewalRegistration = () => {
                                                             <select
                                                                 value={provisionalRequestType}
                                                                 onChange={(ev) => {
-                                                                    setProvisionalRequestType(ev.target.value);
-                                                                    if(ev.target.value === 'tat'){
-                                                                    Swal.fire({
-                                                                        text: "You have selected Tatkal Service ,Additional charges applicable",
-                                                                        icon: "warning",
-                                                                        confirmButtonText: "OK",
-                                                                    });               
-                                                                    }                                                     
-
+                                                                    getTatkalUpdate(ev.target.value);
                                                                 }}
                                                                 className="form-select"
                                                             >

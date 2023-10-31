@@ -102,4 +102,18 @@ export const commonService = {
         return responseData;
     },
 
+    async getTatkalCurrentStatus() {
+        const { data: responseData } = await axiosInstance.get(`common/getTatkalCurrentCnt`);
+        return responseData;
+    },
+    async saveTatkalData( data: any) {
+        const { data: responseData } = await axiosInstance.post(`common/saveTatkalData`,data);
+        return responseData as ApiResponseType;
+    },
+
+    async getTatkalDailyData(fromdate:any,todate:any){
+        const { data: responseData } = await axiosInstance.get(`common/getTatkalDailyData/${fromdate}/${todate}`);
+        return responseData as ApiResponseType;
+    }
+
 };
