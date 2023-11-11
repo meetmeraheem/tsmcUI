@@ -540,7 +540,7 @@ const HomePage = () => {
                                         <div className="card-body py-3">
                                              <ul className="nav nav-tabs nav-fill mb-4" id="myTab" role="tablist">
                                                   <li className="nav-item" role="presentation">
-                                                       <button className="nav-link active" id="LoginPageTab" data-bs-toggle="tab" data-bs-target="#LoginPage" type="button" role="tab" aria-controls="LoginPage" aria-selected="true">TSMC Registered Doctor Sign In</button>
+                                                       <button className="nav-link active" id="LoginPageTab" data-bs-toggle="tab" data-bs-target="#LoginPage" type="button" role="tab" aria-controls="LoginPage" aria-selected="true">TSMC/APMC Registered Doctor Sign In</button>
                                                   </li>
                                                   <li className="nav-item" role="presentation">
                                                        <button className="nav-link" id="NewRegPageTab" data-bs-toggle="tab" data-bs-target="#NewRegPage" type="button" role="tab" aria-controls="NewRegPage" 

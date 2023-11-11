@@ -502,7 +502,7 @@ const FinalRegistration = () => {
                                                             >
                                                                 {/*  <option value="">Select</option>*/}
                                                                 <option value="nor">Normal</option>
-                                                                <option value="tat">Tatkal</option>
+                                                                {localRequestType !=="other-country"? <option value="tat">Tatkal</option>:""}
                                                             </select>
                                                         </div>
                                                         </div>

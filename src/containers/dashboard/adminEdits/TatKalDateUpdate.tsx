@@ -8,9 +8,10 @@ const TatKalDateUpdate = () =>{
     { date: moment().format('YYYY-MM-DD'), count: '' },
   ])
 
+  
   const [TatkaldataList, setTatkaldataList] = useState<any>([]);
     let defaultDate = moment().subtract(3,'d').format('YYYY-MM-DD');
-    let default7Days = moment().add(3,'d').format('YYYY-MM-DD');
+    let default7Days = moment().add(10,'d').format('YYYY-MM-DD');
     const [fromdate, setFromDate] = useState(defaultDate);
     const [todate, setToDate] = useState(default7Days);
 
@@ -36,9 +37,14 @@ const TatKalDateUpdate = () =>{
             icon: "success",
             confirmButtonText: "OK",
         })
-       
+        getTatkalDetails();
     } else {
-        
+      Swal.fire({
+        title: "error",
+        text: "Failed to Update",
+        icon: "error",
+        confirmButtonText: "OK",
+    })
     }
 
   }
@@ -47,8 +53,8 @@ const TatKalDateUpdate = () =>{
     let data = [...formFields];
     if(data.length !== undefined){
       let  cnt=data.length-1;
+      console.log("test "+cnt);
         if(data.length !==0 && data[cnt].count!== "") {
-            console.log("test "+data[cnt].count);
             let object = {
                 date: moment().add(data.length,'day').format('YYYY-MM-DD'),
                 count: ''
@@ -68,13 +74,10 @@ const TatKalDateUpdate = () =>{
 
   const getTatkalDetails = useCallback(async () => {
     try {
-
             const { data } = await commonService.getTatkalDailyData(fromdate,todate);
             if (data.length > 0) {
               setTatkaldataList(data);
-               
             }
-        
     } catch (err) {
         console.log('error getProvisionalDetails', err);
     }
@@ -82,8 +85,10 @@ const TatKalDateUpdate = () =>{
 
   const removeFields = (index:any) => {
     let data = [...formFields];
-    data.splice(index, 1)
-    setFormFields(data)
+    if(data.length >1){
+        data.splice(index, 1);
+        setFormFields(data);
+    }
   }
 
   return (
@@ -140,14 +145,13 @@ const TatKalDateUpdate = () =>{
               </div>
             <div className="col">       
               <button onClick={() => removeFields(index)}>Remove</button>
-              </div>
+             </div>
             </div>
           )
         })}
       </form>
-      <button onClick={()=>addFields()}>Add More..</button>
-      <br />
-      <button onClick={submit}>Submit</button>
+      <button onClick={() =>addFields()}>Add More..</button>
+     <span style={{paddingLeft:'500px'}}> <button type='submit' onClick={submit}>Submit</button></span>
     </div>
   );
 }
