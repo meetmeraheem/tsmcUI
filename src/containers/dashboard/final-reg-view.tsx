@@ -69,7 +69,7 @@ const FinalRegView = (props:any) => {
                         testimonal2: data[0].testimonal2,
                         reg_other_state: data[0].reg_other_state,
                         screen_test: data[0].screen_test,
-                        internship_comp: data[0].internship_comp,
+                        internship_comp: data[0].intership_comp,
                         mci_eligi: data[0].mci_eligi,
                         inter_verif_cert: data[0].inter_verif_cert,
                         mci_reg: data[0].mci_reg,
@@ -262,7 +262,9 @@ const FinalRegView = (props:any) => {
                                         </div>
                                     </div>
                                 }
-                                {final?.edu_cert2 &&
+                                </div>
+                                <div className="row mt-3">
+                                    {final?.edu_cert2 &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.edu_cert2) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
                                             <p className="d-flex align-items-center">{final?.edu_cert2 && <img src={serverImgUrl + 'final/' + final?.edu_cert2} alt="" />}</p>
@@ -278,6 +280,8 @@ const FinalRegView = (props:any) => {
                                         </div>
                                     </div>
                                 }
+                                </div>
+                                <div className="row mt-3">
                                 {final?.affidivit &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.affidivit) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -286,8 +290,7 @@ const FinalRegView = (props:any) => {
                                     </div>
                                 }
                                  </div>
-                                <div className="row mt-3">
-
+                               <div className="row mt-3">
                                 {final?.testimonal1 &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.testimonal1) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -295,6 +298,8 @@ const FinalRegView = (props:any) => {
                                         </div>
                                     </div>
                                 }
+                                </div>
+                                <div className="row mt-3">
                                 {final?.testimonal2 &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.testimonal2) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -311,6 +316,8 @@ const FinalRegView = (props:any) => {
                                         </div>
                                     </div>
                                 }
+                                </div>
+                                <div className="row mt-3">
                                 {final?.screen_test &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.screen_test) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -327,6 +334,8 @@ const FinalRegView = (props:any) => {
                                         </div>
                                     </div>
                                 }
+                                </div>
+                                <div className="row mt-3">
                                 {final?.mci_eligi &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.mci_eligi) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -343,6 +352,8 @@ const FinalRegView = (props:any) => {
                                         </div>
                                     </div>
                                 }
+                                </div>
+                                <div className="row mt-3">
                                 {final?.mci_reg &&
                                     <div className="col" onClick={() => { setIsLightBoxOpen(!isLightBoxOpen); setLightBoxImagePath(final?.mci_reg) }}>
                                         <div className="drag-img-box d-flex align-items-center justify-content-center">

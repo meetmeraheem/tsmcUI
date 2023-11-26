@@ -66,7 +66,7 @@ const FinalDataEdit = () => {
             testimonal2: final?.testimonal2 || '',
             reg_other_state: final?.reg_other_state || '',
             screen_test: final?.screen_test || '',
-            intership_comp: final?.internship_comp || '',
+            intership_comp: final?.intership_comp || '',
             mci_eligi: final?.mci_eligi || '',
             inter_verif_cert: final?.inter_verif_cert || '',
             mci_reg: final?.mci_reg || '',

@@ -70,7 +70,7 @@ export type FinalProfileType = {
   testimonal2: string,
   reg_other_state: string,
   screen_test: string,
-  internship_comp: string,
+  intership_comp: string,
   mci_eligi: string,
   inter_verif_cert: string,
   mci_reg: string,
