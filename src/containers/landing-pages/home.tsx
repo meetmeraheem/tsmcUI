@@ -68,7 +68,7 @@ const HomePage = () => {
      const [confirmPasswordError, setConfirmPasswordError] = useState(false);
      const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState('');
      const [show, setShow] = useState(true);
-     
+     const [showRenewal, setShowRenewal] = useState(true);
 
      const initialFormData = {
           fullname: '',
@@ -476,20 +476,20 @@ const HomePage = () => {
                               <div className='col-2'>
                                    <div className="card shadow-sm rounded border-0 mb-4">
                                         <div className="card-body tsmc-health-pic">
-                                             <img src={DocDefultPic} alt="" />
+                                             <img src={chiefminister} alt="" />
                                         </div>
                                         <div className="card-footer text-center border-top-0">
-                                            {/* <h2 className='fs-14 fw-700 mb-0'>Sri K Chandrashekar Rao</h2>
-                                             <p className='fs-10 fw-600'>Hon'ble Chief Minister</p>*/}
+                                             <h2 className='fs-14 fw-700 mb-0'>Sri Anumula Revanth Reddy</h2>
+                                             <p className='fs-10 fw-600'>Hon'ble Chief Minister</p>
                                         </div>
                                    </div>
                                    <div className="card shadow-sm rounded border-0">
                                         <div className="card-body tsmc-health-pic">
-                                             <img src={DocDefultPic} alt="" />
+                                             <img src={healthminister} alt="" />
                                         </div>
                                         <div className="card-footer text-center border-top-0">
-                                             {/*<h2 className='fs-14 fw-700 mb-0'>Sri T Harish Rao</h2>
-                                             <p className='fs-10 fw-600'>Hon'ble Minister for Finance, Health, Medical & Famiily Welfare</p>*/}
+                                             <h2 className='fs-14 fw-700 mb-0'>Sri Damodar Rajanarasimha</h2>
+                                             <p className='fs-10 fw-600'>Health, Medical &amp; Family Welfare, Science and Technology</p>
                                         </div>
                                    </div>
                               </div>
@@ -930,6 +930,40 @@ const HomePage = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={()=>{setShow(false)}}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal  size="xl" show={showRenewal} onHide={()=>{setShowRenewal(false)}} className="w-100">
+        <Modal.Header>
+          
+          <Modal.Title className="w-100 text-center text-danger">
+          <i className="bi bi-exclamation-triangle m-2 h1"> </i>
+          <span className="text-info">NOTIFICATION FOR RENEWAL OF REGISTRATION </span></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <div>
+                <p>It is to inform to all the doctors that as per National Medical Commission guidelines it is mandatory to earn 30 CPD (CME) credit hours w.e.f 1st January, 2023 by all the doctors who apply for Renewal of Registration. Telangana State Medical Council has taken the following decisions keeping in view of Covid19 in earning CPD (CME) credit hours for renewal of registration.  </p>
+        </div>
+          <div>1. Producing of CME Credit Hours is exempted for the one year i.e., from 1st January, 2023 to 31st December, 2023 only for those who apply for Renewal of Registration.</div>
+         <br/>
+          <div>2. 6 CME Credit Hours to be produced by the doctors who apply for Renewal of Registration w.e.f 1st January, 2024.</div>
+          <br/>
+          <div>3. 12 CME Credit Hours to be produced by the doctors who apply for Renewal of Registration w.e.f 1st January, 2025.</div>
+          <br/>
+          <div>4. 18 CME Credit Hours to be produced by the doctors who apply for Renewal of Registration w.e.f 1st January, 2026.</div>
+          <br/>
+          <div>5. 24 CME Credit Hours to be produced by the doctors who apply for Renewal of Registration w.e.f 1st January, 2027.</div>
+          <br/>
+          <div>6. 30 CME Credit Hours to be produced by the doctors who apply for Renewal of Registration w.e.f 1st January, 2028.</div>
+          <br/>
+          <div>
+               <p>Hence, Telangana State Medical Council has decided that it is mandatory to produce 30 CME Credit hours w.e.f 1st January, 2028 by all the doctors who apply for Renewal of Registration.</p>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={()=>{setShowRenewal(false)}}>
             Close
           </Button>
         </Modal.Footer>

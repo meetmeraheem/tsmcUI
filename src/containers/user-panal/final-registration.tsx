@@ -452,7 +452,7 @@ const FinalRegistration = () => {
                                                             >
                                                                 <option value="">Select</option>
                                                                 <option value="telangana">Telangana</option>
-                                                                <option value="non-telangana">Non Telangana</option>
+                                                                <option value="non-telangana">Other State  within India </option>
                                                                 <option value="other-country">Other countries</option>
                                                             </select>
                                                         </div>
@@ -480,10 +480,7 @@ const FinalRegistration = () => {
                                                                            maxLength={100}
                                                                            required
                                                                        />
-
                                                                        {error && <small className="text-danger">{error.toString()}</small>}
-
-
                                                                    </>
                                                                );
                                                            }}
