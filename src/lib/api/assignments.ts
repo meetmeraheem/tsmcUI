@@ -4,12 +4,12 @@ import { axiosInstance } from './index';
 import { serverUrl } from '../../config/constants';
 
 export const assignmentService = {
-    // async provisionalRegistration(data: any) {
-    //     const { data: responseData } = await axiosInstance.post('provisional/createProvisional', data);
-    //     return responseData;
-    // },
     async assignToUser(data: any) {
         const { data: responseData } = await axiosInstance.post('assignments/createAssignMent', data);
+        return responseData;
+    },
+    async reAssign(data: any) {
+        const { data: responseData } = await axiosInstance.post('assignments/reAssign', data);
         return responseData;
     },
     async getUsersByRole() {

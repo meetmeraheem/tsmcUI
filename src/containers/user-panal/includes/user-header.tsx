@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useCallback,useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import SiteLogo from '../../../assets/images/logo.png'
@@ -6,13 +6,14 @@ import SiteSubLogo from '../../../assets/images/tsgovt-logo.png'
 import { LocalStorageManager } from '../../../lib/localStorage-manager';
 import { tokenManager } from '../../../lib/token-manager';
 import { deleteDoctorInfo } from '../../../redux/doctor';
-
+import { renewalService } from "../../../lib/api/renewals";
 const Userheader = () => {
 	const dispatch = useDispatch();
 	const [isDoctorId, setISDoctorId] = useState(false);
 	const [isDoctorFMRNo, setISDoctorFMRNo] = useState(false);
 	const [isDoctorPMRNo, setISDoctorPMRNo] = useState(false);
 	const [isDoctorFMRapproved, setISDoctorFMRapproved] = useState(false);
+	const [isRenewalAllowed, setIsRenewalAllowed] = useState(true);
 	const signOut = () => {
 		tokenManager.removeToken();
 		LocalStorageManager.removeDoctorPrimaryId();
@@ -24,7 +25,10 @@ const Userheader = () => {
 		dispatch(deleteDoctorInfo);
 	};
 
+	
 	useEffect(() => {
+		
+
 		const doctorSerialId = LocalStorageManager.getDoctorSerialId();
 		if (doctorSerialId) {
 			setISDoctorId(true);
@@ -40,6 +44,11 @@ const Userheader = () => {
 		const doctorFMRstatus = LocalStorageManager.getDoctorFMRStatus();
 		if(doctorFMRstatus === 'apr'){
 			setISDoctorFMRapproved(true);
+		}
+
+		const renwalStatus=LocalStorageManager.getRenewalStatus();
+		if(renwalStatus === 'pen' || renwalStatus === 'ver' || renwalStatus === 'rej'){
+			setIsRenewalAllowed(false);
 		}
 		
 
@@ -102,7 +111,7 @@ const Userheader = () => {
 												{/*<li><Link className="dropdown-item" to={'additional-duplicate'}>Duplicate</Link></li>*/}
 											</ul>
 										</li>
-										<li><Link to='/my-panal/final-renewal' className="dropdown-item">Final Renewals </Link></li>
+										{isRenewalAllowed?<li><Link to='/my-panal/final-renewal' className="dropdown-item">Final Renewals </Link></li>:""}
 										<li><Link to='/my-panal/good-standing-registration' className="dropdown-item">Good Standing</Link></li>
 										<li><Link to='/my-panal/noc-registration' className="dropdown-item">NOC for Other State</Link></li>
 										{/*<li><Link to='/my-panal/chnage-of-name' className="dropdown-item">Change of Name</Link></li>

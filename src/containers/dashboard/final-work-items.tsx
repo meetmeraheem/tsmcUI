@@ -115,6 +115,18 @@ const greet=()=> {
             }
         },
         {
+            Header: "Reg Date",
+            accessor: "regDate",
+            Cell: ({ cell: { value } }: any) => {
+              let temp=  moment(value).format('DD-MM-YYYY');
+                return (
+                    <>
+                        <span>{temp}</span>
+                    </>
+                );
+            }
+        },
+        {
             Header: "Status",
             accessor: "approval_status",
             Cell: ({ cell: { value } }: any) => {

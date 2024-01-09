@@ -23,6 +23,8 @@ const Renewal = () => {
     const [pageCount, setPageCount] = useState(0);
     const [assignedList, setAssignedList] = useState<any>([]);
     const [assignedGridList, setAssignedGridList] = useState<any>([]);
+    const [reassignedList, setReassignedList] = useState<any>([]);
+    const [reassignedGridList, setReassignedGridList] = useState<any>([]);
     const [users, setUsers] = useState<UserRole[]>([]);
     const [assignedUser, setAssignedUser] = useState(0);
     const [statusName, setStatusName] = useState('Pending');
@@ -128,6 +130,18 @@ const greet=()=> {
             }
         },
         {
+            Header: "Reg Date",
+            accessor: "regDate",
+            Cell: ({ cell: { value } }: any) => {
+              var temp=  moment(value).format('DD-MM-YYYY');
+                return (
+                    <>
+                        <span>{temp}</span>
+                    </>
+                );
+            }
+        },
+        {
             Header: "Status",
             accessor: "status",
             Cell: ({ cell: { value } }: any) => {
@@ -174,7 +188,6 @@ const greet=()=> {
                             }
                             else {
                                 const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
-                                //  if (!isDuplicate(assignedGridList, cell.data[Number(cell.row.id)])) {
                                 const doctorInfo = {
                                     assignBy: adminPrimaryId,
                                     assignCreated: moment().format('YYYY-MM-DD'),
@@ -192,16 +205,36 @@ const greet=()=> {
                                     setAssignedGridList(assignedGridList.filter((item: any) => item.doctor_id !== cell.data[Number(cell.row.id)].doctor_id));
 
                                 }
-                                /*  }
-                                  else {
-                                      Swal.fire({
-                                          text: "Already Added",
-                                          icon: "warning",
-                                          confirmButtonText: "OK",
-                                      })
-                                  }*/
+                               
                             }
 
+                        }} /> : cell.data[Number(cell.row.id)].assignedUserName}
+                </>
+            )
+        },{
+            Header: "ReAssign",
+            id: "reassign",
+            Cell: (cell: any) => (
+                <>
+                    {cell.data[Number(cell.row.id)].assignedUserName !== null && cell.data[Number(cell.row.id)].status === 'pen' ?
+                        <input type="checkbox" id={cell.row.id} checked={selected[cell.row.id]} onChange={async (e: any) => {
+                            toggleSelected(cell.row.id, e);
+                                const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
+                                const doctorInfo = {
+                                    assignBy: adminPrimaryId,
+                                    assignId: cell.data[Number(cell.row.id)].assignmentId,
+                                    doctor_id: cell.data[Number(cell.row.id)].doctor_id,
+                                    assignRegType: 'renewal',
+                                    regTypeId: cell.data[Number(cell.row.id)].renewalPrimaryId
+                                }
+                                if (e.target.checked) {
+                                    setReassignedList([...reassignedList, doctorInfo]);
+                                    setReassignedGridList([...reassignedGridList, cell.data[Number(cell.row.id)]]);
+                                } else {
+                                    setReassignedList(reassignedList.filter((item: any) => item.doctor_id !== cell.data[Number(cell.row.id)].doctor_id));
+                                    setReassignedGridList(reassignedGridList.filter((item: any) => item.doctor_id !== cell.data[Number(cell.row.id)].doctor_id));
+
+                                }
                         }} /> : cell.data[Number(cell.row.id)].assignedUserName}
                 </>
             )
@@ -264,6 +297,46 @@ const greet=()=> {
             console.log('error get users by role', err);
         }
     }, [assignedList, assignedUser]);
+
+    const ReAssign = useCallback(async () => {
+        try {
+            if (assignedUser != 0) {
+
+               // setDisablebtn(true);
+                const assignToUser = reassignedList.map((obj: any) => {
+                    return { ...obj, assignTo: assignedUser };
+                })
+                const formData = new FormData();
+                formData.append("assignmentData", JSON.stringify(assignToUser));
+                const { success } = await assignmentService.reAssign(formData);
+                if (success) {
+                    Swal.fire({
+                        //title: "Error",
+                        text: "ReAssigned",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            setReassignedList([]);
+                            setReassignedGridList([]);
+                            fetchData(0);
+                            setDisablebtn(false);
+                            setAssignedUser(0);
+                        }
+                    });
+                }
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "Please select a User to Assign",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            }
+        } catch (err) {
+            console.log('error get users by role', err);
+        }
+    }, [reassignedList, assignedUser]);
 
     useEffect(() => {
         getUsersByRole();
@@ -362,21 +435,14 @@ const greet=()=> {
                         setRenewals([]);
                         setLoading(false);
                     }
-
-                    
                 }
             } else {
                 alert("Please  enter 10 digit  Mobile No ");
             }
-
-
         } catch (err) {
             console.log('error getDoctorDetails ', err);
         }
     };
-
- 
-
     const getDoctorDetailsBydocName = async () => {
         try {
             const fetchId = ++fetchIdRef.current
@@ -400,17 +466,13 @@ const greet=()=> {
                         setLoading(false);
                     }
                 }
-               
             } else {
                 alert("Please enter at least 4 characters of  doctor Name");
             }
-
-
         } catch (err) {
             console.log('error getDoctorDetails ', err);
         }
     };
-
     return (
         <>
             <div className="container-fluid">
@@ -517,6 +579,7 @@ const greet=()=> {
                     {assignedGridList.length > 0 &&
                         <><table className="table table-hover table-striped">
                             <thead>
+                            <tr><th style={{color:'brown'}}>Assigned List </th></tr>
                                 <tr>
                                     <th>Doctor Id</th>
                                     <th>Doctor Name</th>
@@ -556,7 +619,7 @@ const greet=()=> {
                                     placeholder="Select User"
                                     onChange={(selectedOption) => {
                                         const { id } =
-                                            selectedOption as UserRole;
+                                        selectedOption as UserRole;
                                         setAssignedUser(id);
                                     }}
                                     getOptionLabel={(option) => option.username}
@@ -569,7 +632,62 @@ const greet=()=> {
                         </>
                     }
                 </div>
-            </div>
+                {reassignedGridList.length > 0 &&
+                        <><table className="table table-hover table-striped">
+                            <thead>
+                                <tr><th style={{color:'blue'}}>Re Assigned List </th></tr>
+                                <tr>
+                                    <th>Doctor Id</th>
+                                    <th>Doctor Name</th>
+                                    <th>Father Name</th>
+                                    <th>Mobile No.</th>
+                                    <th>PMR Reg No.</th>
+                                    <th>FMR Reg No.</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {reassignedGridList?.map((obj: any) => {
+                                    return (<tr>
+                                        <td>{obj.doctor_id}</td>
+                                        <td>{obj.fullname}</td>
+                                        <td>{obj.fathername}</td>
+                                        <td>{obj.mobileno}</td>
+                                        <td><span>TSMC/PMR/</span>{obj.pmr_no}</td>
+                                        <td><span>TSMC/FMR/</span>{obj.fmr_no}</td>
+                                        <td>
+                                            {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
+                                            {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                                        </td>
+                                        {/* <td><Link to={'/admin/provisional_view'} state={{ provisionalPrimaryId: obj.provisionalPrimaryId, doctorPrimaryId: obj.doctorPrimaryId }}>View</Link></td> */}
+                                    </tr>);
+                                })}
+                            </tbody>
+                        </table>
+                            <div>
+                                <Select
+                                    name="Users"
+                                    id="Users"
+                                    className="react-select"
+                                    classNamePrefix="react-select"
+                                    isSearchable
+                                    options={users}
+                                    placeholder="Select User"
+                                    onChange={(selectedOption) => {
+                                        const { id } =
+                                        selectedOption as UserRole;
+                                        setAssignedUser(id);
+                                    }}
+                                    getOptionLabel={(option) => option.username}
+                                    getOptionValue={(option) => option.id.toString()}
+                                />
+                                <button type='button' disabled={disablebtn} onClick={async () => {
+                                    ReAssign()
+                                }} className='btn btn-primary me-3'>ReAssign </button>
+                            </div>
+                        </>
+                    }
+                </div>
 
             {showComponent === true?<RenewalsViews state={{ renewalPrimaryId:viewRenwalid , doctorPrimaryId: viewDocid, assignmentId:viewAssignid  }} greet={greet}></RenewalsViews>:""}
         </>

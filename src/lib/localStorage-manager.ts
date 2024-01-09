@@ -119,6 +119,15 @@ export const LocalStorageManager = {
         }
     },
 
+    
+    getRenewalStatus: function () {
+        const doctorRenewalNo = localStorage.getItem('doctorRenwalStatus');
+        return doctorRenewalNo || null;
+    },
+    setRenewalStatus: function (RenewalStatus: string) {
+        localStorage.setItem('doctorRenwalStatus', RenewalStatus);
+    },
+
     //Payment Getway
     getOrderKeyId: function () {
         const orderKeyId = localStorage.getItem('orderKeyId');

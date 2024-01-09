@@ -230,6 +230,7 @@ const HomePage = () => {
                               data[0].fmr_no && LocalStorageManager.setDoctorFMRNo(data[0].fmr_no.toString());
                               data[0].pmr_no &&LocalStorageManager.setDoctorPMRNo(data[0].pmr_no.toString());
                               data[0].fmrstatus&&LocalStorageManager.setDoctorFMRStatus(data[0].fmrstatus);
+                              data[0].renewalStatus&&LocalStorageManager.setRenewalStatus(data[0].renewalStatus);
                               dispatch(setDoctorInfo(data[0]));
                               setMobileError(false);
                               setMobileErrorMessage('');
