@@ -526,6 +526,7 @@ const FinalDataEdit = (props:any) => {
                                                                                     maxDate={new Date()}
                                                                                     clearIcon={null}
                                                                                     value={field.value}
+                                                                                    onFocus={e => e.target.blur()}
                                                                                     className={`form-control ${error ? 'is-invalid' : ''}`}
                                                                                 />
 

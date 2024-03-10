@@ -10,9 +10,10 @@ import { useNavigate } from "react-router-dom";
 import DatePicker from 'react-date-picker';
 import { commonService } from "../../lib/api/common";
 import { City, Country, State } from "../../types/common";
-import { DoctorFormType, DoctorProfileType } from "../../types/doctor";
+import { DoctorProfileType } from "../../types/doctor";
 import { ReactFilesError, ReactFilesFile } from "../../types/files";
 import { doctorService } from "../../lib/api/doctot";
+import { changeofnameService } from "../../lib/api/changeofname";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { routes } from "../routes/routes-names";
 import moment from "moment";
@@ -291,6 +292,7 @@ const UserEditProfile = () => {
                                                                             }}
                                                                             clearIcon={null}
                                                                             value={field.value}
+                                                                            onFocus={e => e.target.blur()}
                                                                             className={`form-control ${error ? 'is-invalid' : ''}`}
                                                                         />
                                                                         {/* <input
@@ -351,7 +353,7 @@ const UserEditProfile = () => {
                                                             }}
                                                         </Field>
                                                     </div>
-                                                    <label className="col-sm-2 col-form-label pr-0">Address 1</label>
+                                                    <label className="col-sm-2 col-form-label pr-0">Address Line1</label>
                                                     <div className="col-sm-4">
                                                         <Field name="address1">
                                                             {(fieldProps: FieldProps) => {
@@ -383,7 +385,7 @@ const UserEditProfile = () => {
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">
-                                                    <label className="col-sm-2 col-form-label pr-0">Address 2</label>
+                                                    <label className="col-sm-2 col-form-label pr-0">Address Line2</label>
                                                     <div className="col-sm-4">
                                                         <Field name="address2">
                                                             {(fieldProps: FieldProps) => {

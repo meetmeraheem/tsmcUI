@@ -1,8 +1,7 @@
 import moment from 'moment';
-import { useCallback, useEffect, useState } from 'react';
+import React,{ useCallback, useEffect, useState,useRef } from 'react';
 import { Link } from 'react-router-dom';
 import DocDefultPic from '../../assets/images/doc-default-img.jpg';
-import { commonService } from '../../lib/api/common';
 import { doctorService } from '../../lib/api/doctot';
 import { finalService } from '../../lib/api/final';
 import { provisionalService } from '../../lib/api/provisional';
@@ -10,31 +9,44 @@ import { LocalStorageManager } from '../../lib/localStorage-manager';
 import { DoctorFormType } from '../../types/doctor';
 import { FinalMyProfileType } from '../../types/final';
 import { ProvisionalMyProfileType } from '../../types/provisional';
-import { serverUrl, serverImgUrl } from '../../config/constants';
+import { serverImgUrl } from '../../config/constants';
 import { additionalService } from '../../lib/api/additional';
 import { AddQualDataFormType } from '../../types/additionalQuali';
 import { nocService } from "../../lib/api/noc";
-import { nocUserFormType } from "../../types/noc";
-import { goodStandingFormType } from "../../types/common";
 import { goodstandingService } from "../../lib/api/goodstanding";
 import { renewalService } from "../../lib/api/renewals";
-import { renewalsFormType } from "../../types/common";
-import axios from 'axios';
-
+import { changeofnameService } from '../../lib/api/changeofname';
+import { revalidationService } from "../../lib/api/revalidation";
+import FinalRegPrint from'../../containers/user-panal/printouts/final-reg-print';
+import AdditionalRegViewPrint from'../../containers/user-panal/printouts/additional-view-print';
+import RenewalsViewPrint from'../../containers/user-panal/printouts/renewals-view-print';
+import NocRegViewPrint from'../../containers/user-panal/printouts/noc-view-print';
+import GoodStandingRegPrintView from '../../containers/user-panal/printouts/goodstanding-view-print';
+import ProvisionalViewPrint from '../../containers/user-panal/printouts/provisional-view-print';
+import ReactToPrint from 'react-to-print';
 
 const Myprofile = () => {
-    //const doctorProfile = useSelector((state: RootState) => state.doctor.profile);
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [provisional, setProvisional] = useState<ProvisionalMyProfileType>();
     const [final, setFinal] = useState<FinalMyProfileType>();
-    const [additional, setadditional] = useState<AddQualDataFormType>();
     const [NocdataList, setNocdataList] = useState<any>([]);
     const [GoodStandingList, setGoodStandingList] = useState<any>([]);
     const [renewalsList, setRenewalsList] = useState<any>([]);
+    const [nameChangeList, setNameChangeList] = useState<any>([]);
+    const [revalidationList, setRevalidationList] = useState<any>([]);
     const [additionslGridList, setAdditionalGridList] = useState<any>([]);
+
     const [loading, setLoading] = useState(false)
-
-
+    const greet=()=> {
+       
+       }
+    const provisionalcomponentRef = useRef<HTMLDivElement>(null);   
+    const finalcomponentRef = useRef<HTMLDivElement>(null);
+    const additionalcomponentRef = useRef<HTMLDivElement>(null);
+    const renewlcomponentRef = useRef<HTMLDivElement>(null);
+    const noccomponentRef = useRef<HTMLDivElement>(null);
+    const gscomponentRef = useRef<HTMLDivElement>(null);
+    const doctorSerialId = LocalStorageManager.getDoctorSerialId();
     const getDoctorDetails = useCallback(async () => {
         try {
             const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
@@ -55,9 +67,7 @@ const Myprofile = () => {
             if (doctorSerialId) {
                 const { data } = await provisionalService.getProvisionalByDoctorId(doctorSerialId);
                 if (data.length > 0) {
-                    // const qualification = await commonService.getQualificationById(Number(data[0].qualification));
-                    //const country = await commonService.getCountry(Number(data[0].country));
-                    //const state = await commonService.getState(Number(data[0].state));
+                   
                     setProvisional({
                         id: data[0].id,
                         doctor_id: data[0].doctorId,
@@ -75,6 +85,7 @@ const Myprofile = () => {
                         edu_cert2: data[0].edu_cert2,
                         edu_cert3: data[0].edu_cert3,
                         extra_col3: data[0].extra_col3,
+                        extra_col1: data[0].extra_col1
                     });
                 }
             }
@@ -88,10 +99,9 @@ const Myprofile = () => {
             if (doctorSerialId) {
                 const { data } = await finalService.getFinal(doctorSerialId);
                 if (data.length > 0) {
-                    //  const qualification = await commonService.getQualificationById(Number(data[0].qualification));
-                    //  const country = await commonService.getCountry(Number(data[0].country));
-                    // const state = await commonService.getState(Number(data[0].state));
+                   
                     setFinal({
+                        id: data[0].id,
                         serialno: data[0].serialno,
                         reg_date: data[0].reg_date,
                         country: data[0].countryName,
@@ -105,6 +115,7 @@ const Myprofile = () => {
                         createdon: data[0].createdon,
                         posttime: data[0].posttime,
                         extra_col3: data[0].extra_col3,
+                        extra_col1: data[0].extra_col1,
                         row_type:''
                     });
                 }
@@ -119,20 +130,8 @@ const Myprofile = () => {
             if (doctorSerialId) {
                 const { data } = await additionalService.getAdditionalData(doctorSerialId);
                 if (data.length > 0) {
-                    //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
                     setAdditionalGridList(data);
-                    {/* setadditional({
-                        country: country.data[0].name,
-                        state: state.data[0].name,
-                        qualification: data[0].qualification,
-                        exam_month: data[0].exam_month,
-                        exam_year: data[0].exam_year,
-                        university: data[0].university,
-                        college: data[0].college,
-                        approval_status: data[0].approval_status,
-                        appliedFor:data[0].appliedFor,
-
-                    })*/};
+                    {};
                 }
             }
         } catch (err) {
@@ -145,26 +144,8 @@ const Myprofile = () => {
             if (doctorSerialId) {
                 const { data } = await nocService.nocDataByDoctorId(doctorSerialId);
                 if (data.length > 0) {
-                    //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
-                    //const country = await commonService.getCountry(Number(data[0].country));
-                    //const state = await commonService.getState(Number(data[0].state));
                     setNocdataList(data);
-                    {/* setNocdata({
-                        country: data[0].countryName,
-                        state: data[0].stateName,
-                        councilname: data[0].councilname,
-                        councilpincode: data[0].councilpincode,
-                        approval_status: data[0].approval_status,
-                        address1: data[0].address1,
-                        address2: data[0].address2,
-                        createdon: data[0].createdon,
-                        posttime: data[0].posttime,
-                        modifiedon: data[0].modifiedon,
-                        city: data[0].city,
-                        status: data[0].status,
-                        added_by: data[0].added_by,
-                        extra_col3: data[0].extra_col3,
-                    });*/}
+                    {}
                 }
             }
         } catch (err) {
@@ -175,27 +156,12 @@ const Myprofile = () => {
     const getgoodStandingDetails = useCallback(async () => {
         try {
             const doctorSerialId = LocalStorageManager.getDoctorSerialId();
-            const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
             if (doctorSerialId) {
                 const { data } = await goodstandingService.getGoodstandingByDoctorId(doctorSerialId);
                 if (data.length > 0) {
-                    //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
-                    //const country = await commonService.getCountry(Number(data[0].country));
-                    //const state = await commonService.getState(Number(data[0].state));
+                    
                     setGoodStandingList(data);
-                    {/*setGoodStanding({
-
-                        createdon: data[0].added_by,
-                        posttime: data[0].posttime,
-                        modifiedon: data[0].modifiedon,
-                        status: data[0].status,
-                        added_by: data[0].added_by,
-                        approval_status: data[0].status,
-                        doctor_id: data[0].doctor_id,
-                        doctorPrimaryId: doctorPrimaryId.toString(),
-                        extra_col3: data[0].extra_col3
-
-                    });*/}
+                    {}
                 }
             }
         } catch (err) {
@@ -205,25 +171,10 @@ const Myprofile = () => {
     const getFinalRenewalDetails = useCallback(async () => {
         try {
             const doctorSerialId = LocalStorageManager.getDoctorSerialId();
-            const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
             if (doctorSerialId) {
                 const { data } = await renewalService.getRenewalsByDoctorId(doctorSerialId);
                 if (data.length > 0) {
-                    //const qualification = await commonService.getQualificationById(Number(data[0].qualification));
-                    //const country = await commonService.getCountry(Number(data[0].country));
-                    //const state = await commonService.getState(Number(data[0].state));
                     setRenewalsList(data);
-                    /*
-                        oldRegDate: data[0].posttime,
-                        posttime: data[0].posttime,
-                        modifiedon: data[0].modifiedon,
-                        status:data[0].status,
-                        approval_status: data[0].status,
-                        added_by: data[0].added_by,
-                        doctor_id: data[0].doctor_id,
-                        doctorPrimaryId:doctorPrimaryId.toString(),
-                        document10:data[0].document10
-                    });*/
                 }
             }
         } catch (err) {
@@ -231,10 +182,37 @@ const Myprofile = () => {
         }
     }, []);
 
+    const getChangeNameDetails = useCallback(async () => {
+        try {
+            const doctorSerialId = LocalStorageManager.getDoctorSerialId();
+            if (doctorSerialId) {
+                const { data } = await changeofnameService.getNameChangeByDoctorId(doctorSerialId);
+                if (data.length > 0) {
+                    setNameChangeList(data);
+                }
+            }
+        } catch (err) {
+            console.log('error getProvisionalDetails', err);
+        }
+    }, []);
 
-
+    const getRevalidationList = useCallback(async () => {
+        try {
+            const doctorSerialId = LocalStorageManager.getDoctorSerialId();
+            if (doctorSerialId) {
+                const { data } = await revalidationService.getRevalidationByDoctorId(doctorSerialId);
+                if (data.length > 0) {
+                    setRevalidationList(data);
+                }
+            }
+        } catch (err) {
+            console.log('error getProvisionalDetails', err);
+        }
+    }, []);
+    
+    const [isReady, setIsReady] = useState("none");
     useEffect(() => {
-        //console.log('doctorProfile ' + JSON.stringify(doctorProfile));
+        
         setLoading(true);
         getDoctorDetails();
         getProvisionalDetails();
@@ -243,10 +221,12 @@ const Myprofile = () => {
         getNocDetails();
         getgoodStandingDetails();
         getFinalRenewalDetails();
+        getChangeNameDetails();
+        getRevalidationList();
         setLoading(false);
     }, []);
-
-
+   
+      
 
     return (
         <>
@@ -383,7 +363,21 @@ const Myprofile = () => {
                                                                     <i className='bi-exclamation-circle'></i> Rejected
                                                                 </span>
                                                             }
-                                                            {(provisional?.approval_status == 'pen' || provisional?.approval_status == 'rej') && <Link to={'edit-provisional'} className='btn btn-primary btn-sm me-3'>Edit</Link>}
+                                                            {(provisional?.approval_status == 'pen' || provisional?.approval_status == 'rej') && 
+                                                            
+                                                            <Link to={'edit-provisional'} className='btn btn-primary btn-sm me-3'>Edit</Link>
+                                                          
+                                                            }
+                                                            {(provisional?.extra_col1=='nor'|| provisional?.extra_col1=='tat')&&
+                                                            <>
+                                                             <ReactToPrint
+                                                                    trigger={() => <button className='btn btn-info btn-sm me-3'>Print Receipt</button>}
+                                                                    content={() => provisionalcomponentRef.current}
+                                                                />
+                                                                <div ref={provisionalcomponentRef} className='hideComponentScreen'>
+                                                                <ProvisionalViewPrint state={{ provisionalPrimaryId:provisional.id}}  />
+                                                                </div> 
+                                                          </>}
                                                         </div>
                                                     </div>
                                                     <div className="w-100">
@@ -473,8 +467,21 @@ const Myprofile = () => {
                                                                     <i className='bi-exclamation-circle'></i> Rejected
                                                                 </span>
                                                             }
-                                                            {(final?.approval_status == 'pen' || final?.approval_status == 'rej') && <Link to={'edit-final'} className='btn btn-primary btn-sm me-3'>Edit</Link>}
+                                                            {(final?.approval_status == 'apr' || final?.approval_status == 'rej') && 
+                                                            <Link to={'edit-final'} className='btn btn-primary btn-sm me-3'>Edit</Link>
+                                                            }
+                                                                        
                                                         </div>
+                                                        {(final?.extra_col1=='nor'|| final?.extra_col1=='tat')&&
+                                                            <>
+                                                            <ReactToPrint
+                                                                    trigger={() => <button className='btn btn-info btn-sm me-3'>Print Receipt</button>}
+                                                                    content={() => finalcomponentRef.current}
+                                                                />
+                                                                <div ref={finalcomponentRef} className='hideComponentScreen'>
+                                                                <FinalRegPrint state={{ finalPrimaryId:final.id}}  />
+                                                                </div>                                            
+                                                          </>}
                                                     </div>
                                                     <div className="w-100">
                                                         <div className="d-flex mb-2">
@@ -550,30 +557,25 @@ const Myprofile = () => {
                                                         <thead>
                                                             <tr>
                                                                 <th>Qualification</th>
-                                                                <th>Exam month</th>
-                                                                <th>Exam year</th>
-                                                                <th>Country</th>
-                                                                <th>State</th>
+                                                                <th>Exam month,year</th>
+                                                                <th>State,Country</th>
                                                                 <th>Applied For</th>
-                                                                <th>University</th>
-                                                                <th>college</th>
+                                                                <th>college-University</th>
                                                                 <th>Registration Date</th>
                                                                 <th>Approval Status</th>
                                                                 <th>Reason </th>
                                                                 <th> </th>
+                                                                <th></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             {additionslGridList?.map((obj: any) => {
                                                                 return (<tr>
                                                                     <td>{obj.qualification}</td>
-                                                                    <td>{obj.exam_month}</td>
-                                                                    <td>{obj.exam_year}</td>
-                                                                    <td>{obj.countryName}</td>
-                                                                    <td>{obj.stateName}</td>
+                                                                    <td>{obj.exam_month},{obj.exam_year}</td>
+                                                                    <td>{obj.countryName},{obj.stateName}</td>
                                                                     <td>{obj.appliedFor}</td>
-                                                                    <td>{obj.university}</td>
-                                                                    <td>{obj.college}</td>
+                                                                    <td>{obj.college} - {obj.university}</td>
                                                                     <td>{moment(obj.reg_date).format('DD/MM/YYYY')}</td>
 
                                                                     <td>
@@ -586,6 +588,13 @@ const Myprofile = () => {
                                                                     {(obj.approval_status == 'pen' || obj.approval_status == 'rej') ? <td> <Link to={'edit_additional-qualification-registration'} state={{ additionalPrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
 
                                                                     {obj.approval_status === 'rej' ? <td>{obj.extra_col3}</td> : <td></td>}
+                                                                    {(obj.extra_col1 === 'nor'||obj.extra_col1 === 'tat') ?<td> <ReactToPrint
+                                                                            trigger={() => <button className='btn btn-info btn-sm me-3'>Print Receipt</button>}
+                                                                            content={() => additionalcomponentRef.current}
+                                                                        />
+                                                                     <div ref={additionalcomponentRef} className='hideComponentScreen'>
+                                                                    <AdditionalRegViewPrint state={{ additionalPrimaryId:obj.id}}  />
+                                                                    </div> </td>:""}
 
                                                                 </tr>);
                                                             })}
@@ -609,6 +618,7 @@ const Myprofile = () => {
                                                                 <th>Approval Status</th>
                                                                 <th>Reason </th>
                                                                 <th> </th>
+                                                                <th> </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -626,7 +636,13 @@ const Myprofile = () => {
 
                                                                     {obj.status === 'rej' ? <td>{obj.document10}</td> : <td></td>}
                                                                     {(obj.status == 'pen' || obj.status == 'rej') ? <td> <Link to={'edit-final-renewal'} state={{ renwalPrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
-
+                                                                    {(obj.document9 === 'nor'||obj.document9 === 'tat') ? <td> <ReactToPrint
+                                                                            trigger={() => <button className='btn btn-info btn-sm me-3'>Print Receipt</button>}
+                                                                            content={() => renewlcomponentRef.current}
+                                                                        />
+                                                                     <div ref={renewlcomponentRef} className='hideComponentScreen'>
+                                                                    <RenewalsViewPrint state={{renewalPrimaryId:obj.id}}  />
+                                                                    </div> </td>:""}
 
                                                                 </tr>);
                                                             })}
@@ -650,6 +666,7 @@ const Myprofile = () => {
                                                                 <th>Approval Status</th>
                                                                 <th>Reason </th>
                                                                 <th> </th>
+                                                                <th> </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -665,7 +682,13 @@ const Myprofile = () => {
                                                                     </td>
                                                                     {obj.status === 'rej' ? <td>{obj.extra3}</td> : <td></td>}
                                                                     {(obj.status == 'pen' || obj.status == 'rej') ? <td> <Link to={'good-standing-edit'} state={{ gsPrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
-
+                                                                    {(obj.extra1 === 'nor'||obj.extra1 === 'tat') ?<td> <ReactToPrint
+                                                                            trigger={() => <button className='btn btn-info btn-sm me-3'> Print Receipt</button>}
+                                                                            content={() => gscomponentRef.current}
+                                                                        />
+                                                                     <div ref={gscomponentRef} className='hideComponentScreen'>
+                                                                    <GoodStandingRegPrintView state={{gsPrimaryId:obj.id}}  />
+                                                                    </div> </td>:""}
 
                                                                 </tr>);
                                                             })}
@@ -692,6 +715,7 @@ const Myprofile = () => {
                                                                 <th>Registration Date</th>
                                                                 <th>Approval Status</th>
                                                                 <th>Reason </th>
+                                                                <th> </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -717,12 +741,91 @@ const Myprofile = () => {
                                                                     </td>
                                                                     {obj.status === 'rej' ? <td>{obj.extracol_3}</td> : <td></td>}
                                                                     {(obj.status == 'pen' || obj.status == 'rej') ? <td> <Link to={'edit-noc-registration'} state={{ nocPrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
+
+                                                                    {(obj.extracol_1 === 'nor'||obj.extracol_1 === 'tat') ? <td> <ReactToPrint
+                                                                            trigger={() => <button className='btn btn-info btn-sm me-3'>Print Receipt</button>}
+                                                                            content={() => noccomponentRef.current}
+                                                                        />
+                                                                     <div ref={noccomponentRef} className='hideComponentScreen'>
+                                                                    <NocRegViewPrint state={{nocPrimaryId:obj.id}}  />
+                                                                    </div> </td>:""}
                                                                 </tr>);
                                                             })}
                                                         </tbody></table>
                                                 </div>
                                             </>
 
+                                        }
+                                        {nameChangeList.length > 0 &&
+                                            <>
+                                                <div className="tsmc-timeline mb-5">
+                                                    <div className="tsmc-text">
+                                                        <div className="d-flex align-items-center justify-content-between mb-4">
+                                                            <h1 className='fs-18 fw-700 mb-0'>Change of Name List</h1>
+                                                        </div>
+                                                    </div>
+
+                                                    <table className="table table-hover fs-11 table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Registration Date</th>
+                                                                <th>Approval Status</th>
+                                                                <th>Reason </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {nameChangeList?.map((obj: any) => {
+                                                                return (<tr>
+                                                                    <td>{moment(obj.reg_date).format('DD/MM/YYYY')}</td>
+                                                                    <td>
+                                                                        {obj.approval_status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
+                                                                        {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
+                                                                        {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                                                                        {obj.approval_status === 'rej' && <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>Rejected</span>}
+                                                                    </td>
+                                                                    {obj.approval_status === 'rej' ? <td>{obj.extracol_3}</td> : <td></td>}
+                                                                    {(obj.approval_status == 'pen' || obj.status == 'rej') ? <td> <Link to={'edit_change_of_name'} state={{ changeofNamePrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
+                                                                </tr>);
+                                                            })}
+                                                        </tbody></table>
+                                                </div>
+                                           </>
+                                        }
+
+                                        {revalidationList.length > 0 &&
+                                            <>
+                                                <div className="tsmc-timeline mb-5">
+                                                    <div className="tsmc-text">
+                                                        <div className="d-flex align-items-center justify-content-between mb-4">
+                                                            <h1 className='fs-18 fw-700 mb-0'>Revalidation List</h1>
+                                                        </div>
+                                                    </div>
+
+                                                    <table className="table table-hover fs-11 table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Registration Date</th>
+                                                                <th>Approval Status</th>
+                                                                <th>Reason </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {revalidationList?.map((obj: any) => {
+                                                                return (<tr>
+                                                                    <td>{moment(obj.reg_date).format('DD/MM/YYYY')}</td>
+                                                                    <td>
+                                                                        {obj.approval_status === 'ver' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Verified</span>}
+                                                                        {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
+                                                                        {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
+                                                                        {obj.approval_status === 'rej' && <span className='alert alert-danger px-2 py-1 fs-12 rounded-pill me-3'>Rejected</span>}
+                                                                    </td>
+                                                                    {obj.approval_status === 'rej' ? <td>{obj.extracol_3}</td> : <td></td>}
+                                                                    {(obj.approval_status == 'pen' || obj.status == 'rej') ? <td> <Link to={'edit_prov_revalidation'} state={{ revalidationPrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
+                                                                </tr>);
+                                                            })}
+                                                        </tbody></table>
+                                                </div>
+                                           </>
                                         }
 
                                     </div>

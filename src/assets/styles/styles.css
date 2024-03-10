@@ -907,3 +907,9 @@ aside>ul>li>a:hover {
 		display: none;
 	  }
 }
+
+@media screen {
+	.hideComponentScreen {
+		display: none;
+	}
+}

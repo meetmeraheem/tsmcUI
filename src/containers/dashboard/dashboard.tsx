@@ -9,6 +9,8 @@ import RenewalRegList from '../dashboard/renewal-registrations';
 import AdminEditPage from '../dashboard/admin-edit-page';
 import TatKalDateUpdate from '../dashboard/adminEdits/TatKalDateUpdate';
 import  ProvRevalidationReg  from '../dashboard/prov-revalidation-registrations';
+import  ChangeofNameReg  from '../dashboard/changeofname-registrations';
+
 
 
 type TabsType = {
@@ -49,28 +51,26 @@ type TabsType = {
       index: 6,
       Component: GoodStandingRegList
     },
-    
-      {
-      label: "Enable Edit for Doctor",
-      index: 7,
-      Component: AdminEditPage
-    },
-
-    {
-      label: "TatKal Update",
-      index: 8,
-      Component: TatKalDateUpdate
-    },
-  /*{
+   /* {
       label: "Change of Name",
       index: 7,
       Component: ChangeofNameReg
     },
     {
       label: "Provisional Revalidations",
-      index: 8,
+      index:  8,
       Component: ProvRevalidationReg
-    },*/
+    }*/
+    {
+      label: "Enable Edit for Doctor",
+      index: 9,
+      Component: AdminEditPage
+    },
+    {
+      label: "TatKal Update",
+      index: 10,
+      Component: TatKalDateUpdate
+    },
   ];
 
 const AdminDashboardHome = () => {

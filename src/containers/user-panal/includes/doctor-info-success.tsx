@@ -8,17 +8,14 @@ import { setDoctorInfo } from '../../../redux/doctor';
 import { DoctorFormType } from '../../../types/doctor';
 import { serverUrl, serverImgUrl } from '../.././../config/constants';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
-import Swal from "sweetalert2";
-import { routes } from "../../routes/routes-names";
-import { useNavigate,useLocation } from "react-router-dom";
+
+
 // type Props = {
 //     doctor : DoctorFormType  | null;
 // };
 
 // const DoctorInfoCard: React.FC<Props> = ({doctor}) => {
-const DoctorInfoCard = () => {
-    const navigate = useNavigate();
+const DoctorInfoSuccess = () => {
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
 
@@ -28,24 +25,8 @@ const DoctorInfoCard = () => {
             if (doctorPrimaryId) {
                 const {data} = await doctorService.getDoctorById(doctorPrimaryId);
                 if (data.length > 0) {
-                    if(data[0].passphoto ===null|| data[0].signature ===null ||data[0].passphoto===""||data[0].signature ===""||
-                    data[0].fathername===null || data[0].fathername===""||data[0].mothername===null||data[0].mothername ===""||
-                    data[0].address1===null ||data[0].address1===""||data[0].address2 === null||data[0].address2==="")
-                    {
-                        Swal.fire({
-                            title: "Warning",
-                            text: "Please update Mother Name,Father Name,Pass Photo,Signature  and address detais in  Profile as they are not updated",
-                            icon: "warning",
-                            confirmButtonText: "OK",
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                navigate(routes.usereditprofile);
-                            }
-                        });
-                    }else{
-                        setDoctor(data[0]);
-                        dispatch(setDoctorInfo(data[0]));
-                    }
+                    setDoctor(data[0]);
+                    dispatch(setDoctorInfo(data[0]));
                 }
             }
         } catch (err) {
@@ -67,7 +48,7 @@ const DoctorInfoCard = () => {
                                                 <div className="d-flex">
                                                     <div className="flex-shrink-1 pe-3">
                                                         <div className="tsmc-doc-profile-box border-bottom-0">
-                                                            <div className='tsmc-doc-img mb-3'>
+                                                        <div className='tsmc-doc-img mb-3'>
                                                                 {doctor?.passphoto ? <>
                                                                         {doctor?.filestatus === true ?
                                                                             <img src={serverImgUrl + 'files/' + doctor?.passphoto} alt="" /> :
@@ -87,30 +68,15 @@ const DoctorInfoCard = () => {
                                                                     </>
                                                                 }
                                                             </div>
+                                                            
                                                         </div>
                                                     </div>
                                                 <div className="p-2 w-100">
-                                                        <div className="d-flex mb-2">
+                                                        
                                                             <div className="col d-flex">
                                                                 <label htmlFor="" className='fs-14 fw-600 me-2'>Full Name:</label>
                                                                 <div className="fs-14">{doctor?.fullname}</div>
                                                             </div>
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Father Name:</label>
-                                                                <div className="fs-14">{doctor?.fathername}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="d-flex mb-2">
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Mother Name:</label>
-                                                                <div className="fs-14">{doctor?.mothername}</div>
-                                                            </div>
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Aadhar No:</label>
-                                                                <div className="fs-14">{doctor?.aadharcard}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="d-flex mb-2">
                                                             <div className="col d-flex">
                                                                 <label htmlFor="" className='fs-14 fw-600 me-2'>Date of Birth:</label>
                                                                 <div className="fs-14">{moment(doctor?.dateofbirth).format('DD/MM/YYYY')}</div>
@@ -119,8 +85,7 @@ const DoctorInfoCard = () => {
                                                                 <label htmlFor="" className='fs-14 fw-600 me-2'>Gender:</label>
                                                                 <div className="fs-14">{doctor?.gender == 'M' ? 'MALE' : doctor?.gender == 'F' ? 'FEMALE' : 'OTHERS'}</div>
                                                             </div>
-                                                        </div>
-                                                        <div className="d-flex mb-2">
+                                                        
                                                             <div className="col d-flex">
                                                                 <label htmlFor="" className='fs-14 fw-600 me-2'>Mobile No:</label>
                                                                 <div className="fs-14">{doctor?.mobileno}</div>
@@ -129,30 +94,17 @@ const DoctorInfoCard = () => {
                                                                 <label htmlFor="" className='fs-14 fw-600 me-2'>Email Address:</label>
                                                                 <div className="fs-14">{doctor?.emailid}</div>
                                                             </div>
-                                                        </div>
-                                                        <div className="d-flex mb-2">
                                                             <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Blood Group:</label>
-                                                                <div className="fs-14">{doctor?.bloodgroup}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="d-flex mb-2">
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Address:</label>
-                                                                <div className="fs-14">{doctor?.address1} {doctor?.address2}
-                                                                {doctor?.cityName},{doctor?.stateName}-{doctor?.pincode}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col d-flex">
                                                             <label htmlFor="" className='fs-14 fw-600 me-2'>Registration No:</label>
                                                             <div className="fs-14">{doctor?.original_fmr_no}</div>
+                                                            </div>
                                                         </div>
                                                     </div>
                 
-                                                      </div>
+                
                                                     </div>
                                                  </div>
         </>
     )
 };
-export default DoctorInfoCard;
+export default DoctorInfoSuccess;

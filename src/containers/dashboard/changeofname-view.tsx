@@ -19,10 +19,9 @@ import { AdminChangeOfNameType} from '../../types/common';
 import { authService } from '../../lib/api/auth';
 
 
-const ChangeofNameRegView = () => {
+const ChangeofNameRegView =  (props:any) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { nameChangeId, doctorPrimaryId ,assignmentId} = location.state
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [changeofname, setChangeofname] = useState<AdminChangeOfNameType>();
@@ -33,8 +32,8 @@ const ChangeofNameRegView = () => {
     const [disablebtn, setDisablebtn] = useState(false);
     const getDoctorDetails = async () => {
         try {
-            if (doctorPrimaryId) {
-                const { data } = await doctorService.getDoctorById(doctorPrimaryId);
+            if (props.state.doctorPrimaryId) {
+                const { data } = await doctorService.getDoctorById(props.state.doctorPrimaryId);
                 if (data.length > 0) {
                     setDoctor(data[0]);
                 }
@@ -46,8 +45,8 @@ const ChangeofNameRegView = () => {
 
     const getAdditionalDetails = useCallback(async () => {
         try {
-            if (nameChangeId) {
-                const { data } = await changeofnameService.getNameChangeById(nameChangeId);
+            if (props.state.nameChangeId) {
+                const { data } = await changeofnameService.getNameChangeById(props.state.nameChangeId);
                 if (data && data.approval_status !=  null) {
                     setChangeofname({
                         approval_status: data.approval_status,
@@ -72,13 +71,13 @@ const ChangeofNameRegView = () => {
         if (status) {
             setDisablebtn(true);
             const changeofnameInfo = {
-                doctorPrimaryId:doctorPrimaryId,
+                doctorPrimaryId:props.state.doctorPrimaryId,
                 approval_status: status,
                 remarks: remarks,
-                assignmnetId:assignmentId
+                assignmnetId:props.state.assignmentId
 
             }
-            const { success } = await changeofnameService.updateNameChange(nameChangeId, changeofnameInfo);
+            const { success } = await changeofnameService.updateNameChange(props.state.nameChangeId, changeofnameInfo);
             if (success) {
                 let msg="";
                 let smsmsg="";
@@ -157,7 +156,7 @@ const ChangeofNameRegView = () => {
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getAdditionalDetails();
-    }, [nameChangeId, doctorPrimaryId]);
+    }, [props.state.nameChangeId, props.state.doctorPrimaryId]);
     return (
         <>
             <div className="col-8 m-auto mb-4">

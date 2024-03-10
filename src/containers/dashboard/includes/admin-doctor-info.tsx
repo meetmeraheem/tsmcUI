@@ -31,6 +31,7 @@ const AdminDoctorInfoCard = (props: any) => {
                     setDoctor(data.doctorInfo);
                     setAdditionalGridList(data.additionalInfo);
                     setFinal({
+                        id:data.FinalInfo[0].id,
                         serialno: data.FinalInfo[0].serialno,
                         reg_date: data.FinalInfo[0].reg_date,
                         country: data.FinalInfo[0].countryName,
@@ -45,6 +46,7 @@ const AdminDoctorInfoCard = (props: any) => {
                         posttime: data.FinalInfo[0].posttime,
                         extra_col3: data.FinalInfo[0].extra_col3,
                         row_type:data.FinalInfo[0].row_type,
+                        extra_col1: data.FinalInfo[0].extra_col1,
                     });
                 }
             }

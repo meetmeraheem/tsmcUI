@@ -1,7 +1,7 @@
 import { Field, FieldProps, Formik, FormikProps } from "formik";
 import { object as objectYup, string as stringYup, number as numberYup } from 'yup';
 import getValue from 'lodash/get';
-import Select from 'react-select';
+
 import { useNavigate } from "react-router-dom";
 //@ts-ignore
 import Files from 'react-files';
@@ -12,9 +12,6 @@ import { changeOfNameType } from "../../types/common";
 import DoctorInfoCard from "./includes/doctor-info";
 import { ReactFilesError, ReactFilesFile } from "../../types/files";
 import { useCallback, useEffect, useState } from "react";
-import { College, Country, Qualification, Serials, State, University } from "../../types/common";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux";
 import { routes } from "../routes/routes-names";
 import { isLessThanTheMB } from "../../lib/utils/lessthan-max-filesize";
 import { Messages } from "../../lib/constants/messages";
@@ -24,13 +21,8 @@ import DatePicker from 'react-date-picker';
 
 const ChangeofNameRegistration = () => {
     const navigate = useNavigate();
-    const doctorReduxProfile = useSelector((state: RootState) => state.doctor.profile);
     const [next, setNext] = useState(false);
-    const [doctorId, setDoctorId] = useState(0);
-    const [serial, setserial] = useState<Serials>();
     const [provisionalCertificate, setProvisionalCertificate] = useState<{ file?: File; error?: string } | null>(null);
-    const [applicationForm, setApplicationForm] = useState<{ file?: File; error?: string } | null>(null);
-    const [nocCertificate, setNOCCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [provisionalRequestType, setProvisionalRequestType] = useState<string>('nor');
     const [reg_date, setReg_date] = useState(new Date());
 
@@ -48,7 +40,10 @@ const ChangeofNameRegistration = () => {
     useEffect(() => {
         
     }, []);
-
+  
+    const  handleDateChangeRaw = (e:any) => {
+        e.preventDefault();
+    }
     
 
     const submitForm = useCallback(
@@ -90,7 +85,7 @@ const ChangeofNameRegistration = () => {
                 console.log('error in provisional registeration update', err);
             }
         },
-        [doctorId, serial, provisionalCertificate, applicationForm, nocCertificate]
+        [provisionalCertificate]
     );
 
     return (
@@ -235,8 +230,10 @@ const ChangeofNameRegistration = () => {
                                                                                         setFieldTouched(field.name);
                                                                                         setFieldValue(field.name, date);
                                                                                         setReg_date(date);
-                                                                                    }}
+                                                                                    }}                       
+                                                                                    onFocus={e => e.target.blur()}
                                                                                     clearIcon={null}
+                                                                                   
                                                                                     value={reg_date}
                                                                                     className={`form-control ${error ? 'is-invalid' : ''}`}
                                                                                 />

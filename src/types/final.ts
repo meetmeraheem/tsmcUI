@@ -98,6 +98,7 @@ export type FinalRegFormType = {
 }
 
 export type FinalMyProfileType = {
+  id: number,
   serialno: number,
   reg_date: Date,
   country: string,
@@ -111,6 +112,7 @@ export type FinalMyProfileType = {
   createdon: string,
   posttime: string,
   extra_col3:string,
+  extra_col1:string,
   row_type:string
 }
 

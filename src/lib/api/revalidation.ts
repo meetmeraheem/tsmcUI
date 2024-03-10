@@ -4,7 +4,7 @@ import { axiosInstance } from './index';
 
 export const revalidationService = {
    
-    async getRevalidationsByFilter( fromdate: any,todate:any,status: any) {
+    async getRevalidationsByFilter( fromdate: any,todate:any,status: any,istatkal:any) {
         const { data: responseData } = await axiosInstance.get(`revalidation/getRevalidationsByFilter/${fromdate}/${todate}/${status}`);
         return responseData as ApiResponseType;
     },
@@ -38,4 +38,14 @@ export const revalidationService = {
         const { data: responseData } = await axiosInstance.put(`revalidation/updateRevalidation/${RevaldationId}`, data);
         return responseData;
     },
+
+    async editRevalidation(RevaldationId: number, data: any) {
+        const { data: responseData } = await axiosInstance.put(`revalidation/editRevalidation/${RevaldationId}`, data);
+        return responseData;
+    },
+
+    async getRevalidationByMobileNo(data: any){
+        const { data: responseData } = await axiosInstance.get(`revalidation/getRevalidationByMobileNo`,data);
+        return responseData as ApiResponseType;
+    }
 };

@@ -72,6 +72,7 @@ export type ProvisionalMyProfileType = {
     edu_cert2: string;
     edu_cert3: string;
     extra_col3:string;
+    extra_col1:string;
 };
 
 

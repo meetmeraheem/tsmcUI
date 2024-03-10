@@ -26,6 +26,10 @@ export const routes = {
     good_standing_mci_registration: `${urlPrefix}my-panal${urlPrefix}good-standing-mci-registration`,
     noc_registration: `${urlPrefix}my-panal${urlPrefix}noc-registration`,
     noc_registration_edit:`${urlPrefix}my-panal${urlPrefix}edit-noc-registration`,
+
+    edit_change_of_name: `${urlPrefix}my-panal${urlPrefix}edit_change_of_name`,
+    edit_prov_revalidation: `${urlPrefix}my-panal${urlPrefix}edit_prov_revalidation`,
+
     temporary_registration: `${urlPrefix}my-panal${urlPrefix}temporary-registration`,
     final_renewal: `${urlPrefix}my-panal${urlPrefix}final-renewal`,
     edit_final_renewal: `${urlPrefix}my-panal${urlPrefix}edit-final-renewal`,
@@ -36,7 +40,7 @@ export const routes = {
     paymentsuccess: `${urlPrefix}paymentsuccess`,
     payment_failure: `${urlPrefix}payment_failure`,
     paymenterror: `${urlPrefix}paymentsuccess`,
-
+    
     admin_dashboard: `${urlPrefix}admin`,
     admin_enable_edit: `${urlPrefix}admin${urlPrefix}enableEdit`,
     admin_my_work_items: `${urlPrefix}admin${urlPrefix}my-work-items`,

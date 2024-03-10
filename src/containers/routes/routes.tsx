@@ -60,6 +60,8 @@ import TermsConditions from '../landing-pages/terms-conditions';
 import Refund from '../landing-pages/refund';
 import ChangeofNameRegistration from '../user-panal/change-of-name';
 import ProvisionalRevalidation from '../user-panal/provisional-revalidation';
+import EditChangeofName from '../user-panal/edit-changeofName';
+import EditRevalidation from '../user-panal/edit-revalidation';
 import MyDataEdit from '../user-panal/my-data-edit';
 import AdminEditPage from '../dashboard/admin-edit-page';
 import axios from 'axios';
@@ -107,6 +109,8 @@ const MainRoute = () => {
 					<Route path={routes.additional_duplicate} element={<AdditionalDuplicate />} />
 					<Route path={routes.temporary_registration} element={<TemporaryRegistration />} />
 					<Route path={routes.noc_registration} element={<NocRegistration />} />
+
+
 					<Route path={routes.noc_registration_edit} element={<EditNocView />} />
 					<Route path={routes.good_standing_registration} element={<GoodStandingRegistration />} />
 					<Route path={routes.good_standing_mci_registration} element={<GoodStandingMciRegistration />} />
@@ -116,6 +120,8 @@ const MainRoute = () => {
 					<Route path={routes.edit_final_renewal} element={<EditRenewalRegistration />} />
 					<Route path={routes.change_of_name} element={<ChangeofNameRegistration />} />
 					<Route path={routes.prov_revalidation} element={<ProvisionalRevalidation />} />
+					<Route path={routes.edit_change_of_name} element={<EditChangeofName />} />
+					<Route path={routes.edit_prov_revalidation} element={<EditRevalidation />} />
 				</Route>
 				<Route path={routes.admin_dashboard} element={<AdminDashboard />}>
 				

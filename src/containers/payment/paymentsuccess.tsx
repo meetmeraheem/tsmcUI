@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState,useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import moment from "moment";
@@ -24,24 +24,37 @@ import { renewalService } from "../../lib/api/renewals";
 import { changeofnameService } from "../../lib/api/changeofname";
 import { changeOfNameType } from "../../types/common";
 import { revalidationService } from "../../lib/api/revalidation";
-import DoctorInfoPrintCard from '../../containers/user-panal/includes/doctor-info-print';
+import  DoctorInfoSuccess from './../../containers/user-panal/includes/doctor-info-success'
 import SiteLogo from '../../assets/images/logo.png'
 import SiteSubLogo from '../../assets/images/tsgovt-logo.png'
 import { Link } from 'react-router-dom';
+import FinalRegPrint from'../../containers/user-panal/printouts/final-reg-print';
+import AdditionalRegViewPrint from'../../containers/user-panal/printouts/additional-view-print';
+import RenewalsViewPrint from'../../containers/user-panal/printouts/renewals-view-print';
+import NocRegViewPrint from'../../containers/user-panal/printouts/noc-view-print';
+import GoodStandingRegPrintView from '../../containers/user-panal/printouts/goodstanding-view-print';
+import ProvisionalViewPrint from '../../containers/user-panal/printouts/provisional-view-print';
+import ReactToPrint from 'react-to-print';
+import  './../../assets/styles/styles.css';
 
 
 const PaymentSuccess = () => {
     const location = useLocation();
-    // const orderId = new URLSearchParams(search).get('orderid');
     const navigate = useNavigate();
-    //const location = useLocation();
-    // const { orderid } = location.state
-
+    const finalcomponentRef = useRef<HTMLDivElement>(null);
+    const additionalcomponentRef = useRef<HTMLDivElement>(null);
+    const renewlcomponentRef = useRef<HTMLDivElement>(null);
+    const noccomponentRef = useRef<HTMLDivElement>(null);
+    const gscomponentRef = useRef<HTMLDivElement>(null);
+    const provisionalcomponentRef = useRef<HTMLDivElement>(null);   
     const [isLoader, setIsLoader] = useState(true);
     const [doctorSerialNumber, setDoctorSerialNumber] = useState(0);
     const [pmrSerialNumber, setPMRSerialNumber] = useState(0);
     const [fmrSerialNumber, setFMRSerialNumber] = useState(0);
     const [transactionMsg, setTransactionMsg] = useState('');
+    const [finalId, setFinalId] = useState(0);
+    const [provisionalId, setProvisionalId] = useState(0);
+
     const [isPrinting, setIsPrinting] = useState(false);
 
 
@@ -86,13 +99,17 @@ const PaymentSuccess = () => {
 
                     const { success, data, message } = await provisionalService.provisionalRegistration(formData);
                     if (success) {
+                        
+                        if (data && data.doctorId !== null) {
+                            LocalStorageManager.setDoctorSerialId(data.doctorId.toString());
+                            setProvisionalId(data.id);
+                        }
+                        
                         setIsLoader(false);
                         setTransactionMsg(message);
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
-                        if (data && data.doctorId !== null) {
-                            LocalStorageManager.setDoctorSerialId(data.doctorId.toString());
-                        }
+                        
                         secureLocalStorage.removeItem("provisionalInfo");
                         secureLocalStorage.removeItem("pcName");
                         secureLocalStorage.removeItem("afName");
@@ -186,10 +203,13 @@ const PaymentSuccess = () => {
                     }
                     const { success, data, message } = await finalService.finalRegistration(formData);
                     if (success) {
-                        setIsLoader(false);
+
                         if (data && data.doctorId !== null) {
                             LocalStorageManager.setDoctorSerialId(data.doctorId.toString());
+                            setFinalId(data.id);
                         }
+
+                        setIsLoader(false);
                         setTransactionMsg(message);
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
@@ -564,13 +584,11 @@ const PaymentSuccess = () => {
                         <div className="row mb-3">
                             <div className="col"></div>
                             <div className="col"></div>
-                            
-                            <div className="col align-items-center justify-content-center">
-                                <button type="button" id="printPageButton"
-                                    onClick={() => {
-                                        printwindow();
-                                    }} className='btn btn-outline-primary'><i className="bi-printer-fill"></i> Print</button>
-                            </div>
+                           <div> 
+                             
+                         
+                               
+                        </div>
                         </div>
 
                         {isLoader ? (
@@ -599,10 +617,32 @@ const PaymentSuccess = () => {
                                             <i className="bi-check-circle fs-42 text-success"></i>
                                             <h1 className='fs-22 fw-700'>Payment Success</h1>
                                         </div>
+                        {(secureLocalStorage.getItem("regType") === 'final')
+                             &&
+                             <div>
+                             <ReactToPrint
+                             trigger={() => <button className='btn btn-info btn-sm me-3'>Print</button>}
+                             content={() => finalcomponentRef.current} />
+                             <div ref={finalcomponentRef} className='styles.hideComponentScreen'>
+                              <FinalRegPrint state={{finalPrimaryId:finalId}}  />
+                              </div>  
+                               </div>
+                            }
+                            {(secureLocalStorage.getItem("regType") === 'provisional')&&
+                            <div>
+                            <ReactToPrint
+                            trigger={() => <button className='btn btn-info btn-sm me-3'>Print</button>}
+                            content={() => provisionalcomponentRef.current}
+                                />
+                             <div ref={provisionalcomponentRef} className='hideComponentScreen'>
+                                <ProvisionalViewPrint state={{provisionalPrimaryId:provisionalId}}  />
+                                </div>  
+                                </div>
+                              }
                                         <div className="px-3 text-center">
                                             <p className="mb-3" id="printPageButton">Your application successfully submitted to <br /> Telangana State Medical Council</p>
                                             <hr />
-                                            <DoctorInfoPrintCard />  
+                                            <DoctorInfoSuccess />  
                                         </div>
                                     </div>
                                 }

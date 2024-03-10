@@ -11,7 +11,6 @@ import { adminService } from "../../../lib/api/admin";
 import TopNav from "../../dashboard/includes/admin-top-nav";
  import AdminDashboardHome from "../dashboard";
 
-
 const AdminSideNav = () => {
 	const location = useLocation();
 	const activeTab = location.pathname;
@@ -50,6 +49,7 @@ const AdminSideNav = () => {
 					{user?.user_type === 'u' &&
 					<TopNav/>
 					}
+					
 				</div>
 			
 		</>

@@ -312,6 +312,7 @@ const ProfileDataEdit = () => {
                                                                             }}
                                                                             clearIcon={null}
                                                                             value={field.value}
+                                                                            onFocus={e => e.target.blur()}
                                                                             className={`form-control ${error ? 'is-invalid' : ''}`}
                                                                         />
                                                                         {/* <input

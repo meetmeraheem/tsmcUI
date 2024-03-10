@@ -13,7 +13,7 @@ export const changeofnameService = {
         return responseData as ApiResponseType;
     },
 
-    async getNameChangeByUserId( fromdate: any,todate: any,userId: any,regType:any) {
+    async getNameChangeByUserId( fromdate: any,todate: any,userId: number,regType:any,statusValue:any,istatkal:any) {
         const { data: responseData } = await axiosInstance.get(`namechange/getNameChangeByUserId/${fromdate}/${todate}/${userId}/${regType}`);
         return responseData as ApiResponseType;
     },
@@ -38,4 +38,14 @@ export const changeofnameService = {
         const { data: responseData } = await axiosInstance.put(`namechange/updateNameChange/${namechangeId}`, data);
         return responseData;
     },
+
+    async editNameChange(namechangeId: number, data: any) {
+        const { data: responseData } = await axiosInstance.put(`namechange/editNameChange/${namechangeId}`, data);
+        return responseData;
+    },
+
+    async getChangeOfNameByMobileNo(data: any){
+        const { data: responseData } = await axiosInstance.put(`namechange/getChangeOfNameByMobileNo`, data);
+        return responseData;
+    }
 };

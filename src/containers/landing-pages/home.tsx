@@ -221,6 +221,7 @@ const HomePage = () => {
                          });
                          if (data[0].password !== null) {
                               depwd = cryptojs.decryptData(data[0].password);
+                              
                          }
                          if (success && password === depwd) {
                               tokenManager.setToken(token);
@@ -653,6 +654,7 @@ const HomePage = () => {
                                                                                                                              setFieldValue(field.name, date);
                                                                                                                              setStartDate(date);
                                                                                                                         }}
+                                                                                                                        onFocus={e => e.target.blur()}
                                                                                                                         clearIcon={null}
                                                                                                                         value={startDate}
                                                                                                                         className={`form-control ${error ? 'is-invalid' : ''}`}

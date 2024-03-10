@@ -239,6 +239,7 @@ const RenewalRegistration = () => {
                                                                                     maxDate={showmaxdate}
                                                                                     clearIcon={null}
                                                                                     value={reg_date}
+                                                                                    onFocus={e => e.target.blur()}
                                                                                     className={`form-control ${error ? 'is-invalid' : ''}`}
                                                                                 />
                                                                                 {error && <small className="text-danger">{error.toString()}</small>}

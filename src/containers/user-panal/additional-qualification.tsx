@@ -681,7 +681,7 @@ const AdditionalQualificationRegistration = () => {
                                                                                         setFieldValue(field.name, date);
                                                                                         setCalc_date(date);
                                                                                     }}
-
+                                                                                    onFocus={e => e.target.blur()}
                                                                                     maxDate={new Date()}
                                                                                     clearIcon={null}
                                                                                     value={calc_date}

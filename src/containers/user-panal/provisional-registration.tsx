@@ -557,6 +557,7 @@ const ProvisionalRegistration = () => {
                                                                                     maxDate={new Date()}
                                                                                     clearIcon={null}
                                                                                     value={calc_date}
+                                                                                    onFocus={e => e.target.blur()}
                                                                                     className={`form-control ${error ? 'is-invalid' : ''}`}
                                                                                 />
 

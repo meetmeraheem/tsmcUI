@@ -10,11 +10,7 @@ import { serverUrl, serverImgUrl } from '../.././../config/constants';
 import moment from 'moment';
 
 
-// type Props = {
-//     doctor : DoctorFormType  | null;
-// };
 
-// const DoctorInfoCard: React.FC<Props> = ({doctor}) => {
 const DoctorInfoPrintCard = () => {
     const dispatch = useDispatch();
     const [doctor, setDoctor] = useState<DoctorFormType>();
@@ -41,12 +37,21 @@ const DoctorInfoPrintCard = () => {
 
     return (
         <>
-           
-            <div >
-                                            <div className="tsmc-text">
-                                               
-                                                <div className="d-flex">
-                                                    <div className="flex-shrink-1 pe-3">
+                                                    
+                                                    
+                                                    <table style={{border: "1px solid rgb(0, 0, 0)",backgroundColor:"#E2F4F5", width:"100%"}} >
+
+                                                        <tr style={{alignContent:"center",width:"100%"}}>
+                                                        <td style={{textAlign:"center",width:"100%",fontSize:"24px",fontWeight:"bold"}}>Telangana Medical Council</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style={{textAlign:"center",width:"100%",fontSize:"14px"}}>Application Registration Reciept</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style={{textAlign:"center",width:"100%",fontSize:"12px" }}> P. B. 523, Sultan Bazaar, Near Post Office, opposite Womens College, Hyderabad, Telangana 500095</td>
+                                                        </tr>
+
+                                                        </table>
                                                         <div className="tsmc-doc-profile-box border-bottom-0">
                                                         <div className='tsmc-doc-img mb-3'>
                                                                 {doctor?.passphoto ? <>
@@ -70,40 +75,49 @@ const DoctorInfoPrintCard = () => {
                                                             </div>
                                                             
                                                         </div>
-                                                    </div>
-                                                <div className="p-2 w-100">
-                                                        
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Full Name:</label>
-                                                                <div className="fs-14">{doctor?.fullname}</div>
-                                                            </div>
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Date of Birth:</label>
-                                                                <div className="fs-14">{moment(doctor?.dateofbirth).format('DD/MM/YYYY')}</div>
-                                                            </div>
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Gender:</label>
-                                                                <div className="fs-14">{doctor?.gender == 'M' ? 'MALE' : doctor?.gender == 'F' ? 'FEMALE' : 'OTHERS'}</div>
-                                                            </div>
-                                                        
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Mobile No:</label>
-                                                                <div className="fs-14">{doctor?.mobileno}</div>
-                                                            </div>
-                                                            <div className="col d-flex">
-                                                                <label htmlFor="" className='fs-14 fw-600 me-2'>Email Address:</label>
-                                                                <div className="fs-14">{doctor?.emailid}</div>
-                                                            </div>
-                                                            <div className="col d-flex">
-                                                            <label htmlFor="" className='fs-14 fw-600 me-2'>Registration No:</label>
-                                                            <div className="fs-14">{doctor?.original_fmr_no}</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                
-                
-                                                    </div>
-                                                 </div>
+                                                    
+                                                <table style={{border: "1px solid rgb(0, 0, 0)",width:"100%"}}>
+                                                         <tr style={{width:"100%",backgroundColor:"#E2F4F5"}}>
+                                                         <td colSpan={2} style={{textAlign:"left",width:"100%",fontSize:"14px",fontWeight:"bold"}} >Personal Information</td>
+                                                        </tr>
+                                                            <tr style={{border: "1px solid rgb(0, 0, 0)"}}>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)",fontWeight:"bold"}}>Full Name:</td>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)"}}>{doctor?.fullname}</td>
+                                                            </tr>
+                                                            <tr style={{border: "1px solid rgb(0, 0, 0)"}}>
+                                                                <td  style={{border: "1px solid rgb(0, 0, 0)",fontWeight:"bold"}}>Date of Birth:</td>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)"}}>{moment(doctor?.dateofbirth).format('DD/MM/YYYY')}</td>
+                                                            </tr>
+                                                            <tr style={{border: "1px solid rgb(0, 0, 0)"}}>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)",fontWeight:"bold"}}>Gender:</td>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)"}}>{doctor?.gender == 'M' ? 'MALE' : doctor?.gender == 'F' ? 'FEMALE' : 'OTHERS'}</td>
+                                                            </tr>
+                                                            <tr style={{border: "1px solid rgb(0, 0, 0)"}}>
+                                                                <td  style={{border: "1px solid rgb(0, 0, 0)",fontWeight:"bold"}}>Mobile No:</td>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)"}}>{doctor?.mobileno}</td>
+                                                            </tr>
+                                                            <tr style={{border: "1px solid rgb(0, 0, 0)"}}>
+                                                                <td  style={{border: "1px solid rgb(0, 0, 0)",fontWeight:"bold"}}>Email Address:</td>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)"}}>{doctor?.emailid}</td>
+                                                            </tr>
+                                                            <tr style={{border: "1px solid rgb(0, 0, 0)"}}>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)",fontWeight:"bold"}}>Address Line1:</td>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)"}}>{doctor?.address1} </td>
+                                                             </tr>   
+                                                             <tr style={{border: "1px solid rgb(0, 0, 0)"}}>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)",fontWeight:"bold"}}>Address Line2:</td>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)"}}>{doctor?.address2} </td>
+                                                             </tr>   
+                                                            <tr style={{border: "1px solid rgb(0, 0, 0)"}}>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)",fontWeight:"bold"}}>City Name:</td>
+                                                                <td style={{border: "1px solid rgb(0, 0, 0)"}}>{doctor?.cityName}</td>
+                                                            </tr>
+                                                            <tr style={{border: "1px solid rgb(0, 0, 0)"}}>
+                                                            <td style={{border: "1px solid rgb(0, 0, 0)",fontWeight:"bold"}}>State:</td>
+                                                            <td style={{border: "1px solid rgb(0, 0, 0)"}}>{doctor?.stateName}-{doctor?.pincode}</td>
+                                                            </tr>  
+                                                                
+                                                        </table>
         </>
     )
 };

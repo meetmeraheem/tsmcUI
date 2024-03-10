@@ -49,7 +49,7 @@ const tabs: TabsType = [
     Component: GoodStandingWorkItems
   },
  
- /* {
+ /*{
     label: "Change of Name ",
     index: 7,
     Component: ChangeofNameWorkItems

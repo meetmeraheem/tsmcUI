@@ -119,7 +119,7 @@ const ProvRevalidationRegWorkItems = () => {
             <div className="container-fluid">
                 <div className="tsmc-filter-box d-flex align-items-center">
                     <div className="p-2 w-100">
-                        <h2 className="fs-22 fw-700 mb-0">Additional Registrations</h2>
+                        <h2 className="fs-22 fw-700 mb-0">Provisional Revalidation</h2>
                     </div>
                     <div className="p-2 flex-shrink-1 input-group justify-content-end">
                         <span className="input-group-text p-0" id="filterbox">
