@@ -53,8 +53,13 @@ const PaymentSuccess = () => {
     const [fmrSerialNumber, setFMRSerialNumber] = useState(0);
     const [transactionMsg, setTransactionMsg] = useState('');
     const [finalId, setFinalId] = useState(0);
+    const [finalreqType, setFinalreqType] = useState("");
+    const [additionalId, setAdditionalId] = useState(0);
+    const [additionalreqType, setAdditionalreqType] = useState("");
+    const [renewalId, setRenewalId] = useState(0);
+    const [gsId, setGsId] = useState(0);
+    const [nocId, setNocId] = useState(0);
     const [provisionalId, setProvisionalId] = useState(0);
-
     const [isPrinting, setIsPrinting] = useState(false);
 
 
@@ -207,6 +212,7 @@ const PaymentSuccess = () => {
                         if (data && data.doctorId !== null) {
                             LocalStorageManager.setDoctorSerialId(data.doctorId.toString());
                             setFinalId(data.id);
+                            setFinalreqType(data.extraCol1);
                         }
 
                         setIsLoader(false);
@@ -266,10 +272,12 @@ const PaymentSuccess = () => {
                     if (additional_Degree) {
                         formData.append("Degree", additional_Degree as string);
                     }
-                    const { success, message } = await additionalService.additionalRegistration(formData);
+                    const { success,data, message } = await additionalService.additionalRegistration(formData);
                     if (success) {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        setAdditionalId(data.id);
+                        setAdditionalreqType(data.extraCol1);
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
                         secureLocalStorage.removeItem("additionalInfo");
@@ -311,10 +319,11 @@ const PaymentSuccess = () => {
                     const nocafName = secureLocalStorage.getItem("noc_af_Name");
                     formData.append("nocRegCertificateName", nocRegCertificateName as string);
                     formData.append("nocafName", nocafName as string);
-                    const { success, message } = await nocService.nocRegistration(formData);
+                    const { success,data,message } = await nocService.nocRegistration(formData);
                     if (success) {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        setNocId(data.id);
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
                         secureLocalStorage.removeItem("nocInfo");
@@ -354,10 +363,11 @@ const PaymentSuccess = () => {
                     const gsafName = secureLocalStorage.getItem("gs_af_Name");
                     formData.append("gsRegCertificateName", gsRegCertificateName as string);
                     formData.append("gs_af_Name", gsafName as string);
-                    const { success, message } = await goodstandingService.createGoodstandingDetails(formData);
+                    const { success,data,message } = await goodstandingService.createGoodstandingDetails(formData);
                     if (success) {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        setGsId(data.id);
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
                         secureLocalStorage.removeItem("goodstandingInfo");
@@ -407,10 +417,11 @@ const PaymentSuccess = () => {
                     if (renewalnoc) {
                         formData.append("renewalnoc", renewalnoc as string);
                     }
-                    const { success, message } = await renewalService.createRenewalDetails(formData);
+                    const { success,data,message } = await renewalService.createRenewalDetails(formData);
                     if (success) {
                         setIsLoader(false);
                         setTransactionMsg(message);
+                        setRenewalId(data.id);
                         const element = document.getElementById("msgId") as HTMLElement;
                         element.innerHTML = message;
                         secureLocalStorage.removeItem("finalrenewalsInfo");
@@ -549,9 +560,7 @@ const PaymentSuccess = () => {
         window.print();
     }, []);
 
-
     return (
-
         <>
             <header>
                 <nav className="navbar navbar-expand-lg  tsmc-header">
@@ -621,21 +630,65 @@ const PaymentSuccess = () => {
                              &&
                              <div>
                              <ReactToPrint
-                             trigger={() => <button className='btn btn-info btn-sm me-3'>Print</button>}
+                             trigger={() => <button className='btn btn-outline-primary'><i className="bi-printer-fill"></i>Print</button>}
                              content={() => finalcomponentRef.current} />
                              <div ref={finalcomponentRef} className='styles.hideComponentScreen'>
-                              <FinalRegPrint state={{finalPrimaryId:finalId}}  />
+                              <FinalRegPrint state={{finalPrimaryId:finalId,reqType:finalreqType}}  />
                               </div>  
                                </div>
                             }
                             {(secureLocalStorage.getItem("regType") === 'provisional')&&
                             <div>
                             <ReactToPrint
-                            trigger={() => <button className='btn btn-info btn-sm me-3'>Print</button>}
+                            trigger={() => <button className='btn btn-outline-primary'><i className="bi-printer-fill"></i>Print</button>}
                             content={() => provisionalcomponentRef.current}
                                 />
                              <div ref={provisionalcomponentRef} className='hideComponentScreen'>
                                 <ProvisionalViewPrint state={{provisionalPrimaryId:provisionalId}}  />
+                                </div>  
+                                </div>
+                              }
+                               {(secureLocalStorage.getItem("regType") === 'additionalInfo')&&
+                            <div>
+                            <ReactToPrint
+                            trigger={() => <button className='btn btn-outline-primary'><i className="bi-printer-fill"></i>Print</button>}
+                            content={() => additionalcomponentRef.current}
+                                />
+                             <div ref={additionalcomponentRef} className='hideComponentScreen'>
+                             <AdditionalRegViewPrint state={{ additionalPrimaryId:additionalId,reqType:additionalreqType}}  />
+                                </div>  
+                                </div>
+                              }
+                              {(secureLocalStorage.getItem("regType") === 'finalrenewalsInfo')&&
+                            <div>
+                            <ReactToPrint
+                            trigger={() => <button className='btn btn-outline-primary'><i className="bi-printer-fill"></i>Print</button>}
+                            content={() => renewlcomponentRef.current}
+                                />
+                             <div ref={renewlcomponentRef} className='hideComponentScreen'>
+                             <RenewalsViewPrint state={{renewalPrimaryId:renewalId}}  />
+                                </div>  
+                                </div>
+                              }
+                                {(secureLocalStorage.getItem("regType") === 'goodstandingInfo')&&
+                            <div>
+                            <ReactToPrint
+                            trigger={() => <button className='btn btn-outline-primary'><i className="bi-printer-fill"></i>Print</button>}
+                            content={() => gscomponentRef.current}
+                                />
+                             <div ref={gscomponentRef} className='hideComponentScreen'>
+                             <GoodStandingRegPrintView state={{gsPrimaryId:gsId}}  />
+                                </div>  
+                                </div>
+                              }
+                                {(secureLocalStorage.getItem("regType") === 'nocInfo')&&
+                            <div>
+                            <ReactToPrint
+                            trigger={() => <button className='btn btn-outline-primary'><i className="bi-printer-fill"></i>Print</button>}
+                            content={() => noccomponentRef.current}
+                                />
+                             <div ref={noccomponentRef} className='hideComponentScreen'>
+                             <NocRegViewPrint state={{nocPrimaryId:nocId}}  />
                                 </div>  
                                 </div>
                               }

@@ -14,6 +14,7 @@ import { LocalStorageManager } from '../../../lib/localStorage-manager';
 import { additionalService } from '../../../lib/api/additional';
 import { AdminAddQualDataFormType } from '../../../types/additionalQuali';
 import DoctorInfoPrintCard from './../../user-panal/includes/doctor-info-print';
+
 const AdditionalRegViewPrint = (props: any) => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -21,8 +22,6 @@ const AdditionalRegViewPrint = (props: any) => {
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [additionals, setAdditionals] = useState<AdminAddQualDataFormType>();
     const [userType, setUserType] = useState('');
-    
-
     const getDoctorDetails = async () => {
         try {
             const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
@@ -73,8 +72,12 @@ const AdditionalRegViewPrint = (props: any) => {
         userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getAdditionalDetails();
+        
     }, [props.state.additionalPrimaryId, props.state.doctorPrimaryId]);
+
+     
     return (
+        
         <>
             <div className="col-9 m-auto mb-4">
                 <DoctorInfoPrintCard />
@@ -143,7 +146,7 @@ const AdditionalRegViewPrint = (props: any) => {
 
                 </table>
                 <br/>
-                        <div style={{border:"1px solid rgb(0, 0, 0)"}} className='mt-3'>
+                        <div style={{border:"1px solid rgb(0, 0, 0)",marginTop:"30px"}} >
                         
                             <p style={{fontWeight:"bold", alignContent: "center", width: "100%", backgroundColor: "#E2F4F5" }}>
                             General Instructions
@@ -151,9 +154,19 @@ const AdditionalRegViewPrint = (props: any) => {
                         <p>
                         1.	Payment successful and  Additional Qualification (PG) Registration applied successfully.
                         <br/>
-                        2.	The Certificates verification for  Additional Qualifications (PG) Registration is must & after verification only the application will be processed.
+                        {props.state.reqType==='nor'?
+                        <>
+                        2.Please visit the TSMC office along with all original documents on
+                        <span className='fs-18 fw-700 p-2'>  
+                       {(additionals?.reg_date ? (moment(additionals?.reg_date).add(10,'days').format('DD/MM/YYYY')) : 'NA')}</span> 
+                        </>:
+                        <>
+                        2. Please visit the TSMC office along with all original documents on Next working day within 24-48 hours for collection of certificates
+                        </>}
                         <br/>
-                        3.	Please print and carry this receipt while visiting TSMC office along with all the originals and one set of Xerox copies.
+                        3.	The Certificates verification for  Additional Qualifications (PG) Registration is must & after verification only the application will be processed.
+                        <br/>
+                        4.	Please print and carry this receipt while visiting TSMC office along with all the originals and one set of Xerox copies.
 
                         </p> </div>
                         <br/>
@@ -161,7 +174,7 @@ const AdditionalRegViewPrint = (props: any) => {
                             Note:
                             <br/>
 
-                            1.	Candidates who applied under Tatkal basis has to apply on or before 12am of the day. Who applied under Tatkal, the candidate has to visit on Next  working day within 24-48 hours for collection of certificates .Certificate issuing timings will be 1pm to 4.30pm. 
+                            1.	Candidates who applied under Tatkal basis has to apply on or before 12am of the day. Who applied under Tatkal, the candidate has to visit on Next working day within 24-48 hours for collection of certificates .Certificate issuing timings will be 1pm to 4.30pm. 
                             <br/>
                             2.	If the Candidate is not collecting the certificate  at TSMC office , under Tatkal it shall be Dispatched by Courier /Post after 24 hours from the date of preparation of certificate. 
                             <br/>

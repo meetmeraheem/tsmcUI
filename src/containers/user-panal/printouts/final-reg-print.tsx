@@ -147,7 +147,7 @@ const FinalRegPrint = (props: any) => {
                     </tr>
                 </table>
                        <br/>
-                        <div style={{border:"1px solid rgb(0, 0, 0)"}} className='mt-3'>
+                        <div style={{border:"1px solid rgb(0, 0, 0)",marginTop:"30px"}}>
                         
                             <p style={{fontWeight:"bold", alignContent: "center", width: "100%", backgroundColor: "#E2F4F5" }}>
                             General Instructions
@@ -155,9 +155,20 @@ const FinalRegPrint = (props: any) => {
                         <p>
                         1.	Payment successful and Final Medical Registration applied successfully.
                         <br/>
-                        2.	The Certificates verification for Final Medical Registration is must & after verification only the application will be processed.
+                        {props.state.reqType === 'nor'?
+                        <>
+                        2.Please visit the TSMC office along with all original documents on 
+                            <span className='fs-18 fw-700 p-2'>    
+                        {(final?.reg_date ? (moment(final?.reg_date).add(10,'days').format('DD/MM/YYYY')) : 'NA')}</span>
+                        </>:
+                        <>
+                        2. Please visit the TSMC office along with all original documents on Next working day within 24-48 hours for collection of certificates
+                        </>
+                        }
                         <br/>
-                        3.	Please print and carry this receipt while visiting TSMC office along with all the  originals and one set of Xerox copies.
+                        3.	The Certificates verification for Final Medical Registration is must & after verification only the application will be processed.
+                        <br/>
+                        4.	Please print and carry this receipt while visiting TSMC office along with all the  originals and one set of Xerox copies.
 
                         </p> </div>
                         <br/>

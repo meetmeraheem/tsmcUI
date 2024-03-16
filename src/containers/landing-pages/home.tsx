@@ -207,6 +207,7 @@ const HomePage = () => {
                LocalStorageManager.setDoctorMobileno('');
                LocalStorageManager.setDoctorPrimaryId('');
                LocalStorageManager.setDoctorFMRStatus('');
+               LocalStorageManager.setRenewalStatus('');
                if (mobileNumber && password) {
                     const encryptpassword = cryptojs.encryptData(password);
 

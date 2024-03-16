@@ -479,7 +479,7 @@ const Myprofile = () => {
                                                                     content={() => finalcomponentRef.current}
                                                                 />
                                                                 <div ref={finalcomponentRef} className='hideComponentScreen'>
-                                                                <FinalRegPrint state={{ finalPrimaryId:final.id}}  />
+                                                                <FinalRegPrint state={{ finalPrimaryId:final.id,reqType:final.extra_col1}}  />
                                                                 </div>                                            
                                                           </>}
                                                     </div>
@@ -573,7 +573,7 @@ const Myprofile = () => {
                                                                 return (<tr>
                                                                     <td>{obj.qualification}</td>
                                                                     <td>{obj.exam_month},{obj.exam_year}</td>
-                                                                    <td>{obj.countryName},{obj.stateName}</td>
+                                                                    <td>{obj.stateName},{obj.countryName}</td>
                                                                     <td>{obj.appliedFor}</td>
                                                                     <td>{obj.college} - {obj.university}</td>
                                                                     <td>{moment(obj.reg_date).format('DD/MM/YYYY')}</td>
@@ -593,7 +593,7 @@ const Myprofile = () => {
                                                                             content={() => additionalcomponentRef.current}
                                                                         />
                                                                      <div ref={additionalcomponentRef} className='hideComponentScreen'>
-                                                                    <AdditionalRegViewPrint state={{ additionalPrimaryId:obj.id}}  />
+                                                                    <AdditionalRegViewPrint state={{ additionalPrimaryId:obj.id,reqType:obj.extra_col1}}  />
                                                                     </div> </td>:""}
 
                                                                 </tr>);

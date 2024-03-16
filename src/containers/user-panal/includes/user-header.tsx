@@ -47,13 +47,16 @@ const Userheader = () => {
 		}
 
 		const renwalStatus=LocalStorageManager.getRenewalStatus();
+		
 		if(renwalStatus === 'pen' || renwalStatus === 'ver' || renwalStatus === 'rej'){
 			setIsRenewalAllowed(false);
+		}else{
+			setIsRenewalAllowed(true);
 		}
 		
 
 
-	}, [isDoctorId, isDoctorFMRNo,isDoctorPMRNo]);
+	}, [isDoctorId, isDoctorFMRNo,isDoctorPMRNo,isDoctorFMRapproved,isRenewalAllowed]);
 
 	return (
 		<>
