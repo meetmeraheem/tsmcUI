@@ -92,8 +92,8 @@ const NocRegView =  (props:any) => {
                 let msg="";
                 let smsmsg="";
                 if(status === 'rej' ){
-                    msg="NOC  Application Rejected";
-                    smsmsg="Rejected";
+                    msg="NOC  Application Not-Approved";
+                    smsmsg = "Not-Approved";
                 }else if(status === 'apr') {
                     msg="NOC Application successfully approved";
                     smsmsg="Approved";

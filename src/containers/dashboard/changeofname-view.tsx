@@ -82,8 +82,8 @@ const ChangeofNameRegView =  (props:any) => {
                 let msg="";
                 let smsmsg="";
                 if(status === 'rej' ){
-                    msg="Change of Name Details Application Rejected";
-                    smsmsg="Rejected";
+                    msg="Change of Name Details Application Not-Approved";
+                    smsmsg="Not-Approved";
                 }else if(status === 'apr') {
                     msg="Change of Name Details successfully approved";
                     smsmsg="Approved";

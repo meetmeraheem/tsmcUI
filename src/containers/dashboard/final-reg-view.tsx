@@ -103,8 +103,8 @@ const FinalRegView = (props:any) => {
                 let msg="";
                 let smsmsg="";
                 if(status === 'rej' ){
-                    msg="Final Details Application Rejected";
-                    smsmsg="Rejected";
+                    msg="Final Details Application Not-Approved";
+                    smsmsg = "Not-Approved";
                 }else if(status === 'apr') {
                     msg="Final Details successfully approved and FMR No is ::"+message;
                     smsmsg="Approved";

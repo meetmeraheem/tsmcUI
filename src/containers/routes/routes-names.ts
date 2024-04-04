@@ -35,7 +35,6 @@ export const routes = {
     edit_final_renewal: `${urlPrefix}my-panal${urlPrefix}edit-final-renewal`,
     change_of_name: `${urlPrefix}my-panal${urlPrefix}chnage-of-name`,
     prov_revalidation: `${urlPrefix}my-panal${urlPrefix}revalidation`,
-    newregistration: `${urlPrefix}new-registration`,
     payment: `${urlPrefix}payment`,
     paymentsuccess: `${urlPrefix}paymentsuccess`,
     payment_failure: `${urlPrefix}payment_failure`,
@@ -64,4 +63,5 @@ export const routes = {
     admin_settings: `${urlPrefix}admin/${urlPrefix}settings`,
     admin_logout: `${urlPrefix}admin/${urlPrefix}logout`,
     admin_login: `${urlPrefix}login`,
+    doctor_search: `${urlPrefix}doctorsearch`,
 };

@@ -89,8 +89,8 @@ const AdditionalRegView = (props:any) => {
                 let msg="";
                 let smsmsg="";
                 if(status === 'rej' ){
-                    msg="Additional Details Application Rejected";
-                    smsmsg="Rejected";
+                    msg="Additional Details Application Not-Approved";
+                    smsmsg = "Not-Approved";
                 }else if(status === 'apr') {
                     msg="Additional Details successfully approved";
                     smsmsg="Approved";

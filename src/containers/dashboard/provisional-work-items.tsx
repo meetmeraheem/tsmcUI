@@ -6,6 +6,8 @@ import { provisionalService } from "../../lib/api/provisional";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import TatCheckbox from './../../components/TatCheckbox';
 import ProvisionalView from'./provisional-view';
+import UserCard from "./includes/userCard";
+import { commonService } from '../../lib/api/common';
 
 const ProvsionalWorkItems = () => {
     const fetchIdRef = useRef(0);
@@ -35,6 +37,7 @@ const ProvsionalWorkItems = () => {
     const [viewProvisionalid, setViewProvisionalId] = useState('');
     const [viewDocid, setViewDocId] = useState('');
     const [viewAssignid, setViewAssignid] = useState('');
+    const [dataList, setdataList] = useState<any>();
 
   const toggleComponent = useCallback(async (provId:any,docId:any,assignId:any) => {
     try {
@@ -159,7 +162,8 @@ const greet=()=> {
     ];
 
     useEffect(() => {
-        
+        const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
+        getDashboardDetails(adminPrimaryId);
         if (viewProvisionalid) {
             setShowComponent(true); // Show the child component when propValue is not empty
           } else {
@@ -291,15 +295,30 @@ const greet=()=> {
         setMobileNo("");
         setdocName("");
       };
-   
+      const getDashboardDetails = useCallback(async (assignedUser:any) => {
+        try {
+          const { data } = await commonService.RenewalStatusCnt(assignedUser);
+                if (data) {
+                  setdataList(data);
+                }
+        }
+       catch (err) {
+        console.log('error getDashboardDetails', err);
+      }}, []);
     return (
         <>
             <div className="container-fluid">
                 <div>
-                    <div className="p-2 w-100">
-                        <h2 className="fs-22 fw-700 mb-0">Provisional Registrations</h2>
+            <div className="container">
+                    <div className="row">
+                        <div className="col-sm">
+                            <h2 className=" fs-22 fw-700 mb-0">Provisional Registrations</h2>
+                        </div>
+                    <div className="col-sm">
+                        {dataList&&<UserCard Pending={dataList.provisionalPenCnt} Verified={dataList.provisionalVerCnt} />}
                     </div>
-                   
+                </div>
+            </div>
 
                   <div className="tsmc-filter-box d-flex align-items-center">  
                   <div className="input-group-text p-0">
@@ -391,6 +410,9 @@ const greet=()=> {
                         </span>
                     </div>
                 </div>
+                
+                
+                
                 <div className="mt-3">
                     <div className="card">
                         <div className="card-body">

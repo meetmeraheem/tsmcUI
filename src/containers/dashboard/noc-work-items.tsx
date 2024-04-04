@@ -6,6 +6,8 @@ import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { nocService } from "../../lib/api/noc";
 import TatCheckbox from './../../components/TatCheckbox';
 import NocRegView from './noc-view';
+import UserCard from "./includes/userCard";
+import { commonService } from '../../lib/api/common';
 
 const MyWorkItems = () => {
     const fetchIdRef = useRef(0);
@@ -29,12 +31,11 @@ const MyWorkItems = () => {
     const [disablebtn, setDisablebtn] = useState(false);
     const [mobileNo, setMobileNo] = useState('');
     const [docName, setdocName] = useState('');
-
-
     const [showComponent, setShowComponent] = useState(false);
     const [viewNocid, setViewNocId] = useState('');
     const [viewDocid, setViewDocId] = useState('');
     const [viewAssignid, setViewAssignid] = useState('');
+    const [dataList, setdataList] = useState<any>();
 
   const toggleComponent = useCallback(async (nocId:any,docId:any,assignId:any) => {
     try {
@@ -161,6 +162,8 @@ const MyWorkItems = () => {
     ];
 
     useEffect(() => {
+        const adminPrimaryId = Number(LocalStorageManager.getAdminPrimaryId());
+        getDashboardDetails(adminPrimaryId);
         if (viewNocid) {
             setShowComponent(true); // Show the child component when propValue is not empty
           } else {
@@ -291,14 +294,30 @@ const MyWorkItems = () => {
         setdocName("");
       };
 
+      const getDashboardDetails = useCallback(async (assignedUser:any) => {
+        try {
+          const { data } = await commonService.GsStatusCnt(assignedUser);
+                if (data) {
+                  setdataList(data);
+                }
+        }
+       catch (err) {
+        console.log('error getDashboardDetails', err);
+      }}, []);
     return (
         <>
             <div className="container-fluid">
-                <div >
-                    <div className="p-2 w-100">
-                        <h2 className="fs-22 fw-700 mb-0">NOC Registrations</h2>
+                <div>
+                    <div className="container">
+                    <div className="row">
+                        <div className="col-sm">
+                            <h2 className=" fs-22 fw-700 mb-0">NOC Registrations</h2>
+                        </div>
+                    <div className="col-sm">
+                    {dataList&&<UserCard Pending={dataList.nocPenCnt} Verified={dataList.nocVerCnt} />}
                     </div>
-                    
+                </div>
+            </div>
                     <div className="tsmc-filter-box d-flex align-items-center">  
                   <div className="input-group-text p-0">
                         <label htmlFor="" className='mb-2'>Mobile No : </label>
@@ -389,6 +408,9 @@ const MyWorkItems = () => {
                         </span>
                     </div>
                 </div>
+                
+                
+                
                 <div className="mt-3">
                     <div className="card">
                         <div className="card-body">

@@ -52,6 +52,13 @@ export type DoctorFormType = {
   cityName:string,
   stateName:string,
   countryName:string,
+  qualification:string,
+  university:string,
+  college:string,
+  yearofExam:string,
+	regDate:string,
+	validDate:string,
+	regStatus:string,
 }
 
 export type GetDoctorResponseType = Omit<ApiResponseType, 'list'> & {

@@ -79,10 +79,13 @@ export const commonService = {
         return responseData;
     },
     async getDoctorInfoByFmrNo(fmrNo: any) {
-        const { data: responseData } = await axiosInstance.get(`common/getDoctorInfoByFmrNo/${fmrNo}`);
+        const { data: responseData } = await axiosInstance.get(`common/getDoctorInfoByFmrNo?fmrNo=${fmrNo}`);
         return responseData;
     },
-
+    async getDoctorInfoByNameGender(fmrNo: any,docName: any,gender:any,fatherName:any) {
+        const { data: responseData } = await axiosInstance.get(`common/getDoctorInfoByNameGender?fmrNo=${fmrNo}&docName=${docName}&gender=${gender}&fatherName=${fatherName}`);
+        return responseData;
+    },
     async enableDoctorProfileEdit(docId: any) {
         const { data: responseData } = await axiosInstance.put(`common/enableDoctorProfileEdit/${docId}`);
         return responseData;
@@ -114,6 +117,34 @@ export const commonService = {
     async getTatkalDailyData(fromdate:any,todate:any){
         const { data: responseData } = await axiosInstance.get(`common/getTatkalDailyData/${fromdate}/${todate}`);
         return responseData as ApiResponseType;
-    }
+    },
+    async getDashboardData(fromdate:any,todate:any,assignedUser:any,istatkal:any){
+        const { data: responseData } = await axiosInstance.get(`common/getDashboardData/${fromdate}/${todate}/${assignedUser}/${istatkal}`);
+        return responseData as ApiResponseType;
+    },
+    async AdditionalStatusCnt(assignedUser:any){
+        const { data: responseData } = await axiosInstance.get(`common/AdditionalStatusCnt/${assignedUser}`);
+        return responseData as ApiResponseType;
+    },
+    async ProvisionalStatusCnt(assignedUser:any){
+        const { data: responseData } = await axiosInstance.get(`common/ProvisionalStatusCnt/${assignedUser}`);
+        return responseData as ApiResponseType;
+    },
+    async FinalStatusCnt(assignedUser:any){
+        const { data: responseData } = await axiosInstance.get(`common/FinalStatusCnt/${assignedUser}`);
+        return responseData as ApiResponseType;
+    },
+    async RenewalStatusCnt(assignedUser:any){
+        const { data: responseData } = await axiosInstance.get(`common/RenewalStatusCnt/${assignedUser}`);
+        return responseData as ApiResponseType;
+    },
+    async NocStatusCnt(assignedUser:any){
+        const { data: responseData } = await axiosInstance.get(`common/NocStatusCnt/${assignedUser}`);
+        return responseData as ApiResponseType;
+    },
+    async GsStatusCnt(assignedUser:any){
+        const { data: responseData } = await axiosInstance.get(`common/GsStatusCnt/${assignedUser}`);
+        return responseData as ApiResponseType;
+    },
 
 };

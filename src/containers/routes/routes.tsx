@@ -7,7 +7,7 @@ import MainHomePage from '../landing-pages';
 import Logout from '../landing-pages/logout';
 import ContactUs from '../landing-pages/contact-us';
 import HomePage from '../landing-pages/home';
-import Newregistration from '../registration/new-registration';
+
 import Myprofile from '../user-panal/my-profile';
 import Provisional from '../user-panal/provisional-registration';
 import ProvisionalDuplicate from '../user-panal/duplicates/provisional-duplicate';
@@ -64,9 +64,7 @@ import EditChangeofName from '../user-panal/edit-changeofName';
 import EditRevalidation from '../user-panal/edit-revalidation';
 import MyDataEdit from '../user-panal/my-data-edit';
 import AdminEditPage from '../dashboard/admin-edit-page';
-import axios from 'axios';
-import { apiHealthUrl } from './../../config/constants';
-import { useCallback, useEffect, useState } from 'react';
+import DoctorSearchPage from '../dashboard/doctorSearch';
 	
 
 const MainRoute = () => {
@@ -89,7 +87,7 @@ const MainRoute = () => {
 					<Route path={routes.contact_us} element={<ContactUs />} />
 				</Route>
 				<Route path={routes.admin_login} element={<AdminLogin />} />
-				<Route path={routes.newregistration} element={<Newregistration />} />
+				<Route path={routes.doctor_search} element={<DoctorSearchPage />} /> 
 				<Route path={routes.payment} element={<Payment />} />
 				<Route path={routes.paymentsuccess} element={<PaymentSuccess />} />
 				<Route path={routes.payment_failure} element={<PaymentFailure />} />

@@ -10,7 +10,7 @@ import { AdminFormType } from "../../../types/admin";
 import { adminService } from "../../../lib/api/admin";
 import TopNav from "../../dashboard/includes/admin-top-nav";
  import AdminDashboardHome from "../dashboard";
-
+ import  ChairmanLayout from "../../Chairman/ChairmanLayout";
 const AdminSideNav = () => {
 	const location = useLocation();
 	const activeTab = location.pathname;
@@ -49,6 +49,11 @@ const AdminSideNav = () => {
 					{user?.user_type === 'u' &&
 					<TopNav/>
 					}
+						{user?.user_type === 'c' &&
+					<ChairmanLayout/>
+					}
+
+
 					
 				</div>
 			

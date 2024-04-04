@@ -913,3 +913,127 @@ aside>ul>li>a:hover {
 		display: none;
 	}
 }
+
+	  .cards-list {
+		z-index: 0;
+		width: 100%;
+		display: flex;
+		justify-content: space-around;
+		flex-wrap: wrap;
+	  }
+	  
+	  .tsmccard {
+		margin: 30px auto;
+		width: 210px;		
+		height: 210px;
+		border-radius: 40px;
+	  	box-shadow: 5px 5px 30px 7px rgba(0,0,0,0.25), -5px -5px 30px 7px rgba(0,0,0,0.22);
+		cursor: pointer;
+		transition: 0.4s;
+	  }
+	  
+	  .tsmccard .card_image {
+		width: inherit;
+		height: inherit;
+		border-radius: 15px;
+	  }
+	  
+	  .tsmccard .card_image img {
+		width: inherit;
+		height: inherit;
+		border-radius: 40px;
+		object-fit: cover;
+	  }
+	  
+	  .tsmccard .card_title {
+		text-align: center;
+		border-radius: 0px 0px 40px 40px;
+		font-family: sans-serif;
+		font-weight: bold;
+		font-size: 30px;
+		margin-top: -80px;
+		height: 40px;
+	  }
+	  
+	  .tsmccard:hover {
+		transform: scale(0.9, 0.9);
+		box-shadow: 5px 5px 30px 15px rgba(0,0,0,0.25), 
+		  -5px -5px 30px 15px rgba(0,0,0,0.22);
+	  }
+	  
+	  .title-white {
+		color: white;
+	  }
+	  
+	  .title-black {
+		color: black;
+	  }
+	  
+	  @media all and (max-width: 500px) {
+		.card-list {
+		  /* On small screens, we are no longer using row direction but column */
+		  flex-direction: column;
+		}
+	  }
+	  #sample{
+		width: 100px;
+		height: 100px;
+	  }
+	  .user-card-box {
+		position: relative;
+		color: #fff;
+		border-radius: 15px;
+	}
+	.user-card-box:hover {
+		text-decoration: none;
+		color: #f1f1f1;
+	}
+	.user-card-box:hover .icon i {
+		font-size: 100px;
+		transition: 1s;
+		-webkit-transition: 1s;
+	}
+	.user-card-box .inner {
+		padding: 0px 0px 0 0px;
+	}
+	.user-card-box h3 {
+		font-size: 20px;
+		font-weight: bold;
+		margin: 0 0 8px 0;
+		white-space: nowrap;
+		padding: 0;
+		text-align: left;
+	}
+	.user-card-box p {
+		font-size: 15px;
+	}
+	.user-card-box .icon {
+		position: absolute;
+		top: auto;
+		bottom: 5px;
+		right: 5px;
+		z-index: 0;
+		font-size: 72px;
+		color: rgba(0, 0, 0, 0.15);
+	}
+	.user-card-box .user-card-box-footer {
+		position: absolute;
+		left: 0px;
+		bottom: 0px;
+		text-align: center;
+		padding: 3px 0;
+		color: rgba(255, 255, 255, 0.8);
+		background: rgba(0, 0, 0, 0.1);
+		width: 100%;
+		text-decoration: none;
+	}
+	.user-card-box:hover .user-card-box-footer {
+		background: rgba(0, 0, 0, 0.3);
+	}
+	  .bg-blue {
+		background-color: #d3cd9b !important;
+	}
+	.bg-green {
+		background-color: #3e5c50bd !important;
+	}
+	 

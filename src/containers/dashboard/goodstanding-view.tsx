@@ -85,8 +85,8 @@ const GoodStandingRegView =   (props:any) => {
                 let smsmsg="";
                 
                 if(status === 'rej' ){
-                    msg="Good Standing Details Application Rejected";
-                    smsmsg="Rejected";
+                    msg="Good Standing Details Application Not-Approved";
+                    smsmsg = "Not-Approved";
                 }else if(status === 'apr') {
                     msg="Good Standing Details successfully approved";
                     smsmsg="Approved";

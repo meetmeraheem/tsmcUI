@@ -8,10 +8,8 @@ import { useCallback, useEffect, useState } from "react";
 import { commonService } from "../../lib/api/common";
 import { City, Country, State } from "../../types/common";
 import { DoctorFormType } from "../../types/doctor";
-import Userfooter from "../user-panal/includes/user-footer";
 import UserHeader from "../user-panal/includes/user-header";
 import { ReactFilesError, ReactFilesFile } from "../../types/files";
-import { ReactComponent as IconTrash } from '../../../src/assets/images/trash.svg';
 import { doctorService } from "../../lib/api/doctot";
 
 const Newregistration = () => {
@@ -61,6 +59,13 @@ const Newregistration = () => {
         cityName:'',
         stateName:'',
         countryName:'',
+        qualification:'',
+        university:'',
+        college:'',
+        yearofExam:'',
+        regDate:'',
+        validDate:'',
+        regStatus:'',
         
     }
     const getCountries = useCallback(async () => {

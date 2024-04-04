@@ -201,13 +201,15 @@ const HomePage = () => {
 
           try {
                let depwd = '';
-               LocalStorageManager.setDoctorSerialId('');
-               LocalStorageManager.setDoctorFMRNo('');
-               LocalStorageManager.setDoctorPMRNo('');
-               LocalStorageManager.setDoctorMobileno('');
-               LocalStorageManager.setDoctorPrimaryId('');
-               LocalStorageManager.setDoctorFMRStatus('');
-               LocalStorageManager.setRenewalStatus('');
+               
+               LocalStorageManager.removeDoctorSerialId();
+               LocalStorageManager.removeDoctorFMRNo();
+               LocalStorageManager.removeDoctorPMRNo();
+               LocalStorageManager.removeDoctorMobileno();
+               LocalStorageManager.removeDoctorPrimaryId();
+               LocalStorageManager.removeDoctorFMRStatus();
+               LocalStorageManager.removeRenewalStatus();
+               
                if (mobileNumber && password) {
                     const encryptpassword = cryptojs.encryptData(password);
 

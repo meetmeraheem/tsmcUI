@@ -81,8 +81,8 @@ const ProvRevalidationRegView = () => {
                 let msg = "";
                 let smsmsg = "";
                 if(status === 'rej' ){
-                    msg="Revalidation Details Application Rejected";
-                    smsmsg="Rejected";
+                    msg="Revalidation Details Application Not-Approved";
+                    smsmsg="Not-Approved";
                 }else if(status === 'apr') {
                     msg="Revalidation Details successfully approved";
                     smsmsg="Approved";

@@ -128,6 +128,11 @@ export const LocalStorageManager = {
         localStorage.setItem('doctorRenwalStatus', RenewalStatus);
     },
 
+    removeRenewalStatus: function () {
+        if (this.getRenewalStatus()) {
+            localStorage.removeItem('doctorRenwalStatus');
+        }
+    },
     //Payment Getway
     getOrderKeyId: function () {
         const orderKeyId = localStorage.getItem('orderKeyId');

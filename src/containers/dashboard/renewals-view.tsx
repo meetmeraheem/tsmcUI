@@ -122,8 +122,8 @@ const RenewalsViews = (props:any) => {
                 let smsmsg = "";
 
                 if (status === 'rej') {
-                    msg = "Renewal Details Application Rejected";
-                    smsmsg = "Rejected";
+                    msg = "Renewal Details Application Not-Approved";
+                    smsmsg = "Not-Approved";
                 } else if (status === 'apr') {
                     msg = "Renewal Details successfully approved";
                     smsmsg = "Approved";
@@ -132,7 +132,7 @@ const RenewalsViews = (props:any) => {
                     smsmsg = "Verified";
                 }
                 Swal.fire({
-                    title: "Success",
+                    title: "",
                     text: msg,
                     icon: status === 'rej' ? "error" : "success",
                     confirmButtonText: "OK",

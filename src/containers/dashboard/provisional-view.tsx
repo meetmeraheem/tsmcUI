@@ -101,8 +101,8 @@ const ProvisionalView = (props:any) => {
                     let msg="";
                     let smsmsg="";
                     if(status === 'rej' ){
-                        msg="Provisional Details Application Rejected";
-                        smsmsg="Rejected";
+                        msg="Provisional Details Application Not-Approved";
+                        smsmsg = "Not-Approved";
                     }else if(status === 'apr') {
                         msg="Provisional Details successfully approved and PMR No is ::"+message;
                         smsmsg="Approved";
