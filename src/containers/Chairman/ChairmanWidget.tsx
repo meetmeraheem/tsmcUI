@@ -45,7 +45,7 @@ const ChairmanWidget = (props:any) => {
               </div>
               <div className="col p-0">
               <div className="text-uppercase small text-danger fw-bold">Not Approved</div>
-                <div className="fs-5 fw-semibold">{props.Approved}</div>
+                <div className="fs-5 fw-semibold">{props.Rejected}</div>
               </div>
               </div>
               </div>

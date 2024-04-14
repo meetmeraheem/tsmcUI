@@ -296,7 +296,7 @@ const MyWorkItems = () => {
 
       const getDashboardDetails = useCallback(async (assignedUser:any) => {
         try {
-          const { data } = await commonService.GsStatusCnt(assignedUser);
+          const { data } = await commonService.NocStatusCnt(assignedUser);
                 if (data) {
                   setdataList(data);
                 }

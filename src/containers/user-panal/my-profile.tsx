@@ -467,7 +467,7 @@ const Myprofile = () => {
                                                                     <i className='bi-exclamation-circle'></i> Rejected
                                                                 </span>
                                                             }
-                                                            {(final?.approval_status == 'apr' || final?.approval_status == 'rej') && 
+                                                            {(final?.approval_status == 'pen' || final?.approval_status == 'rej') && 
                                                             <Link to={'edit-final'} className='btn btn-primary btn-sm me-3'>Edit</Link>
                                                             }
                                                                         

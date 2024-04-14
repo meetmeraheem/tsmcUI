@@ -13,6 +13,7 @@ const DoctorSearchPage = () => {
     const [docGender, setDocGender] = useState('select');
     const [docfatherName, setDocfatherName] = useState('');
     const [doctorList, setDoctorList] = useState<any>([]);
+    const [additionalList, setAdditionalList] = useState<any>([]);
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [isLoader, setIsLoader] = useState(false);
     const [view, setView] = useState(false);
@@ -26,7 +27,7 @@ const DoctorSearchPage = () => {
             if (fmrNo.length > 4) {
                 setDoctorList([]);
                 setIsLoader(true);
-                const { data } = await commonService.getDoctorInfoByNameGender(fmrNo,'', '', '');
+                const { data } = await commonService.getDoctorInfoByNameGender(fmrNo, '', '', '');
                 if (data.length > 0) {
                     setIsLoader(false);
                     setDoctorList(data);
@@ -49,11 +50,11 @@ const DoctorSearchPage = () => {
             if (docName.length < 3) {
                 alert("Please enter Name ");
                 return false;
-            }else if(docGender==="select"){
+            } else if (docGender === "select") {
                 alert("Please Select Gender");
                 return false;
-            }else {
-            
+            } else {
+
                 setDoctorList([]);
                 setIsLoader(true);
                 const { data } = await commonService.getDoctorInfoByNameGender('', docName, docGender, docfatherName);
@@ -144,11 +145,16 @@ const DoctorSearchPage = () => {
                                     onClick={
                                         getDoctorDetailsByFMR
                                     } className='btn btn-primary'>Search by Registration No</button>
+
                             </span>
+                        </div>
+                        <div className="col-1 pt-2">
+                            <a className="link-danger" onClick={() => { window.location.reload() }} href="#">Refresh</a>
                         </div>
 
                     </div>
                 </section>
+
                 {isLoader ? (
                     <div className="d-flex justify-content-center">
                         <div className="spinner-border text-success mt-5" role="status">
@@ -180,6 +186,7 @@ const DoctorSearchPage = () => {
                                                 <td><a href="javascript:void(0);" onClick={() => {
                                                     setView(true);
                                                     setDoctor(obj);
+                                                    setAdditionalList(obj.additionalList);
                                                 }}>View</a></td>
                                                 <td>{obj.original_fmr_no}</td>
                                                 <td>{obj.regDate}</td>
@@ -200,8 +207,8 @@ const DoctorSearchPage = () => {
 
                         {view ?
                             <div className="container-fluid">
-                                <div style={{paddingLeft:"1200px",paddingTop:"30px"}}>
-                                <button type="button" id="printPageButton"
+                                <div style={{ paddingLeft: "1200px", paddingTop: "30px" }}>
+                                    <button type="button" id="printPageButton"
                                         onClick={() => {
                                             setView(false);
                                         }} className='btn btn-outline-primary'><i className="bi bi-arrow-left-square-fill"></i> Back</button>
@@ -212,147 +219,220 @@ const DoctorSearchPage = () => {
                                 </div>
 
                                 <div className="text-center">
-                                <img id="sample" src={colorLogo} />
-                                        <br/>
-                                            <h4>
-                                                TELANGANA STATE MEDICAL COUNCIL
-                                            </h4>
-                                            <hr/>
-                                    </div>
+                                    <img id="sample" src={colorLogo} />
+                                    <br />
+                                    <h4>
+                                        TELANGANA STATE MEDICAL COUNCIL
+                                    </h4>
+                                    <hr />
+                                </div>
 
-                                            <table className="table table-bordered table-responsive-sm text-left">
-                                                <tbody><tr>
-                                                    <td className="tdwid1">
-                                                        <b>
-                                                            Doctor Name
-                                                        </b>
+                                <table className="table table-bordered table-responsive-sm text-left">
+                                    <tbody><tr>
+                                        <td className="tdwid1">
+                                            <b>
+                                                Doctor Name
+                                            </b>
 
-                                                    </td>
-                                                    <td className="tdwid2">
-                                                        <b>
-                                                            <span id="Label_name" style={{ color: "Black" }}>{doctor?.fullname}</span>
-                                                        </b>
+                                        </td>
+                                        <td className="tdwid2">
+                                            <b>
+                                                <span id="Label_name" style={{ color: "Black" }}>{doctor?.fullname}</span>
+                                            </b>
 
-                                                    </td>
-                                                </tr>
-                                                    <tr>
-                                                        <td className="tdwid1">
-                                                            Father/Husband Name
-                                                        </td>
-                                                        <td className="tdwid2">
-                                                            <span id="Label_father">{doctor?.fathername}</span>
-                                                        </td>
-                                                    </tr>
-                                                </tbody></table>
-                                            <table className="table table-bordered table-responsive-sm">
-                                                <tbody><tr>
-                                                    <td className="tdwid4">
-                                                        Date of Birth
-                                                    </td>
-                                                    <td className="tdwid4">
-                                                        <span id="Label_dob">{doctor?.dateofbirth}</span>
-                                                    </td>
-                                                    <td className="tdwid4">
-                                                        Year of Examination
-                                                    </td>
-                                                    <td className="tdwid4">
-                                                        <span id="Label_interda1">{doctor?.yearofExam}</span>
-                                                    </td>
-                                                </tr>
-                                                    <tr>
-                                                        <td className="tdwid4">
-                                                            <b>
-                                                                Registration No
-                                                            </b>
+                                        </td>
+                                    </tr>
+                                        <tr>
+                                            <td className="tdwid1">
+                                                Father/Husband Name
+                                            </td>
+                                            <td className="tdwid2">
+                                                <span id="Label_father">{doctor?.fathername}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody></table>
+                                <table className="table table-bordered table-responsive-sm">
+                                    <tbody><tr>
+                                        <td className="tdwid4">
+                                            Date of Birth
+                                        </td>
+                                        <td className="tdwid4">
+                                            <span id="Label_dob">{doctor?.dateofbirth}</span>
+                                        </td>
+                                        <td className="tdwid4">
+                                            Year of Examination
+                                        </td>
+                                        <td className="tdwid4">
+                                            <span id="Label_interda1">{doctor?.yearofExam}</span>
+                                        </td>
+                                    </tr>
+                                        <tr>
+                                            <td className="tdwid4">
+                                                <b>
+                                                    Registration No
+                                                </b>
 
-                                                        </td>
-                                                        <td className="tdwid4">
-                                                            <b>
-                                                                <span id="Label_reg">{doctor?.original_fmr_no}</span>
-                                                            </b>
+                                            </td>
+                                            <td className="tdwid4">
+                                                <b>
+                                                    <span id="Label_reg">{doctor?.original_fmr_no}</span>
+                                                </b>
 
-                                                        </td>
-                                                        <td className="tdwid4">
-                                                            <b>
-                                                                Date of Reg
-                                                            </b>
+                                            </td>
+                                            <td className="tdwid4">
+                                                <b>
+                                                    Date of Reg
+                                                </b>
 
-                                                        </td>
-                                                        <td className="tdwid4">
-                                                            <b>
-                                                                <span id="Label_regdate">{doctor?.regDate}</span>
-                                                            </b>
+                                            </td>
+                                            <td className="tdwid4">
+                                                <b>
+                                                    <span id="Label_regdate">{doctor?.regDate}</span>
+                                                </b>
 
-                                                        </td>
-                                                    </tr>
-                                                </tbody></table>
-                                            <table className="table table-bordered table-responsive-sm">
-                                                <tbody><tr>
-                                                    <td className="tdwid4">
-                                                        <b>
-                                                            Valid Upto
-                                                        </b>
-                                                    </td>
-                                                    <td className="tdwid4">
-                                                        <b>
-                                                            <span id="Labelvaliddate" style={{ color: "#FF6600", fontSize: "Medium", fontWeight: "bold" }}>{doctor?.validDate}</span>
-                                                        </b>
+                                            </td>
+                                        </tr>
+                                    </tbody></table>
+                                <table className="table table-bordered table-responsive-sm">
+                                    <tbody><tr>
+                                        <td className="tdwid4">
+                                            <b>
+                                                Valid Upto
+                                            </b>
+                                        </td>
+                                        <td className="tdwid4">
+                                            <b>
+                                                <span id="Labelvaliddate" style={{ color: "#FF6600", fontSize: "Medium", fontWeight: "bold" }}>{doctor?.validDate}</span>
+                                            </b>
 
-                                                    </td>
-                                                    <td className="tdwid4">
-                                                        <b>
-                                                            Registration Status
-                                                        </b>
+                                        </td>
+                                        <td className="tdwid4">
+                                            <b>
+                                                Registration Status
+                                            </b>
 
-                                                    </td>
-                                                    <td className="tdwid4">
-                                                        <b>
-                                                            <span id="Labelregstatus" style={{ color: "#FF3300", fontSize: "Medium", fontWeight: "bold" }}>{doctor?.regStatus}</span>
-                                                        </b>
+                                        </td>
+                                        <td className="tdwid4">
+                                            <b>
+                                                <span id="Labelregstatus" style={{ color: "#FF3300", fontSize: "Medium", fontWeight: "bold" }}>{doctor?.regStatus}</span>
+                                            </b>
 
-                                                    </td>
-                                                </tr>
+                                        </td>
+                                    </tr>
 
-                                                </tbody></table>
-                                            <table className="table table-bordered table-responsive-sm">
-                                                <tbody><tr>
-                                                    <td className="tdwid4">
-                                                        Qualification
-                                                    </td>
-                                                    <td className="tdwid4">
-                                                        {doctor?.qualification}
-                                                    </td>
-                                                </tr>
-                                                    <tr>
-                                                        <td className="tdwid4">
-                                                            University Name
-                                                        </td>
-                                                        <td className="tdwid4">
-                                                            <span id="Label_uniname">{doctor?.university}</span>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="tdwid4">
-                                                            College Name
-                                                        </td>
-                                                        <td className="tdwid4">
-                                                            <span id="Label_clgname">{doctor?.college}</span>
-                                                        </td>
-                                                    </tr>
+                                    </tbody></table>
+                                <table className="table table-bordered table-responsive-sm">
+                                    <tbody><tr>
+                                        <td className="tdwid4">
+                                            Qualification
+                                        </td>
+                                        <td className="tdwid4">
+                                            {doctor?.qualification}
+                                        </td>
+                                    </tr>
+                                        <tr>
+                                            <td className="tdwid4">
+                                                University Name
+                                            </td>
+                                            <td className="tdwid4">
+                                                <span id="Label_uniname">{doctor?.university}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="tdwid4">
+                                                College Name
+                                            </td>
+                                            <td className="tdwid4">
+                                                <span id="Label_clgname">{doctor?.college}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody></table>
+                               
+                           
 
 
+{additionalList && additionalList.length > 0 ?
+    <section><div>   </div>
+{additionalList.map((add: any, i: any) => {
+     return (<div key={i}>
+        <table className="table table-bordered">
+            <tbody><tr >
+                <td className="tdwid4" >
+                    <span style={{alignContent:"center",paddingLeft:"500px",fontWeight:"bold",color:"#1FAD84"}}>Additional Qualification :- {i+1}</span>
+                </td>
+            </tr>
+            </tbody></table>
+        <table className="table table-bordered">
+            <tbody><tr>
+                <td className="tdwid4">
+                    <b>
+                        Qualification
+                    </b>
 
-                                                </tbody></table>
-                                        </div>
+                </td>
+                <td className="tdwid4">
+                    <b>
+                        <span >{add.qualification}</span>
+                    </b>
 
-                                 : ""}
-                            </>
+                </td>
+                <td className="tdwid4">
+                    <b>
+                        PG Registration Date
+                    </b>
+
+                </td>
+                <td className="tdwid4">
+                    <b>
+                        <span >{add.reg_date}</span>
+                    </b>
+
+                </td>
+
+            </tr>
+            </tbody></table>
+        <table className="table table-bordered">
+            <tbody><tr>
+                <td className="tdwid1">
+                    Qualification Year
+                </td>
+                <td className="tdwid2">
+                    <span >{add.exam_month}-{add.exam_year}</span>
+                </td>
+            </tr>
+                <tr>
+                    <td className="tdwid1">
+                        University Name
+                    </td>
+                    <td className="tdwid2">
+                        <span >{add.university}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td className="tdwid1">
+
+                        College Name
+                    </td>
+                    <td className="tdwid2">
+                        <span >{add.college}</span>
+                    </td>
+                </tr>
+            </tbody></table>
+    </div>)
+})}
+</section>
+ : ""}
+                   
+                   </div>
+
+                            : ""} 
+                   
+                    </>
+
                 }
-                    </div>
-
-
-            </>
-            )
+            </div>
+        </>
+    )
 }
 
-            export default DoctorSearchPage;
+export default DoctorSearchPage;
