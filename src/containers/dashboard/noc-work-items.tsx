@@ -135,7 +135,7 @@ const MyWorkItems = () => {
        
         {
             Header: "Status",
-            accessor: "approval_status",
+            accessor: "status",
             Cell: ({ cell: { value } }: any) => {
                 return (
                     <>
