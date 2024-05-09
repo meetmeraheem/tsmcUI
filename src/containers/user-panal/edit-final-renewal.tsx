@@ -10,16 +10,14 @@ import moment from "moment";
 import { renewalsType } from "../../types/common";
 import { ReactFilesError, ReactFilesFile } from "../../types/files";
 import { useCallback, useEffect, useState, useMemo } from "react";
-import { College, Country, Qualification, Serials, State, University } from "../../types/common";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux";
+import { Serials} from "../../types/common";
 import { routes } from "../routes/routes-names";
 import { isLessThanTheMB } from "../../lib/utils/lessthan-max-filesize";
 import { Messages } from "../../lib/constants/messages";
 import { LocalStorageManager } from "../../lib/localStorage-manager";
 import { renewalService } from "../../lib/api/renewals";
 
-import DatePicker from 'react-date-picker';
+
 
 
 const EditRenewalRegistration = () => {
@@ -27,25 +25,35 @@ const EditRenewalRegistration = () => {
     
     const location = useLocation();
     const { renwalPrimaryId} = location.state
-    const [doctorId, setDoctorId] = useState(0);
-    const [serial, setserial] = useState<Serials>();
     const [renewals, setRenewals] = useState<renewalsType>();
     const [provisionalCertificate, setProvisionalCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [applicationForm, setApplicationForm] = useState<{ file?: File; error?: string } | null>(null);
     const [nocCertificate, setNOCCertificate] = useState<{ file?: File; error?: string } | null>(null);
-    const [provisionalRequestType, setProvisionalRequestType] = useState<string>('nor');
-    const [reg_date, setReg_date] = useState(new Date());
+    const [cmecredit6, setCmecredit6] = useState<{ file?: File; error?: string } | null>(null);
+    const [cmecredit12, setCmecredit12] = useState<{ file?: File; error?: string } | null>(null);
+    const [cmecredit18, setCmecredit18] = useState<{ file?: File; error?: string } | null>(null);
+    const [cmecredit24, setCmecredit24] = useState<{ file?: File; error?: string } | null>(null);
+    const [cmecredit30, setCmecredit30] = useState<{ file?: File; error?: string } | null>(null);
+
+    
 
 
     const initialFormData =  useMemo(
         () => ({
-        doctor_id: 0,
+        doctor_id:renewals?.doctor_id|| 0,
         edu_cert1: renewals?.edu_cert1 || '',
         edu_cert2: renewals?.edu_cert2 || '',
         edu_cert3: renewals?.edu_cert3 || '',
+        cmecredit6:renewals?.cmecredit6 || '',
+        cmecredit12:renewals?.cmecredit12 || '',
+        cmecredit18:renewals?.cmecredit18 || '',
+        cmecredit24:renewals?.cmecredit24 || '',
+        cmecredit30:renewals?.cmecredit30 || '',
         reg_date:'',
         status:'',
         renewal_date_type:'',
+        cmecredit_status:'',
+        cmecredit_value:0,
         
     }),
     [renewals]
@@ -62,7 +70,14 @@ const EditRenewalRegistration = () => {
                         edu_cert1: data.document1,
                         edu_cert2: data.document2,
                         edu_cert3: data.document3,
+                        cmecredit6:data.document4,
+                        cmecredit12:data.document5,
+                        cmecredit18:data.document6,
+                        cmecredit24:data.document7,
+                        cmecredit30:data.document8,
                         renewal_date_type:'',
+                        cmecredit_status:'',
+                        cmecredit_value:0,
                     });
                 }
             }
@@ -86,7 +101,6 @@ const EditRenewalRegistration = () => {
                     prefix: 'TSMC',
                     approval_status: 'pen',
                     row_type: 'on',
-                    extra_col1:provisionalRequestType,
                     doctorPrimaryId:doctorPrimaryId,
                 }
                
@@ -104,7 +118,21 @@ const EditRenewalRegistration = () => {
                 if (nocCertificate?.file) {
                     formData.append("renewal_noc", nocCertificate?.file);
                 }
-               
+                if (cmecredit6?.file) {
+                    formData.append("cmecredit6", cmecredit6?.file);
+                }
+                if (cmecredit12?.file) {
+                    formData.append("cmecredit12", cmecredit12?.file);
+                }
+                if (cmecredit18?.file) {
+                    formData.append("cmecredit18", cmecredit18?.file);
+                }
+                if (cmecredit24?.file) {
+                    formData.append("cmecredit24", cmecredit24?.file);
+                }
+                if (cmecredit30?.file) {
+                    formData.append("cmecredit30", cmecredit30?.file);
+                }
                
                 const { success } = await renewalService.editRenewal(renwalPrimaryId,formData);
                 if (success) {
@@ -130,7 +158,7 @@ const EditRenewalRegistration = () => {
                 console.log('error in final renewal update', err);
             }
         },
-        [doctorId, serial, provisionalCertificate, applicationForm, nocCertificate]
+        [provisionalCertificate, applicationForm, nocCertificate,cmecredit6,cmecredit12,cmecredit18,cmecredit24,cmecredit30]
     );
 
     useEffect(() => {
@@ -162,11 +190,7 @@ const EditRenewalRegistration = () => {
 
                                             return (
                                                 <form onSubmit={handleSubmit}>
-                                                    <div className="row mb-2">
-                                                       
-
-                                                    </div>
-                                                    <div className="row mb-2 mt-4">
+                                                        <div className="row mb-2 mt-4">
                                                             <div className='text-danger fs-10'>
                                                                 Please upload images (.jpeg,.png) only, with less than 200 KB size.  
                                                             </div>
@@ -242,9 +266,8 @@ const EditRenewalRegistration = () => {
                                                                         );
                                                                     }}
                                                                 </Field>
-
-
                                                             </div>
+                                                           </div> 
                                                             <div className="col">
                                                             <div className="drag-img-box d-flex align-items-center justify-content-center">
                                                                 <Field name="edu_cert2">
@@ -312,7 +335,7 @@ const EditRenewalRegistration = () => {
                                                                         );
                                                                     }}
                                                                 </Field>
-                                                            </div>
+                                                             </div>
                                                         </div>
                                                         <div className="col">
                                                             <div className="drag-img-box d-flex align-items-center justify-content-center">
@@ -383,11 +406,357 @@ const EditRenewalRegistration = () => {
                                                                 </Field>
                                                             </div>
                                                             </div>
-                                                        </div>
+                                                        
                                                         <div className="col">
-                                                            
-                                                        </div>
-                                                    </div>
+                                                            <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                                <Field name="cmecredit6">
+                                                                    {(fieldProps: FieldProps) => {
+                                                                        const { field, form } = fieldProps;
+                                                                        const error =
+                                                                            getValue(form.touched, field.name) &&
+                                                                            getValue(form.errors, field.name);
+                                                                        const file = cmecredit6?.file
+                                                                            ? cmecredit6?.file.name
+                                                                            : field.value || null;
+                                                                        return file ? (
+                                                                            <p className="d-flex align-items-center">
+                                                                                <strong>Uploaded:</strong>
+                                                                                <span className="ms-1">{file}</span>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() => {
+                                                                                        setFieldValue(field.name, '');
+                                                                                        setCmecredit6(null);
+                                                                                    }}
+                                                                                    title='Delete'
+                                                                                    className="ms-2 lh-1"
+                                                                                >
+                                                                                    <i className="bi-trash" />
+                                                                                </button>
+                                                                            </p>
+                                                                        ) : (
+                                                                            <>
+                                                                                <Files
+                                                                                    className="files-dropzone"
+                                                                                    onChange={(files: ReactFilesFile[]) => {
+                                                                                        if (files[0]) {
+                                                                                            const file = files[0];
+                                                                                            const isLess = isLessThanTheMB(files[0].size, 0.3);
+                                                                                            if (isLess) {
+                                                                                                setCmecredit6({ file });
+                                                                                                setFieldValue(field.name, file.name);
+                                                                                            }
+                                                                                            else {
+                                                                                                alert(Messages.isLessThanTheMB);
+                                                                                            }
+                                                                                        }
+                                                                                    }}
+                                                                                    onError={(error: ReactFilesError) => {
+                                                                                        console.log('error', error);
+                                                                                        if (error.code === 1) {
+                                                                                        }
+                                                                                    }}
+                                                                                    accepts={['.jpeg', '.jpg','.png']}
+                                                                                    clickable
+                                                                                >
+                                                                                    <div className="drag-drop-box mt-3">
+                                                                                        <div className="text-center">
+                                                                                            <i className="bi-file-earmark-break fs-32"></i>
+                                                                                            <p className='fs-13'>CMEdoc1</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </Files>
+                                                                                <small className="text-danger mt-1">
+                                                                                    {cmecredit6?.error}
+                                                                                </small>
+                                                                                {error && <small className="text-danger">{error.toString()}</small>}
+                                                                            </>
+                                                                        );
+                                                                    }}
+                                                                </Field>
+                                                                </div>
+                                                              </div>  
+                                                            </div>
+
+                                                            <div className="row mb-2 mt-4">
+                                                            <div className="col">
+                                                            <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                                <Field name="cmecredit12">
+                                                                    {(fieldProps: FieldProps) => {
+                                                                        const { field, form } = fieldProps;
+                                                                        const error =
+                                                                            getValue(form.touched, field.name) &&
+                                                                            getValue(form.errors, field.name);
+                                                                        const file = cmecredit12?.file
+                                                                            ? cmecredit12?.file.name
+                                                                            : field.value || null;
+                                                                        return file ? (
+                                                                            <p className="d-flex align-items-center">
+                                                                                <strong>Uploaded:</strong>
+                                                                                <span className="ms-1">{file}</span>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() => {
+                                                                                        setFieldValue(field.name, '');
+                                                                                        setCmecredit12(null);
+                                                                                    }}
+                                                                                    title='Delete'
+                                                                                    className="ms-2 lh-1"
+                                                                                >
+                                                                                    <i className="bi-trash" />
+                                                                                </button>
+                                                                            </p>
+                                                                        ) : (
+                                                                            <>
+                                                                                <Files
+                                                                                    className="files-dropzone"
+                                                                                    onChange={(files: ReactFilesFile[]) => {
+                                                                                        if (files[0]) {
+                                                                                            const file = files[0];
+                                                                                            const isLess = isLessThanTheMB(files[0].size, 0.3);
+                                                                                            if (isLess) {
+                                                                                                setCmecredit12({ file });
+                                                                                                setFieldValue(field.name, file.name);
+                                                                                            }
+                                                                                            else {
+                                                                                                alert(Messages.isLessThanTheMB);
+                                                                                            }
+                                                                                        }
+                                                                                    }}
+                                                                                    onError={(error: ReactFilesError) => {
+                                                                                        console.log('error', error);
+                                                                                        if (error.code === 1) {
+                                                                                        }
+                                                                                    }}
+                                                                                    accepts={['.jpeg', '.jpg','.png']}
+                                                                                    clickable
+                                                                                >
+                                                                                    <div className="drag-drop-box mt-3">
+                                                                                        <div className="text-center">
+                                                                                            <i className="bi-file-earmark-break fs-32"></i>
+                                                                                            <p className='fs-13'>CMEdoc2 </p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </Files>
+                                                                                <small className="text-danger mt-1">
+                                                                                    {cmecredit12?.error}
+                                                                                </small>
+                                                                                {error && <small className="text-danger">{error.toString()}</small>}
+                                                                            </>
+                                                                        );
+                                                                    }}
+                                                                </Field>
+                                                            </div>
+                                                            </div>
+                                                            <div className="col">
+                                                            <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                                <Field name="cmecredit18">
+                                                                    {(fieldProps: FieldProps) => {
+                                                                        const { field, form } = fieldProps;
+                                                                        const error =
+                                                                            getValue(form.touched, field.name) &&
+                                                                            getValue(form.errors, field.name);
+                                                                        const file = cmecredit18?.file
+                                                                            ? cmecredit18?.file.name
+                                                                            : field.value || null;
+                                                                        return file ? (
+                                                                            <p className="d-flex align-items-center">
+                                                                                <strong>Uploaded:</strong>
+                                                                                <span className="ms-1">{file}</span>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() => {
+                                                                                        setFieldValue(field.name, '');
+                                                                                        setCmecredit18(null);
+                                                                                    }}
+                                                                                    title='Delete'
+                                                                                    className="ms-2 lh-1"
+                                                                                >
+                                                                                    <i className="bi-trash" />
+                                                                                </button>
+                                                                            </p>
+                                                                        ) : (
+                                                                            <>
+                                                                                <Files
+                                                                                    className="files-dropzone"
+                                                                                    onChange={(files: ReactFilesFile[]) => {
+                                                                                        if (files[0]) {
+                                                                                            const file = files[0];
+                                                                                            const isLess = isLessThanTheMB(files[0].size, 0.3);
+                                                                                            if (isLess) {
+                                                                                                setCmecredit18({ file });
+                                                                                                setFieldValue(field.name, file.name);
+                                                                                            }
+                                                                                            else {
+                                                                                                alert(Messages.isLessThanTheMB);
+                                                                                            }
+                                                                                        }
+                                                                                    }}
+                                                                                    onError={(error: ReactFilesError) => {
+                                                                                        console.log('error', error);
+                                                                                        if (error.code === 1) {
+                                                                                        }
+                                                                                    }}
+                                                                                    accepts={['.jpeg', '.jpg','.png']}
+                                                                                    clickable
+                                                                                >
+                                                                                    <div className="drag-drop-box mt-3">
+                                                                                        <div className="text-center">
+                                                                                            <i className="bi-file-earmark-break fs-32"></i>
+                                                                                            <p className='fs-13'> CMEdoc3</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </Files>
+                                                                                <small className="text-danger mt-1">
+                                                                                    {cmecredit18?.error}
+                                                                                </small>
+                                                                                {error && <small className="text-danger">{error.toString()}</small>}
+                                                                            </>
+                                                                        );
+                                                                    }}
+                                                                </Field>
+                                                            </div>
+                                                            </div>
+                                                            <div className="col">
+                                                            <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                                <Field name="cmecredit24">
+                                                                    {(fieldProps: FieldProps) => {
+                                                                        const { field, form } = fieldProps;
+                                                                        const error =
+                                                                            getValue(form.touched, field.name) &&
+                                                                            getValue(form.errors, field.name);
+                                                                        const file = cmecredit24?.file
+                                                                            ? cmecredit24?.file.name
+                                                                            : field.value || null;
+                                                                        return file ? (
+                                                                            <p className="d-flex align-items-center">
+                                                                                <strong>Uploaded:</strong>
+                                                                                <span className="ms-1">{file}</span>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() => {
+                                                                                        setFieldValue(field.name, '');
+                                                                                        setCmecredit24(null);
+                                                                                    }}
+                                                                                    title='Delete'
+                                                                                    className="ms-2 lh-1"
+                                                                                >
+                                                                                    <i className="bi-trash" />
+                                                                                </button>
+                                                                            </p>
+                                                                        ) : (
+                                                                            <>
+                                                                                <Files
+                                                                                    className="files-dropzone"
+                                                                                    onChange={(files: ReactFilesFile[]) => {
+                                                                                        if (files[0]) {
+                                                                                            const file = files[0];
+                                                                                            const isLess = isLessThanTheMB(files[0].size, 0.3);
+                                                                                            if (isLess) {
+                                                                                                setCmecredit24({ file });
+                                                                                                setFieldValue(field.name, file.name);
+                                                                                            }
+                                                                                            else {
+                                                                                                alert(Messages.isLessThanTheMB);
+                                                                                            }
+                                                                                        }
+                                                                                    }}
+                                                                                    onError={(error: ReactFilesError) => {
+                                                                                        console.log('error', error);
+                                                                                        if (error.code === 1) {
+                                                                                        }
+                                                                                    }}
+                                                                                    accepts={['.jpeg', '.jpg','.png']}
+                                                                                    clickable
+                                                                                >
+                                                                                    <div className="drag-drop-box mt-3">
+                                                                                        <div className="text-center">
+                                                                                            <i className="bi-file-earmark-break fs-32"></i>
+                                                                                            <p className='fs-13'> CMEdoc4</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </Files>
+                                                                                <small className="text-danger mt-1">
+                                                                                    {cmecredit24?.error}
+                                                                                </small>
+                                                                                {error && <small className="text-danger">{error.toString()}</small>}
+                                                                            </>
+                                                                        );
+                                                                    }}
+                                                                </Field>
+                                                            </div>
+                                                            </div>
+                                                            <div className="col">
+                                                            <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                                <Field name="cmecredit30">
+                                                                    {(fieldProps: FieldProps) => {
+                                                                        const { field, form } = fieldProps;
+                                                                        const error =
+                                                                            getValue(form.touched, field.name) &&
+                                                                            getValue(form.errors, field.name);
+                                                                        const file = cmecredit30?.file
+                                                                            ? cmecredit30?.file.name
+                                                                            : field.value || null;
+                                                                        return file ? (
+                                                                            <p className="d-flex align-items-center">
+                                                                                <strong>Uploaded:</strong>
+                                                                                <span className="ms-1">{file}</span>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() => {
+                                                                                        setFieldValue(field.name, '');
+                                                                                        setCmecredit30(null);
+                                                                                    }}
+                                                                                    title='Delete'
+                                                                                    className="ms-2 lh-1"
+                                                                                >
+                                                                                    <i className="bi-trash" />
+                                                                                </button>
+                                                                            </p>
+                                                                        ) : (
+                                                                            <>
+                                                                                <Files
+                                                                                    className="files-dropzone"
+                                                                                    onChange={(files: ReactFilesFile[]) => {
+                                                                                        if (files[0]) {
+                                                                                            const file = files[0];
+                                                                                            const isLess = isLessThanTheMB(files[0].size, 0.3);
+                                                                                            if (isLess) {
+                                                                                                setCmecredit30({ file });
+                                                                                                setFieldValue(field.name, file.name);
+                                                                                            }
+                                                                                            else {
+                                                                                                alert(Messages.isLessThanTheMB);
+                                                                                            }
+                                                                                        }
+                                                                                    }}
+                                                                                    onError={(error: ReactFilesError) => {
+                                                                                        console.log('error', error);
+                                                                                        if (error.code === 1) {
+                                                                                        }
+                                                                                    }}
+                                                                                    accepts={['.jpeg', '.jpg','.png']}
+                                                                                    clickable
+                                                                                >
+                                                                                    <div className="drag-drop-box mt-3">
+                                                                                        <div className="text-center">
+                                                                                            <i className="bi-file-earmark-break fs-32"></i>
+                                                                                            <p className='fs-13'> CMEdoc5</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </Files>
+                                                                                <small className="text-danger mt-1">
+                                                                                    {cmecredit30?.error}
+                                                                                </small>
+                                                                                {error && <small className="text-danger">{error.toString()}</small>}
+                                                                            </>
+                                                                        );
+                                                                    }}
+                                                                </Field>
+                                                            </div>
+                                                            </div>
+                                                            </div>
+                                                    
                                                     <div className="w-100 text-end mt-3">
                                                         {/* isValid? setNext(false):setNext(true) */}
                                                         <button type="submit" disabled={isSubmitting} className="btn btn-primary">

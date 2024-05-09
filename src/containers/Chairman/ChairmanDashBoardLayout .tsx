@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import TabComponent from "./../Tabs/TabComponent";
 
-import  chairmanDashboard from "../Chairman/ChairmanDashBoardLayout ";
-import AdminDashboardHome from "../dashboard/dashboard";
-
+import  ChairmanDashboard from "../Chairman/ChairmanBoard";
+import ChairmanSearch from "../Chairman/ChairmanSearch";
 type TabsType = {
   label: string;
   index: number;
@@ -13,14 +12,14 @@ type TabsType = {
 // Tabs Array
 const tabs: TabsType = [
   {
-    label: "Chairman View",
+    label: "Dashboard",
     index: 1,
-    Component: chairmanDashboard
+    Component: ChairmanDashboard
   },
   {
-    label: "Admin View",
+    label: "Advanced Search",
     index: 2,
-    Component: AdminDashboardHome
+    Component: ChairmanSearch
   },
  
  

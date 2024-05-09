@@ -18,6 +18,13 @@ export type ApiLoginResponseType = {
     token:string;
 };
 
+export type DispatchApiResponseType = {
+    success: string;
+    message: string;
+    data: any;
+    dispatchdata:any
+
+};
 
 // export type ApiResponseType = {
 //     list: [];

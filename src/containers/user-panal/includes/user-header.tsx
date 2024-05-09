@@ -22,6 +22,8 @@ const Userheader = () => {
 		LocalStorageManager.removeDoctorFMRNo();
 		LocalStorageManager.removeDoctorPMRNo();
 		LocalStorageManager.removeOrderKeyId();
+		LocalStorageManager.removeDoctorFMRStatus();
+		LocalStorageManager.removeRenewalStatus();
 		dispatch(deleteDoctorInfo);
 	};
 

@@ -54,4 +54,5 @@ export type AddQualFormType = {
     edu_cert2:string,
     transanctionId:string,
     calc_date:string,
+    visitDate:string
   }

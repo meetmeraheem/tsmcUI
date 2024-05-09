@@ -78,6 +78,7 @@ const FinalRegView = (props:any) => {
                         dd_amount:data[0].dd_amount,
                         transanctionId:data[0].transanctionId,
                         calc_date:data[0].calc_date,
+                        visitDate:'',
                     });
                 }
             }

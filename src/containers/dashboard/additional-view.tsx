@@ -67,6 +67,7 @@ const AdditionalRegView = (props:any) => {
                         edu_cert2:data[0].edu_cert2,
                         transanctionId:data[0].transanctionId,
                         calc_date:data[0].calc_date,
+                        visitDate:'',
                     });
                 }
             }

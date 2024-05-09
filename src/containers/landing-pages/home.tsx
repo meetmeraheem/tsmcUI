@@ -201,7 +201,7 @@ const HomePage = () => {
 
           try {
                let depwd = '';
-               
+               LocalStorageManager.removeDoctorPrimaryId();
                LocalStorageManager.removeDoctorSerialId();
                LocalStorageManager.removeDoctorFMRNo();
                LocalStorageManager.removeDoctorPMRNo();
@@ -209,6 +209,16 @@ const HomePage = () => {
                LocalStorageManager.removeDoctorPrimaryId();
                LocalStorageManager.removeDoctorFMRStatus();
                LocalStorageManager.removeRenewalStatus();
+
+               
+			LocalStorageManager.setDoctorSerialId('');
+               LocalStorageManager.setDoctorFMRNo('');
+               LocalStorageManager.setDoctorPMRNo('');
+               LocalStorageManager.setDoctorMobileno('');
+               LocalStorageManager.setDoctorPrimaryId('');
+               LocalStorageManager.setDoctorFMRStatus('');
+               LocalStorageManager.setRenewalStatus('');
+                     
                
                if (mobileNumber && password) {
                     const encryptpassword = cryptojs.encryptData(password);

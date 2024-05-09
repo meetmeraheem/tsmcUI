@@ -11,6 +11,7 @@ import { adminService } from "../../../lib/api/admin";
 import TopNav from "../../dashboard/includes/admin-top-nav";
  import AdminDashboardHome from "../dashboard";
  import  ChairmanLayout from "../../Chairman/ChairmanLayout";
+ import DispatchLayout from "../../dispatch/dispatchLayout";
 const AdminSideNav = () => {
 	const location = useLocation();
 	const activeTab = location.pathname;
@@ -52,7 +53,10 @@ const AdminSideNav = () => {
 						{user?.user_type === 'c' &&
 					<ChairmanLayout/>
 					}
-
+						{user?.user_type === 'd' &&
+					<DispatchLayout></DispatchLayout>
+					}
+					
 
 					
 				</div>

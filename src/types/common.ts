@@ -146,7 +146,14 @@ export type goodStandingFormType = {
         edu_cert1: string,
         edu_cert2: string,
         edu_cert3: string,
-        renewal_date_type:string
+        renewal_date_type:string,
+        cmecredit6:string,
+        cmecredit12:string,
+        cmecredit18:string,
+        cmecredit24:string,
+        cmecredit30:string,
+        cmecredit_status:string,
+        cmecredit_value:number,
   };
 
   export type AdminrenewalsType = {
@@ -156,9 +163,16 @@ export type goodStandingFormType = {
     edu_cert1: string,
     edu_cert2: string,
     edu_cert3: string,
+    edu_cert4: string,
+    edu_cert5: string,
+    edu_cert6: string,
+    edu_cert7: string,
+    edu_cert8: string,
     dd_amount:string,
     receipt_no:string,
     transanctionId:string,
+    cmecredit_status:string,
+    cmecredit_value:string,
     
 
 };

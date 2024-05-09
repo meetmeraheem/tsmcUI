@@ -42,7 +42,8 @@ const Myprofile = () => {
        }
     const provisionalcomponentRef = useRef<HTMLDivElement>(null);   
     const finalcomponentRef = useRef<HTMLDivElement>(null);
-    const additionalcomponentRef = useRef<HTMLDivElement>(null);
+    const elementRef = useRef<any>([]);
+
     const renewlcomponentRef = useRef<HTMLDivElement>(null);
     const noccomponentRef = useRef<HTMLDivElement>(null);
     const gscomponentRef = useRef<HTMLDivElement>(null);
@@ -569,8 +570,10 @@ const Myprofile = () => {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {additionslGridList?.map((obj: any) => {
+                                                            {additionslGridList?.map((obj: any,i:any) => {
+                                                                
                                                                 return (<tr>
+                                                                    
                                                                     <td>{obj.qualification}</td>
                                                                     <td>{obj.exam_month},{obj.exam_year}</td>
                                                                     <td>{obj.stateName},{obj.countryName}</td>
@@ -588,11 +591,15 @@ const Myprofile = () => {
                                                                     {(obj.approval_status == 'pen' || obj.approval_status == 'rej') ? <td> <Link to={'edit_additional-qualification-registration'} state={{ additionalPrimaryId: obj.id }} className='btn btn-primary btn-sm me-3'>Edit</Link></td> : <td></td>}
 
                                                                     {obj.approval_status === 'rej' ? <td>{obj.extra_col3}</td> : <td></td>}
+
                                                                     {(obj.extra_col1 === 'nor'||obj.extra_col1 === 'tat') ?<td> <ReactToPrint
                                                                             trigger={() => <button className='btn btn-info btn-sm me-3'>Print Receipt</button>}
-                                                                            content={() => additionalcomponentRef.current}
+                                                                            content={() => elementRef.current[i]}
                                                                         />
-                                                                     <div ref={additionalcomponentRef} className='hideComponentScreen'>
+                                                                     <div ref={
+                                                                        additionalcomponentRef => {
+                                                                            elementRef.current[i] = additionalcomponentRef
+                                                                        }} className='hideComponentScreen'>
                                                                     <AdditionalRegViewPrint state={{ additionalPrimaryId:obj.id,reqType:obj.extra_col1}}  />
                                                                     </div> </td>:""}
 

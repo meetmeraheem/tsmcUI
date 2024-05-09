@@ -27,16 +27,22 @@ import AdminDoctorInfoCard from './../dashboard/includes/admin-doctor-info';
 
 
 
-const RenewalsViews = (props:any) => {
+const RenewalsViews = (props: any) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [next, setNext] = useState(false);
     const [isEduCert1, setIsEduCert1] = useState(false);
     const [isEduCert2, setIsEduCert2] = useState(false);
     const [isEduCert3, setIsEduCert3] = useState(false);
+    const [isEduCert4, setIsEduCert4] = useState(false);
+    const [isEduCert5, setIsEduCert5] = useState(false);
+    const [isEduCert6, setIsEduCert6] = useState(false);
+    const [isEduCert7, setIsEduCert7] = useState(false);
+    const [isEduCert8, setIsEduCert8] = useState(false);
+
     const [renewalsData, setRenewalsData] = useState<AdminrenewalsType>();
     const [doctor, setDoctor] = useState<DoctorFormType>();
-    
+
     const [userType, setUserType] = useState('');
     const [remarks, setRemarks] = useState('');
     const [disablebtn, setDisablebtn] = useState(false);
@@ -61,18 +67,18 @@ const RenewalsViews = (props:any) => {
     );
 
     const getDoctorDetails = async () => {
-                try {
-                    
-                    if (props.state.doctorPrimaryId) {
-                        const { data } = await doctorService.getDoctorById(props.state.doctorPrimaryId);
-                        if (data.length > 0) {
-                            setDoctor(data[0]);
-                        }
-                    }
-                } catch (err) {
-                    console.log('error countries getList', err);
+        try {
+
+            if (props.state.doctorPrimaryId) {
+                const { data } = await doctorService.getDoctorById(props.state.doctorPrimaryId);
+                if (data.length > 0) {
+                    setDoctor(data[0]);
                 }
-            };
+            }
+        } catch (err) {
+            console.log('error countries getList', err);
+        }
+    };
     const getRenewalDetails = useCallback(async () => {
         try {
             if (props.state.renewalPrimaryId) {
@@ -86,9 +92,16 @@ const RenewalsViews = (props:any) => {
                         edu_cert1: data.document1,
                         edu_cert2: data.document2,
                         edu_cert3: data.document3,
+                        edu_cert4: data.document4,
+                        edu_cert5: data.document5,
+                        edu_cert6: data.document6,
+                        edu_cert7: data.document7,
+                        edu_cert8: data.document8,
                         dd_amount: data.dd_amount,
                         receipt_no: data.receipt_no,
                         transanctionId: data.transanctionId,
+                        cmecredit_status:data.cmeCreditStatus,
+                        cmecredit_value:data.cmeCreditValue,
                     });
                 }
             }
@@ -122,8 +135,8 @@ const RenewalsViews = (props:any) => {
                 let smsmsg = "";
 
                 if (status === 'rej') {
-                    msg = "Renewal Details Application Not-Approved";
-                    smsmsg = "Not-Approved";
+                    msg = "Renewal Details Application Rejected";
+                    smsmsg = "Rejected";
                 } else if (status === 'apr') {
                     msg = "Renewal Details successfully approved";
                     smsmsg = "Approved";
@@ -132,7 +145,7 @@ const RenewalsViews = (props:any) => {
                     smsmsg = "Verified";
                 }
                 Swal.fire({
-                    title: "",
+                    title: "Success",
                     text: msg,
                     icon: status === 'rej' ? "error" : "success",
                     confirmButtonText: "OK",
@@ -226,147 +239,286 @@ const RenewalsViews = (props:any) => {
                                             <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Id:</label>
                                             <div className="fs-14">{renewalsData?.transanctionId ? renewalsData?.transanctionId : 'NA'}</div>
                                         </div>
+                                        <div className="col d-flex ml-3">
+                                            <label htmlFor="" className='fs-14 fw-600 me-2'> CME Credit Points:</label>
+                                            <div className="fs-14">{renewalsData?.cmecredit_value ? renewalsData?.cmecredit_value : 'NA'}</div>
+                                        </div>
+
+                                        <div>
+                                            <div className="row mt-3">
+                                                <div className="col">
+                                                    <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                        <p className="d-flex align-items-center" onClick={() => setIsEduCert1(!isEduCert1)}>
+                                                            {renewalsData?.edu_cert1 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert1} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row mt-3">
+                                                <div className="col">
+                                                    <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                        <p className="d-flex align-items-center" onClick={() => setIsEduCert2(!isEduCert2)}>
+                                                            {renewalsData?.edu_cert2 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert2} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row mt-3">
+                                                <div className="col">
+                                                    <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                        <p className="d-flex align-items-center" onClick={() => setIsEduCert3(!isEduCert3)}>
+                                                            {renewalsData?.edu_cert3 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert3} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="row mt-3">
+                                                    <div className="col">
+                                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                            <p className="d-flex align-items-center" onClick={() => setIsEduCert4(!isEduCert4)}>
+                                                                {renewalsData?.edu_cert4 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert4} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row mt-3">
+                                                        <div className="col">
+                                                            <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                                <p className="d-flex align-items-center" onClick={() => setIsEduCert5(!isEduCert5)}>
+                                                                    {renewalsData?.edu_cert5 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert5} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row mt-3">
+                                                            <div className="col">
+                                                                <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                                    <p className="d-flex align-items-center" onClick={() => setIsEduCert6(!isEduCert6)}>
+                                                                        {renewalsData?.edu_cert6 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert6} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div className="row mt-3">
+                                                                <div className="col">
+                                                                    <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                                        <p className="d-flex align-items-center" onClick={() => setIsEduCert7(!isEduCert7)}>
+                                                                            {renewalsData?.edu_cert7 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert7} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="row mt-3">
+                                                                    <div className="col">
+                                                                        <div className="drag-img-box d-flex align-items-center justify-content-center">
+                                                                            <p className="d-flex align-items-center" onClick={() => setIsEduCert8(!isEduCert8)}>
+                                                                                {renewalsData?.edu_cert8 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert8} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            {userType === 'u' && renewalsData?.status === 'pen' &&
+                                                                <div className="card-footer">
+                                                                    <div className="mb-3">
+                                                                        <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
+                                                                        <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
+                                                                    </div>
+                                                                    <div className='d-flex'>
+                                                                        <div className="col">
+                                                                            <button type="submit"
+                                                                                disabled={disablebtn}
+                                                                                onClick={() => {
+                                                                                    submit('rej');
+                                                                                }} className='btn btn-danger'><i className="bi-x-circle"></i> Not Accepted</button>
+                                                                        </div>
+                                                                        <div className="col text-end">
+                                                                            <button type="submit"
+                                                                                disabled={disablebtn}
+                                                                                onClick={() => {
+                                                                                    submit('ver');
+                                                                                }} className='btn btn-success'><i className="bi-check-circle"></i> Verified</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                            {userType === 'a' && renewalsData?.status === 'ver' &&
+                                                                <div className="card-footer">
+                                                                    <div className="mb-3">
+                                                                        <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
+                                                                        <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
+                                                                    </div>
+                                                                    <div className='d-flex'>
+                                                                        <div className="col">
+                                                                            <button type="submit"
+                                                                                disabled={disablebtn}
+                                                                                onClick={() => {
+                                                                                    submit('rej');
+                                                                                }} className='btn btn-danger'><i className="bi-x-circle"></i> Not Accepted</button>
+                                                                        </div>
+                                                                        <div className="col text-end">
+                                                                            <button type="submit"
+                                                                                disabled={disablebtn}
+                                                                                onClick={() => {
+                                                                                    submit('apr');
+                                                                                }} className='btn btn-success'><i className="bi-check-circle"></i> Approve</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                            <>
+
+                                                                <Lightbox
+                                                                    open={isEduCert1}
+                                                                    plugins={[Zoom]}
+                                                                    close={() => setIsEduCert1(false)}
+                                                                    slides={[
+                                                                        {
+                                                                            src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert1,
+                                                                            alt: "edu_cert1",
+                                                                            width: 3840,
+                                                                            height: 2560,
+                                                                            srcSet: [
+                                                                                { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert1, width: 100, height: 100 },
+                                                                            ]
+                                                                        }
+                                                                    ]}
+                                                                />
+                                                                <Lightbox
+                                                                    open={isEduCert2}
+                                                                    plugins={[Zoom]}
+                                                                    close={() => setIsEduCert2(false)}
+                                                                    slides={[
+                                                                        {
+                                                                            src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert2,
+                                                                            alt: "edu_cert2",
+                                                                            width: 3840,
+                                                                            height: 2560,
+                                                                            srcSet: [
+                                                                                { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert2, width: 100, height: 100 },
+                                                                            ]
+                                                                        }
+                                                                    ]}
+                                                                />
+                                                                <Lightbox
+                                                                    open={isEduCert3}
+                                                                    plugins={[Zoom]}
+                                                                    close={() => setIsEduCert3(false)}
+                                                                    slides={[
+                                                                        {
+                                                                            src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert3,
+                                                                            alt: "edu_cert3",
+                                                                            width: 3840,
+                                                                            height: 2560,
+                                                                            srcSet: [
+                                                                                { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert3, width: 100, height: 100 },
+                                                                            ]
+                                                                        }
+                                                                    ]}
+                                                                />
+                                                                <Lightbox
+                                                                    open={isEduCert4}
+                                                                    plugins={[Zoom]}
+                                                                    close={() => setIsEduCert4(false)}
+                                                                    slides={[
+                                                                        {
+                                                                            src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert4,
+                                                                            alt: "edu_cert4",
+                                                                            width: 3840,
+                                                                            height: 2560,
+                                                                            srcSet: [
+                                                                                { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert4, width: 100, height: 100 },
+                                                                            ]
+                                                                        }
+                                                                    ]}
+                                                                />
+                                                                <Lightbox
+                                                                    open={isEduCert5}
+                                                                    plugins={[Zoom]}
+                                                                    close={() => setIsEduCert5(false)}
+                                                                    slides={[
+                                                                        {
+                                                                            src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert5,
+                                                                            alt: "edu_cert5",
+                                                                            width: 3840,
+                                                                            height: 2560,
+                                                                            srcSet: [
+                                                                                { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert5, width: 100, height: 100 },
+                                                                            ]
+                                                                        }
+                                                                    ]}
+                                                                />
+                                                                <Lightbox
+                                                                    open={isEduCert6}
+                                                                    plugins={[Zoom]}
+                                                                    close={() => setIsEduCert6(false)}
+                                                                    slides={[
+                                                                        {
+                                                                            src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert6,
+                                                                            alt: "edu_cert6",
+                                                                            width: 3840,
+                                                                            height: 2560,
+                                                                            srcSet: [
+                                                                                { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert6, width: 100, height: 100 },
+                                                                            ]
+                                                                        }
+                                                                    ]}
+                                                                />
+                                                                <Lightbox
+                                                                    open={isEduCert7}
+                                                                    plugins={[Zoom]}
+                                                                    close={() => setIsEduCert7(false)}
+                                                                    slides={[
+                                                                        {
+                                                                            src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert7,
+                                                                            alt: "edu_cert3",
+                                                                            width: 3840,
+                                                                            height: 2560,
+                                                                            srcSet: [
+                                                                                { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert7, width: 100, height: 100 },
+                                                                            ]
+                                                                        }
+                                                                    ]}
+                                                                />
+                                                                <Lightbox
+                                                                    open={isEduCert8}
+                                                                    plugins={[Zoom]}
+                                                                    close={() => setIsEduCert8(false)}
+                                                                    slides={[
+                                                                        {
+                                                                            src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert8,
+                                                                            alt: "edu_cert8",
+                                                                            width: 3840,
+                                                                            height: 2560,
+                                                                            srcSet: [
+                                                                                { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert8, width: 100, height: 100 },
+                                                                            ]
+                                                                        }
+                                                                    ]}
+                                                                />
+
+
+                                                            </>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+
+
+
+
 
                                     </div>
 
-                                    <div>
-                                        <div className="row mt-3">
-                                            <div className="col">
-                                                <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                                    <p className="d-flex align-items-center" onClick={() => setIsEduCert1(!isEduCert1)}>
-                                                        {renewalsData?.edu_cert1 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert1} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row mt-3">
-                                            <div className="col">
-                                                <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                                    <p className="d-flex align-items-center" onClick={() => setIsEduCert2(!isEduCert2)}>
-                                                        {renewalsData?.edu_cert2 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert2} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row mt-3">
-                                            <div className="col">
-                                                <div className="drag-img-box d-flex align-items-center justify-content-center">
-                                                    <p className="d-flex align-items-center" onClick={() => setIsEduCert3(!isEduCert3)}>
-                                                        {renewalsData?.edu_cert3 ? <img src={serverImgUrl + 'renewal/' + renewalsData?.edu_cert3} alt="" className="w-100" /> : <img src={DocDefultPic} alt="" />}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {userType === 'u' && renewalsData?.status === 'pen' &&
-                                            <div className="card-footer">
-                                                <div className="mb-3">
-                                                    <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
-                                                    <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
-                                                </div>
-                                                <div className='d-flex'>
-                                                    <div className="col">
-                                                        <button type="submit"
-                                                            disabled={disablebtn}
-                                                            onClick={() => {
-                                                                submit('rej');
-                                                            }} className='btn btn-danger'><i className="bi-x-circle"></i> Not Accepted</button>
-                                                    </div>
-                                                    <div className="col text-end">
-                                                        <button type="submit"
-                                                            disabled={disablebtn}
-                                                            onClick={() => {
-                                                                submit('ver');
-                                                            }} className='btn btn-success'><i className="bi-check-circle"></i> Verified</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                        {userType === 'a' && renewalsData?.status === 'ver' &&
-                                            <div className="card-footer">
-                                                <div className="mb-3">
-                                                    <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
-                                                    <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
-                                                </div>
-                                                <div className='d-flex'>
-                                                    <div className="col">
-                                                        <button type="submit"
-                                                            disabled={disablebtn}
-                                                            onClick={() => {
-                                                                submit('rej');
-                                                            }} className='btn btn-danger'><i className="bi-x-circle"></i> Not Accepted</button>
-                                                    </div>
-                                                    <div className="col text-end">
-                                                        <button type="submit"
-                                                            disabled={disablebtn}
-                                                            onClick={() => {
-                                                                submit('apr');
-                                                            }} className='btn btn-success'><i className="bi-check-circle"></i> Approve</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                        <>
-
-                                            <Lightbox
-                                                open={isEduCert1}
-                                                plugins={[Zoom]}
-                                                close={() => setIsEduCert1(false)}
-                                                slides={[
-                                                    {
-                                                        src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert1,
-                                                        alt: "edu_cert1",
-                                                        width: 3840,
-                                                        height: 2560,
-                                                        srcSet: [
-                                                            { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert1, width: 100, height: 100 },
-                                                        ]
-                                                    }
-                                                ]}
-                                            />
-                                            <Lightbox
-                                                open={isEduCert2}
-                                                plugins={[Zoom]}
-                                                close={() => setIsEduCert2(false)}
-                                                slides={[
-                                                    {
-                                                        src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert2,
-                                                        alt: "edu_cert2",
-                                                        width: 3840,
-                                                        height: 2560,
-                                                        srcSet: [
-                                                            { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert2, width: 100, height: 100 },
-                                                        ]
-                                                    }
-                                                ]}
-                                            />
-                                            <Lightbox
-                                                open={isEduCert3}
-                                                plugins={[Zoom]}
-                                                close={() => setIsEduCert3(false)}
-                                                slides={[
-                                                    {
-                                                        src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert3,
-                                                        alt: "edu_cert3",
-                                                        width: 3840,
-                                                        height: 2560,
-                                                        srcSet: [
-                                                            { src: serverImgUrl + 'renewal/' + renewalsData?.edu_cert3, width: 100, height: 100 },
-                                                        ]
-                                                    }
-                                                ]}
-                                            />
-                                        </>
-                                    </div>
                                 </div>
-
-
                             }
-
                         </div>
                     </div>
                 </div>
             </div>
-
 
 
         </>

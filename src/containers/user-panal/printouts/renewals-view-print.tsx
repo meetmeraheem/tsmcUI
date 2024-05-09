@@ -70,9 +70,16 @@ const RenewalsViewPrint = (props: any) => {
                         edu_cert1: data.document1,
                         edu_cert2: data.document2,
                         edu_cert3: data.document3,
+                        edu_cert4: data.document4,
+                        edu_cert5: data.document5,
+                        edu_cert6: data.document6,
+                        edu_cert7: data.document7,
+                        edu_cert8: data.document8,
                         dd_amount: data.dd_amount,
                         receipt_no: data.receipt_no,
                         transanctionId: data.transanctionId,
+                        cmecredit_status:'',
+                        cmecredit_value:'',
                     });
                 }
             }

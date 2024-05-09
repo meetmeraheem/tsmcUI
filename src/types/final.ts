@@ -146,6 +146,7 @@ export type AdminFinalProfileType = {
   dd_amount:String,
   transanctionId:string,
   calc_date:string,
+  visitDate:string
 }
 
 
