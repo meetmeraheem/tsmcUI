@@ -1,6 +1,6 @@
 import moment from "moment";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Field, FieldProps, Formik, FormikProps } from "formik";
 import Select from 'react-select';
 import Swal from "sweetalert2";
 import Table from "../../components/Table";
@@ -13,7 +13,9 @@ import { routes } from '../routes/routes-names';
 import { useNavigate } from 'react-router-dom';
 import TatCheckbox from './../../components/TatCheckbox';
 import ProvisionalView from'./provisional-view';
-
+import { commonService } from "../../lib/api/common";
+import { College, Country, Qualification, Serials, State, University } from "../../types/common";
+import getValue from 'lodash/get';
 const ProvisionalRegistrations = () => {
     const fetchIdRef = useRef(0);
     const navigate = useNavigate();
@@ -36,6 +38,9 @@ const ProvisionalRegistrations = () => {
     const [selected, setSelected] = useState<any>({});
     const [mobileNo, setMobileNo] = useState('');
     const [docName, setdocName] = useState('');
+    const [universities, setUniversities] = useState<University[]>([]);
+    const [colleges, setColleges] = useState<College[]>([]);
+    const [collegeId, setCollegeId] = useState(0);
 
 
     const [checkBoxData, setCheckBoxData] = useState([
@@ -67,7 +72,6 @@ const greet=()=> {
     setViewProvisionalId('');
     fetchData(0);
    }
-
 
     const handleChangeTatkal = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.checked){
@@ -266,10 +270,6 @@ const greet=()=> {
         }
     }, []);
 
-    const isDuplicate = (data: any, obj: any) =>
-        data.some((el: any) =>
-            Object.entries(obj).every(([key, value]) => value === el[key])
-        );
 
     const fetchData = useCallback(async ({ pageSize, pageIndex }: any) => {
         // This will get called when the table needs new data
@@ -284,7 +284,7 @@ const greet=()=> {
         let vfromdate = moment(fromdate).format('YYYY-MM-DD');
         let vtodate = moment(todate).format('YYYY-MM-DD');
 
-        const { data } = await provisionalService.getProvisionalsByFilter(vfromdate,vtodate,statusValue,istatkal);
+        const { data } = await provisionalService.getProvisionalsByFilter(vfromdate,vtodate,statusValue,istatkal,collegeId);
         // if (data.length > 0) {
         //     setProvisionals(data);
         // }
@@ -309,7 +309,7 @@ const greet=()=> {
                 setLoading(false)
             }
         }, 1000)
-    }, [fromdate,todate, statusValue,istatkal]);
+    }, [fromdate,todate, statusValue,istatkal,collegeId]);
 
     const assign = useCallback(async () => {
         try {
@@ -382,7 +382,31 @@ const greet=()=> {
         }
     }, [reassignedList, assignedUser]);
 
+    const getUniversityNames = useCallback(async (stateId: any) => {
+        try {
+            const { data } = await commonService.getUniversitiesByStateId(stateId);
+            if (data.length > 0) {
+                setUniversities(data);
+                setColleges([]);
+            }
+        } catch (err) {
+            console.log('error university getList', err);
+        }
+    }, []);
+    
+   const getColleges = useCallback(async (universityId: any) => {
+    try {
+        setColleges([]);
+        const { data } = await commonService.getCollegesByUniversityId(universityId);
+        if (data.length > 0) {
+            setColleges(data);
+        }
+    } catch (err) {
+        console.log('error colleges getList', err);
+    }
+}, []);
     useEffect(() => {
+        getUniversityNames(36);
         getUsersByRole();
         if (viewProvisionalid) {
             setShowComponent(true); // Show the child component when propValue is not empty
@@ -507,7 +531,10 @@ const greet=()=> {
                                 getDoctorDetailsBydocName
                             } className='btn bi-search btn-outline-success'> </button>
                     </div>
-                    <span className="input-group-text p-0" style={{marginLeft:"30px"}}>
+                    </div>
+                    <div className="tsmc-filter-box d-flex align-items-center">
+                
+                    <span className="input-group-text p-0" style={{marginLeft:"0px"}}>
                     <div className="btn-group">
                         <label className="m-1">Tatkal</label>
                         <span className="tsmc-filter-box  form-control">
@@ -551,6 +578,44 @@ const greet=()=> {
                                 </ul>
                             </div>
                         </span>
+                        <span className="input-group-text p-0" id="filterbox">
+                        <Select
+                                    name="Univerisity"
+                                    id="UniverisityId"
+                                    className="react-select"
+                                    classNamePrefix="react-select"
+                                    isSearchable
+                                    options={universities}
+                                    placeholder="Select University"
+                                    onChange={(selectedOption) => {
+                                        const { id, university } =
+                                        selectedOption as University;
+                                        getColleges(id);
+                                        
+                                    }}
+                                    getOptionLabel={(option) => option.university}
+                                    getOptionValue={(option) => option.id.toString()}
+                                />
+                               </span> 
+                               <span className="input-group-text p-0" id="filterbox">
+                                <Select
+                                    name="collegeName"
+                                    id="collegeNameId"
+                                    className="react-select"
+                                    classNamePrefix="react-select"
+                                    isSearchable
+                                    options={colleges}
+                                    placeholder="Select College"
+                                    onChange={(selectedOption) => {
+                                        const { id, college } =
+                                     selectedOption as College;
+                                        setCollegeId(id);
+                                    }}
+                                    getOptionLabel={(option) => option.college}
+                                    getOptionValue={(option) => option.id.toString()}
+                                />
+                                                       </span>
+
                         <span className="input-group-text p-0">
                         <label>From Date </label>
                             <input type="date" name="" id=""
@@ -619,9 +684,6 @@ const greet=()=> {
                                     id="Users"
                                     className="react-select"
                                     classNamePrefix="react-select"
-                                    // value={users.find(
-                                    //     (item) => item.id === field.value
-                                    // )}
                                     isSearchable
                                     options={users}
                                     placeholder="Select User"
@@ -665,7 +727,6 @@ const greet=()=> {
                                             {obj.approval_status === 'apr' && <span className="alert alert-success rounded-pill py-0 px-2 fs-12">Approved</span>}
                                             {obj.approval_status === 'pen' && <span className="alert alert-warning rounded-pill py-0 px-2 fs-12">Pending</span>}
                                         </td>
-                                        {/* <td><Link to={'/admin/provisional_view'} state={{ provisionalPrimaryId: obj.provisionalPrimaryId, doctorPrimaryId: obj.doctorPrimaryId }}>View</Link></td> */}
                                     </tr>);
                                 })}
                             </tbody>

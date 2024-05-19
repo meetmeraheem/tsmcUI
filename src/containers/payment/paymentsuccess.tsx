@@ -632,7 +632,7 @@ const PaymentSuccess = () => {
                              <ReactToPrint
                              trigger={() => <button className='btn btn-outline-primary'><i className="bi-printer-fill"></i>Print</button>}
                              content={() => finalcomponentRef.current} />
-                             <div ref={finalcomponentRef} className='styles.hideComponentScreen'>
+                             <div ref={finalcomponentRef} className='hideComponentScreen'>
                               <FinalRegPrint state={{finalPrimaryId:finalId,reqType:finalreqType}}  />
                               </div>  
                                </div>

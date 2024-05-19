@@ -59,6 +59,7 @@ const AdditionalRegViewPrint = (props: any) => {
                         edu_cert2: data[0].edu_cert2,
                         transanctionId: data[0].transanctionId,
                         calc_date: data[0].calc_date,
+                        visitDate:data[0].visitDate,
                     });
                 }
             }
@@ -158,7 +159,7 @@ const AdditionalRegViewPrint = (props: any) => {
                         <>
                         2.Please visit the TSMC office along with all original documents on
                         <span className='fs-18 fw-700 p-2'>  
-                       {(additionals?.reg_date ? (moment(additionals?.reg_date).add(10,'days').format('DD/MM/YYYY')) : 'NA')}</span> 
+                       {(additionals?.visitDate ? additionals?.visitDate : 'NA')}</span> 
                         </>:
                         <>
                         2. Please visit the TSMC office along with all original documents on Next working day within 24-48 hours for collection of certificates

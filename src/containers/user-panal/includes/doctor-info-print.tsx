@@ -26,12 +26,11 @@ const DoctorInfoPrintCard = () => {
                 }
             }
         } catch (err) {
-            console.log('error countries getList', err);
+            console.log('error doctor List', err);
         }
     };
 
     useEffect(() => {
-        console.log('error countries getList');
         getDoctorDetails();
     }, []);
 
