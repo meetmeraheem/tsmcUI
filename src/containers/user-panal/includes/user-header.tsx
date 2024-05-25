@@ -71,7 +71,7 @@ const Userheader = () => {
 							</Link>
 						</div>
 						<div>
-							<h1 className="fs-22 fw-700 mb-0 text-light">Telangana State Medical Council</h1>
+							<h1 className="fs-22 fw-700 mb-0 text-light">Telangana Medical Council</h1>
 						</div>
 						<button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#MainMenu" aria-controls="MainMenu">
 							<i className="bi bi-list"></i>

@@ -515,6 +515,50 @@ const greet=()=> {
                 </div>    
                 <div className="tsmc-filter-box d-flex align-items-center">
                 <div className="input-group-text p-0">
+                <label htmlFor="" className='mb-2'>University </label>
+                <span className="ml-3" style={{marginLeft:"10px"}} id="filterbox">
+                        <Select
+                                    name="Univerisity"
+                                    id="UniverisityId"
+                                    className="react-select"
+                                    classNamePrefix="react-select"
+                                    isSearchable
+                                    options={universities}
+                                    placeholder="Select University ..............................................................."
+                                    onChange={(selectedOption) => {
+                                        const { id, university } =
+                                        selectedOption as University;
+                                        getColleges(id);
+                                        
+                                    }}
+                                    getOptionLabel={(option) => option.university}
+                                    getOptionValue={(option) => option.id.toString()}
+                                />
+                               </span> 
+                               <label htmlFor="" className='mb-2' style={{marginLeft:"80px"}}>College </label>
+                               <span className="ml-3" style={{marginLeft:"10px"}} id="filterbox">
+                                <Select
+                                    name="collegeName"
+                                    id="collegeNameId"
+                                    className="react-select"
+                                    classNamePrefix="react-select"
+                                    isSearchable
+                                    options={colleges}
+                                    placeholder="Select College..............................................................."
+                                    onChange={(selectedOption) => {
+                                        const { id, college } =
+                                     selectedOption as College;
+                                        setCollegeId(id);
+                                    }}
+                                    getOptionLabel={(option) => option.college}
+                                    getOptionValue={(option) => option.id.toString()}
+                                />
+                                                       </span>
+</div>
+</div>
+                <div className="tsmc-filter-box d-flex align-items-center">
+                <div className="input-group-text p-0">
+
                         <label htmlFor="" className='mb-2'>Mobile No : </label>
                         <input type="text" defaultValue={mobileNo} className='fs-14' id="mobileNo" onBlur={(e) => setMobileNo(e.target.value)} placeholder='Enter Mobile No' />
                         <button type="submit"
@@ -531,8 +575,9 @@ const greet=()=> {
                                 getDoctorDetailsBydocName
                             } className='btn bi-search btn-outline-success'> </button>
                     </div>
-                    </div>
-                    <div className="tsmc-filter-box d-flex align-items-center">
+                  
+                       
+                    
                 
                     <span className="input-group-text p-0" style={{marginLeft:"0px"}}>
                     <div className="btn-group">
@@ -578,44 +623,6 @@ const greet=()=> {
                                 </ul>
                             </div>
                         </span>
-                        <span className="input-group-text p-0" id="filterbox">
-                        <Select
-                                    name="Univerisity"
-                                    id="UniverisityId"
-                                    className="react-select"
-                                    classNamePrefix="react-select"
-                                    isSearchable
-                                    options={universities}
-                                    placeholder="Select University"
-                                    onChange={(selectedOption) => {
-                                        const { id, university } =
-                                        selectedOption as University;
-                                        getColleges(id);
-                                        
-                                    }}
-                                    getOptionLabel={(option) => option.university}
-                                    getOptionValue={(option) => option.id.toString()}
-                                />
-                               </span> 
-                               <span className="input-group-text p-0" id="filterbox">
-                                <Select
-                                    name="collegeName"
-                                    id="collegeNameId"
-                                    className="react-select"
-                                    classNamePrefix="react-select"
-                                    isSearchable
-                                    options={colleges}
-                                    placeholder="Select College"
-                                    onChange={(selectedOption) => {
-                                        const { id, college } =
-                                     selectedOption as College;
-                                        setCollegeId(id);
-                                    }}
-                                    getOptionLabel={(option) => option.college}
-                                    getOptionValue={(option) => option.id.toString()}
-                                />
-                                                       </span>
-
                         <span className="input-group-text p-0">
                         <label>From Date </label>
                             <input type="date" name="" id=""

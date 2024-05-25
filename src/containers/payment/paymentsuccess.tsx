@@ -571,7 +571,7 @@ const PaymentSuccess = () => {
                             </Link>
                         </div>
                         <div className="row mr-3">
-                            <h1 className="fs-22 fw-700 mb-0 text-light">Telangana State Medical Council</h1>
+                            <h1 className="fs-22 fw-700 mb-0 text-light">Telangana Medical Council</h1>
                         </div>
                         <div>
                         </div>

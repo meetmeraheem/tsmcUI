@@ -54,7 +54,7 @@ const AdminHeader = () => {
 						<div className="d-flex align-items-center">
 							<img src={SiteLogo} width="70" alt="" />
 							<div className="ms-4">
-								<h1 className="mb-0 fs-20 fw-700 tsmc-text-white">TELANGANA STATE MEDICAL COUNCIL</h1>
+								<h1 className="mb-0 fs-20 fw-700 tsmc-text-white">TELANGANA MEDICAL COUNCIL</h1>
 								<div className="row">
 								<p className="fs-14 tsmc-text-white">
 									<span className="fw-600">User:</span> {user?.username}

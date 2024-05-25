@@ -41,7 +41,7 @@ const DoctorInfoPrintCard = () => {
                                                     <table style={{border: "1px solid rgb(0, 0, 0)",backgroundColor:"#E2F4F5", width:"100%"}} >
 
                                                         <tr style={{alignContent:"center",width:"100%"}}>
-                                                        <td style={{textAlign:"center",width:"100%",fontSize:"24px",fontWeight:"bold"}}>Telangana State Medical Council</td>
+                                                        <td style={{textAlign:"center",width:"100%",fontSize:"24px",fontWeight:"bold"}}>Telangana Medical Council</td>
                                                         </tr>
                                                         <tr>
                                                             <td style={{textAlign:"center",width:"100%",fontSize:"14px"}}>Application Registration Reciept</td>
