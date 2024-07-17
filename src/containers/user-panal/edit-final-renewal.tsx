@@ -785,6 +785,8 @@ const getValidationSchema = () =>
             .required('Last Renewal certificate is required.'),
          edu_cert2: stringYup()
             .required('MBBS Certificate is required.'),
+        cmecredit6:stringYup()
+            .required('CME Certificate is required.'),    
        /* edu_cert3: stringYup()
             .required('Other/previous renewal documents is required.')*/
       

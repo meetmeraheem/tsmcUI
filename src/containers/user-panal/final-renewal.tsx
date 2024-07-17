@@ -958,7 +958,9 @@ const getValidationSchema = () =>
             is:(cmeCreditStatus:any)=> (cmeCreditStatus === 'Y'),
             then:stringYup().required('cme credit value is required.'),
             otherwise: stringYup()
-        })
+        }),
+        cmecredit6:stringYup()
+        .required('CME Certificate is required.'),
       
     });
 

@@ -48,6 +48,7 @@ const FinalRegistration = () => {
     const [duration, setDuration] = useState('');
     const [statepmrNo, setStatepmrNo] = useState('');
     const [isIndia, setIsIndia] = useState(false);
+    const [countryselected, setCountryselected] = useState(false);
     const [isPMRDateAbove15M, setIsPMRDateAbove15M] = useState(false);
     const [isPMRDateAbove18M, setIsPMRDateAbove18M] = useState(false);
     const [isTelangana, setIsTelangana] = useState(false);
@@ -199,6 +200,17 @@ const FinalRegistration = () => {
             try {
                 const doctorId = Number(LocalStorageManager.getDoctorSerialId());
                 const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
+                if(values.country!=='India' && finalRequestType==='tat'){
+                    Swal.fire({
+                        text: "TatKal Not allowed for Other Countries",
+                        icon: "warning",
+                        confirmButtonText: "OK",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "/my-panal/final-registration";
+                        }});
+                    return false;    
+                }
 
                 const finalInfo = {
                     ...values,
@@ -442,7 +454,7 @@ const FinalRegistration = () => {
                                                     <form onSubmit={handleSubmit}>
                                                     <div className="row mb-2">
                                                     <div className="col-sm-auto">
-                                                            <label className="mb-2"> Local/Non Local</label>
+                                                            <label className="mb-2"> UG(MBBS) Completed From</label>
                                                             <select
                                                                 value={localRequestType}
                                                                 onChange={(ev) => {
@@ -520,17 +532,34 @@ const FinalRegistration = () => {
                                                                                     classNamePrefix="react-select"
                                                                                     isSearchable
                                                                                     options={countries}
+                                                                                    hideSelectedOptions={countryselected}
                                                                                     placeholder="Select country"
                                                                                     onChange={(selectedOption) => {
                                                                                         const { id, name } =
                                                                                             selectedOption as Country;
-                                                                                        setFieldTouched(field.name);
-                                                                                        setFieldValue(field.name, id);
+                                                                                       
                                                                                         setStates([]);
                                                                                         getStates(id);
                                                                                         if (name === 'India') {
                                                                                             setIsIndia(true);
+                                                                                            setFieldTouched(field.name);
+                                                                                            setFieldValue(field.name, id);
                                                                                         } else {
+                                                                                            if(finalRequestType==='tat'){
+                                                                                                Swal.fire({
+                                                                                                    text: "TatKal Not allowed for Other Countries",
+                                                                                                    icon: "warning",
+                                                                                                    confirmButtonText: "OK",
+                                                                                                }).then(async (result) => {
+                                                                                                    if (result.isConfirmed) {
+                                                                                                        window.location.href = "/my-panal/final-registration";
+                                                                                                    }});
+                                                                                                
+                                                                                                
+                                                                                            }else{
+                                                                                                setFieldTouched(field.name);
+                                                                                                setFieldValue(field.name, id);
+                                                                                            }
                                                                                             setIsIndia(false);
                                                                                         }
                                                                                     }}
