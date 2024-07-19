@@ -467,6 +467,11 @@ const Payment = () => {
             const oldregCert = secureLocalStorage.getItem("regCertificate");
             const renewal_af = secureLocalStorage.getItem("renewal_af");
             const renewal_noc = secureLocalStorage.getItem("renewal_noc");
+            const cmecredit6 =secureLocalStorage.getItem("cmecredit6");
+            const cmecredit12 =secureLocalStorage.getItem("cmecredit12");
+            const cmecredit18 =secureLocalStorage.getItem("cmecredit18");
+            const cmecredit24 =secureLocalStorage.getItem("cmecredit24");
+            const cmecredit30 =secureLocalStorage.getItem("cmecredit30");
            
             if (oldregCert) {
                 formData.append("regCertificate", oldregCert as File);
@@ -476,6 +481,22 @@ const Payment = () => {
             }
             if (renewal_noc) {
                 formData.append("renewal_noc", renewal_noc as File);
+            }
+
+            if (cmecredit6) {
+                formData.append("cmecredit6", cmecredit6 as File);
+            }
+            if (cmecredit12) {
+                formData.append("cmecredit12", cmecredit12 as File);
+            }
+            if (cmecredit18) {
+                formData.append("cmecredit18", cmecredit18 as  File);
+            }
+            if (cmecredit24) {
+                formData.append("cmecredit24", cmecredit24 as  File);
+            }
+            if (cmecredit30) {
+                formData.append("cmecredit30", cmecredit30 as  File);
             }
 
             const frenewalData = await renewalService.getRenewalRegFeeDetails(formData);
@@ -506,6 +527,21 @@ const Payment = () => {
                 }
                 if (frenewalData.data.renewalData.edu_cert3 != null ) {
                     secureLocalStorage.setItem("renewalnocName", frenewalData.data.renewalData.edu_cert3);
+                }
+                if (frenewalData.data.renewalData.document4 != null ) {
+                    secureLocalStorage.setItem("cmecredit6Name", frenewalData.data.renewalData.document4);
+                }
+                if (frenewalData.data.renewalData.document5 != null ) {
+                    secureLocalStorage.setItem("cmecredit12Name", frenewalData.data.renewalData.document5);
+                }
+                if (frenewalData.data.renewalData.document6 != null ) {
+                    secureLocalStorage.setItem("cmecredit18Name", frenewalData.data.renewalData.document6);
+                }
+                if (frenewalData.data.renewalData.document7 != null ) {
+                    secureLocalStorage.setItem("cmecredit24Name", frenewalData.data.renewalData.document7);
+                }
+                if (frenewalData.data.renewalData.document8 != null ) {
+                    secureLocalStorage.setItem("cmecredit30Name", frenewalData.data.renewalData.document8);
                 }
                 if (frenewalData.data.regType != null && frenewalData.data.regType === "tat") {
                     setIsNormalReg(false);

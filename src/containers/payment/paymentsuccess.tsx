@@ -407,6 +407,11 @@ const PaymentSuccess = () => {
                     const oldregCert = secureLocalStorage.getItem("regCertificateName");
                     const renewalaf = secureLocalStorage.getItem("renewalafName");
                     const renewalnoc = secureLocalStorage.getItem("renewalnocName");
+                    const cmecredit6 = secureLocalStorage.getItem("cmecredit6Name");
+                    const cmecredit12 = secureLocalStorage.getItem("cmecredit12Name");
+                    const cmecredit18 = secureLocalStorage.getItem("cmecredit18Name");
+                    const cmecredit24 = secureLocalStorage.getItem("cmecredit24Name");
+                    const cmecredit30 = secureLocalStorage.getItem("cmecredit30Name");
 
                     if (oldregCert) {
                         formData.append("regCertificate", oldregCert as string);
@@ -416,6 +421,21 @@ const PaymentSuccess = () => {
                     }
                     if (renewalnoc) {
                         formData.append("renewalnoc", renewalnoc as string);
+                    }
+                    if (cmecredit6) {
+                        formData.append("cmecredit6", cmecredit6 as string);
+                    }
+                    if (cmecredit12) {
+                        formData.append("cmecredit12", cmecredit12 as string);
+                    }
+                    if (cmecredit18) {
+                        formData.append("cmecredit18", cmecredit18 as string);
+                    }
+                    if (cmecredit24) {
+                        formData.append("cmecredit24", cmecredit24 as string);
+                    }
+                    if (cmecredit30) {
+                        formData.append("cmecredit30", cmecredit30 as string);
                     }
                     const { success,data,message } = await renewalService.createRenewalDetails(formData);
                     if (success) {
@@ -428,6 +448,11 @@ const PaymentSuccess = () => {
                         secureLocalStorage.removeItem("regCertificateName");
                         secureLocalStorage.removeItem("renewalafName");
                         secureLocalStorage.removeItem("renewalnocName");
+                        secureLocalStorage.removeItem("cmecredit6Name");
+                        secureLocalStorage.removeItem("cmecredit12Name");
+                        secureLocalStorage.removeItem("cmecredit18Name");
+                        secureLocalStorage.removeItem("cmecredit24Name");
+                        secureLocalStorage.removeItem("cmecredit30Name");
 
                         Swal.fire({
                             title: "Success",
