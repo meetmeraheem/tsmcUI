@@ -66,6 +66,7 @@ const Newregistration = () => {
         regDate:'',
         validDate:'',
         regStatus:'',
+        mobileStatus:''
         
     }
     const getCountries = useCallback(async () => {

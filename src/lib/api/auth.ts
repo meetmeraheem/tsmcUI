@@ -1,39 +1,19 @@
 import axios from 'axios';
 import { ApiLoginResponseType } from '../../types/api';
 import { axiosInstance } from './index';
-import { smsBaseURL } from '../../config/constants';
+
 
 export const authService = {
     async signIn(data: any) {
         const { data: responseData } = await axiosInstance.post('auth/signIn' , data);
         return responseData as ApiLoginResponseType;
     },
- /*    async sendOTP(mobileNumber: string, message: string) {
-        //const data = await thiredPartyAxiosInstance.get(`${smsBaseURL}phone=${mobileNumber}&text=${message}&priority=ndnd&stype=normal`);
-        const { data } = await axios.post(`${smsBaseURL}phone=${mobileNumber}&text=${message}&priority=ndnd&stype=normal`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Access-Control-Allow-Credentials': "true",
-                'Access-Control-Allow-Methods': "GET,HEAD,OPTIONS,POST,PUT",
-                'Access-Control-Allow-Headers': "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, content-type, Access-Control-Request-Method, Access-Control-Request-Headers"
-            }
-        });
-        return data;
+    async getDoctorInfoByFmrPmr(fmrNo: any,pmrNo: any,regType:any,mobileNo:any) {
+        const { data: responseData } = await axiosInstance.get(`auth/getDoctorInfoByFmrPmr?fmrNo=${fmrNo}&pmrNo=${pmrNo}&regType=${regType}&mobileNo=${mobileNo}`);
+        return responseData;
     },
-   async sendSMS(mobileNumber: string, message: string) {
-        const data = axios.post(`${smsBaseURL}phone=${mobileNumber}&text=${message}&priority=ndnd&stype=normal`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Access-Control-Allow-Credentials': "true",
-                'Access-Control-Allow-Methods': "GET,HEAD,OPTIONS,POST,PUT",
-                'Access-Control-Allow-Headers': "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, content-type, Access-Control-Request-Method, Access-Control-Request-Headers"
-            }
-        });
-        return data;
-    },*/
-    async sendOTP(mobileNumber: string, message: string) {
+
+     async sendOTP(mobileNumber: string, message: string) {
         const data = await axiosInstance.get(`sms/sendotp?mobile=${mobileNumber}&message=${message}`);
         return data;
     },

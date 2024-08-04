@@ -22,7 +22,7 @@ import { SMS } from '../../lib/utils/sms/sms';
 import moment from 'moment';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-
+import DoctorFMRSearch from '../user-panal/includes/doctorFMRSearch';
 
 const cryptojs = require("../../assets/js/cryptojs");
 
@@ -69,6 +69,7 @@ const HomePage = () => {
      const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState('');
      const [show, setShow] = useState(true);
      const [showRenewal, setShowRenewal] = useState(true);
+     const [showFMRData, setShowFMRData] = useState(false);
 
      const initialFormData = {
           fullname: '',
@@ -78,7 +79,10 @@ const HomePage = () => {
           mobileno: '',
           password: ''
      }
-
+     const closeWindow=()=> {
+          setShowFMRData(false);
+         }
+   
      const submitForm = useCallback(
           async (values: DoctorSignUpFormType) => {
                
@@ -559,11 +563,7 @@ const HomePage = () => {
                                                   </li>
                                                   <li className="nav-item" role="presentation">
                                                        <button className="nav-link" id="NewRegPageTab" data-bs-toggle="tab" data-bs-target="#NewRegPage" type="button" role="tab" aria-controls="NewRegPage" 
-                                                       onClick= {() => {Swal.fire({
-                         text: "Doctors who have not enrolled for any certificate services with TSMC previously should Sign Up here",
-                         icon: "warning",
-                         confirmButtonText: Messages.OKText,
-                    }); }}  aria-selected="false">New Doctor Sign Up</button>
+                                                       onClick= {() => {setShowFMRData(true);}}  aria-selected="false">New Doctor Sign Up</button>
                                                   </li>
                                              </ul>
                                              <div className="tab-content" id="myTabContent">
@@ -986,6 +986,17 @@ const HomePage = () => {
       </Modal>
               
               
+      <Modal  size="xl" show={showFMRData} onHide={()=>{setShowFMRData(true)}} >
+        
+          <DoctorFMRSearch methodClose={closeWindow} ></DoctorFMRSearch>
+        
+        <Modal.Footer>
+          <Button variant="primary" onClick={()=>closeWindow()}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
 
           </>
      )

@@ -19,6 +19,11 @@ import { axiosInstance } from './index';
         const { data: responseData } = await axiosInstance.post(`dispatch/updateDispatchinfo/${dispatchId}`,data);
         return responseData as ApiResponseType;
     },
+
+    async getDispachByFilter(from_date: any, to_Date:any){
+        const { data: responseData } = await axiosInstance.get(`dispatch/getDispatchByFilter/${from_date}/${to_Date}`);
+        return responseData as ApiResponseType;
+    }
     
 }
  export default dispatchservice;

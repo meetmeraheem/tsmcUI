@@ -202,7 +202,7 @@ const RenewalRegistration = () => {
                                     <Formik
                                         onSubmit={submitForm}
                                         enableReinitialize
-                                        validationSchema={getValidationSchema}
+                                        validationSchema={getValidationSchema(cmeCreditStatus)}
                                         initialValues={initialFormData}
                                     >
                                         {(formikProps: FormikProps<renewalsType>) => {
@@ -944,7 +944,7 @@ const RenewalRegistration = () => {
 
 export default RenewalRegistration;
 
-const getValidationSchema = () =>
+const getValidationSchema = (cmeCreditStatus:string) =>
     objectYup().shape({
      
         reg_date: stringYup()
@@ -955,13 +955,15 @@ const getValidationSchema = () =>
          edu_cert2: stringYup()
             .required('MBBS Certificate is required.'),
         cmecredit_value:stringYup().when(['cmeCreditStatus'],{
-            is:(cmeCreditStatus:any)=> (cmeCreditStatus === 'Y'),
-            then:stringYup().required('cme credit value is required.'),
-            otherwise: stringYup()
+            is:()=> (cmeCreditStatus === 'Y'),
+            then:()=>stringYup().required('CME credit value is required.'),
+            otherwise:()=> stringYup()
         }),
-        cmecredit6:stringYup()
-        .required('CME Certificate is required.'),
-      
+        cmecredit6:stringYup().when(['cmeCreditStatus'],{
+            is: ()=>(cmeCreditStatus === 'Y'),
+            then:()=>stringYup().required('CME Certificate is required.'),
+            otherwise:()=> stringYup()
+        }),
     });
 
 
