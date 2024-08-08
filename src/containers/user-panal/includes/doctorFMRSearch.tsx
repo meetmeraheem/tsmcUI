@@ -259,7 +259,7 @@ const forgetPasswordOTPVerify = useCallback(async () => {
                <div  style={{ color: "#1b42af",marginBottom:"30px", paddingLeft:"250px",fontWeight:"bold" }}>  Check your Information with Final/Provisional Registration Number  </div>
                 <section className="bg-white">
                                 <div className="row ">
-                                                            <label className="col mb-2" style={{ color: "red" }}> Do You have Final Registration / Provisional No(Y/N) </label>
+                                                            <label className="col mb-2" style={{ color: "red" }}> Do you have final Registration/Provisional in Telangana OR in AP before 2014 (Y/N)   </label>
                                                             <select
                                                                 value={certStatus}
                                                                 onChange={(ev) => {

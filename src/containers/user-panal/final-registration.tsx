@@ -200,7 +200,7 @@ const FinalRegistration = () => {
             try {
                 const doctorId = Number(LocalStorageManager.getDoctorSerialId());
                 const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
-                if(values.country!=='India' && finalRequestType==='tat'){
+                if(parseInt(values.country)!==101 && finalRequestType==='tat'){
                     Swal.fire({
                         text: "TatKal Not allowed for Other Countries",
                         icon: "warning",
