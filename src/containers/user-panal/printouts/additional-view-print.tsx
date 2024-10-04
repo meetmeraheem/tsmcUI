@@ -175,7 +175,7 @@ const AdditionalRegViewPrint = (props: any) => {
                             Note:
                             <br/>
 
-                            1.	Candidates who applied under Tatkal basis has to apply on or before 12am of the day. Who applied under Tatkal, the candidate has to visit on Next working day within 24-48 hours for collection of certificates .Certificate issuing timings will be 1pm to 4.30pm. 
+                            1.	Candidates who applied under Tatkal basis has to apply on or before 12am of the day. Who applied under Tatkal, the candidate has to visit on Next working day within 24-48 hours for collection of certificates .Certificate issuing timings will be 4 pm to 5 pm. 
                             <br/>
                             2.	If the Candidate is not collecting the certificate  at TSMC office , under Tatkal it shall be Dispatched by Courier /Post after 24 hours from the date of preparation of certificate. 
                             <br/>

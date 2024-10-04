@@ -47,7 +47,10 @@ const GoodStandingRegPrintView =   (props:any) => {
                         reg_date:data[0].regDate,
                         edu_cert1: data[0].edu_cert1,
                         edu_cert2: data[0].edu_cert2,
-                        transanctionId:data[0].transanctionId
+                        transanctionId:data[0].transanctionId,
+                        ecfmgRefNo:data[0].ecfmgRefNo,
+                        ecfmgEmail:data[0].ecfmgEmail,
+
                     });
                 }
             }
@@ -90,6 +93,14 @@ const GoodStandingRegPrintView =   (props:any) => {
                                      <td style={{ border: "1px solid rgb(0, 0, 0)", fontWeight: "bold" }}>Transaction Id:</td>
                                     <td style={{ border: "1px solid rgb(0, 0, 0)" }}>{goodStanding?.transanctionId ? goodStanding?.transanctionId : 'NA'}</td>
                                     </tr>
+                                    <tr style={{ border: "1px solid rgb(0, 0, 0)" }}>
+                                     <td style={{ border: "1px solid rgb(0, 0, 0)", fontWeight: "bold" }}>ECFMG id/GMC RefNo/any other :</td>
+                                    <td style={{ border: "1px solid rgb(0, 0, 0)" }}>{goodStanding?.ecfmgRefNo ? goodStanding?.ecfmgRefNo : 'NA'}</td>
+                                    </tr>
+                                    <tr style={{ border: "1px solid rgb(0, 0, 0)" }}>
+                                     <td style={{ border: "1px solid rgb(0, 0, 0)", fontWeight: "bold" }}>ECFMG/GMC-UK Email Id :</td>
+                                    <td style={{ border: "1px solid rgb(0, 0, 0)" }}>{goodStanding?.ecfmgEmail ? goodStanding?.ecfmgEmail : 'NA'}</td>
+                                    </tr>
                     </table>
 
                     <br/>
@@ -108,7 +119,7 @@ const GoodStandingRegPrintView =   (props:any) => {
                             <div style={{fontWeight:"bold", alignContent: "center", width: "100%", backgroundColor: "#E2F4F5" }}><p>
                             Note:
                             <br/>
-                            1.	Candidates who applied under Tatkal basis has to apply on or before 12am of the day. Who applied under Tatkal, the candidate has to visit on Next working day within 24-48 hours for collection of certificates .Certificate issuing timings will be 1pm to 4.30pm. 
+                            1.	Candidates who applied under Tatkal basis has to apply on or before 12am of the day. Who applied under Tatkal, the candidate has to visit on Next working day within 24-48 hours for collection of certificates .Certificate issuing timings will be 4 pm to 5 pm. 
                             <br/>
                             2.	If the Candidate is not collecting the certificate  at TSMC office , who applied under Tatkal it shall be Dispatched by Courier /Post after 24 hours from the date of preparation of certificate. 
                             <br/>

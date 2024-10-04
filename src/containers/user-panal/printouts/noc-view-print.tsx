@@ -60,7 +60,8 @@ const NocRegViewPrint = (props: any) => {
                         reg_date: data[0].reg_date,
                         edu_cert1: data[0].edu_cert1,
                         edu_cert2: data[0].edu_cert2,
-                        transanctionId: data[0].transanctionId
+                        transanctionId: data[0].transanctionId,
+                        ecfmgEmail:data[0].ecfmgEmail,
                     });
                 }
             }
@@ -128,6 +129,11 @@ const NocRegViewPrint = (props: any) => {
                         <td style={{ border: "1px solid rgb(0, 0, 0)", fontWeight: "bold" }}>Transaction Id:</td>
                         <td style={{ border: "1px solid rgb(0, 0, 0)" }}>{noc?.transanctionId ? noc?.transanctionId : 'NA'}</td>
                     </tr>
+                    <tr style={{ border: "1px solid rgb(0, 0, 0)" }}>
+                        <td style={{ border: "1px solid rgb(0, 0, 0)", fontWeight: "bold" }}>ECFMG/GMC-UK Email Id :</td>
+                        <td style={{ border: "1px solid rgb(0, 0, 0)" }}>{noc?.ecfmgEmail ? noc?.ecfmgEmail : 'NA'}</td>
+                    </tr>
+                    
                 </table>
                 <br/>
                         <div style={{border:"1px solid rgb(0, 0, 0)",marginTop:"350px"}} >

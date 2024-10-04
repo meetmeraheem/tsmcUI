@@ -16,7 +16,8 @@ export type nocUserFormType = {
     approval_status:string,
     extra_col3:string,
     edu_cert1:string,
-    edu_cert2:string
+    edu_cert2:string,
+    ecfmgEmail:string,
     
   }
 
@@ -50,6 +51,7 @@ export type nocUserFormType = {
     dd_amount:String,
     edu_cert1:string,
     edu_cert2:string,
-    transanctionId:string
+    transanctionId:string,
+    ecfmgEmail:string,
   }
 

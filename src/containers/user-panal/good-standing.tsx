@@ -39,6 +39,8 @@ const GoodStandingRegistration = () => {
         approval_status:'',
         doctorPrimaryId:'',
         extra_col3:'',
+        ecfmgRefNo:'',
+        ecfmgEmail:''
     }
 
     const submitForm = useCallback(
@@ -48,6 +50,7 @@ const GoodStandingRegistration = () => {
                 const doctorId = LocalStorageManager.getDoctorSerialId();
 
                 const goodstandingInfo = {
+                    
                     createdon: moment().format('YYYY-MM-DD'),
                     posttime: moment().format('h:mm:ss'),
                     prefix: 'TSMC',
@@ -56,8 +59,10 @@ const GoodStandingRegistration = () => {
                     reg_date: moment().format('YYYY-MM-DD'),
                     doctor_id: doctorId && Number(doctorId),
                     extra_col1: provisionalRequestType,
-                    doctorPrimaryId: doctorPrimaryId
-    
+                    doctorPrimaryId: doctorPrimaryId,
+                    ecfmgRefNo:values.ecfmgRefNo,
+                    ecfmgEmail:values.ecfmgEmail,
+
                 }
                
                 secureLocalStorage.setItem("regType", 'goodstandingInfo');
@@ -184,7 +189,73 @@ const GoodStandingRegistration = () => {
 
                                                     </div>
                                                     <div className="row mb-2">
-                                                       
+                                                    <div className="col-sm-6">
+                                                                <Field name="ecfmgRefNo">
+                                                                    {(fieldProps: FieldProps) => {
+                                                                        const { field, form } = fieldProps;
+                                                                        const error =
+                                                                            getValue(form.touched, field.name) &&
+                                                                            getValue(form.errors, field.name);
+                                                                        return (
+                                                                            <>
+                                                                                <label className="mb-2"> ECFMG id/GMC RefNo/any other</label>
+                                                                                <input
+                                                                                    type="text"
+                                                                                     onChange={(ev) => {
+                                                                                         setFieldTouched(field.name);
+                                                                                         setFieldValue(field.name, ev.target.value);
+                                                                                     }}
+                                                                                    className={`form-control ${error ? 'is-invalid' : ''
+                                                                                        }`}
+                                                                                    placeholder=""
+                                                                                    tabIndex={8}
+                                                                                    
+                                                                                    min="1" max="6"
+                                                                                />
+
+                                                                                {error && <small className="text-danger">{error.toString()}</small>}
+
+
+                                                                            </>
+                                                                        );
+                                                                    }}
+                                                                </Field>
+                                                            </div>
+
+                                                            <div className="row mb-2">
+                                                                <div className="col-sm-6">
+                                                                <Field name="ecfmgEmail">
+                                                                    {(fieldProps: FieldProps) => {
+                                                                        const { field, form } = fieldProps;
+                                                                        const error =
+                                                                            getValue(form.touched, field.name) &&
+                                                                            getValue(form.errors, field.name);
+                                                                        return (
+                                                                            <>
+                                                                                <label className="mb-2"> ECFMG/GMC-UK Email Id<span className='text-info fs-11'>(to which Good Standing to be send)</span>   </label>
+                                                                                <input
+                                                                                    type="text"
+                                                                                     onChange={(ev) => {
+                                                                                         setFieldTouched(field.name);
+                                                                                         setFieldValue(field.name, ev.target.value);
+                                                                                     }}
+                                                                                    className={`form-control ${error ? 'is-invalid' : ''
+                                                                                        }`}
+                                                                                    placeholder=""
+                                                                                    tabIndex={8}
+                                                                                    
+                                                                                    min="1" max="6"
+                                                                                />
+
+                                                                                {error && <small className="text-danger">{error.toString()}</small>}
+
+
+                                                                            </>
+                                                                        );
+                                                                    }}
+                                                                </Field>
+                                                            </div>
+                                                        </div>
 
                                                     </div>
 
@@ -368,10 +439,19 @@ const GoodStandingRegistration = () => {
 
 export default GoodStandingRegistration;
 
+
+
 const getValidationSchema = () =>
     objectYup().shape({
         edu_cert1: stringYup()
                 .required('TSMC Final Registration  is required.'),
-             edu_cert2: stringYup()
+        edu_cert2: stringYup()
                 .required('TSMC Addl Qualification/Renewal documents is required.'),
+        ecfmgRefNo:  stringYup()
+                .required('ECFMG id/GMC RefNo is required'),
+        ecfmgEmail: stringYup()
+        .email()
+        .required('Email is required'),
+        
+        
     });

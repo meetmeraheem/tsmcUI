@@ -66,7 +66,8 @@ const NocRegView =  (props:any) => {
                         reg_date:data[0].reg_date,
                         edu_cert1: data[0].edu_cert1,
                         edu_cert2: data[0].edu_cert2,
-                        transanctionId:data[0].transanctionId
+                        transanctionId:data[0].transanctionId,
+                        ecfmgEmail:data[0].ecfmgEmail
                     });
                 }
             }
@@ -182,7 +183,7 @@ const NocRegView =  (props:any) => {
                             </div>
                             <div className="d-flex mb-2">
                                 <div className="col d-flex">
-                                    <label htmlFor="" className='fs-14 fw-600 me-2'>councilname:</label>
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>Council Name:</label>
                                     <div className="fs-14">{noc?.councilname ? noc?.councilname : 'NA'}</div>
                                 </div>
                                 <div className="col d-flex">
@@ -221,7 +222,14 @@ const NocRegView =  (props:any) => {
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Id:</label>
                                     <div className="fs-14">{noc?.transanctionId ? noc?.transanctionId : 'NA'}</div>
                                 </div>
+                               
                             </div>
+                        </div>
+                        <div className="row mt-3">
+                        <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>ECFMG/GMC-UK Email Id: </label>
+                                    <div className="fs-14">{noc?.ecfmgEmail ? noc?.ecfmgEmail : 'NA'}</div>
+                                </div>
                         </div>
                         <div className="row mt-3">
                                 <div className="col">

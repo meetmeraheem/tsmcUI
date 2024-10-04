@@ -58,7 +58,9 @@ const GoodStandingRegView =   (props:any) => {
                         reg_date:data[0].regDate,
                         edu_cert1: data[0].edu_cert1,
                         edu_cert2: data[0].edu_cert2,
-                        transanctionId:data[0].transanctionId
+                        transanctionId:data[0].transanctionId,
+                        ecfmgRefNo:data[0].ecfmgRefNo,
+                        ecfmgEmail:data[0].ecfmgEmail,
                     });
                 }
             }
@@ -173,7 +175,17 @@ const GoodStandingRegView =   (props:any) => {
                                     <div className="fs-14">{goodStanding?.reg_date ? moment(goodStanding?.reg_date).format('DD/MM/YYYY') : 'NA'}</div>
                                 </div>
                             </div>
-                            <div className="d-flex mb-2">
+                            <div className="row mt-3">
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>ECFMG id/GMC RefNo/any other :</label>
+                                    <div className="fs-14">{goodStanding?.ecfmgRefNo ? goodStanding?.ecfmgRefNo : 'NA'}</div>
+                                </div>
+                                <div className="col d-flex">
+                                    <label htmlFor="" className='fs-14 fw-600 me-2'>ECFMG/GMC-UK Email Id:</label>
+                                    <div className="fs-14">{goodStanding?.ecfmgEmail ? goodStanding?.ecfmgEmail : 'NA'}</div>
+                                </div>
+                                </div>
+                            <div className="d-flex mb-2 mt-3">
                                 <div className="col d-flex">
                                     <label htmlFor="" className='fs-14 fw-600 me-2'> Payment Recieved</label>
                                     <div className="fs-14">{goodStanding?.dd_amount ? goodStanding?.dd_amount : 'NA'}</div>
@@ -186,7 +198,9 @@ const GoodStandingRegView =   (props:any) => {
                                     <label htmlFor="" className='fs-14 fw-600 me-2'>Transaction Id:</label>
                                     <div className="fs-14">{goodStanding?.transanctionId ? goodStanding?.transanctionId : 'NA'}</div>
                                 </div>
-                            </div>
+                                </div>    
+                                
+                            
                             <div className="row mt-3">
                                 <div className="col">
                                     <div className="drag-img-box d-flex align-items-center justify-content-center">

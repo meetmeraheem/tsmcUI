@@ -50,6 +50,7 @@ const NocRegistration = () => {
             extra_col3:'',
             edu_cert1: '',
             edu_cert2: '',
+            ecfmgEmail:'',
         }),
         []
     );
@@ -110,7 +111,8 @@ const NocRegistration = () => {
                     address2: values.address2.toUpperCase(),
                     doctor_id: doctorId,
                     extra_col1:provisionalRequestType,
-                    doctorPrimaryId:doctorPrimaryId
+                    doctorPrimaryId:doctorPrimaryId,
+                    ecfmgEmail:values.ecfmgEmail,
                 }
 
                 secureLocalStorage.setItem("regType", 'nocInfo');
@@ -150,6 +152,9 @@ const NocRegistration = () => {
                 .required('TSMC Final Registration  is required.'),
              edu_cert2: stringYup()
                 .required('TSMC Addl Qualification/Renewal documents is required.'),
+                ecfmgEmail: stringYup()
+                    .email()
+                    .required('Email is required'),
         });
 
         const getTatkalUpdate = useCallback(async (value:any) => {
@@ -207,7 +212,7 @@ const NocRegistration = () => {
                             <div className="card-body">
                             <div className="col-9 m-auto">
                                 <div className="card shadow border-0 mb-4">
-                                <h1 className='fs-22 fw-700 m-3'>Council  Details</h1>
+                                <h1 className='fs-22 fw-700 m-3'>NOC Council  Details(to which Council Noc to be issued)</h1>
                                 <hr />
                                 <Formik
                                     onSubmit={submitForm}
@@ -241,7 +246,7 @@ const NocRegistration = () => {
                                                         </div>
 
                                                                 <div className="row mb-3">
-                                                                    <label className="col-sm-2 col-form-label">Council Name</label>
+                                                                    <label className="col-sm-2 col-form-label">NOC Council Name</label>
                                                                     <div className="col-sm-4">
                                                                         <Field name="councilname">
                                                                             {(fieldProps: FieldProps) => {
@@ -473,6 +478,41 @@ const NocRegistration = () => {
                                                                             }}
                                                                         </Field>
                                                                     </div>
+                                                                    <div className="row mb-3 mt-3">
+                                                                    <label className="col-sm-2 col-form-label"> ECFMG/GMC-UK Email Id </label>
+                                                                <div className="col-sm-4">
+                                                                <Field name="ecfmgEmail">
+                                                                    {(fieldProps: FieldProps) => {
+                                                                        const { field, form } = fieldProps;
+                                                                        const error =
+                                                                            getValue(form.touched, field.name) &&
+                                                                            getValue(form.errors, field.name);
+                                                                        return (
+                                                                            <>
+                                                                               
+                                                                                <input
+                                                                                    type="text"
+                                                                                     onChange={(ev) => {
+                                                                                         setFieldTouched(field.name);
+                                                                                         setFieldValue(field.name, ev.target.value);
+                                                                                     }}
+                                                                                    className={`form-control ${error ? 'is-invalid' : ''
+                                                                                        }`}
+                                                                                    placeholder=""
+                                                                                    tabIndex={8}
+                                                                                    
+                                                                                    min="1" max="6"
+                                                                                />
+
+                                                                                {error && <small className="text-danger">{error.toString()}</small>}
+
+
+                                                                            </>
+                                                                        );
+                                                                    }}
+                                                                </Field>
+                                                            </div>
+                                                        </div>
                                                                     <div className="row mb-2 mt-4">
                                                             <div className='text-danger fs-10'>
                                                                 Please upload images (.jpeg,.png) only, with less than 200 KB size.  

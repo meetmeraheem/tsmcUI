@@ -126,6 +126,8 @@ export type goodStandingFormType = {
     extra_col3:string,
     edu_cert1: string,
     edu_cert2: string,
+    ecfmgRefNo:string,
+    ecfmgEmail:string,
   }
   export type renewalsFormType = {
     oldRegDate: string,
