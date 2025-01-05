@@ -1036,4 +1036,11 @@ aside>ul>li>a:hover {
 	.bg-green {
 		background-color: #3e5c50bd !important;
 	}
-	 
+	.rounded-fully{
+		border-radius: 99px;
+	} 
+	.bg-slot{
+		/*background-color: #5f6fff !important;
+		/*background-color: #83f3b9 !important;*/
+		background-color: #8ea493 !important;
+	}

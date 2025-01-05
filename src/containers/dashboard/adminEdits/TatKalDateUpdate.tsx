@@ -5,7 +5,7 @@ import moment from "moment";
 const TatKalDateUpdate = () =>{
     
     const [formFields, setFormFields] = useState<any>([
-    { date: moment().format('YYYY-MM-DD'), count: '' },
+    { date: moment().format('YYYY-MM-DD'), daily_count_aqn_frn:'',daily_count_others: '' },
   ])
 
   
@@ -54,10 +54,11 @@ const TatKalDateUpdate = () =>{
     if(data.length !== undefined){
       let  cnt=data.length-1;
       console.log("test "+cnt);
-        if(data.length !==0 && data[cnt].count!== "") {
+        if(data.length !==0 && data[cnt].daily_count_aqn_frn!== "" && data[cnt].daily_count_others!== "") {
             let object = {
                 date: moment().add(data.length,'day').format('YYYY-MM-DD'),
-                count: ''
+                daily_count_aqn_frn:'',
+                daily_count_others: ''
               }
               setFormFields([...formFields, object])
         }else{
@@ -108,14 +109,17 @@ const TatKalDateUpdate = () =>{
                                                         <thead>
                                                             <tr>
                                                                 <th>Date</th>
-                                                                <th>Tatkal Day Limit</th>
+                                                                <th> Additional and Final Registrations</th>
+                                                                <th> Provisional, Renewal, GS and NOC </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             {TatkaldataList?.map((obj: any) => {
                                                                 return (<tr>
                                                                     <td>{obj.date}</td>
-                                                                    <td>{obj.count}
+                                                                    <td>{obj.daily_count_aqn_frn}
+                                                                    </td>
+                                                                    <td>{obj.daily_count_others}
                                                                     </td>
                                                                 </tr>);
                                                             })}
@@ -129,18 +133,27 @@ const TatKalDateUpdate = () =>{
         {formFields.map((form:any, index:any) => {
           return (
                  <div className="mb-3 row" key={index}>
-                   <div className="col">
+                   <div className="col">Date
                             <input type="date" name="date" id="date"
                                 value={form.date}
                                 onChange={event => handleFormChange(event, index)}
                                  className="form-control" />
                 </div>          
-                <div className="col">       
+                <div className="col"> Additional and Final Registrations      
               <input
-                name='count'
-                placeholder='Count'
+                name='daily_count_aqn_frn'
+                placeholder='Count for Additional_FMR '
                 onChange={event => handleFormChange(event, index)}
-                value={form.count}
+                value={form.count_aqn_frn}
+              />
+              </div> 
+                                                               
+              <div className="col">    Provisional, Renewal, GS and NOC 
+              <input
+                name='daily_count_others'
+                placeholder='Count for others '
+                onChange={event => handleFormChange(event, index)}
+                value={form.count_others}
               />
               </div>
             <div className="col">       

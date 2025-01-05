@@ -290,7 +290,7 @@ const RenewalRegistration = () => {
                                                         <div className="row" style={{marginLeft:'12px', marginTop:'20px' ,border: "1px solid rgb(26, 174, 176)", width:"98%"}}>
                                                         <span className="text-danger fs-13">
                                                             Any Final Registration Renewal needs CME Credit hours  as per TSMC guidelines
-                                                            Which is minimum of 6 till DEC-2024.Any shortage in credit hours  penality applicable
+                                                            Which is minimum of 12 till DEC-2025.Any shortage in credit hours  penality applicable
                                                             </span>
                                                         <div className="col">
                                                         <div className="col-sm-auto">
@@ -324,7 +324,7 @@ const RenewalRegistration = () => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                                                <label className="mb-2">Enter No of CME credit Points <span className="text-danger fs-8'">(value from 1-6 till DEC-2024)</span></label>
+                                                                                <label className="mb-2">Enter No of CME credit Points <span className="text-danger fs-8'">(value from 1-12 till DEC-2025)</span></label>
                                                                                 <input
                                                                                     type="number"
                                                                                      onChange={(ev) => {
@@ -333,10 +333,10 @@ const RenewalRegistration = () => {
                                                                                      }}
                                                                                     className={`form-control ${error ? 'is-invalid' : ''
                                                                                         }`}
-                                                                                    placeholder="Enter No of CME credit Points (value 1-6)"
+                                                                                    placeholder="Enter No of CME credit Points (value 1-12)"
                                                                                     tabIndex={8}
                                                                                     disabled={disabled}
-                                                                                    min="1" max="6"
+                                                                                    min="1" max="12"
                                                                                 />
 
                                                                                 {error && <small className="text-danger">{error.toString()}</small>}
@@ -484,7 +484,7 @@ const RenewalRegistration = () => {
                                                                                     <div className="drag-drop-box mt-3">
                                                                                         <div className="text-center">
                                                                                             <i className="bi-file-earmark-break fs-32"></i>
-                                                                                            <p className='fs-13'>Upload MBBS Certificate </p>
+                                                                                            <p className='fs-13'>Upload Final MBBS Registration Certificate </p>
                                                                                         </div>
                                                                                     </div>
                                                                                 </Files>

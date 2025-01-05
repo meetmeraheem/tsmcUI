@@ -100,6 +100,7 @@ const Userheader = () => {
 											</li> 
 											<li className='dropdown-submenu'>
 												<p className="dropdown-item">Final Registration</p>
+												<li><Link className="dropdown-item" to={'final-registration'}> final New Registration</Link></li>
 													{isDoctorFMRNo ? '' :
 													<ul className="dropdown-menu">
 													<li><Link className="dropdown-item" to={'final-registration'}>New Registration</Link></li>
@@ -110,6 +111,7 @@ const Userheader = () => {
 											{isDoctorFMRapproved ?
 											<div>
 											<li className='dropdown-submenu'>
+												
 											<Link to='additional-qualification-registration' className="dropdown-item">Additional Qualification</Link>
 											<ul className="dropdown-menu">
 												<li><Link className="dropdown-item" to={'additional-qualification-registration'}>New Registration</Link></li>

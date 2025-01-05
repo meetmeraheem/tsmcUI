@@ -259,7 +259,7 @@ const forgetPasswordOTPVerify = useCallback(async () => {
                <div  style={{ color: "#1b42af",marginBottom:"30px", paddingLeft:"250px",fontWeight:"bold" }}>  Check your Information with Final/Provisional Registration Number  </div>
                 <section className="bg-white">
                                 <div className="row ">
-                                                            <label className="col mb-2" style={{ color: "red" }}> Do you have final Registration/Provisional in Telangana OR in AP before 2014 (Y/N)   </label>
+                                                            <label className="col mb-2" style={{ color: "red" }}> Do you have final Registration/Provisional in Telangana (or) in AP medical council earlier(Y/N)   </label>
                                                             <select
                                                                 value={certStatus}
                                                                 onChange={(ev) => {
@@ -358,9 +358,9 @@ const forgetPasswordOTPVerify = useCallback(async () => {
                                     Please click here to change password <div className="w-100 text-center mb-3">
                                                                       <Link to={"/"} className="fs-14"  onClick={() => {setShowDoctorDetails(true); setIsForgetPasswordOTP(true); setIsForgetPassword(false);mobileNumberValidation(doctor.mobileno) }} data-bs-target="#ForgotPassword">Reset/Forgot password?</Link>
                                                                  </div> </span>:
-                                <div style={{ color: "red",fontSize:"15px" ,paddingLeft:"300px" }}> 
-                                Given Mobile Number is <b>Not Registered</b> in our records.<p> Please Contact TGMC  for Change of Mobile Number..
-                                    <p>Click <Link to={"https://onlinetsmc.in/contact/"}> here</Link> for contact details  </p>
+                                <div style={{ color: "red",fontSize:"15px" ,paddingLeft:"150px" }}> 
+                                 Given Mobile Number is <b>Not Registered</b> in our records.<p> Please E-Mail TGMC at <b> <i>telanganamedicalcouncil@gmail.com</i></b> attaching Adhar Card and Final Registration Certificate
+                               <p><b>Note: </b>Creation of new user if doctor is already registered in medical council attracts a penalty of <b>Rs 1000/-</b> </p>
                                  </p>
                                     </div>
                               }
@@ -369,9 +369,6 @@ const forgetPasswordOTPVerify = useCallback(async () => {
                     </>
                   }
          </div>}
-
-
-                         
                          
                                    {isForgetPasswordOTP &&
                                    

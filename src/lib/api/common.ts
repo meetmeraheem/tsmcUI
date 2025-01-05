@@ -1,5 +1,5 @@
 import { ApiResponseType } from '../../types/api';
-import { City, Country, GetCitiesResponseType, GetCollegesResponseType, GetCountriesResponseType, GetQualificationsResponseType, GetStatesResponseType, GetUniversitiesResponseType, SerialResponseType, Serials, State } from '../../types/common';
+import { GetCitiesResponseType, GetStatesResponseType, SerialResponseType, Serials } from '../../types/common';
 import { axiosInstance } from './index';
 
 export const commonService = {

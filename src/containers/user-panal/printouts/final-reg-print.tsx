@@ -160,10 +160,10 @@ const FinalRegPrint = (props: any) => {
                         <>
                         2.Please visit the TSMC office along with all original documents on 
                             <span className='fs-18 fw-700 p-2'>    
-                        {(final?.visitDate ? final?.visitDate : 'NA')}</span>
+                        Date:{(final?.visitDate ? final?.visitDate : 'NA')}hrs</span>
                         </>:
                         <>
-                        2. Please visit the TSMC office along with all original documents on Next working day within 24-48 hours for collection of certificates
+                        2.Please visit the TGMC office along with all original documents Next Working Day between 9.30 AM to 11.00 AM
                         </>
                         }
                         <br/>

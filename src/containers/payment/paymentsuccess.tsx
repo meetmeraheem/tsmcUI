@@ -147,9 +147,13 @@ const PaymentSuccess = () => {
 
                 if (regType === 'final') {
                     const finalInfo = secureLocalStorage.getItem("finalInfo");
+                    const finalInfo_soltValue=secureLocalStorage.getItem("finalInfo_reg_slotValue");
+                    const final_slot_id=secureLocalStorage.getItem("finalInfo_slot_id");
                     const finalPaymentInfo = {
                         ...finalInfo as FinalPaymentFormType,
-                        orderKeyId: respOrderKeyId
+                       orderKeyId: respOrderKeyId,
+                       slotDateTime:finalInfo_soltValue,
+                       slotId:final_slot_id
                     }
                     const formData = new FormData();
                     formData.append("finalInfo", JSON.stringify(finalPaymentInfo));
@@ -257,9 +261,13 @@ const PaymentSuccess = () => {
                 }
                 if (regType === 'additionalInfo') {
                     const additionalInfo = secureLocalStorage.getItem("additionalInfo");
+                    const additionalInfo_soltValue=secureLocalStorage.getItem("additionalInfo_reg_slotValue");
+                    const slot_id=secureLocalStorage.getItem("additional_slot_id");
                     const additionalDataPaymentInfo = {
                         ...additionalInfo as AddQualFormType,
-                        orderKeyId: respOrderKeyId
+                        orderKeyId: respOrderKeyId,
+                        slotDateTime:additionalInfo_soltValue,
+                        slotId:slot_id
                     }
                     const formData = new FormData();
                     formData.append("additionalInfo", JSON.stringify(additionalDataPaymentInfo));

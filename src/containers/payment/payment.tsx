@@ -122,11 +122,13 @@ const Payment = () => {
         try {
 
             const finalInfo = secureLocalStorage.getItem("finalInfo");
+            const finalInfo_slotValue=secureLocalStorage.getItem("finalInfo_slotValue");
             const finalPaymentInfo = {
                 ...finalInfo as FinalPaymentFormType,
                 orderAmount: "",
                 orderId: "",
-                paymethod: ""
+                paymethod: "",
+                slotDateTime:finalInfo_slotValue
             }
             const formData = new FormData();
             formData.append("finalInfo", JSON.stringify(finalPaymentInfo));
@@ -255,6 +257,12 @@ const Payment = () => {
                 if (finalData.data.finalRegInfoData.imr_certificate != null) {
                     secureLocalStorage.setItem("imrName", finalData.data.finalRegInfoData.imr_certificate);
                 }
+                if (finalData.data.finalRegInfoData.slotId != null) {
+                        secureLocalStorage.setItem("finalInfo_slot_id", finalData.data.finalRegInfoData.slotId );
+                     }
+                   if (finalInfo_slotValue != null) {
+                          secureLocalStorage.setItem("finalInfo_reg_slotValue", finalInfo_slotValue);
+                     }
 
 
             }
@@ -331,11 +339,13 @@ const Payment = () => {
         try {
 
             const additionalInfo = secureLocalStorage.getItem("additionalInfo");
+            const additionalInfo_slotValue=secureLocalStorage.getItem("additionalInfo_slotValue");
             const additionalDataPaymentInfo = {
                 ...additionalInfo as AddQualFormType,
                 orderAmount: "",
                 orderId: "",
-                paymethod: ""
+                paymethod: "",
+                slotDateTime:additionalInfo_slotValue
             }
             const formData = new FormData();
             formData.append("additionalInfo", JSON.stringify(additionalDataPaymentInfo));
@@ -380,7 +390,12 @@ const Payment = () => {
                 if (additionalRegData.data.additionalInfoData.edu_cert2 != null) {
                     secureLocalStorage.setItem("additional_Degree_name", additionalRegData.data.additionalInfoData.edu_cert2 );
                 }
-
+                if (additionalRegData.data.additionalInfoData.slotId != null) {
+                      secureLocalStorage.setItem("additional_slot_id", additionalRegData.data.additionalInfoData.slotId );
+                   }
+                   if (additionalInfo_slotValue != null) {
+                       secureLocalStorage.setItem("additionalInfo_reg_slotValue", additionalInfo_slotValue);
+                    }
             }
 
         } catch (err: any) {

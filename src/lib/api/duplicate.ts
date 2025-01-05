@@ -1,7 +1,6 @@
 import { ApiResponseType } from '../../types/api';
-import { tokenManager } from '../token-manager';
 import { axiosInstance } from './index';
-import { serverUrl } from '../../config/constants';
+
 
 export const duplicateService = {
     // async duplicateRegistration(data: any) {

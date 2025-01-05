@@ -1,7 +1,7 @@
 import { ApiResponseType } from '../../types/api';
 
 import { axiosInstance } from './index';
-import { serverUrl } from '../../config/constants';
+
 
 export const assignmentService = {
     async assignToUser(data: any) {

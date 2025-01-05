@@ -1,4 +1,3 @@
-import { ApiResponseType } from '../../types/api';
 import { axiosInstance } from './index';
 
 export const adminEditService = {

@@ -16,12 +16,9 @@ import { AdminAddQualDataFormType } from '../../../types/additionalQuali';
 import DoctorInfoPrintCard from './../../user-panal/includes/doctor-info-print';
 
 const AdditionalRegViewPrint = (props: any) => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+    
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [additionals, setAdditionals] = useState<AdminAddQualDataFormType>();
-    const [userType, setUserType] = useState('');
     const getDoctorDetails = async () => {
         try {
             const doctorPrimaryId = Number(LocalStorageManager.getDoctorPrimaryId());
@@ -69,8 +66,6 @@ const AdditionalRegViewPrint = (props: any) => {
     }, []);
 
     useEffect(() => {
-        const userTypeValue = LocalStorageManager.getUserType();
-        userTypeValue && setUserType(userTypeValue);
         getDoctorDetails();
         getAdditionalDetails();
         
@@ -147,7 +142,7 @@ const AdditionalRegViewPrint = (props: any) => {
 
                 </table>
                 <br/>
-                        <div style={{border:"1px solid rgb(0, 0, 0)",marginTop:"30px"}} >
+                        <div style={{border:"1px solid rgb(0, 0, 0)",marginTop:"80px"}} >
                         
                             <p style={{fontWeight:"bold", alignContent: "center", width: "100%", backgroundColor: "#E2F4F5" }}>
                             General Instructions
@@ -159,10 +154,10 @@ const AdditionalRegViewPrint = (props: any) => {
                         <>
                         2.Please visit the TSMC office along with all original documents on
                         <span className='fs-18 fw-700 p-2'>  
-                       {(additionals?.visitDate ? additionals?.visitDate : 'NA')}</span> 
+                       Date: {(additionals?.visitDate ? additionals?.visitDate : 'NA')} hrs</span> 
                         </>:
                         <>
-                        2. Please visit the TSMC office along with all original documents on Next working day within 24-48 hours for collection of certificates
+                        2. Please visit the TGMC office along with all original documents Next Working Day between 9.30 AM to 11.00 AM
                         </>}
                         <br/>
                         3.	The Certificates verification for  Additional Qualifications (PG) Registration is must & after verification only the application will be processed.

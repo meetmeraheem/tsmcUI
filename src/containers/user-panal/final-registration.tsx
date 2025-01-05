@@ -21,10 +21,12 @@ import { provisionalService } from '../../lib/api/provisional';
 import moment from 'moment';
 import secureLocalStorage from 'react-secure-storage';
 import DatePicker from 'react-date-picker';
+import Appointments from '../user-panal/Appointments';
+import { slotbookingService } from '../../lib/api/slotbooking';
 
 const FinalRegistration = () => {
     const navigate = useNavigate();
-    const [next, setNext] = useState(false);
+    const [next, setNext] = useState<String>("docInfo");
     const [finalSerial, setFinalSerial] = useState<Serials>();
     const [fmrNo, setFMRNo] = useState(0);
     const [countries, setCountries] = useState<Country[]>([]);
@@ -55,8 +57,19 @@ const FinalRegistration = () => {
     const [finalRequestType, setFinalRequestType] = useState<string>('nor');
     const [localRequestType, setLocalRequestType] = useState<string>('telangana');
     const [calc_date, setCalc_date] = useState(new Date());
+    const [slotValue, setSlotValue] = useState<any>("");
 
+    const updateSlotValue = async (slotdate: any, slottime: any) =>   {
+        setSlotValue("");
+        let day = slotdate.getDate();
+        let month = slotdate.getMonth() + 1;
+        let year = slotdate.getFullYear();
 
+        const slotDate = `${day}_${month}_${year}_${slottime}`;
+        //   alert(slotDate+slottime);
+        console.log(slotDate);
+        setSlotValue(slotDate);
+    };
 
 
     const initialFormData = {
@@ -85,6 +98,37 @@ const FinalRegistration = () => {
         calc_date:''
     }
 
+    const saveSlot = useCallback(async () => {
+        try{
+            console.log('slotValue',slotValue);
+            const parts = slotValue.split('_');
+            let day=parts[0];
+            let month=parts[1];
+            let year=parts[2];
+            let slottime= parts[3];
+           let slotdate=`${day}-${month}-${year}`;
+            console.log('slottime',slottime);
+            console.log('slotdate',slotdate);
+            const doctorId = LocalStorageManager.getDoctorSerialId();
+            const { data } = await slotbookingService.validateSlot(slotdate,slottime);
+            if(data === "SUCCESS"){
+                console.log('slot data ', data);
+                secureLocalStorage.setItem("finalInfo_slotValue", slotValue);
+                navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'final'}});
+            }else{
+                Swal.fire({
+                    text: data,
+                    icon: "warning",
+                    confirmButtonText: "OK",
+                })
+            }
+
+            } catch (err) {
+            console.log('error saveSlot', err);
+          } finally {
+            //setLoading(false);
+        }
+    }, [slotValue]);
     const getProvisionalDetails = useCallback(async () => {
         try {
             const doctorSerialId = LocalStorageManager.getDoctorSerialId();
@@ -268,8 +312,13 @@ const FinalRegistration = () => {
                 if (imrCertificate?.file) {
                     secureLocalStorage.setItem("imr", imrCertificate?.file);
                 }
-                navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'final'}});
-
+                
+                
+                if(finalRequestType==='tat'){
+                    navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'final'}});
+                }else{
+                    setNext("slotInfo");
+                }
                 
             } catch (err) {
                 Swal.fire({
@@ -389,7 +438,7 @@ const FinalRegistration = () => {
     const getTatkalUpdate = useCallback(async (value:any) => {
         try {
             if(value !== 'nor'){
-                const { success, data, message } = await commonService.getTatkalCurrentStatus();
+                const {data} = await slotbookingService.getTatkalCurrentStatus();
                     if (data === "YES") {
                         Swal.fire({
                             text: "You have selected Tatkal Service ,Additional charges applicable",
@@ -416,7 +465,7 @@ const FinalRegistration = () => {
         <>
             <section className='gray-banner'>
                 <div className="container mt-4">
-                    {!next && <div className="col-9 m-auto">
+                    {next === 'docInfo' &&  <div className="col-9 m-auto">
                         <div className="card shadow border-0 mb-4">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
@@ -427,13 +476,13 @@ const FinalRegistration = () => {
                                 <DoctorInfoCard />
                             </div>
                             <div className="card-footer text-end">
-                                <button type='submit' onClick={() => setNext(true)} className='btn btn-primary'>Next <i className="bi-chevron-right"></i></button>
+                                <button type='submit' onClick={() => setNext("edInfo")} className='btn btn-primary'>Next <i className="bi-chevron-right"></i></button>
                             </div>
                         </div>
                     </div>
                     }
 
-                    {next &&
+        {next === "edInfo" &&
                         <div className="col-9 m-auto">
                             <div className="card shadow border-0 mb-4">
                                 <div className="card-body">
@@ -1758,9 +1807,9 @@ const FinalRegistration = () => {
 
                                                         <div className="w-100 text-end mt-3">
                                                             {/* isValid? setNext(false):setNext(true) */}
-                                                            <button type='button' onClick={() => { setNext(false) }} className='btn btn-primary me-3'><i className="bi-chevron-left"></i>Back </button>
+                                                            <button type='button' onClick={() => {  setNext("docInfo")  }} className='btn btn-primary me-3'><i className="bi-chevron-left"></i>Back </button>
                                                             <button type="submit" disabled={isSubmitting} className="btn btn-primary">
-                                                                {isSubmitting && <span className="spinner-border spinner-border-sm" />} Submit
+                                                                {isSubmitting && <span className="spinner-border spinner-border-sm" />} Next
                                                             </button>
                                                         </div>
                                                     </form>
@@ -1774,6 +1823,29 @@ const FinalRegistration = () => {
                     }
 
                 </div>
+                {next === "slotInfo" && <div>
+                    <div className="col-9 m-auto">
+                        <div className="card shadow border-0 mb-4">
+                            <div className="card-body">
+                                <Appointments method={updateSlotValue}></Appointments>
+                                <div className="w-100 text-end mt-3">
+                                    <button type="button" id="printPageButton" onClick={() => { navigate(routes.userpanal); }} className="btn btn-primary">Back to Profile</button>
+                                    <button
+                                        type="button"
+                                         className='btn btn-primary ml-3'
+                                        onClick={() => {
+                                            saveSlot();
+                                        }}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                }
             </section>
         </>
     )

@@ -1,6 +1,6 @@
 {
   "name": "tsmc-reactapp",
-  "version": "0.1.0",
+  "version": "20.10.24",
   "private": true,
   "dependencies": {
     "@fontsource/poppins": "^4.5.10",
@@ -37,6 +37,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
+    "prebuild": "node ./build-version",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
