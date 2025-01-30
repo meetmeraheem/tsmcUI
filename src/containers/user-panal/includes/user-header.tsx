@@ -90,7 +90,6 @@ const Userheader = () => {
 										<div className="dropdown-menu shadow">
 											<li className='dropdown-submenu'>
 												<p className="dropdown-item">Provisional</p>
-													
 													{isDoctorPMRNo? '':
 													<ul className="dropdown-menu">
 													<li><Link className="dropdown-item" to={'provisional-registration'}>New Registration</Link></li>
@@ -100,7 +99,7 @@ const Userheader = () => {
 											</li> 
 											<li className='dropdown-submenu'>
 												<p className="dropdown-item">Final Registration</p>
-												<li><Link className="dropdown-item" to={'final-registration'}> final New Registration</Link></li>
+												
 													{isDoctorFMRNo ? '' :
 													<ul className="dropdown-menu">
 													<li><Link className="dropdown-item" to={'final-registration'}>New Registration</Link></li>

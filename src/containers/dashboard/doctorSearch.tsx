@@ -24,7 +24,7 @@ const DoctorSearchPage = () => {
 
     const getDoctorDetailsByFMR = async () => {
         try {
-            if (fmrNo.length > 4) {
+            if (fmrNo.length > 3) {
                 setDoctorList([]);
                 setIsLoader(true);
                 const { data } = await commonService.getDoctorInfoByNameGender(fmrNo, '', '', '');

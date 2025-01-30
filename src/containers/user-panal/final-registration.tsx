@@ -315,6 +315,7 @@ const FinalRegistration = () => {
                 
                 
                 if(finalRequestType==='tat'){
+                    secureLocalStorage.removeItem("finalInfo_slotValue");
                     navigate(routes.payment, {state:{doctor_id:Number(doctorId),regType:'final'}});
                 }else{
                     setNext("slotInfo");

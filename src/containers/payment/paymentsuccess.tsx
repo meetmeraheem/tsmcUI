@@ -237,6 +237,8 @@ const PaymentSuccess = () => {
                         secureLocalStorage.removeItem("interVerificationName");
                         secureLocalStorage.removeItem("mciRegName");
                         secureLocalStorage.removeItem("imrName");
+                        secureLocalStorage.removeItem("finalInfo_reg_slotValue");
+                        secureLocalStorage.removeItem("finalInfo_slot_id");
                         Swal.fire({
                             title: "Success",
                             text: "Final registration successfully completed",
@@ -291,6 +293,8 @@ const PaymentSuccess = () => {
                         secureLocalStorage.removeItem("additionalInfo");
                         secureLocalStorage.removeItem("additional_study_name");
                         secureLocalStorage.removeItem("additional_Degree_name");
+                        secureLocalStorage.removeItem("additionalInfo_reg_slotValue");
+                        secureLocalStorage.removeItem("additional_slot_id");
                         Swal.fire({
                             title: "Success",
                             text: "Additional registration successfully completed",

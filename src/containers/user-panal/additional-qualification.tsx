@@ -265,6 +265,7 @@ const AdditionalQualificationRegistration = () => {
                 }
               
                 if(additionalRequestType==='tat'){
+                    secureLocalStorage.removeItem("additionalInfo_slotValue");
                     navigate(routes.payment, { state: { doctor_id: Number(doctorId), regType: 'additionalInfo' } });
                 }else{
                     setNext("slotInfo");
