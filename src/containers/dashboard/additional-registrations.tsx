@@ -49,6 +49,7 @@ const Additional = () => {
     const [viewadditionalid, setViewadditionalId] = useState('');
     const [viewDocid, setViewDocId] = useState('');
     const [viewAssignid, setViewAssignid] = useState('');
+    const [FMRNo, setFMRNo] = useState('');
 
   const toggleComponent = useCallback(async (additionalId:any,docId:any,assignId:any) => {
     try {
@@ -425,11 +426,13 @@ const greet=()=> {
                 const formData = new FormData();
                 formData.append("mobileNo", mobileNo);
                 formData.append("docName", "");
+                formData.append("FMRNo", "");
                const { data } = await additionalService.getAddlQualifByMobileNo(formData);
                if (fetchId === fetchIdRef.current) {
                 const startRow = pageSize * pageIndex
                 const endRow = startRow + pageSize
                if(data!=undefined){
+                setMobileNo('');
                 setFinals(data.slice(startRow, endRow))
                 setPageCount(Math.ceil(data.length / pageSize));
                 setLoading(false);
@@ -457,11 +460,13 @@ const greet=()=> {
                 const formData = new FormData();
                 formData.append("mobileNo", "");
                 formData.append("docName",docName) ;
+                formData.append("FMRNo", "");
                const { data } = await additionalService.getAddlQualifByMobileNo(formData);
                if (fetchId === fetchIdRef.current) {
                 const startRow = pageSize * pageIndex
                 const endRow = startRow + pageSize
                if(data!=undefined){
+                setdocName('');
                 setFinals(data.slice(startRow, endRow))
                 setPageCount(Math.ceil(data.length / pageSize));
                 setLoading(false);
@@ -479,7 +484,37 @@ const greet=()=> {
             console.log('error getDoctorDetails ', err);
         }
     };
-
+  const getDoctorDetailsByFMRNo = async () => {
+            try {
+                const fetchId = ++fetchIdRef.current
+                const pageSize = 10;
+                const pageIndex = 0
+                if (FMRNo.length > 3) {
+                    const formData = new FormData();
+                    formData.append("mobileNo", "");
+                    formData.append("docName", "");
+                    formData.append("FMRNo", FMRNo);
+                    const { data } = await additionalService.getAddlQualifByMobileNo(formData);
+                    if (fetchId === fetchIdRef.current) {
+                        const startRow = pageSize * pageIndex
+                        const endRow = startRow + pageSize
+                        if (data != undefined) {
+                            setFMRNo('');
+                            setFinals(data.slice(startRow, endRow))
+                            setPageCount(Math.ceil(data.length / pageSize));
+                            setLoading(false);
+                        } else {
+                            setFinals([]);
+                            setLoading(false);
+                        }
+                    }
+                } else {
+                    alert("Please enter at least 4 characters of  FMRNo");
+                }
+            } catch (err) {
+                console.log('error getDoctorDetails ', err);
+            }
+    };
     return (
         <>
             <div className="container-fluid">
@@ -491,21 +526,29 @@ const greet=()=> {
                 <div className="tsmc-filter-box d-flex align-items-center">
                     <div className="input-group-text p-0">
                         <label htmlFor="" className='mb-2'>Mobile No : </label>
-                        <input type="text" className='fs-14' id="mobileNo" onBlur={(e) => setMobileNo(e.target.value)} placeholder='Enter Mobile No' />
+                        <input type="text" className='fs-14 w-100' id="mobileNo" onBlur={(e) => setMobileNo(e.target.value)} placeholder='Enter Mobile No' />
                         <button type="submit"
                             disabled={disablebtn}
                             onClick={
                                 getDoctorDetailsByMobile
-                            } className='btn bi-search btn-outline-success'> </button>
+                            } className='btn bi-search '> </button>
                     
                         <label htmlFor="" className='mb-2'>Doctor Name  : </label>
-                        <input type="text" className='fs-14' id="name" onBlur={(e) => setdocName(e.target.value)} placeholder='Enter Name' />
+                        <input type="text" className='fs-14 w-100' id="name" onBlur={(e) => setdocName(e.target.value)} placeholder='Enter Name' />
                         <button type="submit"
                             disabled={disablebtn}
                             onClick={
                                 getDoctorDetailsBydocName
-                            } className='btn bi-search btn-outline-success'> </button>
+                            } className='btn bi-search '> </button>
+                            <label htmlFor="" className='mb-2'>FMR No  : </label>
+                        <input type="text" className='fs-14 w-100' id="name" onBlur={(e) => setFMRNo(e.target.value)} placeholder='Enter FMRNo' />
+                        <button type="submit"
+                            disabled={disablebtn}
+                            onClick={
+                                getDoctorDetailsByFMRNo
+                            } className='btn bi-search '> </button>
                     </div>
+                    
                     <span className="input-group-text p-0" style={{marginLeft:"30px"}}>
                     <div className="btn-group">
                         <label className="m-1">Tatkal</label>

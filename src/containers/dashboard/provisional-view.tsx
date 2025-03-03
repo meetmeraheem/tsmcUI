@@ -35,7 +35,13 @@ const ProvisionalView = (props:any) => {
     const [isEduCert3, setIsEduCert3] = useState(false);
     const [disablebtn, setDisablebtn] = useState(false);
     const [userType, setUserType] = useState('');
-
+    let defaultDate = moment().format('YYYY-MM-DD');
+        
+    const [provregdate, setProvregdate] = useState(defaultDate);
+    const inputHandler = (event:any) => {
+        setProvregdate(event.target.value);
+        console.log(event.target.value);
+      };
     const getDoctorDetails = async () => {
         try {
             if (props.state.doctorPrimaryId) {
@@ -88,12 +94,14 @@ const ProvisionalView = (props:any) => {
     }, []);
 
     const submit = useCallback(async (status: any) => {
+         let vfromdate = moment(provregdate).format('YYYY-MM-DD');
         if (status) {
             setDisablebtn(true);
             const provisionalInfo = {
                 approval_status: status,
                 remarks: remarks,
-                assignmnetId:props.state.assignmentId
+                assignmnetId:props.state.assignmentId,
+                provregdate:vfromdate
             }
 
             const { success,message} = await provisionalService.updateProvisional(props.state.provisionalPrimaryId, provisionalInfo);
@@ -152,7 +160,7 @@ const ProvisionalView = (props:any) => {
                 confirmButtonText: "OK",
             });
         }
-    }, [remarks]);
+    }, [remarks,provregdate]);
    
     useEffect(() => {
         const userTypeValue = LocalStorageManager.getUserType();
@@ -289,7 +297,17 @@ const ProvisionalView = (props:any) => {
                    
                     {userType === 'u' && provisional?.approval_status === 'pen' &&
                         <div className="card-footer pb-3">
-                            <div className="mb-3">
+                            <span>
+                            <label htmlFor="" className='mb-2'>RegDate <span className='fs-12 text-danger'>{'(Please select Registration Date if you want to change)'}</span></label>
+                            <div className="btn-group">
+                            <input type="date" name="" id=""
+                                value={provregdate}
+                                onChange={(ev) => {
+                                    inputHandler(ev)
+                                }} className="form-control fs-14 " />
+                                </div>
+                        </span>
+                        <div className="mb-3">
                                 <label htmlFor="" className='mb-2'>Reason <span className='fs-12'>{'(Enter reason if you are rejecting application)'}</span></label>
                                 <textarea className='form-control fs-14' onChange={(e) => setRemarks(e.target.value)} name="" id="" placeholder='Enter Reason'></textarea>
                             </div>

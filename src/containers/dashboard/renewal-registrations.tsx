@@ -35,6 +35,7 @@ const Renewal = () => {
     const [selected, setSelected] = useState<any>({});
     const [mobileNo, setMobileNo] = useState('');
     const [docName, setdocName] = useState('');
+    const [FMRNo, setFMRNo] = useState('');
 
 
     const [checkBoxData, setCheckBoxData] = useState([
@@ -422,6 +423,7 @@ const greet=()=> {
                 const formData = new FormData();
                 formData.append("mobileNo", mobileNo);
                 formData.append("docName", "");
+                formData.append("FMRNo", "");
                 const { data } = await renewalService.getRenewalsByMobileNo(formData);
                 if (fetchId === fetchIdRef.current) {
                     const startRow = pageSize * pageIndex
@@ -452,6 +454,7 @@ const greet=()=> {
                 const formData = new FormData();
                 formData.append("mobileNo", "");
                 formData.append("docName", docName);
+                formData.append("FMRNo", "");
                 const { data } = await renewalService.getRenewalsByMobileNo(formData);
                 if (fetchId === fetchIdRef.current) {
                     const startRow = pageSize * pageIndex
@@ -473,6 +476,37 @@ const greet=()=> {
             console.log('error getDoctorDetails ', err);
         }
     };
+        const getDoctorDetailsByFMRNo = async () => {
+            try {
+                const fetchId = ++fetchIdRef.current
+                const pageSize = 10;
+                const pageIndex = 0
+                if (FMRNo.length > 3) {
+                    const formData = new FormData();
+                    formData.append("mobileNo", "");
+                    formData.append("docName", "");
+                    formData.append("FMRNo", FMRNo);
+                    const { data } = await renewalService.getRenewalsByMobileNo(formData);
+                    if (fetchId === fetchIdRef.current) {
+                        const startRow = pageSize * pageIndex
+                        const endRow = startRow + pageSize
+                        if (data != undefined) {
+                            setFMRNo('');
+                            setRenewals(data.slice(startRow, endRow))
+                            setPageCount(Math.ceil(data.length / pageSize));
+                            setLoading(false);
+                        } else {
+                            setRenewals([]);
+                            setLoading(false);
+                        }
+                    }
+                } else {
+                    alert("Please enter at least 4 characters of  FMRNo");
+                }
+            } catch (err) {
+                console.log('error getDoctorDetails ', err);
+            }
+    };
     return (
         <>
             <div className="container-fluid">
@@ -482,24 +516,32 @@ const greet=()=> {
                     </div>
                 </div>
 
-                <div className="tsmc-filter-box d-flex align-items-center">
+                <div className="tsmc-filter-box d-flex align-items-center fs-9">
                     <div className="input-group-text p-0">
                         <label htmlFor="" className='mb-2'>Mobile No : </label>
-                        <input type="text" className='fs-14' id="mobileNo" onBlur={(e) => setMobileNo(e.target.value)} placeholder='Enter Mobile No' />
+                        <input type="text" className='fs-14 w-100' id="mobileNo" onBlur={(e) => setMobileNo(e.target.value)} placeholder='Enter Mobile No' />
                         <button type="submit"
                             disabled={disablebtn}
                             onClick={
                                 getDoctorDetailsByMobile
-                            } className='btn bi-search btn-outline-success'> </button>
-                        <label htmlFor="" className='mb-2'>Doctor Name  : </label>
-                        <input type="text" className='fs-14' id="name" onBlur={(e) => setdocName(e.target.value)} placeholder='Enter Name' />
+                            } className='btn bi-search '> </button>
+                        <label htmlFor="" >Doctor Name: </label>
+                        <input type="text" className='fs-14 w-100' id="name" onBlur={(e) => setdocName(e.target.value)} placeholder='Enter Name' />
                         <button type="submit"
                             disabled={disablebtn}
                             onClick={
                                 getDoctorDetailsBydocName
-                            } className='btn bi-search btn-outline-success'> </button>
+                            } className='btn bi-search'> </button>
+                             <label htmlFor="" className='mb-2'>FMR No  : </label>
+                        <input type="text" className='fs-14 w-100' id="name" onBlur={(e) => setFMRNo(e.target.value)} placeholder='Enter FMRNo' />
+                        <button type="submit"
+                            disabled={disablebtn}
+                            onClick={
+                                getDoctorDetailsByFMRNo
+                            } className='btn bi-search '> </button>
                     </div>
-                    <span className="input-group-text p-0" style={{ marginLeft: "30px" }}>
+                    
+                    <span className="input-group-text p-0" style={{ marginLeft: "0px" }}>
 
                         <div className="btn-group">
                             <label className="m-1">Tatkal</label>
