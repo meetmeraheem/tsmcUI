@@ -59,7 +59,9 @@ export type DoctorFormType = {
 	regDate:string,
 	validDate:string,
 	regStatus:string,
-  mobileStatus:string
+  mobileStatus:string,
+  lastRenewalDate:string,
+
 }
 
 export type GetDoctorResponseType = Omit<ApiResponseType, 'list'> & {

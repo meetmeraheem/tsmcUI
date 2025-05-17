@@ -170,6 +170,7 @@ const DoctorSearchPage = () => {
                                             <th>Details</th>
                                             <th>Registration Number</th>
                                             <th>Registration Date</th>
+                                            <th>Last Renewal Date</th>
                                             <th>Doctor Name</th>
                                             <th>Father Name	</th>
                                             <th>Date of Birth</th>
@@ -190,6 +191,7 @@ const DoctorSearchPage = () => {
                                                 }}>View</a></td>
                                                 <td>{obj.original_fmr_no}</td>
                                                 <td>{obj.regDate}</td>
+                                                <td>{obj.lastRenewalDate}</td>
                                                 <td>{obj.fullname}</td>
                                                 <td>{obj.fathername}</td>
                                                 <td>{moment(obj.dateofbirth).format('DD/MM/YYYY')}</td>
@@ -288,6 +290,20 @@ const DoctorSearchPage = () => {
                                             <td className="tdwid4">
                                                 <b>
                                                     <span id="Label_regdate">{doctor?.regDate}</span>
+                                                </b>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        <td className="tdwid4">
+                                                <b>
+                                                    Last Renewal Date
+                                                </b>
+
+                                            </td>
+                                            <td className="tdwid4">
+                                                <b>
+                                                    <span id="Label_regdate">{doctor?.lastRenewalDate}</span>
                                                 </b>
 
                                             </td>

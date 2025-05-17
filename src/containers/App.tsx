@@ -22,7 +22,7 @@ const clearCacheData = () => {
     .then((meta) => {
       if (meta?.version) {
         const metaVersion = parseVersion(meta.version);
-        const packageVersion = parseVersion("05.01.2025");
+        const packageVersion = parseVersion("30.03.25");
         console.log("metaVersion"+metaVersion);
         console.log("packageVersion"+packageVersion);
         if (packageVersion < metaVersion) {
