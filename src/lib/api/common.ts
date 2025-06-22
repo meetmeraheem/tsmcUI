@@ -147,4 +147,14 @@ export const commonService = {
         return responseData as ApiResponseType;
     },
 
+    async getDoctorInfoBySerialId(docId: any) {
+        const { data: responseData } = await axiosInstance.get(`common/getDoctorInfoBySerialId/${docId}`);
+        return responseData as ApiResponseType;
+    },
+
+    async updateOldFinalReg(data: any) {
+            const { data: responseData } = await axiosInstance.post(`common/updateOldFinalReg`, data);
+            return responseData as ApiResponseType;
+        },
+
 };

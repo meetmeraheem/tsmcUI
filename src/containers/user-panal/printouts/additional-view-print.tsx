@@ -157,7 +157,7 @@ const AdditionalRegViewPrint = (props: any) => {
                        Date: {(additionals?.visitDate ? additionals?.visitDate : 'NA')} hrs</span> 
                         </>:
                         <>
-                        2. Please visit the TGMC office along with all original documents Next Working Day between 9.30 AM to 11.00 AM
+                        2. Please visit the TGMC office along with all original documents on the next working day and should report by 9:30 AM.
                         </>}
                         <br/>
                         3.	The Certificates verification for  Additional Qualifications (PG) Registration is must & after verification only the application will be processed.

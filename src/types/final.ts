@@ -174,3 +174,36 @@ export type FinalPaymentFormType = {
   mci_reg: string,
   imr_certificate: string
 }
+
+export type FinalRegOLDFormType = {
+  country: number,
+  state: number,
+  university: string,
+  college: string,
+  qualification: number;
+  exam_month: string;
+  exam_year: string;
+  duration: string,
+  edu_cert1: string,
+  edu_cert2: string,
+  edu_cert3: string,
+  affidivit: string,
+  testimonal1: string,
+  testimonal2: string,
+  reg_other_state: string,
+  screen_test: string,
+  intership_comp: string,
+  mci_eligi: string,
+  inter_verif_cert: string,
+  mci_reg: string,
+  imr_certificate: string,
+  doctor_id:string,
+  reg_date: Date|null,
+  receipt_no:string,
+  receipt_date:Date|null,
+  dd_number:string,
+  dd_date:Date|null,
+  serialno: number,
+  prefix:string,
+  addedBy:number
+}
