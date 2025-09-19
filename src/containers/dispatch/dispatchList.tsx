@@ -16,6 +16,10 @@ const DispatchList = () => {
     let default7Days = moment().subtract(3,'d').format('YYYY-MM-DD');
     const [fromdate, setFromDate] = useState(default7Days);
     const [todate, setToDate] = useState(defaultDate);
+    const [mobileNo, setMobileNo] = useState('');
+    const [FMRNo, setFMRNo] = useState('');
+    
+    const [disablebtn, setDisablebtn] = useState(false);
     useEffect(() => {
     }, []);
 
@@ -32,6 +36,10 @@ const DispatchList = () => {
         {
             Header: "Mobile No",
             accessor: "mobileno"
+        },
+        {
+            Header: "FMR No",
+            accessor: "fmrno"
         },
         {
             Header: "Email id",
@@ -100,6 +108,8 @@ const DispatchList = () => {
         setLoading(true)
 
         let vfromdate = moment(fromdate).format('YYYY-MM-DD');
+
+
         let vtodate = moment(todate).format('YYYY-MM-DD');
 
         const { data } = await dispatchservice.getDispachByFilter(vfromdate,vtodate );
@@ -135,12 +145,96 @@ const DispatchList = () => {
         }, 1000)
     }, [fromdate,todate]);
 
-
+    const getDispatchByMobile = async () => {
+            try {
+                    const fetchId = ++fetchIdRef.current
+                    const pageSize=10;
+                    const pageIndex=0
+                if (mobileNo.length === 10) {
+                    setLoading(true);
+                    const formData = new FormData();
+                    formData.append("mobileNo", mobileNo);
+                    formData.append("FMRNo", "");
+                   const { data } = await dispatchservice.getDispatchByMobile(formData);
+                   if (fetchId === fetchIdRef.current) {
+                    const startRow = pageSize * pageIndex
+                    const endRow = startRow + pageSize
+                   if(data!=undefined){
+                    setMobileNo('');
+                    setFinals(data.slice(startRow, endRow))
+                    setPageCount(Math.ceil(data.length / pageSize));
+                    setLoading(false);
+                   }else{
+                    setFinals([]);
+                       setLoading(false);
+                    }
+                }
+                    }else{
+                        alert("Please  enter 10 digit  Mobile No ");    
+                    }
+                
+    
+            } catch (err) {
+                console.log('error getDoctorDetails ', err);
+            }
+        
+    };
+  const getgetDispatchByFMRNo = async () => {
+            try {
+                const fetchId = ++fetchIdRef.current
+                const pageSize = 10;
+                const pageIndex = 0
+                if (FMRNo.length > 3) {
+                    setLoading(true);
+                    const formData = new FormData();
+                    formData.append("mobileNo", "");
+                    formData.append("FMRNo", FMRNo);
+                    const { data } = await dispatchservice.getDispatchByMobile(formData);
+                    if (fetchId === fetchIdRef.current) {
+                        const startRow = pageSize * pageIndex
+                        const endRow = startRow + pageSize
+                        if (data != undefined) {
+                            setFMRNo('');
+                            setFinals(data.slice(startRow, endRow))
+                            setPageCount(Math.ceil(data.length / pageSize));
+                            setLoading(false);
+                        } else {
+                            setFinals([]);
+                            setLoading(false);
+                        }
+                    }
+                } else {
+                    alert("Please enter at least 4 characters of  FMRNo");
+                }
+            } catch (err) {
+                console.log('error getDoctorDetails ', err);
+            }
+    };
     return (
         <>
             <div className="tsmc-filter-box d-flex align-items-center">
                 <div className="row">
-                <div className="col" style={{marginLeft:"400px"}}>
+                <div className="tsmc-filter-box d-flex align-items-center">
+                    <div className="input-group-text p-0">
+                        <label htmlFor="" className='mb-2'>Mobile No : </label>
+                        <input type="text" className='fs-14 w-100' id="mobileNo" onBlur={(e) => setMobileNo(e.target.value)} placeholder='Enter Mobile No' />
+                        <button type="submit"
+                            disabled={disablebtn}
+                            onClick={
+                                getDispatchByMobile
+                            } className='btn bi-search '> </button>
+                        
+                            <label htmlFor="" className='mb-2'>FMR No  : </label>
+                        <input type="text" className='fs-14 w-100' id="name" onBlur={(e) => setFMRNo(e.target.value)} placeholder='Enter FMRNo' />
+                        <button type="submit"
+                            disabled={disablebtn}
+                            onClick={
+                                getgetDispatchByFMRNo
+                            } className='btn bi-search '> </button>
+                    </div>
+                    
+                
+                    
                 <span className="input-group-text p-0">
                         <label>From Date </label>
                             <input type="date" name="" id=""
@@ -150,8 +244,8 @@ const DispatchList = () => {
                                     setFromDate(ev.target.value)
                                 }} className="form-control" />
                         </span>
-                        </div>
-                        <div className="col">     
+                        
+                        
                         <span className="input-group-text p-0">
                         <label>To Date </label>
                             <input type="date" name="" id=""
@@ -161,9 +255,11 @@ const DispatchList = () => {
                                     setToDate(ev.target.value)
                                 }} className="form-control" />
                         </span>
-                   
-                </div>
-                </div>
+                        </div>
+                   </div>
+                
+                
+                                
             </div>
             <div className="row">
                 <div className="card">

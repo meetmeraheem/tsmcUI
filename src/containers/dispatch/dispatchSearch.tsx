@@ -26,6 +26,9 @@ const DispatchSearch = () => {
     const greet=()=> {
         setShowComponent(false);
         fetchData(0);
+        setReqType('select');
+        setFmrNo('');
+        setFromDate(default7Days);
        }
     const toggleComponent = useCallback(async (Id:any,docId:any,docPrimeId:any) => {
         try {
@@ -70,7 +73,7 @@ const DispatchSearch = () => {
             Cell: ({ cell: { value } }: any) => {
                 return (
                     <>
-                        <span>TSMC/FMR/</span>{value}
+                        <span>{value}</span>
                     </>
                 );
             }
@@ -162,11 +165,13 @@ const DispatchSearch = () => {
                 });
                 return false;
             }
-            
+            setLoading(true);
                 const { data} = await dispatchservice.getDoctorByFMR(reqType, searchType, fmrNo, fromdate);
                 if (data.length > 0) {
                     setFinal(data);
+                    setLoading(false);
                 }else {
+                    setLoading(false);
                 Swal.fire({
                     icon:"warning",
                     title: "",
@@ -176,6 +181,7 @@ const DispatchSearch = () => {
             }
             
         } catch (err) {
+            setLoading(false);
             console.log('error get users by role', err);
         }
     }, [reqType, searchType, fmrNo, fromdate]);
@@ -224,7 +230,10 @@ const DispatchSearch = () => {
                                 <option value="pmrno">PMRNo</option>
 
                             </select>
-                            <input type="text" className='fs-14' id="mobileNo" onBlur={(e) => setFmrNo(e.target.value)} placeholder='Enter FMR/PMR No ' />
+                            <input type="text" className='fs-14' id="fmrNo" onChange={(e) => setFmrNo(e.target.value)} 
+                            value={fmrNo}
+
+                            placeholder='Enter FMR/PMR No ' />
                         </span>
                     </div>
                     <div className="col">

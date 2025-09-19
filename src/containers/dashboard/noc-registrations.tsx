@@ -113,7 +113,7 @@ const Noc = () => {
             Cell: ({ cell: { value } }: any) => {
                 return (
                     <>
-                        <span>TSMC/FMR/</span>{value}
+                        <span>{value}</span>
                     </>
                 );
             }

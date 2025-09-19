@@ -23,6 +23,10 @@ import { axiosInstance } from './index';
     async getDispachByFilter(from_date: any, to_Date:any){
         const { data: responseData } = await axiosInstance.get(`dispatch/getDispatchByFilter/${from_date}/${to_Date}`);
         return responseData as ApiResponseType;
+    },
+    async getDispatchByMobile(data: any){
+        const { data: responseData } = await axiosInstance.post(`dispatch/getDispatchByMobile`,data);
+        return responseData as ApiResponseType;
     }
     
 }
