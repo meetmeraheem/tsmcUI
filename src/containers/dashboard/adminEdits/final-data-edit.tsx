@@ -12,7 +12,6 @@ import { finalService } from '../../../lib/api/final';
 import { adminEditService } from '../../../lib/api/adminedits';
 import { dateDuration } from '../../../lib/utils/dateDuration';
 import { LocalStorageManager } from '../../../lib/localStorage-manager';
-import DatePicker from 'react-date-picker';
 import moment from 'moment';
 
 const FinalDataEdit = (props:any) => {
@@ -515,20 +514,12 @@ const FinalDataEdit = (props:any) => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                                                <DatePicker
-                                                                                    format='dd-MM-yyyy'
-                                                                                    onChange={(date: any) => {
-                                                                                        setFieldTouched(field.name);
-                                                                                        setFieldValue(field.name, date);
-                                                                                    }}
-
-
-                                                                                    maxDate={new Date()}
-                                                                                    clearIcon={null}
+                                                                               <input type="date" name="" id=""
                                                                                     value={field.value}
-                                                                                    onFocus={e => e.target.blur()}
-                                                                                    className={`form-control ${error ? 'is-invalid' : ''}`}
-                                                                                />
+                                                                                    onChange={(ev:any) => {
+                                                                                        setFieldTouched(field.name);
+                                                                                        setFieldValue(field.name, ev.target.value);
+                                                                                    }} className="form-control" />
 
 
                                                                                 {error && <small className="text-danger">{error.toString()}</small>}

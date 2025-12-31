@@ -16,7 +16,6 @@ import { LocalStorageManager } from '../../../lib/localStorage-manager';
 import { dateDuration } from '../../../lib/utils/dateDuration';
 import { adminEditService } from '../../../lib/api/adminedits';
 import moment from 'moment';
-import DatePicker from 'react-date-picker';
 
 
 const AdditionalDataEdit = (props:any) => {
@@ -30,6 +29,7 @@ const AdditionalDataEdit = (props:any) => {
     const [studyCertificate, setStudyCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [DegreeCertificate, setDegreeCertificate] = useState<{ file?: File; error?: string } | null>(null);
     const [duration, setDuration] = useState('');
+    const [calc_date, setCalc_date] = useState(new Date());
     
 
     const initialFormData =  useMemo(
@@ -48,6 +48,10 @@ const AdditionalDataEdit = (props:any) => {
     }),
     [additionals]
 );
+
+const onClose=(args:any) =>{
+    args.preventDefault();
+}
 
    
 
@@ -548,20 +552,12 @@ const AdditionalDataEdit = (props:any) => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                                                <DatePicker
-                                                                                    format='dd-MM-yyyy'
-                                                                                    onChange={(date: any) => {
-                                                                                        setFieldTouched(field.name);
-                                                                                        setFieldValue(field.name, date);
-                                                                                    }}
-                                                                                    maxDate={new Date()}
-                                                                                    clearIcon={null}
+                                                                            <input type="date" name="" id=""
                                                                                     value={field.value}
-                                                                                    onFocus={e => e.target.blur()}
-                                                                                    className={`form-control ${error ? 'is-invalid' : ''}`}
-                                                                                />
-
-
+                                                                                    onChange={(ev:any) => {
+                                                                                        setFieldTouched(field.name);
+                                                                                        setFieldValue(field.name, ev.target.value);
+                                                                                    }} className="form-control" />
                                                                                 {error && <small className="text-danger">{error.toString()}</small>}
                                                                             </>
                                                                         );

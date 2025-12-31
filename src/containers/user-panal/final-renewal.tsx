@@ -324,7 +324,7 @@ const RenewalRegistration = () => {
                                                                             getValue(form.errors, field.name);
                                                                         return (
                                                                             <>
-                                                                                <label className="mb-2">Enter No of CME credit Points <span className="text-danger fs-8'">(value from 1-12 till DEC-2025)</span></label>
+                                                                                <label className="mb-2">Enter No of CME credit Points <span className="text-danger fs-8'">(value from 1-18 till DEC-2026)</span></label>
                                                                                 <input
                                                                                     type="number"
                                                                                      onChange={(ev) => {
@@ -333,10 +333,10 @@ const RenewalRegistration = () => {
                                                                                      }}
                                                                                     className={`form-control ${error ? 'is-invalid' : ''
                                                                                         }`}
-                                                                                    placeholder="Enter No of CME credit Points (value 1-12)"
+                                                                                    placeholder="Enter No of CME credit Points (value 1-18)"
                                                                                     tabIndex={8}
                                                                                     disabled={disabled}
-                                                                                    min="1" max="12"
+                                                                                    min="1" max="18"
                                                                                 />
 
                                                                                 {error && <small className="text-danger">{error.toString()}</small>}
