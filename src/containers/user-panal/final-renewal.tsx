@@ -290,7 +290,7 @@ const RenewalRegistration = () => {
                                                         <div className="row" style={{marginLeft:'12px', marginTop:'20px' ,border: "1px solid rgb(26, 174, 176)", width:"98%"}}>
                                                         <span className="text-danger fs-13">
                                                             Any Final Registration Renewal needs CME Credit hours  as per TSMC guidelines
-                                                            Which is minimum of 12 till DEC-2025.Any shortage in credit hours  penality applicable
+                                                            Which is minimum of 18 till DEC-2026.Any shortage in credit hours  penality applicable
                                                             </span>
                                                         <div className="col">
                                                         <div className="col-sm-auto">
