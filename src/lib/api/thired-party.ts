@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { smsBaseURL } from '../../config/constants';
+
 
 export const thiredPartyAxiosInstance = axios.create({
     withCredentials: false

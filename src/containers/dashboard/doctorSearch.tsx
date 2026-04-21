@@ -1,10 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { commonService } from '../../lib/api/common';
 import { DoctorFormType } from '../../types/doctor';
 import moment from 'moment';
 import SiteLogo from '../../assets/images/logo.png';
 import colorLogo from '../../assets/images/TSMC_LOGO.jpg';
 import './../../assets/styles/styles.css';
+import axios from 'axios';
+import { apiUrl } from '../../config/constants';
+import { ApiResponseType } from '../../types/api';
 const DoctorSearchPage = () => {
 
 
@@ -12,25 +15,33 @@ const DoctorSearchPage = () => {
     const [docName, setDocName] = useState('');
     const [docGender, setDocGender] = useState('select');
     const [docfatherName, setDocfatherName] = useState('');
-    const [doctorList, setDoctorList] = useState<any>([]);
+    const [doctorList, setDoctorList] = useState<DoctorFormType[]>([]);
     const [additionalList, setAdditionalList] = useState<any>([]);
     const [doctor, setDoctor] = useState<DoctorFormType>();
     const [isLoader, setIsLoader] = useState(false);
     const [view, setView] = useState(false);
-    useEffect(() => {
-        setDoctor(doctor);
-    }, [doctor]);
-
-
     const getDoctorDetailsByFMR = async () => {
         try {
             if (fmrNo.length > 3) {
                 setDoctorList([]);
                 setIsLoader(true);
-                const { data } = await commonService.getDoctorInfoByNameGender(fmrNo, '', '', '');
-                if (data.length > 0) {
+                //const { data } = await commonService.getDoctorInfoByNameGender(fmrNo, '', '', '');
+                const api = axios.create({
+                    baseURL: apiUrl,
+                    headers: {
+                         "X-CLIENT-TOKEN": process.env.REACT_APP_CLIENT_TOKEN||"",
+                         'Content-Type': 'application/json',
+                    }
+                    });
+                     const  resp  = await api.get<ApiResponseType | DoctorFormType[]>(`common/getTgmcDocDetails?fmrNo=${fmrNo}&docName=''&gender=''&fatherName=''`);
+                     const doctors = Array.isArray(resp.data)
+                        ? resp.data
+                        : Array.isArray(resp.data?.data)
+                            ? resp.data.data
+                            : [];
+                if (doctors.length > 0) {
                     setIsLoader(false);
-                    setDoctorList(data);
+                    setDoctorList(doctors);
                     setView(false);
                 } else {
                     setIsLoader(false);
@@ -57,10 +68,24 @@ const DoctorSearchPage = () => {
 
                 setDoctorList([]);
                 setIsLoader(true);
-                const { data } = await commonService.getDoctorInfoByNameGender('', docName, docGender, docfatherName);
-                if (data.length > 0) {
+                const api = axios.create({
+                    baseURL: apiUrl,
+                    headers: {
+                         "X-CLIENT-TOKEN": process.env.REACT_APP_CLIENT_TOKEN||"",
+                         'Content-Type': 'application/json',
+                    }
+                    });
+                
+                const  resp  = await api.get<ApiResponseType | DoctorFormType[]>(`common/getTgmcDocDetails?docName=${docName}&gender=${docGender}&fatherName=${docfatherName}`);
+                const doctors = Array.isArray(resp.data)
+                        ? resp.data
+                        : Array.isArray(resp.data?.data)
+                            ? resp.data.data
+                            : [];
+
+                if (doctors.length > 0) {
                     setIsLoader(false);
-                    setDoctorList(data);
+                    setDoctorList(doctors);
                     setView(false);
                 } else {
                     setIsLoader(false);
@@ -183,7 +208,7 @@ const DoctorSearchPage = () => {
                                     </thead>
                                     <tbody>
                                         {doctorList.map((obj: any) => {
-                                            return (<tr>
+                                            return (<tr key={obj.id ?? obj.original_fmr_no}>
                                                 <td><a href="javascript:void(0);" onClick={() => {
                                                     setView(true);
                                                     setDoctor(obj);

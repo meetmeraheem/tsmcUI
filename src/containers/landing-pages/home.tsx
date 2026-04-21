@@ -108,7 +108,7 @@ const HomePage = () => {
                          
                               if (success){
 
-                              if(data.mobileno !== null) {
+                              if(data.mobileno!==undefined&&data.mobileno !== null) {
                                    console.log('mobile registered ' + JSON.stringify(data.length));
                                    
                                    Swal.fire({
